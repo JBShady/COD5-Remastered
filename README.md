@@ -11,4 +11,4 @@
 
 To be written.
 
-This git is not complete. Need to remove unnecessary files and upload raw contents. Do not attempt to build.
+This repo is not complete. Need to remove unnecessary files and upload raw contents. Do not attempt to build.
