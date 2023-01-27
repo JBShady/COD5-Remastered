@@ -1,0 +1,227 @@
+
+attack_player : nonloopsync
+{
+	german_shepherd_attack_player
+}
+
+attack_player_late : nonloopsync
+{
+	german_shepherd_attack_player_late
+}
+
+zd_attack_player_late : nonloopsync
+{
+	zombie_dog_attack_player_late
+}
+
+german_shepherd_death_front
+german_shepherd_idle
+german_shepherd_attackidle_knob
+{
+	german_shepherd_attackidle
+	german_shepherd_attackidle_bark
+	german_shepherd_attackidle_growl
+}
+
+zombie_dog_attackidle_knob
+{
+	zombie_dog_attackidle
+	zombie_dog_attackidle_bark
+	zombie_dog_attackidle_growl
+}
+
+german_shepherd_look_2 : additive
+{
+	german_shepherd_look_down
+	german_shepherd_attack_look_down
+}
+german_shepherd_look_4 : additive
+{
+	german_shepherd_look_right
+	german_shepherd_attack_look_right
+}
+german_shepherd_look_6 : additive
+{
+	german_shepherd_look_left
+	german_shepherd_attack_look_left
+}
+german_shepherd_look_8 : additive
+{
+	german_shepherd_look_up
+	german_shepherd_attack_look_up
+}	
+
+zombie_dog_look_2 : additive
+{
+	zombie_dog_look_down
+	zombie_dog_attack_look_down
+}
+zombie_dog_look_4 : additive
+{
+	zombie_dog_look_right
+	zombie_dog_attack_look_right
+}
+zombie_dog_look_6 : additive
+{
+	zombie_dog_look_left
+	zombie_dog_attack_look_left
+}
+zombie_dog_look_8 : additive
+{
+	zombie_dog_look_up
+	zombie_dog_attack_look_up
+}	
+	
+german_shepherd_run_start_knob : nonloopsync
+{
+	german_shepherd_run_start
+	german_shepherd_run_start_L
+	german_shepherd_run_start_R
+	german_shepherd_run_start_180_R
+	german_shepherd_run_start_180_L
+}
+
+zombie_dog_run_start_knob : nonloopsync
+{
+	zombie_dog_run_start
+}
+
+german_shepherd_run_knob : loopsync
+{
+	german_shepherd_run
+	german_shepherd_run_lean_L
+	german_shepherd_run_lean_R
+}
+
+zombie_dog_run_knob : loopsync
+{
+	zombie_dog_run
+	zombie_dog_run_lean_l
+	zombie_dog_run_lean_r
+}
+
+german_shepherd_turn_knob : nonloopsync
+{
+	german_shepard_turn_90_left		
+	german_shepard_turn_90_right		
+	german_shepard_turn_180_left
+	german_shepard_turn_180_right
+	german_shepard_run_turn_90_left	
+	german_shepard_run_turn_90_right	
+	german_shepard_run_turn_180_left
+	german_shepard_run_turn_180_right
+}
+
+zombie_dog_turn_knob : nonloopsync
+{
+	zombie_dog_turn_90_left
+	zombie_dog_turn_90_right
+	zombie_dog_turn_180_left
+	zombie_dog_turn_180_right
+	zombie_dog_run_turn_90_left
+	zombie_dog_run_turn_90_right
+	zombie_dog_run_turn_180_left
+	zombie_dog_run_turn_180_right
+}
+
+german_shepherd_attack_player_miss
+german_shepherd_run_attack
+german_shepherd_run_attack_low
+german_shepherd_run_attack_miss
+german_shepherd_run_jump_40
+german_shepherd_run_jump_window_40
+german_shepherd_run_stop
+german_shepherd_run_pain
+german_shepherd_run_flashbang
+german_shepherd_attack_AI_01_start_a
+german_shepherd_attack_AI_02_idle_a
+german_shepherd_attack_AI_03_pushed_a
+german_shepherd_attack_AI_03_shot_a
+german_shepherd_attack_AI_04_middle_a
+german_shepherd_attack_AI_05_kill_a
+german_shepherd_attack_player_miss_turnR
+german_shepherd_attack_player_miss_turnL
+german_shepherd_traverse_down_40
+german_shepherd_traverse_up_40
+german_shepherd_traverse_up_80
+german_shepherd_walk
+german_shepherd_player_neck_snap
+german_shepherd_player_neck_miss
+german_shepherd_eating
+german_shepherd_eating_in
+german_shepherd_eating_loop
+german_shepherd_eating_out
+german_shepherd_sleeping
+german_shepherd_wakeup_slow
+german_shepherd_wakeup_fast
+german_shepard_death_hit_left
+german_shepard_death_hit_right
+german_shepard_death_hit_back
+german_shepard_pain_hit_front
+german_shepard_pain_hit_back
+german_shepard_pain_hit_left
+german_shepard_pain_hit_right
+german_shepard_run_pain_hit_front
+
+
+// SNIPER ESCAPE
+sniper_escape_dog_fence
+
+// Pel1b send dog to cave
+ch_peleliu1b_dog_Loop
+ch_peleliu1b_dog_out
+
+//zombiemode
+ai_zombie_dog_attack_v1
+
+zombie_dog_eating_loop
+zombie_dog_eating_out
+zombie_dog_idle
+zombie_dog_look_forward
+zombie_dog_player_neck_miss
+zombie_dog_player_neck_snap
+zombie_dog_run_attack
+zombie_dog_run_attack_low
+zombie_dog_run_attack_miss
+zombie_dog_run_bark
+zombie_dog_run_flashbang
+zombie_dog_run_jump_30
+zombie_dog_run_jump_40
+zombie_dog_run_jump_window_40
+zombie_dog_run_lean_l_bark
+zombie_dog_run_lean_r_bark
+zombie_dog_run_pain
+zombie_dog_run_start_180_l
+zombie_dog_run_start_180_r
+zombie_dog_run_start_l
+zombie_dog_run_start_r
+zombie_dog_run_stop
+zombie_dog_sitting_idle
+zombie_dog_sitting_look_down
+zombie_dog_sitting_look_forward
+zombie_dog_traverse_down_96
+zombie_dog_traverse_down_40
+zombie_dog_traverse_down_126
+zombie_dog_traverse_down_190
+zombie_dog_traverse_up_40
+zombie_dog_traverse_up_80
+zombie_dog_wakeup_fast
+zombie_dog_wakeup_slow
+zombie_dog_walk
+zombie_dog_trot
+zombie_dog_tesla_death_a
+zombie_dog_tesla_death_b
+zombie_dog_tesla_death_c
+zombie_dog_tesla_death_d
+zombie_dog_tesla_death_e
+zombie_dog_death_front
+zombie_dog_death_hit_back
+zombie_dog_death_hit_left
+zombie_dog_death_hit_right
+zombie_dog_pain_hit_back
+zombie_dog_pain_hit_front
+zombie_dog_pain_hit_left
+zombie_dog_pain_hit_right
+zombie_dog_run_pain_front
+zombie_dog_attack_player_miss_turnR
+zombie_dog_attack_player_miss_turnL

@@ -1,0 +1,35 @@
+Egg descriptions
+STEPS
+
+// -- SHARED -- //
+1. “Suspicious Beginnings” - Find Richtofen's shelf and interact with it, you will hear his laugh.
+
+// -- SOLO OR INCOMPLETE LOBBY -- //
+2. “One & Done” - Complete only your character's tasks from the steps below depending on who you spawn as.
+
+// -- FOUR-PLAYER COOP -- //
+2. “Peter's Intel” - Peter's radio can be dislodged using an explosive and dropped to the ground, but only Dempsey can recover it. To get a strong enough signal with the radio, you must go to the Comm Room main desk and power on the hub by succesfully completing a random three-long sequence in the correct order. After the radio hub is powered on, place your handheld radio on the desk to send your message, and pick it up after the message completes. However, before sending this message (at any point) there are two prerequisites that must be met, ensuring Dempsey has the required intel. First, the spawn room radio message must have been activated and completed by interacting with the three radios placed throughout the room. Second, Dempsey must have interacted with the 115 Meteor.
+	-FINISHED, except for final touches (Sound, FX, hintstrings) 
+
+3. To do
+
+4. To do
+
+5. “Work to be Done” - Richtofen must acquire his journal from his Quarters. Pick up the journal by interacting with it, and avoid touching water or else the journal will be reset back to the start. While holding the journal, the player must search for three intel sites across the map and take notes at them.
+	-FINISHED, except for final touches (sound, FX, hintstrings)
+	-Need to fix step being reset from water (not deleting og trigs) -> level.
+	-Need to fix anim
+
+
+Shelf, pre-existing
+8412 2950 -630
+
+Floor
+8767.99, 3243.33, -664.875
+
+Floor 2
+8423.22, 3371.12 -664.875
+
+
+Fishing pole
+8061.3, 3513.83, -664.875
