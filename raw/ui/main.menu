@@ -1,0 +1,1501 @@
+// CONSOLE SP - Main
+
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+#include "ui/mission_select/missiondefs.menu"
+
+#ifdef CONSOLE
+	#define LOGO_START_X			-300//375
+	#define LOGO_START_Y			-125//70
+	#undef	SIGNED_IN_RECT
+	#define SIGNED_IN_RECT			-250 60 250 15
+#endif
+
+#ifdef PC
+	#define LOGO_START_X			-300
+	#define LOGO_START_Y			-160
+	#undef	SIGNED_IN_RECT
+	#define SIGNED_IN_RECT			-350 60 250 15
+#endif
+
+#define CHOICE_SIZE_X			150
+#define CHOICE_SIZE_Y			22
+
+#define CHOICE_X_START			0
+#define CHOICE_Y_START			120
+
+#ifdef XENON
+	#undef	CHOICE_Y_START
+	#define CHOICE_Y_START		45//40//58//72
+#endif
+
+#ifdef PS3
+	#undef	CHOICE_Y_START
+	#define CHOICE_Y_START		45//92//106//120
+#endif
+
+#ifdef PC
+	#undef	CHOICE_Y_START
+	#define CHOICE_Y_START		50//106//120
+	#undef	CHOICE_X_START
+	#define CHOICE_X_START			30
+#endif
+
+#define CHOICE_SEP_OFFSET_Y		-2
+
+#define CHOICE_GROUP			"main"
+
+#ifdef PC
+	#undef CHOICE_SEP_1
+	#define CHOICE_SEP_1			3
+	#define CHOICE_SEP_2			6
+#endif
+#ifdef CONSOLE
+	#define CHOICE_SEP_1			3
+#endif
+
+#define ARCADE_DESC_ORIGIN	CHOICE_SIZE_X CHOICE_Y(5)
+#define CLEARUIHINT	exec "set ui_hint_text @NULL_EMPTY"; hide "desc_arrow"
+
+#define ACTION_LOCKOUT_CLOSE \
+	execnow "ui_cinematic front_end_sp 3" \
+	play "mouse_click"; \
+	close main_lockout; \
+	setdvar ui_skipMainLockout "0" \
+	execnow "makeLocalClientActive;"; \
+	open main_text;
+
+
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+#include "ui/online_status.inc"
+{
+	assetGlobalDef
+	{
+		fadeClamp		1.0						// sets the fadeup alpha
+		fadeCycle		1						// how often fade happens in milliseconds
+		fadeAmount		0.1						// amount to adjust alpha per cycle
+	}
+	
+	menuDef 
+	{
+		name			main
+		fullScreen		1				
+		rect			0 0 640 480				// Size and position of the menu
+		focusColor		COLOR_FOCUSED	// Menu focus color for text and items
+		soundloop 		"music_mainmenu"
+		onOpen
+		{
+            #if COOP_EPD
+                open main_lockout 
+			#elif defined( CONSOLE )
+				uiScript openMenuOnDvar "ui_skipMainLockout" 0 "main_lockout"
+				uiScript openMenuOnDvar "ui_skipMainLockout" 1 "main_text"
+			#else
+				// IW COD4 version:
+				//open main_text;
+				//uiScript addPlayerProfiles;
+				//uiScript openMenuOnDvar com_playerProfile "" player_profile;
+				//uiScript openMenuOnDvarNot ui_playerProfileCount 1 player_profile;
+				//uiScript stopRefresh;
+				// COD5 DW License Auth version:
+				open main_text;
+				uiScript openMainMenuPlayerProfileScriptCallback;
+				uiScript stopRefresh;
+			#endif
+		}
+		onClose
+		{			
+			#ifdef CONSOLE
+				close main_text;			
+				close main_lockout;
+			#endif
+		}
+	}
+	
+#ifdef CONSOLE
+	menuDef 
+	{
+		name			main_lockout
+		fullScreen		0				
+		rect			0 0 640 480				// Size and position of the menu
+		focusColor		1 1 1 0.85				// Menu focus color for text and items
+		onOpen
+		{ 
+			setfocus sp;
+			execnow "ui_cinematic bink_front_end_screen_home 3"
+#if COOP_EPD
+			uiScript openMenuOnDvar "ui_epd_disclaimer" 0 "epd_disclaimer";
+#endif
+		}
+		onClose
+		{
+//			close main_lockout;
+//			open main_text;
+		}
+		onESC 
+		{
+			ingameclose main;
+		}
+		onFocus
+		{
+			execnow "AcceptInputFromAllControls"
+		}
+		
+#ifdef PS3
+		execKeyInt BUTTON_START
+		{
+			ACTION_LOCKOUT_CLOSE;
+		}
+#endif // PS3
+
+		#undef FOOTNOTE_RECT
+		#define FOOTNOTE_RECT( x, y )			x y 640 22 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
+		CHOICE_FOOTNOTE( "@MENU_LEGAL_LINE", -140, -22 )
+
+		//#include "ui/bg.inc"
+		itemDef	
+		{
+			rect			-250 -120 512 128 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			origin			0 0
+			forecolor		1 1 1 1
+			style			WINDOW_STYLE_SHADER
+			background		"logo_cod2"
+			decoration
+			visible			1
+		}
+
+#if !COOP_EPD
+		#undef FOG_SCROLL_TIME
+		#define FOG_SCROLL_TIME 40000
+
+		itemDef
+		{
+			style			WINDOW_STYLE_SHADER
+			rect			-107 0 1708 480
+			exp				rect X((-107) - ((float(milliseconds() % FOG_SCROLL_TIME) / FOG_SCROLL_TIME) * (854)))
+			background		"animbg_fogscrollthin"
+			forecolor		.37 .15 .07 1
+			visible			1
+			decoration
+		}
+#endif // #if !COOP_EPD
+
+		itemDef
+		{
+			name			sp
+			text			"@MENU_PRESS_START"
+			type			ITEM_TYPE_BUTTON
+			rect			-60 50 120 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			forecolor		1 1 1 0.85
+			textalign		ITEM_ALIGN_MIDDLE_CENTER
+			textfont		CHOICE_TEXTFONT
+			visible			1 
+			action 
+			{
+#if !COOP_EPD
+				execnow "ui_cinematic front_end_sp 3"
+#endif // #if !COOP_EPD
+				play "mouse_click";
+				close main_lockout;
+				setdvar ui_skipMainLockout "0"
+				execnow "makeLocalClientActive;";
+#if !COOP_EPD
+				open main_text;
+#else
+                // main_text
+                //  onOpen
+                CLEARUIHINT
+                
+                setdvar ui_version_show "0";
+                execnow "Updatedvarsfromprofile";
+#if !COOP_EPD
+                execnow "select_save_device";
+#endif // #if !COOP_EPD
+
+                profilehide levelselect_noprofile;
+                profileshow levelselect;
+                profilehide newgame_noprofile;
+                profileshow newgame;
+
+                //open main_online
+
+    		  	// main_online
+                //  onFocus
+			    exec "endsplitscreensignin";
+
+                //  xbox live menu item
+                exec "xsigninlive";
+                exec "systemlink 0";
+                exec "splitscreen 0";
+                exec "onlinegame 1";
+                exec "exec "XBOXLIVE_MP_CFG;
+                exec "party_maxplayers 9";
+                exec "xblive_privatematch 0";
+                exec "xblive_rankedmatch 0";
+                exec "party_timerVisible 0";
+                exec "xstartprivateparty";
+                setdvar ui_mptype "0";
+                exec "set ui_gametype cmp; set ui_mapname ber2"
+                open menu_xboxlive;
+#endif // #if !COOP_EPD
+            }
+		}
+	}
+#endif // #ifdef CONSOLE
+
+    // This menu is called to devmap into credits because devmapping from
+    // main_text will give main the focus and unlock all the controllers.
+    // Having this menu do the devmap prevents main from getting focus.
+	menuDef
+	{
+		name			credits_menu
+		rect			0 0 640 470 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
+		focuscolor		COLOR_FOCUSED
+		style			WINDOW_STYLE_FILLED
+		soundloop 		"music_mainmenu"
+		border			0
+		onOpen	
+		{
+			//#ifdef PC
+			//	STAT_UPDATE
+			//#endif 
+			
+			HIDEALL_DESC
+			focusFirst;
+			setLocalVarBool ui_hideBack 1;
+			//setLocalVarBool dempsey 1; setLocalVarBool nikolai 0; setLocalVarBool takeo 0; setLocalVarBool richtofen 0
+			setdvar invite_visible "0";
+		}
+		onEsc	
+		{	
+			//execnow "uploadstats";
+			setLocalVarBool ui_inOverlay 1;
+			//setLocalVarBool dempsey 1; setLocalVarBool nikolai 0; setLocalVarBool takeo 0; setLocalVarBool richtofen 0
+			close self;
+		}
+		onClose
+		{
+			setdvar invite_visible "1";
+			setLocalVarBool ui_hideBack 0;
+			//setLocalVarBool dempsey 1; setLocalVarBool nikolai 0; setLocalVarBool takeo 0; setLocalVarBool richtofen 0
+			setLocalVarBool ui_inOverlay 0;
+		}
+		
+		// ------------------  statics ------------------------
+		//#include "ui/blurredbg.inc"
+		#include "ui/overlaybg.inc"		
+		
+		#ifdef PC
+			BACKGROUND_BLACK_LETTERBOX_BLURWORLD_VIS( 0 , 0 )
+			OVERLAY_BACKGROUND_VIS( !menuisopen( "menu_xboxlive_barracks" ) )
+			CHOICE_OVERLAY_TITLE( "@REMASTERED_MAP_INTEL" )
+		#else
+			OVERLAY_BACKGROUND_VIS( !menuisopen( "menu_xboxlive_barracks" ) )
+			CHOICE_OVERLAY_TITLE( "@MENU_CHALLENGES_CAP" )
+		#endif
+		
+		#undef BACK_OPEN
+		#define BACK_OPEN	close self;
+		#include "ui/navcontrols.inc"
+
+		itemDef 
+		{
+		       name                 der_riese_info
+		       rect                    FULLSCREEN
+			   //fullScreen		1				
+		       forecolor            1 1 1 1
+		       style                 WINDOW_STYLE_SHADER
+		       background      "der_riese_info" 
+		       decoration
+			   visible			1
+		}
+
+	}
+
+	#define LOCAL_ZOMBIE_RESET\
+		exec "set zombiemode 0";
+	#define LOCAL_ARCADEMODE_RESET\
+		exec "set arcademode 0";
+	#define LOCAL_NETWORK_RESET\
+		exec "set onlinegame 0; set systemlink 0";
+	#define SET_DEFAULT_MAP_AND_MODE\
+		exec "set ui_gametype cmp; set ui_mapname "FIRST_PLAYABLE_CAMPAIGN_LEVEL
+	#define SET_ARCADE_MODE\
+		exec "set arcademode 1"; \
+		execOnDvarStringValue "ui_gametype" zom "set arcademode 0";
+	#define RESET_GAMEMODES \
+		LOCAL_ZOMBIE_RESET \
+		LOCAL_ARCADEMODE_RESET \
+		exec "set ui_gametype cmp;"
+
+	menuDef
+	{
+		name			main_text
+		fullScreen		1
+		rect			0 0 640 480
+		focusColor		COLOR_FOCUSED
+		soundloop 		"music_mainmenu"
+		style			WINDOW_STYLE_EMPTY
+		onOpen
+		{
+			CLEARUIHINT
+			
+#ifdef CONSOLE
+			setdvar ui_version_show "0";
+			setdvar ui_skipMainLockout "0";
+			execnow "ui_cinematic front_end_sp 3"
+			execnow "Updatedvarsfromprofile";
+			exec "set cg_gameMessageWidth 455";
+#if !COOP_EPD
+			execnow "select_save_device";
+#endif // #if !COOP_EPD
+
+			profilehide levelselect_noprofile;
+			profileshow levelselect;
+			profilehide newgame_noprofile;
+			profileshow newgame;
+			profileshow optionsselect;
+			profilehide optionsselect_noprofile;
+			
+			//showhidenewgameresume;
+
+			focusfirst;
+#else // #ifdef CONSOLE
+			execnow "ui_cinematic front_end_sp 3"
+			setdvar ui_showOnlineOfflineButton "1";
+
+			//savegameshow resume;
+			//savegamehide newgame;
+#endif
+
+#ifdef PS3
+			uiScript openmenuondvar ui_show_autosave_warning 1 "popmenu_autosave_warning_lockout"
+#endif //PS3
+
+#if GERMAN_ZOMBIE_BUILD
+			setdvar allow_zombies_german 1
+#else // #if GERMAN_ZOMBIE_BUILD
+			setdvar allow_zombies_german 0
+#endif // #if GERMAN_ZOMBIE_BUILD
+			uiScript openmenuondvar ui_sp_unlock 1 "popmenu_sp_unlock";
+		}
+		onFocus
+		{
+#ifdef CONSOLE
+			execnow "AcceptInputFromActiveControl"
+			execnow "EnableSpecialInput";
+#endif // #ifdef CONSOLE
+			execnow "ui_cinematic front_end_sp 3"
+			setdvar ui_showOnlineOfflineButton "1";
+		}
+		onEsc
+		{
+#ifdef CONSOLE
+			execnow "DisableSpecialInput";
+			close main_text;
+			open main_lockout;
+#endif // #ifdef CONSOLE
+		}
+
+#ifdef CONSOLE
+		itemDef
+		{
+			name			unlocked_missions
+			text			"@MENU_CHEAT_ENABLED"
+			type			ITEM_TYPE_TEXT
+			textscale		.3
+			style			WINDOW_STYLE_FILLED
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			rect			50 380 100 17
+			forecolor		COLOR_TITLE
+			visible			when( 0 )
+			decoration
+		}
+#endif // #ifdef CONSOLE
+
+		// background
+		#include "ui/bg.inc"
+
+#ifdef CONSOLE
+		// --------------------- MOTD -----------------------		
+		#include "ui/info_box.inc"
+		CHOICE_MENU_TITLE( "@MENU_MAIN_MENU" )
+#else
+		CHOICE_MENU_TITLE( "@REMASTERED_DER_RIESE_TITLE" )
+#endif // #ifdef CONSOLE
+
+		itemDef
+		{
+			rect			LOGO_START_X LOGO_START_Y 256 64 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
+			forecolor		1 1 1 1
+			style			WINDOW_STYLE_SHADER
+			background		"logo_cod2"
+			visible			when( !localVarBool( ui_hideBack ) );
+			decoration
+		}
+
+		// draws signin status
+		SIGNIN_STATUS
+#ifdef PC
+		ONLINE_OFFLINE_BUTTON
+#endif // #ifdef PC
+
+#define SETUP_ACTION_SOLO \
+			execnow "nosplitscreen"; \
+			exec "xstopprivateparty"\
+			exec "xstopparty"\
+			exec "systemlink 0"; \
+			exec "splitscreen 0"; \
+			exec "xblive_rankedmatch 0"; \
+			exec "onlinegame 0"; \
+			exec "arcademode 0" \
+			exec "zombiemode 0" \
+			exec "ui_hostOptionsEnabled 0" \
+			SET_DEFAULT_MAP_AND_MODE \
+			open main_solo; \
+
+#define SETUP_ACTION_SOLO_DEV \
+			execnow "nosplitscreen"; \
+			exec "xsignin"; \
+			exec "systemlink 0"; \
+			exec "splitscreen 0"; \
+			exec "xblive_rankedmatch 0"; \
+			exec "onlinegame 0"; \
+			exec "arcademode 0" \
+			open levels_game; \		
+
+#define SETUP_ACTION_CREDITS \
+			setdvar credits_load 1; \
+			setdvar credits_frommenu 1; \
+			setdvar systemlink 0; \
+			setdvar onlinegame 0; \
+			setdvar splitscreen 0; \
+			setvdar arcademode 0; \
+			LOCAL_ZOMBIE_RESET; \	
+			close main_text; \
+			close main; \
+			open credits_menu
+
+#ifdef CONSOLE 
+			CHOICE_BUTTON_BG( 1, 1 )
+			CHOICE_HIGHLIGHT( 1, 1 )
+			CHOICE_BUTTON_VIS_NOHI( 1, "@MENU_SOLO_CAP", SETUP_ACTION_SOLO, when ( !dvarbool( cg_development ) ); )
+			CHOICE_BUTTON_VIS_NOHI( 1, "@MENU_SOLO_CAP", SETUP_ACTION_SOLO, when ( dvarbool( cg_development) ); ) 
+
+		  	CHOICE_BUTTON( 2, "@MENU_COOPERATIVE", open main_online )
+			CHOICE_BUTTON( 3, "@MENU_MULTIPLAYER", setdvar ui_changed_exe 1; exec "wait;wait;wait"; uiScript startMultiplayer )
+
+			//CHOICE_SEPARATOR( CHOICE_SEP_1 )
+			CHOICE_BUTTON_BG( 4, 1 )
+			CHOICE_HIGHLIGHT( 4, 1 )
+			CHOICE_BUTTON_NOHI_EX( 4, "@MENU_OPTIONS_UPPER_CASE", open options;, name optionsselect )
+			CHOICE_BUTTON_NOHI_EX( 4, "@MENU_OPTIONS_UPPER_CASE", open popup_options_noprofile;, name optionsselect_noprofile )
+
+			CHOICE_BUTTON_BG( 5, 1 )
+			CHOICE_HIGHLIGHT( 5, 1 )
+			//CHOICE_BUTTON_VIS_NOHI( 5, "@MENU_CREDITS", SETUP_ACTION_CREDITS, when( dvarInt( mis_01 ) < dvarInt( mis_01_unlock ) ); )
+			//CHOICE_BUTTON_VIS( 5, "@MENU_CREDITS", setdvar credits_load 1; setdvar credits_frommenu 1; LOCAL_ZOMBIE_RESET; open credits_menu, when( dvarInt( mis_01 ) >= 20 ); )
+			//CHOICE_BUTTON_VIS_NOHI( 5, "@MENU_CREDITS", setdvar credits_load 1; LOCAL_ZOMBIE_RESET; open credits_menu, when( dvarInt( mis_01 ) < 20 ) )
+			//CHOICE_BUTTON_VIS_NOHI( 5, "@MENU_CREDITS", SETUP_ACTION_CREDITS, when( dvarInt( mis_01 ) >= dvarInt( mis_01_unlock ) ) )
+#endif
+				
+#ifdef PC
+			// all buttons will be hidden when option menus are opened, LocalVarBool(ui_hideBack)
+			//CHOICE_BUTTON_VIS( 1, "@MENU_NEWGAME", open popmenu_newgame, when( !localVarBool( ui_hideBack ) ); name new )
+			//CHOICE_BUTTON_BG( 1, when( !localvarBool( ui_hideBack ) ); )
+			//CHOICE_HIGHLIGHT( 1, 1 )
+			//CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@MENU_NEWGAME", exec DEVMAP_LEVEL_TRAINING; LOCAL_ZOMBIE_RESET, ;, ;, when( !localvarBool( ui_hideBack ) );, name newgame )
+			//CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@MENU_RESUMEGAME", open resume_popmenu; LOCAL_ZOMBIE_RESET, ;, ;, when( !localvarBool( ui_hideBack ) );, name resume )*/
+			CHOICE_BUTTON_VIS( 1, "@REMASTERED_START_MATCH", exec "devmap nazi_zombie_factory";, when( !localvarBool( ui_hideBack ) ); )
+			CHOICE_BUTTON_VIS( 2, "@REMASTERED_COOPERATIVE", open main_online; LOCAL_ZOMBIE_RESET, when( !localvarBool( ui_hideBack ) ); )
+			CHOICE_BUTTON_VIS( 3, "@REMASTERED_MAP_INTEL", open menu_collectibles;, when( !localvarBool( ui_hideBack ) ); )
+			CHOICE_SEPARATOR_VIS( CHOICE_SEP_1, when( !localvarBool( ui_hideBack ) ); )
+
+			#define SETUP_ACTION_CHALLENGES \
+					statSetUsingTable( 263, 1 ); \
+					/*exec "uploadstats";*/ \
+					open menu_challenges
+			CHOICE_BUTTON_BG( 4, when( !localVarBool( ui_hideBack ) ) )
+			CHOICE_HIGHLIGHT( 4, 1 )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 4, "@REMASTERED_HERO_BIO_CAP", SETUP_ACTION_CHALLENGES, CLEARUIHINT;, ;, when( !localVarBool( ui_hideBack ) ), name challenges )	
+
+			
+
+			
+			//CHOICE_BUTTON_VIS( 3, "CHARACTER BIOS", open main_online; LOCAL_ZOMBIE_RESET, when( !localvarBool( ui_hideBack ) ); )
+			//CHOICE_BUTTON_VIS( 3, "Join LAN Game", open menu_lan; LOCAL_ZOMBIE_RESET, when( !localvarBool( ui_hideBack ) ); )
+			CHOICE_BUTTON_VIS( 5, "@REMASTERED_PROFILE", execOnDvarIntValue dw_loggedin 0 "dwconnect"; setdvar ui_playerProfileAlreadyChosen 0; open player_profile, when( !localvarBool( ui_hideBack ) ); )
+			//CHOICE_BUTTON_VIS( 5, "@MENU_ARCADEMODE", open popmenu_arcade; LOCAL_ZOMBIE_RESET, when( dvarInt( mis_01 ) >= 20 && !localvarBool( ui_hideBack ) ); )
+			//CHOICE_DBUTTON_VIS( 5, "@MENU_ARCADEMODE", when( dvarInt( mis_01 ) < 20 && !localvarBool( ui_hideBack ) ); )	
+			CHOICE_BUTTON_VIS( 6, "@MENU_FRIENDS_CAP", open menu_pc_friends;, when( !localvarBool( ui_hideBack ) ); )
+			CHOICE_NEWICON_VIS( 6, "specialty_new", when( hasinvites() || haspendingfriends() ); )
+			CHOICE_BUTTON_VIS( 7, "@MENU_OPTIONS_CONTROLS_CAP", open options_new_pc;, when( !localvarBool( ui_hideBack ) ); )
+
+			CHOICE_SEPARATOR_VIS( CHOICE_SEP_2, when( !localvarBool( ui_hideBack ) ); )
+			CHOICE_BUTTON_VIS( 8, "@MENU_MODS", open mods_menu;, when( !localvarBool( ui_hideBack ) ) )
+						
+			//CHOICE_BUTTON_BG( 8, 1 )
+			//CHOICE_HIGHLIGHT( 8, 1 )
+			//CHOICE_BUTTON_VIS_NOHI( 8, "@MENU_CREDITS", SETUP_ACTION_CREDITS, when( !localvarBool( ui_hideBack ) && dvarInt( mis_01 ) < dvarInt( mis_01_unlock ) ); )
+			//CHOICE_BUTTON_VIS_NOHI( 8, "@MENU_CREDITS", SETUP_ACTION_CREDITS, when( !localvarBool( ui_hideBack ) && dvarInt( mis_01 ) >= dvarInt( mis_01_unlock ) ); )
+			//CHOICE_BUTTON_VIS( 10, "@MENU_MULTIPLAYER", open multi_popmenu, when( !localvarBool( ui_hideBack ) ); )
+			CHOICE_BUTTON_VIS( 9, "@MENU_QUIT", open quit_popmenu, when( !localvarBool( ui_hideBack ) ); )
+
+				
+
+			
+#endif // #ifdef PC
+
+/*
+#ifdef XENON
+			// ----------------- BEGIN Message of the day ------------------------		
+			#define	INFO_BOX_ORIENT				1
+			#define INFO_BOX_TITLE_HEIGHT		20
+			#define INFO_BOX_WIDTH				(CHOICE_SIZE_X-(INFO_BOX_TITLE_HEIGHT/4))
+			#define INFO_BOX_HEIGHT				126
+			#define INFO_BOX_X					(CHOICE_X_START)
+			#define INFO_BOX_Y					304
+			#define ORIGIN_INFO_BOX_TITLE		INFO_BOX_X INFO_BOX_Y
+	
+			#define INFO_TEXT				dvarString( "motd" )
+			#define INFO_TITLE				"@MENU_MESSAGE_OF_THE_DAY"
+			
+			#include "ui_mp/info_box.inc"
+#endif
+*/
+		#include "ui/safearea.menu"
+	}
+
+#ifdef XENON
+	#undef	CHOICE_Y_START
+	#define CHOICE_Y_START		45//40//58//72
+#endif
+
+#ifdef PS3
+	#undef	CHOICE_Y_START
+	#define CHOICE_Y_START		92//106//120
+#endif
+	menuDef
+	{
+		name			main_solo
+		fullScreen		1
+		rect			0 0 640 480
+		focusColor		COLOR_FOCUSED
+		soundloop 		"music_mainmenu"
+		onOpen
+		{
+			//clear hint for arcade mode description
+			CLEARUIHINT
+			LOCAL_ZOMBIE_RESET
+			
+#ifdef CONSOLE
+			setdvar ui_version_show "0";
+
+			profilehide levelselect_noprofile;
+			profileshow levelselect;
+			profileshow resume_nosavedevice;
+
+			profilehide newgame_noprofile;
+			profileshow newgame;
+			profileshow newgame_nosavegame;
+			profileshow newgame_nosavedevice;
+			
+			//showhidenewgameresume;
+
+			focusfirst;
+#else
+			execnow "update_sv_savegameavailable";
+#endif
+
+			uiScript openmenuondvar ui_sp_unlock 1 "popmenu_sp_unlock";
+		}
+		onFocus
+		{
+		}
+		onEsc
+		{
+			close main_solo;
+		}
+
+		// background
+		#include "ui/sp_top_bg.inc"
+		#include "ui/navcontrols.inc"
+
+		CHOICE_MENU_TITLE( "@MENU_SOLO_CAMPAIGN_CAP" )
+		itemDef
+		{
+			rect			LOGO_START_X LOGO_START_Y 256 64 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
+			forecolor		1 1 1 1
+			style			WINDOW_STYLE_SHADER
+			background		"logo_cod2"
+#ifdef CONSOLE
+			visible			1
+#else
+			visible			when( !localVarBool( ui_hideBack ) );
+#endif			
+			decoration
+		}
+
+		// draws signin status
+		SIGNIN_STATUS
+
+#ifdef XENON
+
+			//CHOICE_BUTTON_BG( 1, 1 )
+			//CHOICE_HIGHLIGHT( 1, 1 )
+			//CHOICE_BUTTON_VIS( 1, "@MENU_RESUMEGAME", open resume_popmenu; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, when( dvarbool( sv_saveGameAvailable ) ); )
+			//CHOICE_BUTTON_VIS( 1, "@MENU_RESUMEGAME", open save_corrupted; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, when( !dvarbool( sv_saveGameAvailable ) && dvarbool( sv_saveGameNotReadable ) ); )
+			CHOICE_BUTTON_FOCUS_VIS_EX_ADV( 1,"@MENU_RESUMEGAME_CAP", open resume_popmenu; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, LOCAL_ZOMBIE_RESET, ;, when( dvarbool( sv_saveGameAvailable ) ), ;, dvarbool( sv_saveGameAvailable ) )
+			CHOICE_BUTTON_FOCUS_VIS_EX_ADV( 1, "@MENU_RESUMEGAME_CAP", open save_corrupted; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, LOCAL_ZOMBIE_RESET, ;, when( !dvarbool( sv_saveGameAvailable ) && dvarbool( sv_saveGameNotReadable ) ), ;, !dvarbool( sv_saveGameAvailable ) && dvarbool( sv_saveGameNotReadable ) )
+			//CHOICE_DBUTTON_VIS( 1, "@MENU_RESUMEGAME", when( !dvarbool( sv_saveGameAvailable ) && !dvarbool( sv_saveGameNotReadable ) ); )
+			
+			CHOICE_BUTTON_BG( 2, 1 )
+			CHOICE_HIGHLIGHT( 2, 1 )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 2, "@MENU_NEWGAME", setdvar ui_newgame_nextmenu 4; open popmenu_content_warning; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, ;, ;, when( !dvarbool( sv_saveDeviceAvailable ) ), name newgame_nosavedevice )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 2, "@MENU_NEWGAME", setdvar ui_newgame_nextmenu 3; open popmenu_content_warning; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, ;, ;, 1, name newgame_noprofile )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 2, "@MENU_NEWGAME", setdvar ui_newgame_nextmenu 2; open popmenu_content_warning; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, ;, ;, when( dvarbool( sv_saveDeviceAvailable ) && ( dvarbool( sv_saveGameAvailable ) || dvarbool( sv_saveGameNotReadable ) ) ), name newgame_nosavegame )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 2, "@MENU_NEWGAME", setdvar ui_newgame_nextmenu 1; open popmenu_content_warning; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, ;, ;, when( dvarbool( sv_saveDeviceAvailable ) && !dvarbool( sv_saveGameAvailable ) && !dvarbool( sv_saveGameNotReadable ) ), name newgame )
+
+			CHOICE_BUTTON_BG( 3, 1 )
+			CHOICE_HIGHLIGHT( 3, 1 )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 3, "@MENU_MISSION_SELECT", open popmenu_savedevice_unavailable_warning_mission; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, ;, ;, when( !dvarbool( sv_saveDeviceAvailable ) ), name resume_nosavedevice )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 3, "@MENU_MISSION_SELECT", open levels; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, ;, ;, when( dvarbool( sv_saveDeviceAvailable ) ), name levelselect )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 3, "@MENU_MISSION_SELECT", open noprofilewarning_levelselect; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, ;, ;, 1, name levelselect_noprofile )	
+
+			//CHOICE_SEPARATOR( CHOICE_SEP_1 )
+			//CHOICE_BUTTON_FOCUS_VIS_EX_ADV( 4, "@MENU_ARCADEMODE", open popmenu_arcade; LOCAL_NETWORK_RESET;, CLEARUIHINT, CLEARUIHINT, when( dvarInt( mis_01 ) >= 20 );, ;, dvarInt( mis_01 ) >= 20 )
+			//CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 4, "", ;, exec "set ui_hint_text @MENU_ARCADE_UNLOCK_DESC"; show "desc_arrow", CLEARUIHINT, when( dvarInt( mis_01 ) < 20 );, ; )
+			//CHOICE_DBUTTON_VIS( 4, "@MENU_ARCADEMODE", when( dvarInt( mis_01 ) < 20 ); )
+
+#endif
+		
+#ifdef PS3		
+		
+			CHOICE_BUTTON_FOCUS_VIS_ADV( 1, "@MENU_RESUMEGAME_CAP", open resume_popmenu; LOCAL_ZOMBIE_RESET, ;, ;, when( dvarbool( sv_saveGameAvailable ) ), dvarbool( sv_saveGameAvailable ) )
+			CHOICE_BUTTON_FOCUS_VIS_ADV( 1, "@MENU_RESUMEGAME_CAP", open save_corrupted; LOCAL_ZOMBIE_RESET, ;, ;, when( !dvarbool( sv_saveGameAvailable ) && dvarbool( sv_saveGameNotReadable ) ), !dvarbool( sv_saveGameAvailable ) && dvarbool( sv_saveGameNotReadable ) )
+			//CHOICE_DBUTTON_VIS( 1, "@MENU_RESUMEGAME", when( !dvarbool( sv_saveGameAvailable ) && !dvarbool( sv_saveGameNotReadable ) ); )
+			
+			CHOICE_BUTTON_FOCUS_VIS_ADV( 2, "@MENU_NEWGAME", setdvar ui_newgame_nextmenu 1; open popmenu_content_warning; LOCAL_ZOMBIE_RESET, ;, ;, when( !dvarbool( sv_saveGameAvailable ) || dvarbool( sv_saveGameNotReadable ) ), !dvarbool( sv_saveGameAvailable ) || dvarbool( sv_saveGameNotReadable ) )
+			CHOICE_BUTTON_FOCUS_VIS_ADV( 2, "@MENU_NEWGAME", setdvar ui_newgame_nextmenu 2; open popmenu_content_warning; LOCAL_ZOMBIE_RESET, ;, ;, when( dvarbool( sv_saveGameAvailable ) && !dvarbool( sv_saveGameNotReadable ) ), dvarbool( sv_saveGameAvailable ) && !dvarbool( sv_saveGameNotReadable ) )
+
+			//CHOICE_BUTTON( 3, "@MENU_MISSION_SELECT", open levels_game; LOCAL_ZOMBIE_RESET )
+			CHOICE_BUTTON_FOCUS_VIS_EX( 3, "@MENU_MISSION_SELECT", open levels;  LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, ;, ;, when( dvarint( mis_01 ) >= 1 ), name levelselect )
+	
+			//CHOICE_BUTTON_FOCUS_VIS_EX_ADV( 4, "@MENU_ARCADEMODE", open popmenu_arcade;, CLEARUIHINT, CLEARUIHINT, when( dvarInt( mis_01 ) >= 20 );, ;, dvarInt( mis_01 ) >= 20 )
+			//CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 4, "", ;, exec "set ui_hint_text @MENU_ARCADE_UNLOCK_DESC"; show "desc_arrow", CLEARUIHINT, when( dvarInt( mis_01 ) < 20 );, ; )
+			//CHOICE_DBUTTON_VIS( 4, "@MENU_ARCADEMODE", when( dvarInt( mis_01 ) < 20 ); )
+
+#endif
+		
+#ifdef PC
+			// all buttons will be hidden when option menus are opened, LocalVarBool(ui_hideBack)
+
+			CHOICE_BUTTON_FOCUS_VIS_ADV( 1, "@MENU_RESUMEGAME_CAP", open resume_popmenu; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, ;, ;, when( dvarbool( sv_saveGameAvailable ) && !localvarBool( ui_hideBack ) ), dvarbool( sv_saveGameAvailable ) && !localvarBool( ui_hideBack ) )
+			
+			CHOICE_BUTTON_BG( 2, when( !localvarBool( ui_hideBack ) ); )
+			CHOICE_HIGHLIGHT( 2, 1 )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 2, "@MENU_NEWGAME", open popmenu_newgame; LOCAL_NETWORK_RESET; LOCAL_ARCADE_RESET; LOCAL_ZOMBIE_RESET, ;, ;, when( !localvarBool( ui_hideBack ) && !dvarBool(sv_saveGameAvailable) );, name newgame )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 2, "@MENU_NEWGAME", open popmenu_overwrite_warning; LOCAL_NETWORK_RESET; LOCAL_ARCADE_RESET; LOCAL_ZOMBIE_RESET, ;, ;, when( !localvarBool( ui_hideBack ) && dvarBool(sv_saveGameAvailable) );, name newgame )
+
+		
+			CHOICE_BUTTON_VIS( 3, "@MENU_MISSION_SELECT", open levels; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, when( !localvarBool( ui_hideBack ) ); )
+			//CHOICE_BUTTON_VIS( 4, "@MENU_SELECT_PROFILE", setdvar ui_playerProfileAlreadyChosen 0; open player_profile, when( !localvarBool( ui_hideBack ) ); )
+
+			//CHOICE_BUTTON_VIS( 4, "@MENU_ARCADEMODE", open popmenu_arcade; LOCAL_NETWORK_RESET; LOCAL_ZOMBIE_RESET, when( dvarInt( mis_01 ) >= 20 && !localvarBool( ui_hideBack ) ); )
+			//CHOICE_DBUTTON_VIS( 4, "@MENU_ARCADEMODE", when( dvarInt( mis_01 ) < 20 && !localvarBool( ui_hideBack ) ); )
+#endif // #ifdef PC
+		
+		#include "ui/safearea.menu"
+	}
+	
+	menuDef
+	{
+		name			main_online
+		fullScreen		1
+		rect			0 0 640 480
+		focusColor		COLOR_FOCUSED
+		soundloop 		"music_mainmenu"
+		onOpen
+		{
+			//clear hint for arcade mode description
+			CLEARUIHINT
+			LOCAL_ZOMBIE_RESET
+			
+#ifdef CONSOLE
+			setdvar ui_version_show "0";
+
+			profilehide levelselect_noprofile;
+			profileshow levelselect;
+			profilehide newgame_noprofile;
+			profileshow newgame;
+			
+			//showhidenewgameresume;
+
+			focusfirst;
+#endif
+
+#ifdef PC
+			setdvar dw_active 1
+#endif
+			uiScript openmenuondvar ui_sp_unlock 1 "popmenu_sp_unlock";
+		}
+		onFocus
+		{
+			//execnow "ui_cinematic front_end_coop 3"
+			#ifdef PC
+			// setdvar onlinegame "1"
+			#endif
+		}
+#undef BACK_OPEN
+#define BACK_OPEN \
+			exec "xstopprivateparty"; \
+			exec "xstopparty"; \
+			exec "set splitscreen 0"; \
+			exec "set arcademode 0"; \
+			LOCAL_ZOMBIE_RESET \
+			LOCAL_NETWORK_RESET	\ 
+			close main_online;
+
+		onEsc
+		{		
+			BACK_OPEN	
+		}
+
+		// background
+		#include "ui/blurredbg.inc"
+		#include "ui/navcontrols.inc"
+
+		CHOICE_MENU_TITLE( "@REMASTERED_COOP_TITLE" )
+
+		itemDef
+		{
+			rect			LOGO_START_X LOGO_START_Y 256 64 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
+			forecolor		1 1 1 1
+			style			WINDOW_STYLE_SHADER
+			background		"logo_cod2"
+#ifdef CONSOLE
+			visible			1
+#else 
+			visible			when( !localVarBool( ui_hideBack ) );
+#endif
+			decoration
+		}
+		
+		// draws signin status
+		SIGNIN_STATUS
+
+#ifdef CONSOLE
+	#define SETUP_ACTION_PUBLIC_GAME \
+		exec "xblive_privatematch 0"; \
+		open menu_xboxlive;
+#endif // #ifdef CONSOLE
+
+#define SETUP_ACTION_SUMMARY_RESET \
+		uiScript closeMenuOnDvar "ui_lobbypopup" summary "popup_summary_body"; \
+		setdvar ui_lobbypopup ""; \
+		setdvar ui_lobbypopup_text "";
+
+#ifdef PC
+	#define SETUP_ACTION_PUBLIC_GAME \
+			exec "sv_privateclients 1"; \
+			exec "xstartpublicpartyhost"; \
+			exec "updategamerprofile"; \
+			open "menu_xboxlive_lobby";
+			
+	#define SETUP_ACTION_HOSTONLINE \
+			exec "systemlink 0"; \
+			exec "splitscreen 0"; \
+			exec "onlinegame 1"; \
+			exec "exec "XBOXLIVE_MP_CFG; \
+			exec "party_maxplayers 4"; \
+			exec "xblive_privatematch 0"; \
+			exec "xblive_rankedmatch 0"; \
+			exec "party_timerVisible 0"; \
+			exec "xstartprivateparty"; \
+			setdvar ui_mptype "0"; \
+			SET_ARCADE_MODE \
+			SET_DEFAULT_MAP_AND_MODE \
+			SETUP_ACTION_PUBLIC_GAME 
+			
+
+#else
+	#define SETUP_ACTION_XBOXLIVE \
+			exec "xsigninlive"; \
+			exec "systemlink 0"; \
+			exec "splitscreen 0"; \
+			exec "onlinegame 1"; \
+			exec "exec "XBOXLIVE_MP_CFG; \
+			exec "party_maxplayers 4"; \
+			exec "xblive_privatematch 0"; \
+			exec "xblive_rankedmatch 0"; \
+			exec "party_timerVisible 0"; \
+			exec "xstartprivateparty"; \
+			setdvar ui_mptype "0"; \
+			SETUP_ACTION_PUBLIC_GAME \
+			SETUP_ACTION_SUMMARY_RESET \
+			SET_DEFAULT_MAP_AND_MODE
+#endif // #ifdef PC
+			
+#define SETUP_ACTION_SYSTEMLINK \
+			exec "xsignin"; \
+			exec "systemlink 1"; \
+			exec "splitscreen 0"; \
+			exec "xblive_rankedmatch 0"; \
+			exec "onlinegame 0"; \
+			exec "exec "SYSTEMLINK_MP_CFG; \
+			setdvar ui_mptype "1"; \
+			open systemlink_popup; \
+			LOCAL_ZOMBIE_RESET \
+			SET_ARCADE_MODE \
+			SET_DEFAULT_MAP_AND_MODE
+			
+#define SETUP_ACTION_SYSTEMLINK_LOBBY \
+			exec "xsignin"; \
+			exec "systemlink 1"; \
+			exec "splitscreen 0"; \
+			exec "onlinegame 0"; \
+			exec "exec "SYSTEMLINK_MP_CFG; \
+			exec "party_maxplayers 4"; \
+			exec "xblive_privatematch 0"; \
+			exec "xblive_rankedmatch 0"; \
+			exec "party_timerVisible 0"; \
+			setdvar ui_mptype "0"; \
+			open menu_systemlink_popmenu;/*menu_systemlink_popmenu menu_systemlink_party;*/ \
+			LOCAL_ZOMBIE_RESET \
+			SET_ARCADE_MODE \
+			SET_DEFAULT_MAP_AND_MODE
+
+#define SETUP_ACTION_SPLITSCREEN_LOBBY \
+			exec "splitscreen 1"; \
+			exec "endsplitscreensignin"; \
+			exec "xblive_rankedmatch 0"; \
+			exec "onlinegame 0"; \
+			exec "systemlink 0"; \
+			setdvar ui_mptype "0"; \
+			open menu_splitscreen_lobby; \
+			LOCAL_ZOMBIE_RESET \
+			SET_ARCADE_MODE \
+			SET_DEFAULT_MAP_AND_MODE
+
+#define SETUP_ACTION_GAMEBROWSER \
+			exec "systemlink 0"; \
+			exec "splitscreen 0"; \
+			exec "onlinegame 1"; \
+			exec "xblive_privatematch 0"; \
+			exec "xblive_rankedmatch 0"; \
+			exec "party_timerVisible 0"; \
+			setdvar ui_mptype "0"; \
+			SETUP_ACTION_SUMMARY_RESET \
+			open pc_join_unranked;
+
+#define SETUP_ACTION_HOSTLAN \
+			exec "systemlink 1"; \
+			exec "onlinegame 1"; \
+			exec "exec "SYSTEMLINK_MP_CFG; \
+			exec "party_maxplayers 4"; \
+			exec "xblive_privatematch 1"; \
+			exec "xblive_rankedmatch 0"; \
+			exec "party_timerVisible 0"; \
+			exec "xstartprivateparty"; \
+			setdvar ui_mptype "0"; \
+			SETUP_ACTION_PUBLIC_GAME \
+			SET_ARCADE_MODE \
+			SETUP_ACTION_SUMMARY_RESET \
+			//SET_DEFAULT_MAP_AND_MODE
+			exec "set ui_mapname nazi_zombie_factory"; \
+			exec "set ui_gametype zom";	\
+			
+		#ifdef XENON
+			CHOICE_BUTTON_BG( 1, 1 );
+			CHOICE_HIGHLIGHT( 1, 1 );
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@PLATFORM_XBOX_LIVE", SETUP_ACTION_XBOXLIVE, CLEARUIHINT;, ;, when( dvarBool( ui_ethernetLinkActive ) ), name xboxliveselect )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@PLATFORM_XBOX_LIVE", open error_netconnect_popmenu;, CLEARUIHINT;, ;, when( !dvarBool( ui_ethernetLinkActive ) ), name xboxliveselect_nolink )
+			
+			CHOICE_BUTTON_FOCUS_VIS_EX( 2, "@MENU_SPLIT_SCREEN", SETUP_ACTION_SPLITSCREEN_LOBBY, CLEARUIHINT;, ;, 1, name splitscreenselect )
+
+			CHOICE_BUTTON_BG( 3, 1 );
+			CHOICE_HIGHLIGHT( 3, 1 );
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 3, "@PLATFORM_SYSTEM_LINK", SETUP_ACTION_SYSTEMLINK_LOBBY, CLEARUIHINT;, ;, when( dvarBool( ui_ethernetLinkActive ) ), name systemlinkselect )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 3, "@PLATFORM_SYSTEM_LINK", open error_netconnect_popmenu;, CLEARUIHINT;, ;, when( !dvarBool( ui_ethernetLinkActive ) ), name systemlinkselect_nolink )
+			
+		#endif
+		
+		#ifdef PS3
+			CHOICE_BUTTON_FOCUS_VIS_EX( 1, "@PLATFORM_PLAY_ONLINE", SETUP_ACTION_XBOXLIVE, CLEARUIHINT;, ;, 1, name xboxliveselect )
+			CHOICE_BUTTON_FOCUS_VIS_EX( 2, "@MENU_SPLIT_SCREEN", SETUP_ACTION_SPLITSCREEN_LOBBY, CLEARUIHINT;, ;, 1, name splitscreenselect )
+			CHOICE_BUTTON_FOCUS_VIS_EX( 3, "@PLATFORM_SYSTEM_LINK", SETUP_ACTION_SYSTEMLINK_LOBBY, CLEARUIHINT;, ;, 1, name systemlinkselect )		
+		#endif
+		
+		#ifdef PC
+			// all buttons will be hidden when option menus are opened, LocalVarBool(ui_hideBack)
+			//CHOICE_BUTTON_BG( 1, 1 )
+			//CHOICE_HIGHLIGHT( 1, 1 )
+			//CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@PLATFORM_PLAY_ONLINE", SETUP_ACTION_XBOXLIVE, CLEARUIHINT;, ;, 1, name xboxliveselect )
+			//
+			//CHOICE_BUTTON_BG( 2, 1 )
+			//CHOICE_HIGHLIGHT( 2, 1 )
+			//CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 2, "@PLATFORM_SYSTEM_LINK", SETUP_ACTION_SYSTEMLINK_LOBBY, CLEARUIHINT;, ;, 1, name systemlinkselect )								
+			
+/*			#define SETUP_ACTION_CHALLENGES \
+					statSetUsingTable( 263, 1 ); \
+					open menu_challenges*/
+
+			#define SETUP_ACTION_COLLECTIBLES \
+				open menu_collectibles;
+
+			#undef CHOICE_SEP_1
+			#define CHOICE_SEP_1			1
+
+			#undef CHOICE_SEP_2
+			#define CHOICE_SEP_2			3
+
+			CHOICE_BUTTON_BG( 1, when( !localVarBool( ui_hideBack ) ) )
+			CHOICE_HIGHLIGHT( 1, 1 )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@MENU_FIND_GAME", SETUP_ACTION_GAMEBROWSER, CLEARUIHINT;, ;, when( !localVarBool( ui_hideBack ) ), name gamebrowser )
+
+			CHOICE_BUTTON_FOCUS_VIS( 2, "@MENU_HOST_ONLINE_CAP", SETUP_ACTION_HOSTONLINE, exec "set ui_hint_text @MPUI_DESC_HOST_ONLINE", CLEARUIHINT, when( !localVarBool( ui_hideBack ) && dvarBool( dw_loggedin ) ) )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI( 2, "", ;, exec "set ui_hint_text @MPUI_DESC_HOST_ONLINE_LOCKED", CLEARUIHINT, when( !localVarBool( ui_hideBack ) && !dvarBool( dw_loggedin ) ) )
+			CHOICE_DBUTTON_VIS( 2, "@MENU_HOST_ONLINE_CAP", when( !localVarBool( ui_hideBack ) && !dvarBool( dw_loggedin ) ) )
+
+			CHOICE_BUTTON_BG( 3, when( !localVarBool( ui_hideBack ) ) )
+			CHOICE_HIGHLIGHT( 3, 1 )
+			CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 3, "@MENU_HOST_LAN_CAP", SETUP_ACTION_HOSTLAN, CLEARUIHINT;, ;, when( !localVarBool( ui_hideBack ) ), name hostlan )
+
+			//CHOICE_BUTTON_BG( 4, when( !localVarBool( ui_hideBack ) ) )
+			//CHOICE_HIGHLIGHT( 4, 1 )
+			//CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 4, "@MENU_RANK_AND_CHALLENGES_CAP", SETUP_ACTION_CHALLENGES, CLEARUIHINT;, ;, when( !localVarBool( ui_hideBack ) ), name challenges )					
+			
+			//CHOICE_BUTTON_BG( 5, when( !localVarBool( ui_hideBack ) ) )
+			//CHOICE_HIGHLIGHT( 5, 1 )
+			//CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 5, "@MENU_DEATHCARDS", SETUP_ACTION_COLLECTIBLES, CLEARUIHINT;, ;, when( !localVarBool( ui_hideBack ) ), name deathcards )					
+
+			CHOICE_FOOTNOTE_VIS( "@REMASTERED_T4M_WARNING", 40, 430, when( !localvarBool( ui_hideBack ) && !localvarBool( ui_inOverlay ) ) )
+		#endif // #ifdef PC
+
+#ifdef CONSOLE
+		#undef FOOTNOTE_RECT
+		#define FOOTNOTE_RECT( x, y )			x y 640 22 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
+		CHOICE_FOOTNOTE( "@MENU_GAME_EXPERIENCE_MAY_CHANGE", -250, -22 )
+#endif // #ifdef CONSOLE
+
+		#include "ui/safearea.menu"
+	}
+
+	#include "ui_mp/popupstyle.inc"
+	#include "ui/choices_setup_popmenu.menu"
+	
+	#undef CHOICE_SIZE_X
+	#define CHOICE_SIZE_X			180
+
+	#undef CHOICE_HORIZONTAL_ALIGN
+	#define CHOICE_HORIZONTAL_ALIGN	HORIZONTAL_ALIGN_LEFT
+	#undef CHOICE_VERTICAL_ALIGN
+	#define CHOICE_VERTICAL_ALIGN	VERTICAL_ALIGN_TOP
+
+#ifdef CONSOLE
+	#undef CHOICE_POPUP_TITLE_HEIGHT
+	#define CHOICE_POPUP_TITLE_HEIGHT	24
+	#undef CHOICE_X_START
+	#define CHOICE_X_START			78
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			135//230
+#endif
+
+#ifdef PC
+	#undef CHOICE_X_START
+	#define CHOICE_X_START			78
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			230
+	#undef CHOICE_SIZE_X
+	#define CHOICE_SIZE_X			180
+#endif
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP_ONOPEN( resume_popmenu, 2, ;, ;, 1 )
+		CHOICE_POPMENU_TITLE( "@MENU_RESUMEGAME_Q" )
+		
+		CHOICE_HIGHLIGHT( 2, 1 )
+		CHOICE_BUTTON_FOCUS_NOHI( 2, "@MENU_YES", exec "loadgame_continue"; close self;, play "mouse_over";, ;)
+		CHOICE_HIGHLIGHT( 3, 1 )
+		CHOICE_BUTTON_FOCUS_NOHI( 3, "@MENU_NO", close self;, play "mouse_over";, ; )
+	}
+	
+	menuDef
+	{
+		CENTER_POPUP_SETUP_ONOPEN( popmenu_arcade, 5, ;, ;, 1 )
+		CHOICE_POPMENU_TITLE( "@MENU_SELECT_ARCADEMODE" )
+		
+		CHOICE_HIGHLIGHT( 2, 1 )
+		CHOICE_BUTTON( 2, "@MENU_ARCADE_FULL", exec "set arcademode 1; set arcademode_full 1"; open popmenu_arcade_difficulty; close self; )
+		CHOICE_BUTTON( 2, "@MENU_ARCADE_SINGLE", exec "set arcademode 1; set arcademode_full 0"; open levels; close self; )
+		
+		CHOICE_CAPTION_VIS( 3, locstring("@MENU_ARCADE_FULL_DESC", dvarInt(s18)), when( localvarint(ui_highlight) == 1 ); autowrapped)
+		CHOICE_CAPTION_VIS( 3, "@MENU_ARCADE_SINGLE_DESC", when( localvarint(ui_highlight) == 2 ); autowrapped)
+	}
+
+#ifdef CONSOLE
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			250
+	#undef CHOICE_SIZE_X
+	#define CHOICE_SIZE_X			340
+
+	#define	RECT_Y_OFFSET			198
+	#define	CHOICE_CUSTOM_START		1
+#else // #ifdef CONSOLE
+	#undef CHOICE_X_START
+	#define CHOICE_X_START			78
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			230
+	#undef CHOICE_SIZE_X
+	#define CHOICE_SIZE_X			180
+#endif
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP_ONOPEN( error_netconnect_popmenu, 3, ;, ;, 1 )
+			
+		CHOICE_POPMENU_TITLE( "@MENU_NOTICE" )
+		CHOICE_POPMENU_SUBTITLE( "@XBOXLIVE_NETCONNECTION")
+
+		CHOICE_HIGHLIGHT( 3, 1 )
+		CHOICE_BUTTON_NOHI( 3, "@MENU_EXIT", close self;)
+	}
+
+
+
+	// popup for unlock of cheats and arcade mode
+	menuDef
+	{
+		CENTER_POPUP_SETUP_ONOPEN( popmenu_sp_unlock, 3, ;, ;, 1 )
+		onClose{ exec "set ui_sp_unlock 0";  }
+		onOpen{ exec "set ui_sp_unlock 0";  }
+		
+		CHOICE_POPMENU_TITLE( "@PLATFORM_SP_UNLOCK_TITLE" )
+		
+		CHOICE_POPMENU_SUBTITLE( "@PLATFORM_SP_UNLOCK_INFO" )
+		//CHOICE_POPMENU_SUBTITLE_VIS( "@PLATFORM_SP_UNLOCK_DESC", 1 exp rect Y( RECT_Y_OFFSET ); )		
+		
+		CHOICE_BUTTON( 3, "@MENU_OK", close self;)
+	}
+	
+	#undef CHOICE_SIZE_X
+	#define CHOICE_SIZE_X			180
+
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			230
+
+#ifdef PC
+	
+	menuDef
+	{
+		CENTER_POPUP_SETUP_ONOPEN( multi_popmenu, 3, ;, ;, 1 )
+		CHOICE_POPMENU_TITLE( "@MENU_SWITCHTOMULTIPLAYER" )
+		
+		CHOICE_BUTTON( 2, "@MENU_YES", uiScript startMultiplayer; close self;)
+		CHOICE_BUTTON( 3, "@MENU_NO", close self )
+	}	
+#endif
+
+	#define ONOPEN_OVERWRITE \
+		setfocus "no"; \
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP_ONOPEN( popmenu_overwrite_warning, 3, ;, ONOPEN_OVERWRITE, 1 )
+		CHOICE_POPMENU_TITLE( "@MENU_NEWGAME_NOCAPS" )
+
+		CHOICE_POPMENU_SUBTITLE( "@MENU_WARNING_CHECKPOINT_RESET" )
+
+		CHOICE_HIGHLIGHT( 2, 1 )
+		CHOICE_BUTTON_BG( 2, 1 )
+		CHOICE_BUTTON_FOCUS_NOHI( 2, "@MENU_YES", close self; open popmenu_newgame;, play "mouse_over";, ; )
+
+		CHOICE_HIGHLIGHT( 3, 1 )
+		CHOICE_BUTTON_BG( 3, 1 )
+		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 3, "@MENU_NO", close self;, play "mouse_over";, ;, 1, name "no" )
+	}
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP_ONOPEN( popmenu_autosave_warning, 3, ;, ;, 1 )
+		CHOICE_POPMENU_TITLE( "@MENU_NOTICE" )
+
+		CHOICE_POPMENU_SUBTITLE( "@MENU_WARNING_AUTOSAVE" )
+
+		CHOICE_HIGHLIGHT( 2, 1 )
+		CHOICE_BUTTON_NOHI( 2, "@MENU_YES", close self; open popmenu_newgame; )
+		CHOICE_HIGHLIGHT( 3, 1 )
+		CHOICE_BUTTON_NOHI_EX( 3, "@MENU_NO", close self;, name "no" )
+	}
+
+#ifdef PS3
+	menuDef
+	{
+		CENTER_POPUP_SETUP_ONOPEN( popmenu_autosave_warning_lockout, 6, ;, ;, 1 )
+		onClose{ exec "set ui_show_autosave_warning 0";  }
+		CHOICE_POPMENU_TITLE( "@MENU_NOTICE" )
+		CHOICE_POPMENU_SUBTITLE( "@MENU_WARNING_AUTOSAVE" )
+
+		CHOICE_HIGHLIGHT( 1, 1 )
+		CHOICE_BUTTON_NOHI( 1, "@MENU_OK", close self;)
+	}
+#endif // PS3
+
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP_ONOPEN( popup_options_noprofile, 3, ;, setfocus "no";, 1 )
+		
+		CHOICE_POPMENU_TITLE( "@MENU_WARNING_CAP" )
+		CHOICE_POPMENU_SUBTITLE( "@MENU_PROFILE_WARNING" )
+
+		CHOICE_BUTTON_EX( 2, "@MENU_YES", close self; open options, name yes )
+		CHOICE_BUTTON_EX( 3, "@MENU_NO", exec "xsignin 0"; close self;, name no )
+	}
+
+#define LOCAL_ACTION_CONTENT_WARNING \
+	uiScript openMenuOnDvar ui_newgame_nextmenu 1 popmenu_newgame; \
+	uiScript openMenuOnDvar ui_newgame_nextmenu 2 popmenu_overwrite_warning; \
+	uiScript openMenuOnDvar ui_newgame_nextmenu 3 noprofilewarning_newgame; \
+	uiScript openMenuOnDvar ui_newgame_nextmenu 4 popmenu_savedevice_unavailable_warning; \
+	close self;
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP_ONOPEN( popmenu_content_warning, 3, close self;, ;, 1 )
+		CHOICE_POPMENU_TITLE( "@MENU_WARNING_CAP" )
+
+		CHOICE_POPMENU_SUBTITLE( "@MENU_CONTENT_WARNING" )
+
+		CHOICE_HIGHLIGHT( 3, 1 )
+		CHOICE_BUTTON_FOCUS_NOHI( 3, "@MENU_OK", LOCAL_ACTION_CONTENT_WARNING, play "mouse_over";, ; )
+	}
+
+	//menuDef
+	//{
+	//	name			"popmenu_first_playable"
+	//	visible			0
+	//	fullscreen		0
+	//	rect			204 140 235 160
+	//	focusColor		COLOR_FOCUSED
+	//	style			WINDOW_STYLE_FILLED
+	//	border			1
+	//	popup
+	//	onESC
+	//	{
+	//		play "mouse_over";
+	//		close popmenu_first_playable;
+	//	}
+	//	onOpen
+	//	{
+	//		exec "updatedvarsfromprofile";
+	//		setfocus "newgame_regular";
+	//		setfocusbydvar "g_gameskill";
+	//	}
+	//	onClose
+	//	{
+	//	}
+	//	itemDef
+	//	{
+	//		name			window
+	//		group			grpControlbutton
+	//		rect			0 2 235 135
+	//		style			WINDOW_STYLE_FILLED
+	//		border			1
+	//		bordercolor		.5 .5 .5 .5
+	//		forecolor		1 1 1 1
+	//		backcolor		0 0 0 .5
+	//		visible			0
+	//		decoration
+	//	}
+	//	itemDef
+	//	{
+	//		name			backimage2fade
+	//		style			WINDOW_STYLE_SHADER
+	//		rect			-332 -162 896 440
+	//		background		"white"
+	//		forecolor		0 0 0 0.6
+	//		backcolor		0 0 0 0.6
+	//		visible			1
+	//		decoration
+	//	}
+	//	itemDef
+	//	{
+	//		name			window2
+	//		group			grpControlbutton
+	//		rect			2 3 231 20
+	//		style			WINDOW_STYLE_FILLED
+	//		border			1
+	//		bordercolor		.1 .1 .1 .2
+	//		forecolor		1 1 1 1
+	//		backcolor		1 1 .3 .3
+	//		visible			0
+	//		decoration
+	//	}
+	//	itemDef
+	//	{
+	//		name			backimage2fade
+	//		style			WINDOW_STYLE_SHADER
+	//		rect			-200 2 635 225
+	//		background		"popmenu_bg"
+	//		visible			1
+	//		decoration
+	//	}
+	//	itemDef
+	//	{
+	//		name			confirm
+	//		text			"@MENU_CHOOSESKILLLEVEL"
+	//		style			WINDOW_STYLE_EMPTY
+	//		textscale		TEXTSIZE_TITLE
+	//		rect			17 6 201 24
+	//		textalign		ITEM_ALIGN_MIDDLE_CENTER
+	//		forecolor		COLOR_TITLE
+	//		visible			1
+	//		decoration
+	//	}
+	//	itemDef
+	//	{
+	//		name			newgame_easy
+	//		text			"@MENU_EASY"
+	//		type			ITEM_TYPE_BUTTON
+	//		textscale		TEXTSIZE_DEFAULT
+	//		style			WINDOW_STYLE_FILLED
+	//		textfont		UI_FONT_NORMAL
+	//		rect			70 43 100 16
+	//		textalign		ITEM_ALIGN_MIDDLE_CENTER
+	//		forecolor		COLOR_UNFOCUSED
+	//		visible			1
+	//		dvartest		"g_gameskill"
+	//		focusdvar		{ "0" }
+	//		onFocus
+	//		{
+	//			play "mouse_over";
+	//			show newgame_regular_description;
+	//		}
+	//		leavefocus
+	//		{
+	//			hide newgame_regular_description;
+	//		}
+	//		action
+	//		{
+	//			play "mouse_click";
+	//			execnow "difficultyeasy";
+	//			execnow "updategamerprofile";
+	//			close popmenu_first_playable;
+	//			exec "devmap bog_a";
+	//		}
+	//	}
+	//	itemDef
+	//	{
+	//		name			newgame_regular
+	//		text			"@MENU_REGULAR"
+	//		type			ITEM_TYPE_BUTTON
+	//		textscale		TEXTSIZE_DEFAULT
+	//		style			WINDOW_STYLE_FILLED
+	//		textfont		UI_FONT_NORMAL
+	//		rect			70 63 100 16
+	//		textalign		ITEM_ALIGN_MIDDLE_CENTER
+	//		forecolor		COLOR_UNFOCUSED
+	//		visible			1
+	//		dvartest		"g_gameskill"
+	//		focusdvar		{ "1" }
+	//		onFocus
+	//		{
+	//			play "mouse_over";
+	//			show newgame_skilled_description;
+	//		}
+	//		leavefocus
+	//		{
+	//			hide newgame_skilled_description;
+	//		}
+	//		action
+	//		{
+	//			play "mouse_click";
+	//			execnow "difficultymedium";
+	//			execnow "updategamerprofile";
+	//			close popmenu_first_playable;
+	//			exec "devmap bog_a";
+	//		}
+	//	}
+	//	itemDef
+	//	{
+	//		name			newgame_hard
+	//		text			"@MENU_HARDENED"
+	//		type			ITEM_TYPE_BUTTON
+	//		textscale		TEXTSIZE_DEFAULT
+	//		style			WINDOW_STYLE_FILLED
+	//		textfont		UI_FONT_NORMAL
+	//		rect			70 83 100 16
+	//		textalign		ITEM_ALIGN_MIDDLE_CENTER
+	//		forecolor		COLOR_UNFOCUSED
+	//		visible			1
+	//		dvartest		"g_gameskill"
+	//		focusdvar		{ "2" }
+	//		onFocus
+	//		{
+	//			play "mouse_over";
+	//			show newgame_hardened_description;
+	//		}
+	//		leavefocus
+	//		{
+	//			hide newgame_hardened_description;
+	//		}
+	//		action
+	//		{
+	//			play "mouse_click";
+	//			execnow "difficultyhard";
+	//			execnow "updategamerprofile";
+	//			close popmenu_first_playable;
+	//			exec "devmap bog_a";
+	//		}
+	//	}
+	//	itemDef
+	//	{
+	//		name			newgame_fu
+	//		text			"@MENU_VETERAN"
+	//		type			ITEM_TYPE_BUTTON
+	//		textscale		TEXTSIZE_DEFAULT
+	//		style			WINDOW_STYLE_FILLED
+	//		textfont		UI_FONT_NORMAL
+	//		rect			70 103 100 16
+	//		textalign		ITEM_ALIGN_MIDDLE_CENTER
+	//		forecolor		COLOR_UNFOCUSED
+	//		visible			1
+	//		dvartest		"g_gameskill"
+	//		focusdvar		{ "3" }
+	//		onFocus
+	//		{
+	//			play "mouse_over";
+	//			show newgame_fu_description;
+	//		}
+	//		leavefocus
+	//		{
+	//			hide newgame_fu_description;
+	//		}
+	//		action
+	//		{
+	//			play "mouse_click";
+	//			execnow "difficultyfu";
+	//			execnow "updategamerprofile";
+	//			close popmenu_first_playable;
+	//			exec "devmap bog_a";
+	//		}
+	//	}
+	//	itemDef
+	//	{
+	//		name			newgame_regular_description_1
+	//		group			newgame_regular_description
+	//		text			"@MENU_REGULAR_DESC_3"
+	//		type			ITEM_TYPE_BUTTON
+	//		textscale		.3
+	//		style			WINDOW_STYLE_FILLED
+	//		textfont		UI_FONT_NORMAL
+	//		rect			70 139 100 17
+	//		textalign		ITEM_ALIGN_TOP_CENTER
+	//		forecolor		COLOR_UNFOCUSED
+	//		visible			0
+	//		decoration
+	//	}
+	//	itemDef
+	//	{
+	//		name			newgame_regular_description_1
+	//		group			newgame_regular_description
+	//		text			"@MENU_REGULAR_DESC_4"
+	//		type			ITEM_TYPE_BUTTON
+	//		textscale		.3
+	//		style			WINDOW_STYLE_FILLED
+	//		textfont		UI_FONT_NORMAL
+	//		rect			70 154 100 17
+	//		textalign		ITEM_ALIGN_TOP_CENTER
+	//		forecolor		COLOR_UNFOCUSED
+	//		visible			0
+	//		decoration
+	//	}
+	//	itemDef
+	//	{
+	//		name			newgame_skilled_description_1
+	//		group			newgame_skilled_description
+	//		text			"@MENU_SKILLED_DESC"
+	//		type			ITEM_TYPE_BUTTON
+	//		textscale		.3
+	//		style			WINDOW_STYLE_FILLED
+	//		textfont		UI_FONT_NORMAL
+	//		rect			70 139 100 17
+	//		textalign		ITEM_ALIGN_TOP_CENTER
+	//		forecolor		COLOR_UNFOCUSED
+	//		visible			0
+	//		decoration
+	//	}
+	//	itemDef
+	//	{
+	//		name			newgame_skilled_description_1
+	//		group			newgame_skilled_description
+	//		text			"@MENU_SKILLED_DESC_2"
+	//		type			ITEM_TYPE_BUTTON
+	//		textscale		.3
+	//		style			WINDOW_STYLE_FILLED
+	//		textfont		UI_FONT_NORMAL
+	//		rect			70 154 100 17
+	//		textalign		ITEM_ALIGN_TOP_CENTER
+	//		forecolor		COLOR_UNFOCUSED
+	//		visible			0
+	//		decoration
+	//	}
+	//	itemDef
+	//	{
+	//		name			newgame_hardened_description_1
+	//		group			newgame_hardened_description
+	//		text			"@MENU_HARDENED_DESC"
+	//		type			ITEM_TYPE_BUTTON
+	//		textscale		.3
+	//		style			WINDOW_STYLE_FILLED
+	//		textfont		UI_FONT_NORMAL
+	//		rect			70 144 100 17
+	//		textalign		ITEM_ALIGN_TOP_CENTER
+	//		forecolor		COLOR_UNFOCUSED
+	//		visible			0
+	//		decoration
+	//	}
+	//	itemDef
+	//	{
+	//		name			newgame_fu_description_1
+	//		group			newgame_fu_description
+	//		text			"@MENU_VETERAN_DESC"
+	//		type			ITEM_TYPE_BUTTON
+	//		textscale		.3
+	//		style			WINDOW_STYLE_FILLED
+	//		textfont		UI_FONT_NORMAL
+	//		rect			70 144 100 17
+	//		textalign		ITEM_ALIGN_TOP_CENTER
+	//		forecolor		COLOR_UNFOCUSED
+	//		visible			0
+	//		decoration
+	//	}
+	//	itemDef
+	//	{
+	//		name			back
+	//		text			"@MENU_BACK"
+	//		type			ITEM_TYPE_BUTTON
+	//		textscale		.3
+	//		style			WINDOW_STYLE_FILLED
+	//		textfont		UI_FONT_NORMAL
+	//		rect			0 220 50 15
+	//		textalign		ITEM_ALIGN_TOP_CENTER
+	//		forecolor		COLOR_UNFOCUSED
+	//		visible			0
+	//		onFocus
+	//		{
+	//			play "mouse_over";
+	//		}
+	//		action
+	//		{
+	//			play "mouse_click";
+	//			close popmenu_first_playable;
+	//		}
+	//	}
+	//}
+}
+

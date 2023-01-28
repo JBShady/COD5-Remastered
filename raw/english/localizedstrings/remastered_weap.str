@@ -1,0 +1,106 @@
+// Note to translators:
+// If a sentence is the same in your language then please change it to "#same"
+//
+// eg:
+// LANG_ENGLISH  "HALT"
+// LANG_GERMAN   "#same"
+//
+// (This is so we can tell which strings have been signed-off as ok to be the same words for QA
+//  and because we do not store duplicate strings, which will then get exported again next time
+//  as being untranslated.)
+//
+VERSION             "1"
+CONFIG              "C:\cod5\cod\cod5\bin\StringEd.cfg"
+FILENOTES           "Strings used in the weapon settings go in this file."
+
+REFERENCE           M7_LAUNCHER
+LANG_ENGLISH        "M7 Grenade Launcher"
+
+REFERENCE           M7_LAUNCHER_UP
+LANG_ENGLISH        "M700"
+
+REFERENCE           MOSIN_UP
+LANG_ENGLISH        "Moist-Nugget"
+
+REFERENCE           30CAL
+LANG_ENGLISH        "M1919 Browning"
+
+REFERENCE           30CAL_UP
+LANG_ENGLISH        "B115 Accelerator"
+
+REFERENCE           BAR
+LANG_ENGLISH        "M1918 BAR"
+
+REFERENCE           COLT_UP
+LANG_ENGLISH        "C-3000 B1at-ch35"
+
+REFERENCE           SAWED
+LANG_ENGLISH        "Sawed-Off Double-Barreled Shotgun"
+
+REFERENCE           DOUBLE_UP
+LANG_ENGLISH        "24 Bore Long Range"
+
+REFERENCE           DP28_UP
+LANG_ENGLISH        "The Dinner Plate"
+
+REFERENCE           CARBINE
+LANG_ENGLISH        "M1 Carbine"
+
+REFERENCE           NAMBU
+LANG_ENGLISH        "Type 14 Nambu"
+
+REFERENCE           NAMBU_UP
+LANG_ENGLISH        "DEVILDOG F0c-k3r"
+
+REFERENCE           STG
+LANG_ENGLISH        "StG-44"
+
+REFERENCE           SVT_UP
+LANG_ENGLISH        "SLVT-69"
+
+REFERENCE           THOMPSON
+LANG_ENGLISH        "M1A1 Thompson"
+
+REFERENCE           TOKAREV
+LANG_ENGLISH        "Tokarev TT-33"
+
+REFERENCE           TOKAREV_UP
+LANG_ENGLISH        "Cyk4-B1y4t"
+
+REFERENCE           TYPE99_UP
+LANG_ENGLISH        "The Eviscerator"
+
+REFERENCE           WALTHER
+LANG_ENGLISH        "Walther P38"
+
+REFERENCE           WALTHER_UP
+LANG_ENGLISH        "FR1TZ-6000000"
+
+REFERENCE           SPRINGFIELD
+LANG_ENGLISH        "M1903 Springfield"
+
+REFERENCE           SPRINGFIELD_SCOPED
+LANG_ENGLISH        "Scoped M1903 Springfield"
+
+REFERENCE           ARISAKA
+LANG_ENGLISH        "Type 99 Arisaka"
+
+REFERENCE           ARISAKA_SCOPED
+LANG_ENGLISH        "Scoped Type 99 Arisaka"
+
+REFERENCE           JOURNAL
+LANG_ENGLISH        "Richtofen's Journal"
+
+REFERENCE           RADIO
+LANG_ENGLISH        "Handheld Radio"
+
+REFERENCE           KATANA
+LANG_ENGLISH        "Katana"
+
+REFERENCE           VODKA
+LANG_ENGLISH        "Vodka Bottle"
+
+
+ENDMARKER
+
+

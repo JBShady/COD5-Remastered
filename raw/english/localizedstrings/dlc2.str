@@ -1,0 +1,52 @@
+// Note to translators:
+// If a sentence is the same in your language then please change it to "#same"
+//
+// eg:
+// LANG_ENGLISH  "HALT"
+// LANG_GERMAN   "#same"
+//
+// (This is so we can tell which strings have been signed-off as ok to be the same words for QA
+//  and because we do not store duplicate strings, which will then get exported again next time
+//  as being untranslated.)
+//
+VERSION             "1"
+CONFIG              "C:\cod5\cod\cod5\bin\StringEd.cfg"
+FILENOTES           ""
+
+REFERENCE           ZOMBIE_SURVIVOR
+LANG_ENGLISH        ""Soul Survivor""
+
+REFERENCE           ZOMBIE_SECRET
+LANG_ENGLISH        ""Dead Air""
+
+REFERENCE           ZOMBIE_REPAIR_BOARDS
+LANG_ENGLISH        ""Hammer Time""
+
+REFERENCE           ZOMBIE_POINTS
+LANG_ENGLISH        ""Big Baller""
+
+REFERENCE           ZOMBIE_NUKE_KILLS
+LANG_ENGLISH        ""Weapon of Minor Destruction""
+
+REFERENCE           ZOMBIE_MELEE_KILLS
+LANG_ENGLISH        ""Big Brawler""
+
+REFERENCE           ZOMBIE_KILLS
+LANG_ENGLISH        ""Fertilizer Man""
+
+REFERENCE           ZOMBIE_HEADSHOTS
+LANG_ENGLISH        ""Deadhead""
+
+REFERENCE           ZOMBIE_ALL_TRAPS
+LANG_ENGLISH        ""It's a Trap!""
+
+REFERENCE           ZOMBIE_ALL_PERKS
+LANG_ENGLISH        ""Perk-a-Holic""
+
+REFERENCE           ZOMBIE_EE
+LANG_ENGLISH        ""Doctor's Orders""
+
+
+ENDMARKER
+
+

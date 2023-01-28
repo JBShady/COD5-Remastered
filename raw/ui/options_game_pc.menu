@@ -1,0 +1,135 @@
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+#define OPTIONS_STYLE			1
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+
+{
+	menuDef 
+	{
+		name			options_game
+		fullScreen		0
+		rect			0 0 640 480
+		focusColor		COLOR_FOCUSED
+		soundloop		""
+		onOpen
+		{
+			close options_look;
+			close options_move;
+			close options_shoot;
+			close options_invehicle;
+			close options_misc;
+			close options_graphics;
+			close options_sound;
+			close options_view;
+			close options_defaults;
+			close options_driverinfo;
+			close options_credits;
+			close options_multi;
+			close options_graphics_defaults;
+			close options_graphics_texture;
+			close options_control_defaults;
+			close options_coop;
+
+			setLocalVarBool ui_hideBack 1;
+      	    setLocalVarBool controller_enabled 0;
+
+			uiScript getLanguage;
+		}
+		onClose
+		{
+			setLocalVarBool ui_hideBack 0;
+		}
+		onESC
+		{ 
+			close self;
+		}
+
+
+
+
+#define SINGLE_PLAYER ( dvarbool( onlinegame ) == 0 && dvarbool( systemlink ) == 0 )
+#define MULTIPLAYER ( dvarbool( onlinegame ) || dvarbool( systemlink ) )
+
+#ifdef PC_INGAME
+#define INGAME 1
+#else
+#define INGAME ( dvarBool( cl_ingame ))
+#endif
+
+		#include "ui_mp/leftside_options.inc"
+
+
+		CHOICE_SECTION_TITLE( 21, "@MENU_GAME_OPTIONS_CAP" )
+
+		CHOICE_DVARFLOATLIST_VIS( 22, "@MENU_MATURE", ;, { "@MENU_MATURE_UNRESTRICTED" 0 "@MENU_MATURE_UNRESTRICTED" 1 }, open mature_content_pc_disable_warning, when( dvarString( "cg_mature" ) == "1" && dvarBool(cg_allow_mature) && !INGAME && !dvarBool(ui_multiplayer) ) )
+   		CHOICE_DVARFLOATLIST_VIS( 22, "@MENU_MATURE", cg_mature, { "@MENU_MATURE_REDUCED" 1 "@MENU_MATURE_REDUCED" 0 }, setdvar "cg_mature" 1; setdvar cg_blood "1", when( dvarString( "cg_mature" ) == "0" && dvarBool(cg_allow_mature) && !INGAME && !dvarBool(ui_multiplayer) ) )   		
+		CHOICE_DDVARALTTEXT_VIS( 22, "@MENU_MATURE", "@MENU_MATURE_UNRESTRICTED", when( ( !dvarBool(cg_allow_mature) || INGAME ) && dvarString( "cg_mature" ) == "1" && !dvarBool(ui_multiplayer) ) )
+		CHOICE_DDVARALTTEXT_VIS( 22, "@MENU_MATURE", "@MENU_MATURE_REDUCED", when( ( !dvarBool(cg_allow_mature) || INGAME ) && dvarString( "cg_mature" ) == "0" && !dvarBool(ui_multiplayer) ) )
+		
+		CHOICE_DVARFLOATLIST_VIS( 23, "@REMASTERED_GAMETYPE", classic_zombies, { "@REMASTERED_MODIFIED_DEFAULT" 0 "@REMASTERED_CLASSIC" 1 }, ;, when( SINGLE_PLAYER && !INGAME ) ) // Effects # of zombie spawns and powerup cycles (carp)
+		CHOICE_DDVARALTTEXT_VIS( 23, "@REMASTERED_GAMETYPE", "@REMASTERED_MODIFIED_DEFAULT", when( SINGLE_PLAYER && INGAME && dvarString( "classic_zombies") == "0" ) )
+		CHOICE_DDVARALTTEXT_VIS( 23, "@REMASTERED_GAMETYPE", "@REMASTERED_CLASSIC", when( SINGLE_PLAYER && INGAME && dvarString( "classic_zombies") == "1" ) )
+		CHOICE_DDVARALTTEXT_VIS( 23, "@REMASTERED_GAMETYPE", "@REMASTERED_MODIFIED_DEFAULT", when( MULTIPLAYER ) )
+		
+		CHOICE_DVARFLOATLIST_VIS( 24, "@REMASTERED_LAST_STAND", classic_perks, { "@REMASTERED_MODIFIED_DEFAULT" 0 "@REMASTERED_CLASSIC" 1 }, ;, when( !INGAME ) ) // Disables solo quick revive & reverts to 30 second last stand time in coop
+		CHOICE_DDVARALTTEXT_VIS( 24, "@REMASTERED_LAST_STAND", "@REMASTERED_MODIFIED_DEFAULT", when( INGAME && dvarString( "classic_perks") == "0" ) )
+		CHOICE_DDVARALTTEXT_VIS( 24, "@REMASTERED_LAST_STAND", "@REMASTERED_CLASSIC", when( INGAME && dvarString( "classic_perks") == "1" ) )
+
+		CHOICE_DVARFLOATLIST_VIS( 25, "@REMASTERED_ENEMY_PUSH", grabby_zombies, { "@REMASTERED_MODIFIED_DEFAULT" 0 "@REMASTERED_CLASSIC" 1 }, ;, when( !INGAME ) ) // Effects behavior of individual zombies (grabbiness)
+		CHOICE_DDVARALTTEXT_VIS( 25, "@REMASTERED_ENEMY_PUSH", "@REMASTERED_MODIFIED_DEFAULT", when( INGAME && dvarString( "grabby_zombies") == "0" ) )
+		CHOICE_DDVARALTTEXT_VIS( 25, "@REMASTERED_ENEMY_PUSH", "@REMASTERED_CLASSIC", when( INGAME && dvarString( "grabby_zombies") == "1" ) )
+
+
+		CHOICE_DVARYESNO_VIS( 26, "@REMASTERED_CROSSHAIR", cg_drawCrosshair, ;, when( !dvarBool(ui_multiplayer) ); )
+
+		CHOICE_DVARSTRINGLIST( 27, "@REMASTERED_FPS_HUD", cg_drawFPS, { "@MENU_YES"; "Simple"; "@MENU_NO"; "Off" }, ; )
+		CHOICE_DVARFLOATLIST( 28, "@REMASTERED_FPS_LIMIT", com_maxfps, { "@MENU_YES" 85 "@MENU_NO" 0 }, ; )
+		CHOICE_DVARSLIDER( 29, "@REMASTERED_FOV", cg_fov, 80, 65, 90, setLocalVarBool ui_hideBack 1 )
+		CHOICE_DVARFLOATLIST( 30, "@REMASTERED_VIEW_SCALE", cg_fovscale, { "@REMASTERED_NORMAL" 1 "@REMASTERED_MEDIUM" 1.1 "@REMASTERED_HIGH" 1.2 }, ; )
+
+
+		CHOICE_DVARFLOATLIST( 31, "@REMASTERED_CTRL_INVERSION", input_invertpitch, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, ; )
+		CHOICE_DVARFLOATLIST( 32, "@REMASTERED_CTRL_SENSE", input_viewSensitivity, { "@REMASTERED_LOW" 0.6 "@REMASTERED_MED" 1 "3" 1.4 "@REMASTERED_HI" 1.8 "5" 2 "6" 2.2 "@REMASTERED_V_HI" 2.6 "8" 3 "9" 3.5 "@REMASTERED_INSANE" 4 }, ; )
+
+		CHOICE_DVARFLOATLIST_VIS( 33, "@REMASTERED_CONTROLLER_SUPPORT", controller_dummy, { "@REMASTERED_CONTROLLER_ENABLE" 0 "@REMASTERED_CONTROLLER_EXECUTED" 1 }, setLocalVarBool controller_enabled 1; exec "exec default_controller.cfg" , when ( !localVarBool( controller_enabled) ) )
+		CHOICE_DDVARALTTEXT_VIS( 33, "@REMASTERED_CONTROLLER_SUPPORT", "@REMASTERED_CONTROLLER_EXECUTED", when( localVarBool(controller_enabled) ) )
+
+		//CHOICE_DVARFLOATLIST_VIS( 26, "@MENU_LANGUAGE", ui_language, { "@MENU_ENGLISH" 0 "@MENU_FRENCH" 1 "@MENU_GERMAN" 2 "@MENU_ITALIAN" 3 "@MENU_SPANISH" 4 "@MENU_BRITISH" 5 "@MENU_RUSSIAN" 6 "@MENU_POLISH" 7 "@MENU_KOREAN" 8 "@MENU_TAIWANESE" 9 "@MENU_JAPANESE" 10 "@MENU_CHINESE" 11 "@MENU_THAI" 12 }, uiScript verifyLanguage, when( dvarint( developer ) ) )
+		//CHOICE_APPLY_VIS( "@MENU_APPLY_LANGUAGE_CHANGE", open language_restart_popmenu, when ( dvarint( ui_languageChanged ) ) )		
+		
+		itemDef 
+		{
+			name			controller_help
+			text			"@REMASTERED_CONTROLLER_V1"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			340 -87 280 200 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		when( !localVarBool( controller_enabled ) )
+			mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			controller_help_2
+			text			"@REMASTERED_CONTROLLER_V2"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			340 -87 300 200 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		when( localVarBool( controller_enabled ) )
+			mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+	}
+}

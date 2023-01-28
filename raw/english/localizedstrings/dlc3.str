@@ -1,0 +1,49 @@
+// Note to translators:
+// If a sentence is the same in your language then please change it to "#same"
+//
+// eg:
+// LANG_ENGLISH  "HALT"
+// LANG_GERMAN   "#same"
+//
+// (This is so we can tell which strings have been signed-off as ok to be the same words for QA
+//  and because we do not store duplicate strings, which will then get exported again next time
+//  as being untranslated.)
+//
+VERSION             "1"
+CONFIG              "C:\cod5\cod\cod5\bin\StringEd.cfg"
+FILENOTES           ""
+
+REFERENCE           ZOMBIE_PAP_ONCE
+LANG_ENGLISH        ""Wacker Packer""
+
+REFERENCE           ZOMBIE_USE_MONKEY
+LANG_ENGLISH        ""The Might of the Monkey""
+
+REFERENCE           ZOMBIE_FIVE_TELEPORTS
+LANG_ENGLISH        ""Frequent Flyer""
+
+REFERENCE           ZOMBIE_BOWIE_KILLS
+LANG_ENGLISH        ""40 Knives""
+
+REFERENCE           ZOMBIE_RAY_TESLA
+LANG_ENGLISH        ""Acquire Waffle Weapons""
+
+REFERENCE           ZOMBIE_TWO_UPGRADED
+LANG_ENGLISH        ""Pack Addict""
+
+REFERENCE           ZOMBIE_NO_PERKS
+LANG_ENGLISH        ""Perkaholics Anonymous""
+
+REFERENCE           ZOMBIE_ANTI_GRAVITY
+LANG_ENGLISH        ""Elevate Your Senses""
+
+REFERENCE           ZOMBIE_ALL_DOORS
+LANG_ENGLISH        ""Locksmith""
+
+REFERENCE           ZOMBIE_FAST_LINK
+LANG_ENGLISH        ""Der Electrician""
+
+
+ENDMARKER
+
+

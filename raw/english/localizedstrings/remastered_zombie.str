@@ -1,0 +1,121 @@
+// Note to translators:
+// If a sentence is the same in your language then please change it to "#same"
+//
+// eg:
+// LANG_ENGLISH  "HALT"
+// LANG_GERMAN   "#same"
+//
+// (This is so we can tell which strings have been signed-off as ok to be the same words for QA
+//  and because we do not store duplicate strings, which will then get exported again next time
+//  as being untranslated.)
+//
+VERSION             "1"
+CONFIG              "C:\cod5\cod\cod5\bin\StringEd.cfg"
+FILENOTES           ""
+
+REFERENCE           RANDOM_WEAPON_950
+LANG_ENGLISH        "Press & hold &&1 for a Random Weapon [Cost: 950]"
+
+REFERENCE           TRADE_WEAPONS
+LANG_ENGLISH        "Press & hold &&1 to trade weapons"
+
+REFERENCE           WEAPON_STIELHANDGRANATE_250
+LANG_ENGLISH        "Press & hold &&1 to buy Stielhandgranaten [Cost: 250]"
+
+REFERENCE           WEAPON_TYPE97FRAG_250
+LANG_ENGLISH        "Press & hold &&1 to buy Type 97 Grenades [Cost: 250]"
+
+REFERENCE           WEAPON_TYPE99_200
+LANG_ENGLISH        "Press & hold &&1 to buy Type 99 Arisaka [Cost: 200]"
+
+REFERENCE           WEAPON_SPRINGFIELD_200
+LANG_ENGLISH        "Press & hold &&1 to buy M1903 Springfield [Cost: 200]"
+
+REFERENCE           WEAPON_STG44_1200
+LANG_ENGLISH        "Press & hold &&1 to buy StG-44 [Cost: 1200]"
+
+REFERENCE           WEAPON_THOMPSON_1200
+LANG_ENGLISH        "Press & hold &&1 to buy M1A1 Thompson [Cost: 1200]"
+
+REFERENCE           WEAPON_DOUBLEBARREL_SAWED_1200
+LANG_ENGLISH        "Press & hold &&1 to buy Sawed-Off Double-Barreled Shotgun [Cost: 1200]"
+
+REFERENCE           WEAPON_BAR_1800
+LANG_ENGLISH        "Press & hold &&1 to buy M1918 BAR [Cost: 1800]"
+
+REFERENCE           WEAPON_BAR_BIPOD_2500
+LANG_ENGLISH        "Press & hold &&1 to buy M1918 BAR [Cost: 1800]"
+
+REFERENCE           PERK_QUICKREVIVE
+LANG_ENGLISH        "Press & hold &&1 to buy Quick Revive [Cost: 1500]"
+
+REFERENCE           ZIPLINE_ACTIVATE
+LANG_ENGLISH        "Press & hold &&1 to turn on the Zipline "
+
+REFERENCE           FLAMES_UNAVAILABLE_HAND
+LANG_ENGLISH        "The power must be activated first "
+
+REFERENCE           TELEPORT_COOLDOWN
+LANG_ENGLISH        "Teleporters are cooling down"
+
+REFERENCE           ELECTRIC_SWITCH
+LANG_ENGLISH        "Press & hold &&1 to turn on the electricity "
+
+REFERENCE           BETTY_PURCHASE
+LANG_ENGLISH        "Press & hold &&1 to buy Bouncing Betties [Cost: 1000 - one time only]"
+
+REFERENCE           BETTY_HOWTO
+LANG_ENGLISH        "Press [{+actionslot 4}] then [{+attack}] to place a Bouncing Betty"
+
+REFERENCE           INTRO_ASYLUM_LEVEL_BERLIN
+LANG_ENGLISH        "Wittenau Sanatorium"
+
+REFERENCE           INTRO_ASYLUM_LEVEL_HIMMLER
+LANG_ENGLISH        "Berlin, Germany"
+
+REFERENCE           INTRO_ASYLUM_LEVEL_SEPTEMBER
+LANG_ENGLISH        "September 6th, 1945"
+
+REFERENCE           INTRO_PROTO_LEVEL_PLACE
+LANG_ENGLISH        "Location Unknown"
+
+REFERENCE           INTRO_PROTO_LEVEL_TIME
+LANG_ENGLISH        "June 4th, 1945"
+
+REFERENCE           INTRO_SUMPF_LEVEL_PLACE
+LANG_ENGLISH        "Imperial Japan"
+
+REFERENCE           INTRO_SUMPF_LEVEL_TIME
+LANG_ENGLISH        "October 21st, 1945"
+
+REFERENCE           INTRO_FACTORY_LEVEL_PLACE
+LANG_ENGLISH        "Near Breslau, Germany"
+
+REFERENCE           INTRO_FACTORY_LEVEL_TIME
+LANG_ENGLISH        "October 28th, 1945"
+
+REFERENCE           ACHIEVEMENT
+LANG_ENGLISH        "Achievement Unlocked!"
+
+REFERENCE           ENTER_FIRST_PERSON
+LANG_ENGLISH        "Hold ^3[{+activate}]^7 to enter first person view"
+
+REFERENCE           ENTER_THIRD_PERSON
+LANG_ENGLISH        "Hold ^3[{+activate}]^7 to enter third person view"
+
+REFERENCE           DEPLOY
+LANG_ENGLISH        "Press & Hold &&1 to deploy Machine Gun "
+
+REFERENCE           DEPLOYING
+LANG_ENGLISH        "Deploying..."
+
+REFERENCE           INVALID_WEP
+LANG_ENGLISH        "Invalid Weapon"
+
+REFERENCE           NEED_AMMO
+LANG_ENGLISH        "Need Ammo"
+
+
+ENDMARKER
+
+

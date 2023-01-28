@@ -1,0 +1,227 @@
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+
+#define CHOICE_X_START			30
+#define CHOICE_Y_START			40
+
+#define SIGNED_IN_RECT			-350 60 250 15
+
+#define CHOICE_SEP_1			3
+#define CHOICE_SEP_2			6
+
+#define CHOICE_GROUP			"pc_gamesetup_coop"
+
+#define STYLE_PC	1
+#include "ui_mp/menustyle.inc"
+
+#undef	CHOICE_SIZE_X
+#define CHOICE_SIZE_X			180
+
+#include "ui/choices_setup_common.menu"
+#include "ui/online_status.inc"
+
+{
+
+	// Coop Settings //
+	menuDef 
+	{
+		name			"pc_gamesetup_coop"
+		fullscreen		1	
+		rect			0 0 640 480
+		soundloop 		"music_mainmenu"
+		focuscolor		COLOR_FOCUSED
+		style			1
+		border			0
+		onEsc  			{ close self; }
+		onOpen 
+		{ 
+			uiScript loadArenas;	
+			exec "party_editingsettings 1"
+		}
+		onClose
+		{
+			exec "party_editingsettings 0"
+			exec "updategamerprofile";			
+			exec "xupdatepartystate";
+			exec "set ui_mapname nazi_zombie_asylum";
+			exec "set ui_gametype zom";	
+		}
+		
+		//#include "ui/blurredbg.inc"
+		#include "ui/bg.inc"
+		#undef		BACK_ENABLE
+		#define 	BACK_ENABLE		0
+		#include "ui/navcontrols.inc"
+
+		// draws signin status
+		SIGNIN_STATUS
+
+		#define LOCAL_GAMERULES_ACTION \
+			uiScript openMenuOnDvar "ui_netGameTypeName" cmp "settings_quick_cmp";
+			// uiScript openMenuOnDvar "ui_netGameTypeName" zom "settings_quick_zom"; \
+
+		CHOICE_MENU_TITLE( "@MENU_COOP_SERVER_SETUP" )
+	
+	#undef	CHOICE_DVAR_WIDTH_OFFSET
+	#define	CHOICE_DVAR_WIDTH_OFFSET 170
+		// server settings =========================================
+		//CHOICE_DVARLIST_VIS( 		1, "@MENU_GAME_TYPE", "", ITEM_TYPE_MULTI, ownerdraw UI_NETGAMETYPE textaligny 20, execOnDvarStringValue "ui_netGametypeName" zom "set ui_hostOptions 0; set ui_hostOptionsEnabled 0;";, 1 )
+		//CHOICE_DVARLIST_VIS( 		1, "@MENU_GAME_TYPE", "", ITEM_TYPE_MULTI, ownerdraw UI_NETGAMETYPE textaligny 20, execOnDvarStringValue "ui_netGametypeName" zom "set ui_hostOptions 0; set ui_hostOptionsEnabled 0;";, 1 )
+		CHOICE_DVAREDIT_VIS( 		1, "@MENU_SERVER_NAME", "sv_hostname", 20, 9, ;, 1 )
+		CHOICE_DVAREDIT_VIS( 		2, "@MENU_PASSWORD1", "g_password", 12, 9, ;, 1 )	//CHOICE_DVARYESNO( 10, "@MENU_FRIENDLY_INDICATORS", "scr_drawfriend", ; )
+		
+		
+	#undef	CHOICE_DVAR_WIDTH_OFFSET
+	#define	CHOICE_DVAR_WIDTH_OFFSET 60
+
+		CHOICE_DVAREDIT_NUMERIC( 	3, "@MENU_MAXIMUM_PLAYERS", "party_maxplayers", 3, ; )
+		CHOICE_SEPARATOR( CHOICE_SEP_1 )
+
+		CHOICE_DVAREDIT_NUMERIC( 	4, "@MENU_MINIMUM_PING", "sv_minping", 4, ; )
+		CHOICE_DVAREDIT_NUMERIC( 	5, "@MENU_MAXIMUM_PING", "sv_maxping", 4, ; )
+		CHOICE_DVARYESNO( 			6, "@MENU_VOICECHATCOLON", "sv_voice", ; )
+		
+		CHOICE_SEPARATOR( CHOICE_SEP_2 )
+
+		CHOICE_DVARFLOATLIST( 7, "@REMASTERED_LAST_STAND", classic_perks, { "@REMASTERED_MODIFIED_DEFAULT" 0 "@REMASTERED_CLASSIC" 1 }, ; ) // Disables solo quick revive & reverts to 30 second last stand time in coop
+		CHOICE_DVARFLOATLIST( 8, "@REMASTERED_ENEMY_PUSH", grabby_zombies, { "@REMASTERED_MODIFIED_DEFAULT" 0 "@REMASTERED_CLASSIC" 1 }, ; )
+		CHOICE_DVARFLOATLIST( 9, "@REMASTERED_SUPER_SPRINTERS", super_sprinters, { "@REMASTERED_MODIFIED_DEFAULT" 0 "@REMASTERED_CLASSIC" 1 }, ; )
+		CHOICE_DVARFLOATLIST( 10, "@REMASTERED_CHAR_DIALOGUE", character_dialog, { "@MENU_YES" 0 "@MENU_NO" 1 }, ; )
+
+		//CHOICE_DVARYESNO( 			8, "@MPUI_PUNKBUSTERWITHCOLONANDTWOSPACES", "sv_punkbuster", ; )				
+
+		//CHOICE_SEPARATOR( CHOICE_SEP_2 )
+
+		//CHOICE_BUTTON_VIS( 			9, "@MENU_GAME_TYPE_SETTINGS", LOCAL_GAMERULES_ACTION, when( dvarString( ui_netGameType ) != 1 ) )
+		//CHOICE_DBUTTON_VIS( 		9, "@MENU_GAME_TYPE_SETTINGS", when( dvarString( ui_netGameType ) == 1 ) )
+			
+		// map selection ===========================================
+/*	
+		itemDef 
+		{
+			name			maplist
+			rect			-260 210 200 195 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP //404 271 192 130
+			type			ITEM_TYPE_LISTBOX
+			style			WINDOW_STYLE_FILLED
+			elementwidth 	120
+			elementheight 	22
+			origin			0 0
+			textfont		UI_FONT_NORMAL
+			textscale		CHOICE_TEXTSIZE
+			elementtype		LISTBOX_TEXT
+			feeder			FEEDER_ALLMAPS
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalignx 		6
+			textaligny 		0
+			outlinecolor	1 1 1 0.2
+			forecolor 		CHOICE_TEXTCOLOR
+			focusColor		CHOICE_TEXTCOLOR
+			disableColor	CHOICE_TEXTCOLOR
+			backcolor 		0 0 0 0
+			border			1
+			bordersize		1
+			bordercolor		1 1 1 0.15
+			visible			1
+			columns			1 2 190 25
+			mouseEnter 		{ play "mouse_over"; setitemcolor maplist bordercolor 1 1 1 0.55 }
+			mouseExit 		{ setitemcolor maplist bordercolor 1 1 1 0.15 }
+		}		
+
+		itemDef 
+		{
+			name			mappreview
+			style			0
+			ownerdraw		UI_MAPPREVIEW
+			rect			-260 75 200 135 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+			border			0
+			bordercolor		.5 .5 .5 .5
+			origin			0 0
+			visible			1
+			decoration
+		}
+*/
+		// buttons =================================================
+
+		itemDef {
+			name			back
+			text			"@MENU_BACK"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		TEXTBUTTON_COLOR
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			-250 -26 40 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			textaligny		18
+			visible			1
+			mouseEnter		{ play "mouse_over"; }
+			action 
+			{
+				play "mouse_click";
+				exec "xupdatepartyplaylist";
+				close self;
+			}	
+		}    
+		/*
+		itemDef 
+		{
+			name			button_serversettings
+			text			"@MENU_GAME_TYPE_SETTINGS"
+			type			ITEM_TYPE_BUTTON
+			textfont		UI_FONT_NORMAL
+			textscale		TEXTSIZE_SMALL
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			-80 -26 140 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
+			textalign		ITEM_ALIGN_LEFT
+			textalignx		0
+			textaligny		18
+			forecolor		TEXTBUTTON_COLOR
+			visible			1
+			mouseEnter		{ play "mouse_over"; } 
+			action
+			{ 
+				//hide button_serversettings; 
+				//show button_gametypesettings; 
+				//close createserver_serversettings;
+				//openForGameType "settings_%s";
+				
+				uiScript openMenuOnDvar "ui_netGametypeName" war "settings_quick_war";
+				uiScript openMenuOnDvar "ui_netGametypeName" sd "settings_quick_sd";
+				uiScript openMenuOnDvar "ui_netGametypeName" sab "settings_quick_sab";
+				uiScript openMenuOnDvar "ui_netGametypeName" koth "settings_quick_koth";
+				uiScript openMenuOnDvar "ui_netGametypeName" dom "settings_quick_dom";
+				uiScript openMenuOnDvar "ui_netGametypeName" dm "settings_quick_dm";
+				uiScript openMenuOnDvar "ui_netGametypeName" ctf "settings_quick_ctf";
+				
+				play "mouse_click" ; 
+			}
+		}*/
+
+		itemDef 
+		{
+			name			accept
+			text			"@MENU_OK"
+			type			ITEM_TYPE_BUTTON
+			textfont		UI_FONT_NORMAL
+			style			WINDOW_STYLE_FILLED	
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			220 -26 40 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			textalignx		0
+			textaligny		18
+			forecolor		TEXTBUTTON_COLOR
+			visible			1
+			mouseEnter		{ play "mouse_over"; }
+			action 
+			{
+				play "mouse_click";
+				uiScript acceptServerSettings;
+				close pc_gamesetup_coop;
+			}	
+		}
+	}
+}
+

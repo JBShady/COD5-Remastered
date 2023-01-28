@@ -1,0 +1,256 @@
+#include "ui/menudef.h"
+
+#define ORIGIN_DIY_TITLE_HIDEF		42 300
+#define ORIGIN_DIY_FRAME_HIDEF		35 300
+#define ORIGIN_DIY_HIDEF			37 320
+
+#define ORIGIN_DIY_TITLE_STDEF		22 300
+#define ORIGIN_DIY_FRAME_STDEF		15 300
+#define ORIGIN_DIY_STDEF			17 320
+
+#define NOT_DEVELOPMENT				( !dvarbool( cg_development ) && !dvarbool ( ui_shipping_cheats ) )
+
+{
+	menuDef 
+	{
+		name			"briefing"
+		style			WINDOW_STYLE_FILLED
+		fullScreen		0
+		rect			0 0 640 480
+		focusColor		COLOR_FOCUSED
+		backcolor		0 0 0 0
+		visible			1
+#ifdef NOT_DEVELOPMENT
+		onEsc{ }
+#else
+		onEsc{ close self; }
+#endif // #ifdef NOT_DEVELOPMENT
+
+		// background
+		itemDef 
+		{
+			style			WINDOW_STYLE_FILLED
+			rect			FULLSCREEN_WIDE
+			backcolor		0 0 0 1
+			visible			1
+			background		"white"
+			decoration
+		}
+
+		itemDef
+		{
+			style			WINDOW_STYLE_SHADER
+			rect			FULLSCREEN_WIDE
+			backcolor		0 0 0 1
+			background		"$levelBriefing"
+			visible			when( ( dvarbool(onlinegame) || dvarbool(systemlink) ) && dvarbool(widescreen) )
+			decoration
+		}
+
+		itemDef
+		{
+			style			WINDOW_STYLE_SHADER
+			rect			FULLSCREEN
+			backcolor		0 0 0 1
+			background		"$levelBriefing"
+			visible			when( ( dvarbool(onlinegame) || dvarbool(systemlink) ) && !dvarbool(widescreen) )
+			decoration
+		}
+
+		itemDef 
+		{
+			style			WINDOW_STYLE_FILLED
+			rect			FULLSCREEN_WIDE
+			backcolor		1 1 1 1
+			visible			when( !dvarbool(onlinegame) && !dvarbool(systemlink) )
+			background		cinematic
+			ownerdraw		UI_CINEMATIC
+			decoration
+		}
+
+		itemDef
+		{
+			type			ITEM_TYPE_TEXT
+			#ifdef PC
+				rect			-250 378 500 0 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+			#else
+				rect			-225 342 450 0 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+			#endif			
+			textcinematicsubtitle
+			textfont		UI_FONT_DEFAULT
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		0.38
+			textalign		ITEM_ALIGN_TOP_CENTER
+			visible			1
+			decoration
+			autowrapped
+		}		
+
+		itemDef 
+		{
+			name			"profile"
+			rect			40 40 560 400
+			align			HUD_HORIZONTAL
+			ownerdraw		UI_LOADPROFILING
+			visible			1
+			decoration
+		}
+
+		itemDef 
+		{
+			name			"load_status_screen"
+			rect			-270 300 260 15 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+			backcolor		0.08627 0.1098 0.1098 1
+			align			HUD_HORIZONTAL
+			textfont		UI_FONT_DEFAULT
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		0.30
+			textalign		ITEM_ALIGN_TOP_CENTER
+			ownerdraw		UI_LOAD_STATUS_SCREEN
+			visible			when( dvarbool( onlinegame ) || dvarbool( systemlink )  )
+			decoration
+		}
+
+		#include "ui/safearea.menu"
+
+#define LOADBAR_IMAGE_XSIZE 192
+#define LOADBAR_IMAGE_YSIZE 48
+
+		// LoadBar for Solo and Splitscreen
+
+		itemDef 
+		{
+			name			"loadbar"
+			style			WINDOW_STYLE_LOADBAR
+			rect			-120 444 240 2 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_FULLSCREEN
+			forecolor		1 1 1 1
+	 		background		"menu_white_line_faded_big"
+			visible			when( iscinematicfinished() != 1 && !dvarbool( onlinegame ) && !dvarbool( systemlink ) )
+			decoration
+		}
+
+		// This is the back ground for the loading bar
+		itemDef 
+		{
+			name			"loadbar_bg"
+			style			WINDOW_STYLE_FILLED
+			rect			-120 444 240 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_FULLSCREEN
+			backcolor		0.4 0.4 0.4 0.4
+	 		background		"menu_white_line_faded_big"
+			visible			when( iscinematicfinished() != 1 && !dvarbool( onlinegame ) && !dvarbool( systemlink ) )
+			decoration
+		}
+
+		// New Loadbars for XboxLive and Systemlink Games
+		itemDef 
+		{
+			name			"new_loadbar"
+			style			WINDOW_STYLE_LOADBAR
+			rect			-260 259 240 2 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+			forecolor		1 1 1 1
+	 		background		"menu_white_line_faded_big"
+			visible			when( dvarbool( onlinegame ) || dvarbool( systemlink ) )
+			decoration
+		}
+
+		// This is the back ground for the loading bar
+		itemDef 
+		{
+			name			"new_loadbar_bg"
+			style			WINDOW_STYLE_FILLED
+			rect			-260 259 240 1 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+			backcolor		0.4 0.4 0.4 0.4
+	 		background		"menu_white_line_faded_big"
+			visible			when( dvarbool( onlinegame ) || dvarbool( systemlink ) )
+			decoration
+		}
+
+		// The Intel Box for Hi Def
+		itemDef 
+		{ 
+			style			WINDOW_STYLE_SHADER 
+			rect			0 0 260 4 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			origin 			-285 -136
+			forecolor		0 0 0 0.5 
+			exp				material( "menu_white_line_faded" ); 
+			visible			when( dvarbool( hiDef ) && ( dvarbool( onlinegame ) || dvarbool( systemlink ) ) )
+			decoration 
+		}
+
+		itemDef
+		{
+			
+			style			WINDOW_STYLE_SHADER
+			rect			ORIGIN_DIY_FRAME_HIDEF 283 98 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
+			background		"white"
+			forecolor		0 0 0 0.6
+			border			WINDOW_BORDER_HORZ
+			bordersize		1
+			bordercolor		0.5 0.5 0.5 0.3
+			visible			when( dvarbool( hiDef ) && ( dvarbool( onlinegame ) || dvarbool( systemlink ) ) )
+			decoration
+		}
+
+		itemDef
+		{
+			rect			ORIGIN_DIY_HIDEF 270 100 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
+			type			ITEM_TYPE_BUTTON
+			textfont		UI_FONT_OBJECTIVE
+			dvar			"didyouknow"
+			textalign 		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_DEFAULT
+			forecolor		1 1 1 1
+			backcolor		0 0 0 0
+			textalignx 		0
+			textaligny 		-10   
+			origin			5 10
+			visible			when( dvarbool( hiDef ) && ( dvarbool( onlinegame ) || dvarbool( systemlink ) ) )
+			decoration
+			autowrapped
+		}
+		// The Intel Box for Standard Def
+		itemDef 
+		{ 
+			style			WINDOW_STYLE_SHADER 
+			rect			0 0 200 4 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			origin 			-285 -136
+			forecolor		0 0 0 0.5 
+			exp				material( "menu_white_line_faded" ); 
+			visible			when( !dvarbool( hiDef ) && ( dvarbool( onlinegame ) || dvarbool( systemlink ) ) )
+			decoration 
+		}
+
+		itemDef
+		{
+			
+			style			WINDOW_STYLE_SHADER
+			rect			ORIGIN_DIY_FRAME_STDEF 223 98 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
+			background		"white"
+			forecolor		0 0 0 0.6
+			border			WINDOW_BORDER_HORZ
+			bordersize		1
+			bordercolor		0.5 0.5 0.5 0.3
+			visible			when( !dvarbool( hiDef ) && ( dvarbool( onlinegame ) || dvarbool( systemlink ) ) )
+			decoration
+		}
+
+		itemDef
+		{
+			rect			ORIGIN_DIY_STDEF 210 100 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
+			type			ITEM_TYPE_BUTTON
+			textfont		UI_FONT_OBJECTIVE
+			dvar			"didyouknow"
+			textalign 		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_DEFAULT
+			forecolor		1 1 1 1
+			backcolor		0 0 0 0
+			textalignx 		0
+			textaligny 		-10   
+			origin			5 10
+			visible			when( !dvarbool( hiDef ) && ( dvarbool( onlinegame ) || dvarbool( systemlink ) ) )
+			decoration
+			autowrapped
+		}
+	}
+}
+

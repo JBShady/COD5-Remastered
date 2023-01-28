@@ -1,0 +1,67 @@
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+#define OPTIONS_STYLE			1
+#define CHOICE_ACTION_SOUND		"mouse_click_t"
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+{
+	menuDef
+	{
+		name options_voice
+		fullScreen 0
+		rect 0 0 640 480				// Size and position of the menu
+		focusColor COLOR_FOCUSED		// Menu focus color for text and items
+		soundloop ""
+		onOpen
+		{
+			setLocalVarBool ui_hideBack 1;
+		}
+		onClose
+		{
+			setLocalVarBool ui_hideBack 0;
+		}
+		onESC
+		{
+			close self;
+		}
+
+		#include "ui_mp/leftside_options.inc"
+		
+		CHOICE_SECTION_TITLE( 21, "@MENU_VOICECHAT_CAP" )
+	
+		CHOICE_DVARFLOATLIST( 22, "@MENU_VOICE_CHAT_ENABLE", cl_voice, { "@MENU_ON" 1 "@MENU_OFF" 0 }, ; )
+		
+		CHOICE_TEXT_VIS( 23, "@MENU_VOICECHAT_LEVEL_INDICATOR", COLOR_TEXT, 1 )
+
+		itemDef
+		{
+			name		voicechat_level_indicator
+			ownerdraw	UI_RECORDLEVEL
+			rect			CHOICE_ORIGIN( 23 ) (CHOICE_DVAR_WIDTH_OFFSET-15) (CHOICE_SIZE_Y-5) CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN
+			textalign		ITEM_ALIGN_MIDDLE_LEFT
+			textalignx		(CHOICE_SIZE_X+20)
+			textscale		CHOICE_TEXTSIZE
+			forecolor		CHOICE_TEXTCOLOR
+			visible			1
+			decoration
+		}
+
+		itemDef 
+		{
+			name			graphic_warning
+			text			"@PLATFORM_RECORD_LEVEL_INFO"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			340 -310 240 100 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible			1
+			mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+	}
+}

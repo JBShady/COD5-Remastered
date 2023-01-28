@@ -1,0 +1,291 @@
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+
+#define CHOICE_SEP_1			5
+#define CHOICE_GROUP	"challenges"
+
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+
+// menu specifice re-positioning
+#ifdef CONSOLE
+	#undef CHOICE_X_START
+	#define CHOICE_X_START			0
+
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			65//34
+#else
+	#undef CHOICE_X_START
+	#define CHOICE_X_START			30
+
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			65
+#endif
+
+#undef CHOICE_POPUP_BACKCOLOR
+#define CHOICE_POPUP_BACKCOLOR	0.2 0.2 0.22 1 //0.15 0.15 0.155 1//0.125 0.125 0.1275 1
+
+#undef HIGHLIGHT_COLOR
+#define HIGHLIGHT_COLOR			0.9 0.95 1 0.25
+
+#define LABEL_TEXT_COLOR		0.7 0.75 0.75 1
+
+#define TIER_BUTTON( pnum, pnum_s, pstat, porigin ) \
+	PREPROC_SHADER_DRAW( porigin 36 18, 46 -18, "specialty_new", 1 1 1 1, 1, 1, 0 0 0 0 visible when( stat( int( pstat ) ) > 1 ) ) \
+	SINGULAR_BUTTON_FULL( pnum, porigin, 112 20, \
+		"Tier "pnum_s, play "mouse_click" \
+		execnow "set ui_tier_num "pnum_s \
+		execnow "set ui_table_name mp/challengeTable_tier"pnum_s".csv" \
+		statSetUsingTable( pstat, 1 ); \
+		/*exec "uploadstats";*/ \
+		open "popup_tier", stat( int( pstat ) ) > 0 )
+
+#define SHOW_DESC( pnum ) \
+	show "desc_tier"#pnum;
+
+#define HIDE_DESC( pnum ) \
+	hide "desc_tier"#pnum; \
+	hide "desc2_tier"#pnum;
+	
+#define SHOW_DESC2( pnum ) \
+	show "desc2_tier"#pnum;
+
+#define HIDE_DESC2( pnum ) \
+	hide "desc2_tier"#pnum;	\
+	hide "desc_tier"#pnum;
+	
+#define HIDEALL_DESC \
+	HIDE_DESC( 1 ) HIDE_DESC( 6 ) HIDE_DESC( 11 ) HIDE_DESC( 16 ) \
+	HIDE_DESC( 2 ) HIDE_DESC( 7 ) HIDE_DESC( 12 ) HIDE_DESC( 17 ) \
+	HIDE_DESC( 3 ) HIDE_DESC( 8 ) HIDE_DESC( 13 ) \
+	HIDE_DESC( 4 ) HIDE_DESC( 9 ) HIDE_DESC( 14 ) \
+	HIDE_DESC( 5 ) HIDE_DESC( 10 ) HIDE_DESC( 15 )
+	
+#define ORIGIN_DESCRIPTION		(CHOICE_X_START + 15) 320
+
+#define LOCAL_TIER_ACTION( pnum_s, pstat ) \
+	play "mouse_click"; \
+	execnow "set ui_tier_num "pnum_s; \
+	execnow "set ui_table_name mp/challengeTable_coop"pnum_s".csv"; \
+	statSetUsingTable( pstat, 1 ); \
+	/*exec "uploadstats";*/ \
+	open "popup_tier"
+
+#define LOCAL_NAME( pnum ) "@"+tablelookup("mp/challengetable_coop.csv",0,pnum,1)
+
+#define LOCAL_DESC( pnum ) \
+	PREPROC_TEXT_DRAW_ALIGNED_EXP( ORIGIN_DESCRIPTION 220 22 CHOICE_HORIZONTAL_ALIGN VERTICAL_ALIGN_TOP, 0 0, "@"+tablelookup("mp/challengetable_coop.csv",0,pnum,2), CHOICE_TEXTSIZE, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR name "desc_tier"#pnum )
+
+#define LOCAL_DESC2( pnum ) \
+	PREPROC_TEXT_DRAW_ALIGNED_EXP( ORIGIN_DESCRIPTION 220 22 CHOICE_HORIZONTAL_ALIGN VERTICAL_ALIGN_TOP, 0 0, "@"+tablelookup("mp/challengetable_coop.csv",0,pnum,3), CHOICE_TEXTSIZE, 0, 0, ITEM_ALIGN_MIDDLE_LEFT, CHOICE_TEXTCOLOR name "desc2_tier"#pnum )
+
+#define LOCAL_UNLOCK_COLOR 		0.31 0.31 0.33 0.55 //0.21 0.21 0.23 0.65
+
+
+
+{
+	menuDef
+	{
+		name			menu_challenges
+		rect			0 0 640 470 HORIZONTAL_ALIGN_FULLSCREEN VERTICAL_ALIGN_FULLSCREEN
+		focuscolor		COLOR_FOCUSED
+		style			WINDOW_STYLE_FILLED
+		soundloop 		"music_mainmenu"
+		border			0
+		onOpen	
+		{
+			//#ifdef PC
+			//	STAT_UPDATE
+			//#endif 
+			
+			HIDEALL_DESC
+			focusFirst;
+			setLocalVarBool ui_hideBack 1;
+			setdvar invite_visible "0";
+		}
+		onEsc	
+		{	
+			//execnow "uploadstats";
+			setLocalVarBool ui_inOverlay 1;
+			close self;
+		}
+		onClose
+		{
+			setdvar invite_visible "1";
+			setLocalVarBool ui_hideBack 0;
+			setLocalVarBool ui_inOverlay 0;
+		}
+		
+		// ------------------  statics ------------------------
+		//#include "ui/blurredbg.inc"
+		#include "ui/overlaybg.inc"		
+		
+		#ifdef PC
+			BACKGROUND_BLACK_LETTERBOX_BLURWORLD_VIS( 0 , 0 )
+			OVERLAY_BACKGROUND_VIS( !menuisopen( "menu_xboxlive_barracks" ) )
+			CHOICE_OVERLAY_TITLE( "@REMASTERED_HERO_BIO_CAP" )
+		#else
+			OVERLAY_BACKGROUND_VIS( !menuisopen( "menu_xboxlive_barracks" ) )
+			CHOICE_OVERLAY_TITLE( "@MENU_CHALLENGES_CAP" )
+		#endif
+		
+		#undef BACK_OPEN
+		#define BACK_OPEN	close self;
+		#include "ui/navcontrols.inc"
+
+				
+#define COOP_TIER_ACTION \
+	play "mouse_click"; \
+	execnow "set ui_table_name mp/challengeTable_coop.csv"; \
+	/*statSetUsingTable( pstat, 1 ); */ \
+	/*exec "uploadstats";*/ \
+	open "popup_tier"
+
+#define CLEAR_BIOS \
+        setLocalVarBool dempsey 0;\
+        setLocalVarBool nikolai 0;\
+        setLocalVarBool takeo 0;\
+        setLocalVarBool richtofen 0;
+
+
+		CHOICE_BUTTON_FOCUS( 1, "@REMASTERED_AMERICAN_HERO_NAME", ;, CLEAR_BIOS setLocalVarBool dempsey 1; , setLocalVarInt ui_highlight 1; )
+		CHOICE_BUTTON_FOCUS( 2, "@REMASTERED_RUSSIAN_HERO_NAME", ;, CLEAR_BIOS setLocalVarBool nikolai 1; , setLocalVarInt ui_highlight 2; )
+		CHOICE_BUTTON_FOCUS( 3, "@REMASTERED_JAPANESE_HERO_NAME", ;, CLEAR_BIOS setLocalVarBool takeo 1; , setLocalVarInt ui_highlight 3; )
+		CHOICE_BUTTON_FOCUS( 4, "@REMASTERED_GERMAN_HERO_NAME", ;, CLEAR_BIOS setLocalVarBool richtofen 1; , setLocalVarInt ui_highlight 4; )
+
+
+		#include "ui/safearea.menu"
+
+
+		itemDef 
+		{
+			name			dempsey_bio
+			text			"@REMASTERED_AMERICAN_HERO_DESC"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			-394.8 84 332 200 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		when( localVarBool( dempsey ) )
+			mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+
+		itemDef 
+		{
+			name			nikolai_bio
+			text			"@REMASTERED_RUSSIAN_HERO_DESC"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			-394.8 84 332 200 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		when( localVarBool( nikolai ) )
+			mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+
+		itemDef 
+		{
+			name			takeo_bio
+			text			"@REMASTERED_JAPANESE_HERO_DESC"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			-394.8 84 332 200 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		when( localVarBool( takeo ) )
+			mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+
+		itemDef 
+		{
+			name			richtofen_bio
+			text			"@REMASTERED_GERMAN_HERO_DESC"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			-394.8 84 332 200 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_TOP
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		when( localVarBool( richtofen ) )
+			mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+
+		itemDef 
+		{
+		       name                 dempsey_image
+				rect         45 -268 201 201 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM			
+		       forecolor            1 1 1 1
+		       style                 WINDOW_STYLE_SHADER
+		       background      "dempsey_bio" 
+		       decoration
+			   visible			when( localVarBool( dempsey ) )
+		}
+		itemDef 
+		{
+		       name                 nikolai_image
+				rect         45 -268 201 201 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM			
+		       forecolor            1 1 1 1
+		       style                 WINDOW_STYLE_SHADER
+		       background      "nikolai_bio" 
+		       decoration
+			   visible			when( localVarBool( nikolai ) )
+		}
+
+		itemDef 
+		{
+		       name                 takeo_image
+				rect         45 -268 201 201 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM			
+		       forecolor            1 1 1 1
+		       style                 WINDOW_STYLE_SHADER
+		       background      "takeo_bio" 
+		       decoration
+			   visible			when( localVarBool( takeo ) )
+		}
+
+		itemDef 
+		{
+		       name                 richtofen_image
+				rect         45 -268 201 201 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM			
+		       forecolor            1 1 1 1
+		       style                 WINDOW_STYLE_SHADER
+		       background      "richtofen_bio" 
+		       decoration
+			   visible			when( localVarBool( richtofen ) )
+
+		}
+		itemDef 
+		{
+		       name                 line_bio
+		       rect                    FULLSCREEN
+		       forecolor            1 1 1 1
+		       style                 WINDOW_STYLE_SHADER
+		       background      "line_bio" 
+		       decoration
+			   visible			when( dvarstring("r_mode") == "1280x720" || dvarstring("r_mode") == "1600x900" || dvarstring("r_mode") == "1920x1080" || dvarstring("r_mode") == "2560x1440" || dvarstring("r_mode") == "3840x2160" ) // Line only shows up on proper HD widescreen resolutions
+
+		}
+
+	}
+	
+
+}

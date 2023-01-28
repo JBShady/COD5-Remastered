@@ -1,0 +1,342 @@
+VERSION             "1"
+CONFIG              "D:\cod5_dlc3\cod\cod5\bin\StringEd.cfg"
+FILENOTES           "Strings displayed in the menus go in this file."
+
+REFERENCE           HERO_BIO_CAP
+LANG_ENGLISH        "CHARACTER BIOS"
+
+REFERENCE           AMERICAN_HERO_NAME
+LANG_ENGLISH        "Tank Dempsey"
+
+REFERENCE           AMERICAN_HERO_DESC
+LANG_ENGLISH        "Tank Dempsey: American hero. Hand him a loaded weapon, a good woman, and something to shoot at and he is happy. Enrage him and he will rip your guts out and use them as a bandolier. \n...\nDempsey was selected for this mission after he showed his true grit at the Battle of Peleliu. Remarkable though it may seem, his unit was captured during the early raids before the main invasion, and he spent 2 weeks in a rat infested bamboo cage submerged in malarial water. Well, that did not stop The Tank. After he gnawed his way through the cage, he then gnawed his way through his captors armed only with a bobby pin and his Medal of Honor, which he keeps secreted in various body cavities. \n...\nNow you know there is no before the war for Dempsey, and there is no after. There is only the legend of Tank Dempsey, and how he will win the war for the rest of us. \n"
+
+REFERENCE           RUSSIAN_HERO_NAME
+LANG_ENGLISH        "Nikolai Belinski"
+
+REFERENCE           RUSSIAN_HERO_DESC
+LANG_ENGLISH        "Stalin himself cannot stare Nikolai in the eye, no one can. There, in his eyes, you will see the soul of a man burning with the hatred of all things living. His closet is full of skeletons, many of them with the flesh still attached. \n...\nEarly in his career, Nikolai had quickly made his way up through the party ranks by killing the next man in line, and by marrying politically. Ultimately, his aspirations all came crashing down after his fifth wife mysteriously died while cleaning his axe with her neck. Little did he know that she had been sleeping with a high ranking party official on the side. This made Nikolai infamous, and his reputation spread quickly through the party. It was not long before Stalin himself had heard about Nikolai. More importantly, he feared Nikolai. As soon as the war started, our hero was dropped on the front lines and forgotten about, where he wallowed in self pity and vodka for several years. \n...\nThere are many weapons in his arsenal, not least of which is his breath. \n"
+
+REFERENCE           JAPANESE_HERO_NAME
+LANG_ENGLISH        "Takeo Masaki"
+
+REFERENCE           JAPANESE_HERO_DESC
+LANG_ENGLISH        "Enter Takeo, for whom life has no meaning if not to perfect your discipline and to reveal true character and honor. Perhaps he ponders this and other philosophical questions as his katana slices through the flesh and sinew of his enemy. \n...\nOur hero was born into wealth; his family dynasty dates back several centuries, and throughout that time they have been highly decorated Samurai and Bushi. Well, Takeo is no exception to this celebrated bloodline. Even when the family first saw the young, life-filled 5 year old Takeo playing in the street with his Katana and slicing the tails off terrified kittens. It was obvious he was destined to bring honor to the Masaki name. \n...\nReserved and reflective, the war is a perfect opportunity for Takeo to explore his bloodlust and study the nature of those less honorable than himself, so if you fall victim to his might and swift action know that you have helped a man better than you reach enlightenment. \n"
+
+REFERENCE           GERMAN_HERO_NAME
+LANG_ENGLISH        "Doctor Richtofen"
+
+REFERENCE           GERMAN_HERO_DESC
+LANG_ENGLISH        ""Beware The Doc." A message that was scrawled across walls of every town under Axis control. Starvation may cripple you, dysentery may wreck you, and gunfire may rip the flesh from your bones, but "Beware The Doc." \n...\nThis is Dr. Richtofen, known affectionately as "The Butcher" to his victims as they scream in agony moments before he snuffs out their light. All through his career, Richtofen has been at the forefront of torture and information extraction research. Richtofen is an incurable sociopath and sees no moral distinction between natural death and murder; the victim is the victim, regardless of how their demise manifests itself. \n...\nDr. Richtofen has a collection of stuffed animals, most of them posed in positions of terror at the instant of their death. \n"
+
+REFERENCE           CHAR_ONE_NAME
+LANG_ENGLISH        "Unknown Identity"
+
+REFERENCE           CHAR_ONE_DESC
+LANG_ENGLISH        "Killed in action. \n...\nRANK: Private First Class\nCOLOR HAIR: Brown\nCOLOR EYES: Green\nWEIGHT: 145\nHEIGHT: 5'8\nAGE: Low-20s \n...\nUnfinished letter, found in uniform pocket.\n "Good evening, sweetie, it has been a while. I have a couple big plans for the coming months together that I cannot wait to tell you about when I get home. I got my last box of junk sent off to you today. Included in this one are a couple souvenirs from Bielefeld. We are becoming very hot...Rumor has it that we will be leaving in a day or so for the staging area near Le Havre, which we should not be at for over three or four days before catching the ol' boat for home. Anyways, I love you---get set, because here I come."\n"
+
+REFERENCE           CHAR_TWO_NAME
+LANG_ENGLISH        "Unknown Identity"
+
+REFERENCE           CHAR_TWO_DESC
+LANG_ENGLISH        "Killed in action. \n...\nRANK: Private First Class\nCOLOR HAIR: Blond\nCOLOR EYES: Blue\nWEIGHT: 175\nHEIGHT: 5'10\nAGE: Low-20s \n...\nBelieved to have previously served in a Marine Raider battalion. Likely transferred to Britain for S.O. duties after Raider units were disbanded.\n"
+
+REFERENCE           CHAR_THREE_NAME
+LANG_ENGLISH        "Jesse"
+
+REFERENCE           CHAR_THREE_DESC
+LANG_ENGLISH        "Killed in action. \n...\nRANK: Corporal\nCOLOR HAIR: Brown\nCOLOR EYES: Brown\nWEIGHT: 150\nHEIGHT: 5'9\nAGE: Mid-20s \n...\nMedical notes record, found in uniform pocket.\nComplaint: "Hearing sounds and voices."\nDoctor Remarks: "Likely experiencing mild combat fatigue. All vitals clear."\nRet'd to duty: May 10th \n"
+
+REFERENCE           CHAR_FOUR_NAME
+LANG_ENGLISH        "Sarge"
+
+REFERENCE           CHAR_FOUR_DESC
+LANG_ENGLISH        "Killed in action. \n...\nRANK: Sergeant\nCOLOR HAIR: Brown\nCOLOR EYES: Blue\nWEIGHT: 190\nHEIGHT: 6'0\nAGE: Mid-30s \n...\n Last contact on June 3rd 1945. Believed to have been assigned with guarding the transportation of cargo loaded into the bomb bay of a B-17. While in flight, the plane plummeted and crashed, cause unknown. Entire aft-waist section behind wings towards the empennage was completely torn off, whereabouts unknown. No known survivors. \n"
+
+REFERENCE           CHAR_ONE_NAME_ASY
+LANG_ENGLISH        "John "Banana""
+
+REFERENCE           CHAR_ONE_DESC_ASY
+LANG_ENGLISH        "Missing in action. \n...\nUNKNOWN \nJOHN \n401547      \nTYPE O \nT2/42 \nUSMCR \n...\n4-man Marine fire team assigned with rescuing and extracting captured OSS operative. \n"
+
+REFERENCE           CHAR_TWO_NAME_ASY
+LANG_ENGLISH        ""Smokey""
+
+REFERENCE           CHAR_TWO_DESC_ASY
+LANG_ENGLISH        "Missing in action. \n...\nNAME REDACTED\n \n410386    C \nTYPE A \nT. 1/43 \nUSMCR \n...\n4-man Marine fire team assigned with rescuing and extracting captured OSS operative. \n"
+
+REFERENCE           CHAR_THREE_NAME_ASY
+LANG_ENGLISH        "Marine #3"
+
+REFERENCE           CHAR_THREE_DESC_ASY
+LANG_ENGLISH        "Missing in action. \n...\nNAME REDACTED\n \n400628    P \nTYPE AB \nT1/42 \nUSMCR \n...\nSquad leader assigned with directing his team in/out of the Wittenau Sanatorium facility and confirming identity of captive. \n"
+
+REFERENCE           CHAR_FOUR_NAME_ASY
+LANG_ENGLISH        "Paxton "Gunner" Ridge"
+
+REFERENCE           CHAR_FOUR_DESC_ASY
+LANG_ENGLISH        "Missing in action. \n...\nRIDGE \nPAXTON \n310574    P \nTYPE-A- \nT10/41 \nUSMC \n...\n4-man Marine fire team assigned with rescuing and extracting captured OSS operative. \n"
+
+REFERENCE           CHAR_DIALOGUE
+LANG_ENGLISH        "Character Dialogue"
+
+REFERENCE           FOG
+LANG_ENGLISH        "Fog"
+
+REFERENCE           CINEMATIC
+LANG_ENGLISH        "Cinematic Mode"
+
+REFERENCE           START_MATCH
+LANG_ENGLISH        "START MATCH"
+
+REFERENCE           COOPERATIVE
+LANG_ENGLISH        "COOPERATIVE"
+
+REFERENCE           MAP_INTEL
+LANG_ENGLISH        "MAP INTEL"
+
+REFERENCE           PROFILE
+LANG_ENGLISH        "PROFILE"
+
+REFERENCE           COOP_TITLE
+LANG_ENGLISH        "NAZI ZOMBIES - COOPERATIVE"
+
+REFERENCE           T4M_WARNING
+LANG_ENGLISH        "All players require T4M to play together."
+
+REFERENCE           DER_RIESE_TITLE
+LANG_ENGLISH        "NAZI ZOMBIES - DER RIESE"
+
+REFERENCE           SHI_NO_TITLE
+LANG_ENGLISH        "NAZI ZOMBIES - SHI NO NUMA"
+
+REFERENCE           VERRUCKT_TITLE
+LANG_ENGLISH        "NAZI ZOMBIES - VERRÜCKT"
+
+REFERENCE           NACHT_TITLE
+LANG_ENGLISH        "NAZI ZOMBIES - NACHT DER UNTOTEN"
+
+REFERENCE           GAMETYPE
+LANG_ENGLISH        "Gametype"
+
+REFERENCE           ENEMY_PUSH
+LANG_ENGLISH        "Enemy Pushing"
+
+REFERENCE           LAST_STAND
+LANG_ENGLISH        "Last Stand"
+
+REFERENCE           CROSSHAIR
+LANG_ENGLISH        "Crosshair"
+
+REFERENCE           VIEW_SCALE
+LANG_ENGLISH        "View Scale"
+
+REFERENCE           FOV
+LANG_ENGLISH        "Field of View"
+
+REFERENCE           FPS_LIMIT
+LANG_ENGLISH        "Limit FPS"
+
+REFERENCE           FPS_HUD
+LANG_ENGLISH        "Display FPS"
+
+REFERENCE           CTRL_INVERSION
+LANG_ENGLISH        "Controller Inversion"
+
+REFERENCE           CTRL_SENSE
+LANG_ENGLISH        "Controller Sensitivity"
+
+REFERENCE           MODIFIED_DEFAULT
+LANG_ENGLISH        "Modified Default"
+
+REFERENCE           CLASSIC
+LANG_ENGLISH        "Classic"
+
+REFERENCE           DISABLED
+LANG_ENGLISH        "Disabled"
+
+REFERENCE           ENABLED
+LANG_ENGLISH        "Enabled"
+
+REFERENCE           HIGH
+LANG_ENGLISH        "High"
+
+REFERENCE           MEDIUM
+LANG_ENGLISH        "Medium"
+
+REFERENCE           NORMAL
+LANG_ENGLISH        "Normal"
+
+REFERENCE           LOW
+LANG_ENGLISH        "1 (Low)"
+
+REFERENCE           MED
+LANG_ENGLISH        "2 (Medium)"
+
+REFERENCE           HI
+LANG_ENGLISH        "4 (High)"
+
+REFERENCE           V_HI
+LANG_ENGLISH        "7 (Very High)"
+
+REFERENCE           INSANE
+LANG_ENGLISH        "10 (Insane)"
+
+REFERENCE           SUPER_SPRINTERS
+LANG_ENGLISH        "Enemy Intensity"
+
+REFERENCE           LOD
+LANG_ENGLISH        "LOD Range"
+
+REFERENCE           DETAIL
+LANG_ENGLISH        "High"
+
+REFERENCE           LOW_DETAIL
+LANG_ENGLISH        "Normal"
+
+REFERENCE           CONTROLLER_ENABLE
+LANG_ENGLISH        "Enable"
+
+REFERENCE           CONTROLLER_SUPPORT
+LANG_ENGLISH        "Controller Support"
+
+REFERENCE           CONTROLLER_EXECUTED
+LANG_ENGLISH        "Enabled"
+
+REFERENCE           CONTROLLER_V1
+LANG_ENGLISH        "To enable or reset controller bindings, click the above setting."
+
+REFERENCE           CONTROLLER_V2
+LANG_ENGLISH        "Controller script executed. \nWarning: Only Xbox controllers have native support."
+
+REFERENCE           ZOMBIE_SURVIVOR
+LANG_ENGLISH        "Soul Survivor"
+
+REFERENCE           ZOMBIE_SECRET
+LANG_ENGLISH        "Dead Air"
+
+REFERENCE           ZOMBIE_REPAIR_BOARDS
+LANG_ENGLISH        "Hammer Time"
+
+REFERENCE           ZOMBIE_POINTS
+LANG_ENGLISH        "Big Baller"
+
+REFERENCE           ZOMBIE_NUKE_KILLS
+LANG_ENGLISH        "Weapon of Minor Destruction"
+
+REFERENCE           ZOMBIE_MELEE_KILLS
+LANG_ENGLISH        "Big Brawler"
+
+REFERENCE           ZOMBIE_KILLS
+LANG_ENGLISH        "Fertilizer Man"
+
+REFERENCE           ZOMBIE_HEADSHOTS
+LANG_ENGLISH        "Deadhead"
+
+REFERENCE           ZOMBIE_ALL_TRAPS
+LANG_ENGLISH        "It's a Trap!"
+
+REFERENCE           ZOMBIE_ALL_PERKS
+LANG_ENGLISH        "Perk-a-Holic"
+
+REFERENCE           ZOMBIE_EE
+LANG_ENGLISH        "Doctor's Orders"
+
+REFERENCE           ZOMBIE_SURVIVOR_DESC
+LANG_ENGLISH        "Reach Round 15 without getting downed."
+
+REFERENCE           ZOMBIE_SECRET_DESC
+LANG_ENGLISH        "Must have been a wrong number."
+
+REFERENCE           ZOMBIE_REPAIR_BOARDS_DESC
+LANG_ENGLISH        "Repair 200 window boards in a single game."
+
+REFERENCE           ZOMBIE_POINTS_DESC
+LANG_ENGLISH        "Get 75,000 total points in a single game."
+
+REFERENCE           ZOMBIE_NUKE_KILLS_DESC
+LANG_ENGLISH        "Kill no more than 1 zombie with a Nuke."
+
+REFERENCE           ZOMBIE_MELEE_KILLS_DESC
+LANG_ENGLISH        "Get 10 knife kills with Insta-Kill in a single round."
+
+REFERENCE           ZOMBIE_KILLS_DESC
+LANG_ENGLISH        "Kill 200 zombies in a single game."
+
+REFERENCE           ZOMBIE_HEADSHOTS_DESC
+LANG_ENGLISH        "Get 150 zombie headshots in a single game."
+
+REFERENCE           ZOMBIE_ALL_TRAPS_DESC
+LANG_ENGLISH        "Kill at least one zombie with three different traps in a single round."
+
+REFERENCE           ZOMBIE_ALL_PERKS_DESC
+LANG_ENGLISH        "Have every single perk at the same time."
+
+REFERENCE           ZOMBIE_EE_DESC
+LANG_ENGLISH        "Harness the power of the Element."
+
+REFERENCE           ZOMBIE_PAP_ONCE
+LANG_ENGLISH        "Wacker Packer"
+
+REFERENCE           ZOMBIE_USE_MONKEY
+LANG_ENGLISH        "The Might of the Monkey"
+
+REFERENCE           ZOMBIE_FIVE_TELEPORTS
+LANG_ENGLISH        "Frequent Flyer"
+
+REFERENCE           ZOMBIE_BOWIE_KILLS
+LANG_ENGLISH        "40 Knives"
+
+REFERENCE           ZOMBIE_RAY_TESLA
+LANG_ENGLISH        "Acquire Waffle Weapons"
+
+REFERENCE           ZOMBIE_TWO_UPGRADED
+LANG_ENGLISH        "Pack Addict"
+
+REFERENCE           ZOMBIE_NO_PERKS
+LANG_ENGLISH        "Perkaholics Anonymous"
+
+REFERENCE           ZOMBIE_ANTI_GRAVITY
+LANG_ENGLISH        "Elevate Your Senses"
+
+REFERENCE           ZOMBIE_ALL_DOORS
+LANG_ENGLISH        "Locksmith"
+
+REFERENCE           ZOMBIE_FAST_LINK
+LANG_ENGLISH        "Der Electrician"
+
+REFERENCE           ZOMBIE_PAP_ONCE_DESC
+LANG_ENGLISH        "Upgrade a weapon using the Pack-a-Punch Machine."
+
+REFERENCE           ZOMBIE_USE_MONKEY_DESC
+LANG_ENGLISH        "Use the Monkey Bomb."
+
+REFERENCE           ZOMBIE_FIVE_TELEPORTS_DESC
+LANG_ENGLISH        "Teleport 8 times in a single game."
+
+REFERENCE           ZOMBIE_BOWIE_KILLS_DESC
+LANG_ENGLISH        "Kill 40 zombies using the Bowie Knife."
+
+REFERENCE           ZOMBIE_RAY_TESLA_DESC
+LANG_ENGLISH        "Obtain the Ray Gun, Wunderwaffe DG-2, and the Monkey Bomb all at the same time."
+
+REFERENCE           ZOMBIE_TWO_UPGRADED_DESC
+LANG_ENGLISH        "Upgrade 5 weapons using the Pack-a-Punch Machine in a single game."
+
+REFERENCE           ZOMBIE_NO_PERKS_DESC
+LANG_ENGLISH        "Survive until Round 20 without buying a single perk."
+
+REFERENCE           ZOMBIE_ANTI_GRAVITY_DESC
+LANG_ENGLISH        "Activate the Fly Trap."
+
+REFERENCE           ZOMBIE_ALL_DOORS_DESC
+LANG_ENGLISH        "Open all the doors in the map."
+
+REFERENCE           ZOMBIE_FAST_LINK_DESC
+LANG_ENGLISH        "Link all the teleport pads before Round 8."
+
+REFERENCE           DESC
+LANG_ENGLISH        "Achievement Description:"
+
+
+ENDMARKER

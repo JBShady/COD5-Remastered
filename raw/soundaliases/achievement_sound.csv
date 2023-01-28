@@ -1,0 +1,6 @@
+name,sequence,file,platform,vol_min,vol_max,pitch_min,pitch_max,dist_min,dist_max,dist_reverb_max,limit_count,limit_type,entity_limit_count,entity_limit_type,bus,spatialized,type,probability,loop,masterslave,loadspec,reverb_falloff_curve,subtitle,compression,randomize_type,secondaryaliasname,chainaliasname,volumefalloffcurve,startdelay,speakermap,reverb_send,lfe percentage,center percentage,platform,envelop_min,envelop_max,envelop percentage,occlusion_level,real_delay,distance_lpf,move_type,move_time,min_priority,max_priority,min_priority_threshold,max_priority_threshold,doppler
+# Interface,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+mp_challenge_complete,,Stream\Music\mp\achievement\mp_achievement.wav,,1,1,1,1,,,,1,reject,,,music,2d,streamed,,,,all_mp,,,,,,,,,,music,0,,,,,,,,,,100,100,0.25,1,,,
+mp_bomb_twist_2,,SFX\mp\bomb\CapTurn_00.wav,,1,1,1.5,1.5,200,500,500,1,reject,,,full_vol,2d,,,,,all_mp,,,,,,,,,,,,,,,,,,,,,100,100,0.25,1,,,
+mp_bomb_twist_0,,SFX\mp\bomb\CapTurn_00.wav,,1,1,1,1,200,500,500,1,reject,,,full_vol,2d,,,,,all_mp,,,,,,,,,,,,,,,,,,,,,100,100,0.25,1,,,
+mp_bomb_twist_1,,SFX\mp\bomb\CapTurn_00.wav,,1,1,0.5,0.5,200,500,500,1,reject,,,full_vol,2d,,,,,all_mp,,,,,,,,,,,,,,,,,,,,,100,100,0.25,1,,,
