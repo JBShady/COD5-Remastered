@@ -1,7 +1,7 @@
 # Call of Duty: World at War Zombies - Remastered Mod
 This mod contains bug fixes, quality of life tweaks, and other improvements for each of the four zombie maps.
 
-## Created by: JB Shady
+## Created by JB Shady
 
 [YouTube](https://www.youtube.com/c/JBShady)
 
