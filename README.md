@@ -11,4 +11,11 @@
 
 To be written.
 
-This repo is not complete. Need to remove unnecessary files and upload raw contents. Do not attempt to build.
+This repo is not complete. Do not attempt to build.
+
+to do:
+- add brief instructions for building
+- delete unnecessary scripts (inside \mods directory)
+- upload raw contents
+- change list
+- update descriptions
