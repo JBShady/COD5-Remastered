@@ -19,4 +19,3 @@ To be written.
 
 to do:
 - delete unnecessary scripts (inside \mods directory)
-- change list
