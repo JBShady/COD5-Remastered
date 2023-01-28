@@ -14,7 +14,8 @@ To be written.
 This repo is not complete. Do not attempt to build.
 
 to do:
-- add brief instructions for building
+- add brief instructions for building (raw contents, must have mod tools, some thigns will be replaced)
+- disclaimer about if it doesnt work 
 - delete unnecessary scripts (inside \mods directory)
 - upload raw contents
 - change list
