@@ -108,8 +108,6 @@ maps\nazi_zombie_sumpf_blockers.gsc
 maps\ugx_modder_help.gsc
 maps\walking_anim.gsc
 mod.csv
-sound\sfx\Levels\zombie\perksacola\jingle\jugga_old_jingle.wav
-sound\sfx\mp\progress_update_v5.wav
 weapons\sp\falling_hands
 weapons\sp\kar98k_scoped_zombie
 weapons\sp\kar98k_scoped_zombie_upgraded
