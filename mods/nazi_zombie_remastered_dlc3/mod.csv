@@ -178,7 +178,4 @@ material,line_alt
 stringtable,mp/dlc3_achievements.csv
 xmodel,viewmodel_zombie_type100_smg_remastered
 menufile,ui/hud.menu
-xmodel,collision_wall_32x32x10
-xmodel,collision_geo_32x32x10
-xmodel,collision_geo_64x64x10
 xmodel,collision_wall_64x64x10

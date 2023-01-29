@@ -52,7 +52,6 @@ xmodel,zombie_carpenter
 sound,dlc2_vox
 // TEST
 sound,weapons,,all_sp
-weapon,sp/radar_mp
 weapon,sp/zombie_colt_upgraded
 xmodel,viewmodel_zombie_colt45_pistol_up
 xmodel,weapon_zombie_colt45_pistol_up
@@ -153,9 +152,6 @@ weapon,sp/zombie_item_journal
 weapon,sp/zombie_item_journal_writing
 xmodel,viewmodel_mp_handheld_radio
 xmodel,prop_mp_handheld_radio
-xanim,viewmodel_shubox_idle
-xanim,viewmodel_shubox_pullout
-xanim,viewmodel_shubox_putaway
 material,hud_katana
 xmodel,viewmodel_zombie_type100_smg_remastered
 xmodel,tom_katana_model
