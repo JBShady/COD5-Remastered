@@ -64,7 +64,7 @@ To be written. notes wip
 * cooperative now auto loaded, new coop settings, and T4m warning
 * map intel page
 * character bios
-
+* new walking anim
 
 * fixed clientside heartbeat timing
 * fixed delays in voiceover to prevent overlapping lines (powerups)
@@ -303,7 +303,7 @@ New Easter Eggs
 #### Mystery Box
 * Ray Gun is obtainable from the first Mystery Box location on all maps without having to first get a Teddy Bear 
 * All weapons are now available in the Mystery Box--excluding equipment, frag grenades, and starting pistols.
-
+* All maps have the same glow effect when the box is opened
 
 
 ## Special Thanks
