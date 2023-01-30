@@ -14,14 +14,34 @@ This mod contains bug fixes, quality of life tweaks, fixed inconsistencies, and 
 * If notice any issues with the mod after compiling, please let me know. However, I tested the files on a fresh install and everything appeared to work.
 * Keep in mind that not every script file (.gsc & .csc) in the \mods directory has been modified, but having them gives you complete control of every aspect of each map
 
-# Big Title
-## Sub Title
-### Sub-sub title
-#### Individual items
-
 ## Change Notes
-
 To be written. notes wip
+
+### General
+
+### Player
+
+### Zombies
+
+### HUD
+
+### Menu
+
+### Settings
+
+### Perks
+
+### Powerups
+
+### Traps
+
+### Blockers
+
+### Last Stand
+
+### Weapons
+
+
 
 
 * Improved spacing between any strings that used the HINT_ACTIVATE hand logo
@@ -95,7 +115,7 @@ New Easter Eggs
 * Added a new type of "super sprinter" that comes after round 10, toggleable in Game Options.
 * Replaced the existing grey uniform zombie variant texture with an SS camouflage texture, which fits better with the battlefield atmosphere of the map.
 
-### Player
+### Characters
 * Added characters. Instead of randomizing the player models for each character, each Player (1, 2, 3, 4) always has a consistent player model.
 * Added new generic voiceover taken from Campaign assets using factory style code. Includes categories for weapons, low ammo, close kill, damaged close kill, explosion cough, explosion kill, flamethrower kill, headshot kill, killstreak, scared breathing, pain, reload, player surrounded, player responses, powerups, downed/mandown, revived/revived teammate, Insta-Kill melee, and level start.
 
@@ -107,7 +127,7 @@ New Easter Eggs
 * Added the Nacht "sprint" crawler animation to bridge the consistency between the first two maps.
 * Added a second new type of "super sprinter" that comes after round 10, toggleable in Game Options.
 
-### Player
+### Characters
 * Added characters. Instead of randomizing the player models for each character, each Player (1, 2, 3, 4) always has a consistent player model.
 * Changed player models and player viewmodel hands to use Marine Raider recon gear. These Marines were supposed to be a "recon team" in the story and it helps differentiate them from the Marines on the previous map. 
 * Rewrote voiceover to use factory style code. 
@@ -115,9 +135,13 @@ New Easter Eggs
 
 ## Shi No Numa
 * Added intro screen text
+### Zombies
+### Characters
 
 ## Der Riese
 * Improved intro screen text with complete date
+### Zombies
+### Characters
 
 ## Weapons
 * All maps share the same loadout, except for the exceptions described in the table below.
