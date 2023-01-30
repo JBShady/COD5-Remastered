@@ -74,3 +74,29 @@ New Easter Eggs
 * Added Easter Egg quest to Shi No Numa- new achievement 4 players
 * Red barrels
 * Character bios on nacht/verruckt
+* added cut walking animation that was later used in BO1 to all maps
+
+## Nacht Der Untoten
+
+### Zombies
+* Zombies can now spawn with random combinations of helmets, hats, or gear based on rare % chances.
+* Zombies can now use updated animations from future maps for traversing, crawling, attacking, hitting through barriers, walking, running, etc. The exception remains that Nacht zombies are "slower," they are more likely to stop before hitting than on other maps. Nacht-unique "sprint" crawlers are still present.
+* Added a new type of "super sprinter" that comes after round 10, toggleable in Game Options.
+
+### Player
+* Added characters. Instead of randomizing the player models for each character, each Player (1, 2, 3, 4) always has a consistent player model.
+
+
+## Verrückt
+* Renamed map from Zombie Verrückt to Verrückt, like future titles
+
+### Zombies
+* Zombies can now spawn with random combinations of helmets, hats, bandages, or gear based on rare % chances.
+* Added the Nacht "sprint" crawler animation to bridge the consistency between the first two maps.
+* Added a second new type of "super sprinter" that comes after round 10, toggleable in Game Options.
+
+### Player
+* Added characters. Instead of randomizing the player models for each character, each Player (1, 2, 3, 4) always has a consistent player model.
+* Changed player models and player viewmodel hands to use Marine Raider recon gear. These Marines were supposed to be a "recon team" in the story and it helps differentiate them from the Marines on the previous map. 
+
+
