@@ -20,12 +20,29 @@ To be written. notes wip
 ### General
 
 ### Player
+* new walking anim
+* Added Bo2 death anim
+* fixed clientside heartbeat timing
+* fixed delays in voiceover to prevent overlapping lines (powerups)
 
 ### Zombies
+* added cut walking animation that was later used in BO1 to all maps
 
 ### HUD
-
+* HUD elements, including ammo, round counter, and perks no longer touch very edge of the screen
+* removed objective info screen when pressing tab
+* updated HD font
+* updated HD HINT_ACTIVATE hand icon
+* updated grenade icon and grenade pickup icon to accurately represent the frag grenade type on the map
+* updated HD flamethrower icon
+* updated HD wood board texture for barriers
+* updated perk and powerup HD icons
 ### Menu
+* Improved spacing between any strings that used the HINT_ACTIVATE hand logo
+* Capitiization is more consistent in hintstrings
+* Added custom co-op loading screen hint message
+* Added T4M installation reminder when selecting co-op
+* removed intel sponsorship advertisement from loading screen
 
 ### Settings
 
@@ -44,39 +61,39 @@ To be written. notes wip
 
 
 
-* Improved spacing between any strings that used the HINT_ACTIVATE hand logo
-* Capitiization is more consistent in hintstrings
-* Added T4M installation reminder when selecting co-op
-* Added custom co-op loading screen hint message
+
 
 * Added achievements, stats remembered, like console
 * Fixed sound issues m1 launcher, rocket launchers
 * Lowered volume of wall breaking barrier sounds
-* Added Bo2 death anim
-* Fixed ray gun idle anim for high fovs
-* removed intel sponsorship advertisement from loading screen
 * added character bios
 * Tidied up Character Bio messages without changing the content, including small grammatical fixes 
 * added map intel page including map name, description, image, and achievements if available
-* HUD elements, including ammo, round counter, and perks no longer touch very edge of the screen
 * map is loaded by default with solo button and when going into co-op lobbies 
 * co-op settings page now includes any of my custom settings that are relevant for co-op lobbies
-* removed objective info screen when pressing tab
-* new settings:
-* Sound: added setting for disabling voiceover
-* Graphics: fog, cinematic mode, and higher LOD (default enabled)
-* Game settings: 
-* classic_zombies default 0, classic 1
-* classic_perks default 0, classic 1
-* grabby_zombies default 0, classic
-* super_sprinters default 0, classic 1
-* cg_drawFPS Simple YES, off NO
-* com_maxfps 85 yes no 0
-* cg_fov 65-90
-* cg_fovscale 1 normal, 1.1 med, 1.2 high
-* input_invertpitch disabled 0, enabled 1
-* input_viewSensitivity uses same scale from console (Low to Insane)
-* controller_dummy enable 0 executed 1 dummy variable used to execute controller script
+
+| New Settings | DVAR | Default | Alternate | Description | 
+| :---: | :--- | :--- | :--- | :--- |
+| **GRAPHICS** |  |  |  |  |
+| Fog | `r_fog` | `1` Yes | `0` No | Enables or disables fog. |
+| Cinematic Mode | `r_filmUseTweaks` | `0` No | `1` Yes | More saturated color grading. Must launch map first before using. |
+| **TEXTURE SETTINGS** |  |  |  |  |
+| LOD Range | `lod_bias_enable` | `0` High | `1` Normal | Changes "r_lodBiasRigid" and "r_lodBiasSkinned" to -200, increasing range of visible detail. Accessible on menu, requires match restart. |
+| **SOUND** |  |  |  |  |
+| Character Dialogue | `character_dialog` | `0` Yes | `1` No | Enable or disables character dialogue. Locked in game for co-op. |
+| **GAME OPTIONS** |  |  |  |  |
+| Gametype | `classic_zombies` | `0` Modified Default | `1` Classic | By default, 24 zombie cap on solo is disabled. Accessible on menu, requires match restart. |
+| Last Stand | `classic_perks` | `0` Modified Default | `1` Classic | By default, solo Quick Revive and 45 second bleedout buffs are enabled. Accessible on menu, requires match restart. |
+| Enemy Pushing | `grabby_zombies` | `0` Modified Default | `1` Classic | By default, "sticky" zombies are disabled with PushPlayer(false). Accessible on menu, requires match restart. |
+| Enemy Intensity | `super_sprinters` | `0` Modified Default | `1` Classic | By default, additional super sprinters are added to prototype and asylum. Accessible on menu, requires match restart. |
+| Display FPS | `cg_drawFPS` | `Off` No | `Simple` Yes | Enables or disables FPS counter. |
+| Limit FPS | `com_maxfps` | `85` Yes | `0` No | Enables or disables max FPS lock. |
+| Field of View | `cg_fov` | `65` Default | `90` Maximum | Adjustable FOV with slider. |
+| View Scale | `cg_fovScale` | `1` Normal | `1.1` Medium or `1.2` High | Scales existing FOV higher or lower by multiplier. |
+| Controller Inversion | `input_invertpitch` | `0` Disabled | `1` Enabled | Enables or disables controller inversion. |
+| Controller Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to Medium, High, Very High, Insane) | Increases or decreases controller sensitivity using the same scale as console. |
+| Controller Support | `controller_dummy` | `0` Enable | `1` Enabled | Variable that when enabled, automatically executes "default_controller.cfg" |
+
 
 * new menu
 * cleaned up all setting pages and menus to remove irrelevant non-zombie related content, as with my mod you can only play zombies
@@ -84,25 +101,16 @@ To be written. notes wip
 * cooperative now auto loaded, new coop settings, and T4m warning
 * map intel page
 * character bios
-* new walking anim
 
-* fixed clientside heartbeat timing
-* fixed delays in voiceover to prevent overlapping lines (powerups)
-*
-* updated HD font
-* updated HD HINT_ACTIVATE hand icon
-* updated grenade icon and grenade pickup icon to accurately represent the frag grenade type on the map
-* updated HD flamethrower icon
-* updated HD wood board texture for barriers
-* updated perk and powerup HD icons
+
+
+
 
 * edited der riese vision
-* Fixed Der Riese zombies using flesh colored limbs after being gibbed 
 New Easter Eggs
 * Added Easter Egg quest to Shi No Numa- new achievement 4 players
 * Red barrels
 * Character bios on nacht/verruckt
-* added cut walking animation that was later used in BO1 to all maps
 
 ## Nacht Der Untoten
 * Added intro screen text
@@ -141,6 +149,8 @@ New Easter Eggs
 ## Der Riese
 * Improved intro screen text with complete date
 ### Zombies
+* Fixed Der Riese zombies using flesh colored limbs after being gibbed 
+
 ### Characters
 
 ## Weapons
@@ -315,6 +325,7 @@ New Easter Eggs
 * Grenade suicide does not give you an extra grenade when falling into last stand
 
 #### Ray Gun
+* Fixed idle animation to remove blocky left hand
 * (Upgraded) Fixed Ray Gun VOX not playing
 * (Upgraded) Fixed last stand giving you more than one ammo cartridge
 
@@ -328,6 +339,7 @@ New Easter Eggs
 * Ray Gun is obtainable from the first Mystery Box location on all maps without having to first get a Teddy Bear 
 * All weapons are now available in the Mystery Box--excluding equipment, frag grenades, and starting pistols.
 * All maps have the same glow effect when the box is opened
+* Fixed Mystery Box playing the debris sound for other players after every use when there has been a Teddy Bear  
 
 
 ## Special Thanks
