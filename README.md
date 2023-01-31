@@ -91,8 +91,8 @@ To be written. notes wip
 | Field of View | `cg_fov` | `65` Default | `90` Maximum | Adjustable FOV with slider. |
 | View Scale | `cg_fovScale` | `1` Normal | `1.1` Medium or `1.2` High | Scales existing FOV higher or lower by multiplier. |
 | Controller Inversion | `input_invertpitch` | `0` Disabled | `1` Enabled | Enables or disables controller inversion. |
-| Controller Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to Medium, High, Very High, Insane) | Increases or decreases controller sensitivity using the same scale as console. |
-| Controller Support | `controller_dummy` | `0` Enable | `1` Enabled | Variable that when enabled, automatically executes "default_controller.cfg" |
+| Controller Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to Medium, High, Very High, Insane | Increases or decreases controller sensitivity using the same scale as console. |
+| Controller Support | `controller_dummy` | `0` Enable | `1` Enabled | Variable that when enabled, automatically executes "default_controller.cfg". |
 
 
 * new menu
