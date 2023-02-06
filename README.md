@@ -159,16 +159,16 @@ New Easter Eggs
 ### Loadout
 | Category | Nacht Der Untoten  | Verrückt | Shi No Numa | Der Riese | 
 | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
-| Starting Pistols | Colt M1911 | Colt M1911 | Faction Dependent | Faction Dependent |
-| Bolt-action Rifles | Kar98k, Springfield | Kar98k, Springfield | Arisaka | Kar98k |
-| Scoped Rifles | Scoped Kar98k | Scoped Springfield | Scoped Arisaka | Scoped Mosin Nagant |
-| Rocket Launcher | Panzerschrek | Panzerschrek | M9A1 Bazooka | Panzerschrek |
-| Frag Grenades | Stielhandgranate | Stielhandgranate | Type 97 Grenade | Stielhandgranate |
-| Speical Grenades | Molotov | Molotov, Smoke Grenade | Molotov, Sticky Grenade | Molotov, Monkey Bomb |
-| Equipment | None | Bouncing Betties | Bouncing Betties | Bouncing Betties, Bowie Knife |
-| Cut Weapons Added | SVT-40 | SVT-40 | SVT-40, DP-28, Type 99 | SVT-40, DP-28, Type 99 |
-| Regular Weapons Added | Type 100 | Type 100 | None | M1 Garand, Sawed-Off Double Barrel |
-| Wonder Weapons | Ray Gun | Ray Gun | Ray Gun, Wunderwaffe DG-2 | Ray Gun, Wunderwaffe DG-2 |
+| **Starting Pistols** | Colt M1911 | Colt M1911 | Faction Dependent | Faction Dependent |
+| **Bolt-action Rifles | Kar98k, Springfield | Kar98k, Springfield | Arisaka | Kar98k |
+| **Scoped Rifles** | Scoped Kar98k | Scoped Springfield | Scoped Arisaka | Scoped Mosin Nagant |
+| **Rocket Launcher** | Panzerschrek | Panzerschrek | M9A1 Bazooka | Panzerschrek |
+| **Frag Grenades** | Stielhandgranate | Stielhandgranate | Type 97 Grenade | Stielhandgranate |
+| **Speical Grenades** | Molotov | Molotov, Smoke Grenade | Molotov, Sticky Grenade | Molotov, Monkey Bomb |
+| **Equipment** | None | Bouncing Betties | Bouncing Betties | Bouncing Betties, Bowie Knife |
+| **(NEW) Cut Weapons** | SVT-40 | SVT-40 | SVT-40, DP-28, Type 99 | SVT-40, DP-28, Type 99 |
+| **(NEW) Consistent Weapons** | Type 100 | Type 100 | None | M1 Garand, Sawed-Off Double Barrel |
+| **Wonder Weapons** | Ray Gun | Ray Gun | Ray Gun, Wunderwaffe DG-2 | Ray Gun, Wunderwaffe DG-2 |
 
 ### Changes
 * All weapons are consistent in stats and appearance between each map, with all using the best materials (either the HD materials from Singleplayer, or the weathered material if present).
