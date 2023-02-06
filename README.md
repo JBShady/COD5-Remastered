@@ -160,7 +160,7 @@ New Easter Eggs
 | Category | Nacht Der Untoten  | Verrückt | Shi No Numa | Der Riese | 
 | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
 | **Starting Pistols** | Colt M1911 | Colt M1911 | Faction Dependent | Faction Dependent |
-| **Bolt-action Rifles | Kar98k, Springfield | Kar98k, Springfield | Arisaka | Kar98k |
+| **Bolt-action Rifles** | Kar98k, Springfield | Kar98k, Springfield | Arisaka | Kar98k |
 | **Scoped Rifles** | Scoped Kar98k | Scoped Springfield | Scoped Arisaka | Scoped Mosin Nagant |
 | **Rocket Launcher** | Panzerschrek | Panzerschrek | M9A1 Bazooka | Panzerschrek |
 | **Frag Grenades** | Stielhandgranate | Stielhandgranate | Type 97 Grenade | Stielhandgranate |
