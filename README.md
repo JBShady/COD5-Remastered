@@ -344,4 +344,4 @@ New Easter Eggs
 
 ## Special Thanks
 * MrJayden585 - SS uniform texture
-
+* New secret melee weapon created by Tom Crowley
