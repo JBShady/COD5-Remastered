@@ -1,4 +1,4 @@
-NOTE: This Git page (and the readme) is still a work in progress as of right now
+THIS GIT PAGE (and the readme) IS STILL WIP, I unfortunately follow my own scripting convetions which includes not actually using git until I finish the whole thing. But if you want to follow or save this page for when everything is ready, feel free.
 
 # Call of Duty: World at War Zombies - Remastered Mod
 This mod contains bug fixes, quality of life tweaks, fixed inconsistencies, and other improvements for each of the four zombie maps. To install & play, download the release and follow the [installation instructions](https://youtu.be/YbOq6Nb9xug). This repository contains the source files of the project. If you would like to modify it see the instructions below. 
