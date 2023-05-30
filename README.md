@@ -54,12 +54,17 @@ To be written. notes wip
 ### Powerups
 
 ### Traps
+* All electric traps last for 30 seconds with a 30 second cooldown, except for Shi No Numa which is 60 for balance reasons
+* All levers return to upward posistion when not in use to prevent glitches, however, will not be usable until cooldown completes and lights turn green
+* Fixed bug where traps would not slow down player. However, players with Jug that do not stand still in traps can now avoid the slow down
+* Fixed traps sometimes displaying yellow lights on Der Riese 
+* Decreased Hellhound death delay in traps
+* Fixed Hellhounds playing normal zombie death sounds on Shi No Numa
 
 ### Blockers
 
 ### Last Stand
 
-### Weapons
 
 
 
@@ -147,6 +152,10 @@ New Easter Eggs
 
 ## Shi No Numa
 * Added intro screen text
+* Flogger changes, cooldown, fx light, dmg is the same in solo vs co-op, kills player instantly no jug/does damage with jug, sets player to crouch, JBleezy fix damaging multiple times in one hit
+* Zipline initial cooldown decreased
+
+
 ### Zombies
 ### Characters
 
@@ -158,7 +167,7 @@ New Easter Eggs
 ### Characters
 
 ## Weapons
-* All maps share the same loadout, except for the exceptions described in the table below.
+* All maps share the same loadout, except for the exceptions described in the table below:
 
 ### Loadout
 | Category | Nacht Der Untoten  | Verrückt | Shi No Numa | Der Riese | 
@@ -170,8 +179,8 @@ New Easter Eggs
 | **Frag Grenades** | Stielhandgranate | Stielhandgranate | Type 97 Grenade | Stielhandgranate |
 | **Speical Grenades** | Molotov | Molotov, Smoke Grenade | Molotov, Sticky Grenade | Molotov, Monkey Bomb |
 | **Equipment** | None | Bouncing Betties | Bouncing Betties | Bouncing Betties, Bowie Knife |
-| **(NEW) Cut Weapons** | SVT-40 | SVT-40 | SVT-40, DP-28, Type 99 | SVT-40, DP-28, Type 99 |
-| **(NEW) Consistent Weapons** | Type 100 | Type 100 | None | M1 Garand, Sawed-Off Double Barrel |
+| **Entirely New Weapons** | SVT-40 | SVT-40 | SVT-40, DP-28, Type 99 | SVT-40, DP-28, Type 99 |
+| **Missing Weapons Added** | Type 100 | Type 100 | None | M1 Garand, Sawed-Off Double Barrel |
 | **Wonder Weapons** | Ray Gun | Ray Gun | Ray Gun, Wunderwaffe DG-2 | Ray Gun, Wunderwaffe DG-2 |
 
 ### Changes
