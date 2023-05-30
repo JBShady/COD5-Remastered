@@ -1,7 +1,7 @@
 THIS GIT PAGE (and the readme) IS STILL WIP, I unfortunately follow my own scripting convetions which includes not actually using git until I finish the whole thing. But if you want to follow or save this page for when everything is ready, feel free.
 
 # Call of Duty: World at War Zombies - Remastered Mod
-This mod contains bug fixes, quality of life tweaks, fixed inconsistencies, and other improvements for each of the four zombie maps. To install & play, download the release and follow the [installation instructions](https://youtu.be/YbOq6Nb9xug). This repository contains the source files of the project. If you would like to modify it see the instructions below. 
+This mod contains bug fixes, quality of life tweaks, fixed inconsistencies, and other improvements for each of the four stock zombie maps. To install & play, download the release and follow the [installation instructions](https://youtu.be/YbOq6Nb9xug). This repository contains the source files of the project. If you would like to modify it, see the instructions below. 
 
 ## Created by JB Shady
 
@@ -11,7 +11,7 @@ This mod contains bug fixes, quality of life tweaks, fixed inconsistencies, and 
 
 ## Build Instructions
 * If you are downloading the source code and wish to build it, you will need the latest version of the official [Call of Duty: World at War Mod Tools](https://mega.nz/#!5kwyCYYQ!Onn3s3SfJjrombt7b1lUOcFYAtzhg9T_X7c4SvJljbs) installed before continuing. I also recommend installing the community made [V1.1 Launcher patch](https://www.ugx-mods.com/forum/3rd-party-applications-and-tools/48/world-at-war-mod-tools-v1-1-pwned-w-linkerpc-fix/10245/).
-* Drag & drop the "raw" folder, "mods" folder, and d3d9.dll (T4M) file into your game's root folder. Some files will be replaced, this is normal. (Program Files (x86)\Steam\steamapps\common\Call of Duty World at War) 
+* Drag & drop the "raw" folder, "mods" folder, and d3d9.dll (T4M) file from this repository into your game's root folder. Some files will be replaced, this is normal. (Program Files (x86)\Steam\steamapps\common\Call of Duty World at War) 
 * Use the mod tools Launcher to compile each of the four mods. (Check "Build mod.ff FastFile" and "Build IWD File" in each)
 * If you notice any issues with the mod after compiling, please let me know. However, I tested the files on a fresh install and everything appeared to work.
 * Keep in mind that not every script file (.gsc & .csc) in the \mods directory has been modified, but having them all gives you complete control of every aspect of each map
@@ -26,6 +26,7 @@ To be written. notes wip
 * Added Bo2 death anim
 * fixed clientside heartbeat timing
 * fixed delays in voiceover to prevent overlapping lines (powerups)
+* can no longer pull out equipment while drinking perks/bowie knife
 
 ### Zombies
 * added cut walking animation that was later used in BO1 to all maps
@@ -131,6 +132,7 @@ New Easter Eggs
 
 ## Verrückt
 * Renamed map from Zombie Verrückt to Verrückt, like in future Call of Duty titles
+* Specific box sound
 
 ### Zombies
 * Zombies can now spawn with random combinations of helmets, hats, bandages, or gear based on rare % chances.
@@ -173,47 +175,52 @@ New Easter Eggs
 | **Wonder Weapons** | Ray Gun | Ray Gun | Ray Gun, Wunderwaffe DG-2 | Ray Gun, Wunderwaffe DG-2 |
 
 ### Changes
-* All weapons are consistent in stats and appearance between each map, with all using the best materials (either the HD materials from Singleplayer, or the weathered material if present).
-* Certain weapons no longer share ammo reserves because it was a glitchy system.
-* All added weapons (and their upgraded variants) use their official sounds, stats, names, effects, and materials unless non-existent. In such cases, they were created from scratch while still matching Treyarch's style.
+* All weapons are consistent in stats and appearance between each map.
+* All use the best available materials (HD textures from Singleplayer, weathered materials if available, normal/spec maps).
+* Certain weapons no longer share ammo reserves because it was a glitchy system where players could create ammo out of thin air.
+* All added weapons (and their upgraded variants) use official sounds, stats, names, effects, models, and materials unless non-existent. In such rare cases, they were created from scratch while still matching Treyarch's style.
 
 #### Starting Pistols
 * Starting pistols are now faction dependent. Americans spawn with the Colt M1911, Russian with the Tokarev T-33, Japanese with Type 14 Nambu, and German with Walther P38
 * All have identical stats and upgrade into explosive pistols
 * (Walther P38) removed first raise animation
 * (Upgraded, all) Increased reserve ammo from 40 to 42 so it is actually divisible by the magazine capacity (6)
-* (Upgraded, all) Changed the last shot animation so the pistol slides do not go back and glitch forward
+* (Upgraded, all) Changed the last shot animation so the pistol slides do not go back and glitch forward due to being categorized as a grenade launcher
 * (Upgraded, all) Added muzzle flash effects
 * (Upgraded, all) Added PaP firing soundsand grenade impact sounds instead of using the Rifle Grenade sounds
-* (Upgraded, all) Slightly buffed fire rate and damage to make these weapons more rewarding, taking inspiration from how useful the Mustang & Sally are in Black Ops 1
+* (Upgraded, all) Slightly buffed fire rate and damage to make these weapons more rewarding, taking inspiration from how great the Mustang & Sally were in Black Ops 1
 
 #### Type 99
 * Stats for upgraded/un-upgraded slightly rebalanced from default SP values to fit for zombies as a mid-tier LMG (damage, ammo, firerate)
 * Increased ADS FOV from 30 to 40 to give more visibility
-* Has visible bipod in model
+* Has visible bipod in models for both upgraded/un-upgraded versions
+* (Upgraded) Custom model with uniqe UV mapping of silver etching 
 
 #### DP-28
-* Stats for upgraded/un-upgraded slightly rebalanced from default SP values to fit for zombies as a mid-tier LMG (damage, ammo, firerate)
+* Stats for upgraded/un-upgraded slightly rebalanced from default SP values to fit for zombies as a mid/low-tier LMG (damage, ammo, firerate)
 * Rebalanced empty reload speed to closer match animation
-* Has visible bipod in model
+* Has visible bipod in models for both upgraded/un-upgraded versions
+* (Upgraded) Custom model with uniqe UV mapping of silver etching 
 
 #### SVT-40
 * Stats for upgraded/un-upgraded slightly rebalanced from default SP values to fit for zombies as a mid-tier rifle (damage, ammo, firerate)
+* (Upgraded) Custom model with uniqe UV mapping of silver etching 
 
 #### M9A1 Bazooka
 * Tweaked sprint and raise animation timing to look better
-* Has identical damage and ammo stats with the Panzerschreck
-
-#### Sticky Grenade
-* High impact, low radius. Stats rebalanced for zombies. 
-* Uses cut voicelines
+* Has identical damage and ammo stats with the Panzerschreck, used on non-German maps
 
 #### Type 97 Grenade
-* Has identical damage and ammo stats with the Stielhandgranate
+* Has identical damage and ammo stats with the Stielhandgranate, used on non-German maps
+
+#### Sticky Grenade
+* High impact, low radius grenades rebalanced for zombies 
+* Uses cut voicelines
 
 #### Scoped Snipers
-* Has identical damage and ammo between variants depending on the map.
-* Names tidied up for more historical accuracy. All have unique in-scope textures.
+* Have identical damage and ammo between variants depending on the map
+* Names tidied up for more historical accuracy and all have unique in-scope textures
+* (Upgraded Mosin Nagant) Uses cut model made by Treyarch along with custom name & stats
 
 #### .357 Magnum
 * Decreased reserve ammo from 80 to 78 so it is actually divisible by the weapon capacity (6)
@@ -224,15 +231,17 @@ New Easter Eggs
 * Fixed Bowie Knife missing sound when knifing with this weapon
 * (Upgraded) Fixed missing muzzle flash effect
 * (Upgraded) Increased reserve ammo from 60 to 64 so it is actually divisible by the magazine capacity (8)
+* (Upgraded) Updated model to remove metal gaps without silver etching
 
 #### Gewehr 43
 * (Upgraded) Increased reserve ammo from 170 to 180 so it is actually divisible by the magazine capacity (12)
 
 #### M1A1 Carbine
 * Renamed to M1 Carbine for historical accuracy (non-folding stock variant)
-* Slightly nerfed damage as this weapon should be similar, if not worse, at raw damage than the M1 Garand
+* Slightly nerfed damage as this weapon should be similar, if not worse, at pure damage than the M1 Garand
 * Slightly buffed mobility to suit this weapon better, being lighter than other rifles in real life
 * (Upgraded) Increased magazine size from 15 to 30 so it actually receives a decent ammo buff upon upgrading
+* (Upgraded) Updated model to use the 30-round magazine from Multiplayer
 
 #### M1 Garand
 * Slightly buffed base rifle damage
@@ -245,36 +254,42 @@ New Easter Eggs
 * Decreased mobility to compensate for Rifle Grenades
 * Nerfed maximum ammo to balance with regular M1 Garand and compensate for having to carry Rifle Grenades
 * When equipping the launcher, the name changes to the name of the grenade launcher for historical accuracy
-* (Upgraded) Nerfed maximum ammo to balance with regular M1 Garand and compensate for added Rifle Grenades
+* (Upgraded) Nerfed maximum rifle ammo to balance with regular M1 Garand and compensate for added Rifle Grenades
 * (Upgraded) Renamed equipped launcher to M7000
 * (Upgraded) Receives the same headshot multiplier buff as the non-launcher variant
-* (Upgraded) Slightly nerfed max launcher explosion radius so that it is less than the upgraded Panzer, there's no reason these should've had identical stats when they're different projectiles
+* (Upgraded) Slightly nerfed max launcher explosion radius so that it is less than the upgraded Panzer, there's no reason these should had identical stats when they're different projectiles
+* All maps use the proper model where an attachment is fitted under the barrel even when a grenade is not loaded
 
 #### Double-Barreled Shotgun
-* Removed Trench Gun ejecting shell effect, as the shells are only disposed of when reloading
+* Removed Trench Gun ejecting shell effect as the shells are only disposed of when reloading
 * (Upgraded) Fixed capitalization in the name
-* (Upgraded) Fixed ADS FOV being way too low 
+* Fixed small gaps in the model by the hammer
+* Uses the model with the smaller grip that does not clip through the player hand
 
 #### Sawed-Off Double-Barreled Shotgun
 * Removed Trench Gun ejecting shell effect, as the shells are only disposed of when reloading
 * Removed "w/ Grip" from the name
 * Small damage boost to both un-upgraded and upgraded version so that this version is a little stronger than the normal double barrel, but with a wider and less accurate fire spread
+* Uses the model with the smaller grip that does not clip through the player hand
 
 #### Thompson
 * Renamed to M1A1 Thompson for historical accuracy
 * (Upgraded) Increased reserve ammo from 250 to 280 so it is actually divisible by the magazine capacity (40)
 
 #### Type 100
-* Fixed dry fire sound effect not being the SMG sound effect
 * Increased reserve ammo from 160 to 180 so it is actually divisible by the magazine capacity (30)
+* Fixed dry fire sound effect not being the SMG sound effect
+* Fixed shells ejecting from the wrong position on the weapon
 * (Upgraded) Increased reserve ammo from 220 to 240 so it is actually divisible by the magazine capacity (60)
-* (Upgraded) Updated weapon model and first person model with the standard Pack-a-Punch texture, as this weapon still used Treyarch's original silver texture that was not shiny
+* (Upgraded) Updated models with the standard Pack-a-Punch texture, as this weapon used Treyarch's original silver texture that was not shiny
+* Fixed wood material from appearing as all black on some maps
 
 #### PPSh-41
 * (Upgraded) Decreased reserve ammo from 700 to 690 so it is actually divisible by the drum mag capacity (115)
 
 #### STG-44
 * Fixed capitalization of the "t" to be lowercase for historical accuracy
+* (Upgraded) Updated model to remove metal gaps without silver etching
 
 #### BAR
 * Renamed to M1918 BAR for historical accuracy
@@ -282,7 +297,8 @@ New Easter Eggs
 * (Upgraded) Increased stock ammo from 180 to 240 so it actually receives a decent ammo buff upon upgrading, especially because it is not a wall weapon on Der Riese
 
 #### FG42
-* Updated viewmodel to look more complete for when playing on higher FOVs
+* Updated viewmodels to look more complete when playing on higher FOVs
+* (Upgraded) Recieves telescopic scope attachment and updated model to remove metal gaps without silver etching
 
 #### Browning M1919
 * Name rearranged to M1919 Browning for historical accuracy
@@ -290,16 +306,17 @@ New Easter Eggs
 * Slightly lower ADS time, as this weapon is supposed to be slow to handle
 * (Upgraded) Fixed capitalization in the name
 * (Upgraded) The Browning now recieves a similar damage multiplier buff compared to the MG42 when upgrading, instead of previously being left behind
-* Has visible bipod in model
+* Has visible bipod in models for both upgraded/un-upgraded versions
 
 #### MG42
 * Slightly higher mobility compared to the Browning, representing its lighter weight in real life
-* Decreased un-upgraded drum magazine capacity from 125 to 100 to differentiate it from the Browning, which also better represents its historically accurate lower capacity
-* Has visible bipod in model
+* Decreased un-upgraded drum magazine capacity from 125 to 100 while still retaining 500 stock ammo to differentiate it from the Browning, which also better represents its historically accurate lower capacity
+* Has visible bipod in models for both upgraded/un-upgraded versions
+* (Upgraded) Updated model to remove metal gaps without silver etching
 
 #### PTRS-41
 * Nerfed reserve ammo to 50 max instead of 60 to match other similar rifles, and also so that the upgraded reserve ammo of 60 feels earned
-* Uses the sniper voiceover category instead of the PPSh for the four heroes
+* Uses the cut sniper voiceover category instead of the PPSh when playing as the four heroes
 * (Upgraded) Increased reserve ammo from 60 to 64 so it is actually divisible by the clip capacity (8)
 * (Upgraded) Recieves small mobility buff
 
@@ -317,13 +334,19 @@ New Easter Eggs
 
 #### Bouncing Betty
 * Decreased delay from 2 seconds to 1 second before activation
+* Each player can only have 30 Bouncing Betties placed at once to prevent errors
+* When more than 4 mines explode one server frame the server waits another frame before continung to prevent crashes 
 * Fixed capitalization in the instruction hintstring
+* Hintstring also requires the player to look at the wall chalk, like other weapons
 
 #### Molotov Cocktails
-* Received a small buff so they are better than normal grenades, but still far from being powerful
+* Added fire FX deaths when zombies are killed
+* Received a small buff so they are better than normal grenades while still being far from powerful
 
 #### Frag Grenades
+* Recieved a small buff making frag grenades on all maps behave similar to the regular Der Riese style / Black Ops 1
 * Fixed plurality on hintstrings
+* If a player with full grenades tries to purchase more, the wall model simply appears but no points are lost 
 * Grenade suicide does not give you an extra grenade when falling into last stand
 
 #### Ray Gun
@@ -332,18 +355,29 @@ New Easter Eggs
 * (Upgraded) Fixed last stand giving you more than one ammo cartridge
 
 #### Wunderwaffe DG-2
-* Does not permanently reduce max health or remove Jugger-Nog effects 
-* Fixed missing reload clip on Der Riese
+* Does not permanently reduce max health upon zapping yourself
+* Fixed missing reload clip on Der Riese for both upgraded/un-upgraded versions
+* (Upgraded) Time between arcs is 20% shorter, improving the effectiveness of the weapon
+* (Upgraded) Added 3rd person weapon model that has the silver etching material
 * (Upgraded) Fixed not playing idle loop sound while holding weapon (electric humming)
 * (Upgraded) Fixed not playing the tesla sound after getting a 4 killstreak
 
 #### Mystery Box
 * Ray Gun is obtainable from the first Mystery Box location on all maps without having to first get a Teddy Bear 
-* All weapons are now available in the Mystery Box--excluding equipment, frag grenades, and starting pistols.
+* All weapons are now always available in the Mystery Box excluding equipment, frag grenades, and starting pistols
 * All maps have the same glow effect when the box is opened
-* Fixed Mystery Box playing the debris sound for other players after every use when there has been a Teddy Bear  
-
+* Fixed Mystery Box playing the debris sound for other players after every use once moving locations
+* Der Riese & Shi No Numa boxes now share equal weighted odds for Wonder Weapons, which have also been slightly rebalanced
 
 ## Special Thanks
-* MrJayden585 - SS uniform texture
-* New secret melee weapon created by Tom Crowley
+* Numan, Phil81334, cristian_m, Gympie5, Tristan, NGcaudle, psulions45 - General modding advice
+* MrJayden585 - Zombified SS uniform texture
+* Bunz1102 - Secret model & animations work
+* Tom Crowley - Secret melee weapon model & animation
+* ege115 - New first person sway walking script
+* jiggy22 - Original creator of SVT-40, Type 99, and DP-28 upgraded model UV mapping
+* Fusorf - Original creator of some assets used in HD shaders
+* RealVenom - Fixed Ray Gun viewmodel animation at high FOVs
+* Jbird632 - Working sticky grenades on AI & "Reward All Perks" scripts
+* Inspired by JBleezy's Black Ops 1 Reimagined mod
+* Thank you to the members of both my own & UGX WaW's Discord for helping me along the way
