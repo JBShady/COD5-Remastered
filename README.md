@@ -80,15 +80,17 @@ To be written. notes wip
 * map is loaded by default with solo button and when going into co-op lobbies 
 * co-op settings page now includes any of my custom settings that are relevant for co-op lobbies
 
+New "fake" DVARs created for cheat protected settings, now labeled with "_settings"--this allow players to edit them in-game and on the menu. 
 | New Settings | DVAR | Default | Alternate | Description | 
 | :---: | :--- | :--- | :--- | :--- |
 | **GRAPHICS** |  |  |  |  |
-| Fog | `r_fog` | `1` Yes | `0` No | Enables or disables fog. |
-| Cinematic Mode | `r_filmUseTweaks` | `0` No | `1` Yes | More saturated color grading. Must launch map first before using. |
+| Fog | `r_fog_settings` | `1` Yes | `0` No | Enables or disables fog. |
+| Cinematic Mode | `r_filmUseTweaks_settings` | `0` No | `1` Yes | More saturated color grading. |
 | **TEXTURE SETTINGS** |  |  |  |  |
-| LOD Range | `lod_bias_enable` | `0` High | `1` Normal | Changes "r_lodBiasRigid" and "r_lodBiasSkinned" to -200, increasing range of visible detail. Accessible on menu, requires match restart. |
+| LOD Range (Rigid) | `r_lodBiasRigid_settings` | `0` Default | `-200` High | Increases range of visible detail on rigid models. |
+| LOD Range (Skinned) | `r_lodBiasSkinned_settings` | `0` Default | `-200` High | Increases range of visible detail on skinned models. |
 | **SOUND** |  |  |  |  |
-| Character Dialogue | `character_dialog` | `0` Yes | `1` No | Enable or disables character dialogue. Locked in game for co-op. |
+| Character Dialogue | `character_dialog` | `0` Yes | `1` No | Enable or disables character dialogue. Locked in-game on co-op. |
 | **GAME OPTIONS** |  |  |  |  |
 | Gametype | `classic_zombies` | `0` Modified Default | `1` Classic | By default, 24 zombie cap on solo is disabled. Accessible on menu, requires match restart. |
 | Last Stand | `classic_perks` | `0` Modified Default | `1` Classic | By default, solo Quick Revive and 45 second bleedout buffs are enabled. Accessible on menu, requires match restart. |
@@ -99,8 +101,16 @@ To be written. notes wip
 | Field of View | `cg_fov` | `65` Default | `90` Maximum | Adjustable FOV with slider. |
 | View Scale | `cg_fovScale` | `1` Normal | `1.1` Medium or `1.2` High | Scales existing FOV higher or lower by multiplier. |
 | Controller Inversion | `input_invertpitch` | `0` Disabled | `1` Enabled | Enables or disables controller inversion. |
-| Controller Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to Medium, High, Very High, Insane | Increases or decreases controller sensitivity using the same scale as console. |
+| Controller Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to (Medium), (High), (Very High), (Insane) | Increases or decreases controller sensitivity using the same scale as console. |
 | Controller Support | `controller_dummy` | `0` Enable | `1` Enabled | Variable that when enabled, automatically executes "default_controller.cfg". |
+| **CONSOLE / EASTER EGGS** |  |  |  |  |
+| Character | `character` | `0` Random | `1-4` | Developer command to change character in solo, requires map restart. |
+| Health Counter | `cg_drawHealthCount` | `0` | `1` | Developer command to enable health counter in solo, requires map restart. |
+| Clearance Code | `bio_access` | `[PASSWORD]` | `?` | Grants access to confidential menus. |
+| Sumpf Completion | `sumpf_quest` | `?` | `?` | Indicates completion of new Shi No Numa Easter Egg achievement in 4-player. |
+| Factory Completion | `factory_quest` | `?` | `?` | Indicates completion of new Der Riese Easter Egg achievement in 4-player. |
+| DVAR Initialization | `dvar_init_dummy` | `0` | `1` | Set to 1 upon running mod. Set to 0 in console to reset all new remastered settings back to default. |
+
 
 
 * new menu
