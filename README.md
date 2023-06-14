@@ -96,20 +96,21 @@ New "fake" DVARs created for cheat protected settings, now labeled with "_settin
 | Last Stand | `classic_perks` | `0` Modified Default | `1` Classic | By default, solo Quick Revive and 45 second bleedout buffs are enabled. Accessible on menu, requires match restart. |
 | Enemy Pushing | `grabby_zombies` | `0` Modified Default | `1` Classic | By default, "sticky" zombies are disabled with PushPlayer(false). Accessible on menu, requires match restart. |
 | Enemy Intensity | `super_sprinters` | `0` Modified Default | `1` Classic | By default, additional super sprinters are added to prototype and asylum. Accessible on menu, requires match restart. |
+| HUD | `cg_draw2D` `r_flame_allowed` | `1` Yes | `0` No | Enables or disables full heads up display. |
 | Display FPS | `cg_drawFPS` | `Off` No | `Simple` Yes | Enables or disables FPS counter. |
-| Limit FPS | `com_maxfps` | `85` Yes | `0` No | Enables or disables max FPS lock. |
+| Limit FPS | `com_maxfps` | `85` Default | `0` Disabled | Adjusts the max FPS value. |
 | Field of View | `cg_fov` | `65` Default | `90` Maximum | Adjustable FOV with slider. |
 | View Scale | `cg_fovScale` | `1` Normal | `1.1` Medium or `1.2` High | Scales existing FOV higher or lower by multiplier. |
 | Controller Inversion | `input_invertpitch` | `0` Disabled | `1` Enabled | Enables or disables controller inversion. |
 | Controller Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to (Medium), (High), (Very High), (Insane) | Increases or decreases controller sensitivity using the same scale as console. |
 | Controller Support | `controller_dummy` | `0` Enable | `1` Enabled | Variable that when enabled, automatically executes "default_controller.cfg". |
 | **CONSOLE / EASTER EGGS** |  |  |  |  |
-| Character | `character` | `0` Random | `1-4` | Developer command to change character in solo, requires map restart. |
+| DVAR Initialization | `dvar_init_dummy` | `0` | `1` | Set to 0 in console to reset all new remastered settings back to default, requires mod relaunch. |
+| Character | `character` | `0` Random | `1-4` Player # | Developer command to change character in solo, requires map restart. |
 | Health Counter | `cg_drawHealthCount` | `0` | `1` | Developer command to enable health counter in solo, requires map restart. |
 | Clearance Code | `bio_access` | `[PASSWORD]` | `?` | Grants access to confidential menus. |
 | Sumpf Completion | `sumpf_quest` | `?` | `?` | Indicates completion of new Shi No Numa Easter Egg achievement in 4-player. |
 | Factory Completion | `factory_quest` | `?` | `?` | Indicates completion of new Der Riese Easter Egg achievement in 4-player. |
-| DVAR Initialization | `dvar_init_dummy` | `0` | `1` | Set to 1 upon running mod. Set to 0 in console to reset all new remastered settings back to default. |
 
 
 
