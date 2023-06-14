@@ -50,18 +50,29 @@ To be written. notes wip
 ### Settings
 
 ### Perks
+* Quick Revive now works on solo giving 3 possible extra lives
+* Renamed hintstring from saying to buy "Revive" to "Quick Revive"
+* Jugger-nog abilities and health regeneration behaves the same on all maps using improvements from Der Riese
 
 ### Powerups
+* Carpenter available on all maps
+* Max Ammmos now refill equipment on all maps (betties, molotovs, grenades)
+* Increased volume of Insta-Kill active loop sound
+* Double points now effects Carpenters and Nukes giving +800 and +400 respectively
+* Double points stack on all maps including Der Riese like originally scripted 
 
 ### Traps
-* All electric traps last for 30 seconds with a 30 second cooldown, except for Shi No Numa which is 60 for balance reasons
-* All levers return to upward posistion when not in use to prevent glitches, however, will not be usable until cooldown completes and lights turn green
-* Fixed bug where traps would not slow down player. However, players with Jug that do not stand still in traps can now avoid the slow down
+* All electric traps last for 30 seconds with a 30 second cooldown, except for Shi No Numa which is 60 for balance
+* All levers return to upward posistion when not in use to prevent glitches but will not be usable until cooldown completes and the lights turn green
+* Fixed bug where traps would not slow down player, but players with Jug that do not stand still in traps can still avoid the slow down
 * Fixed traps sometimes displaying yellow lights on Der Riese 
 * Decreased Hellhound death delay in traps
 * Fixed Hellhounds playing normal zombie death sounds on Shi No Numa
 
 ### Blockers
+* Repairing individual boards gives the player a screenshake like future games
+* Repairing barriers only plays the cha-ching sound while actively earning +10 points
+* Barriers are now effected by two active double points giving +40
 
 ### Last Stand
 
