@@ -14,10 +14,13 @@ This mod contains bug fixes, quality of life tweaks, fixed inconsistencies, and 
 * If you notice any issues with the mod after compiling, please let me know. However, I tested the files on a fresh install and everything appeared to work.
 * Keep in mind that not every script file (.gsc & .csc) in the \mods directory has been modified, but having them all gives you complete control of every aspect of each map
 
-* nazi_zombie_remastered (Nacht Der Untoten)
-* nazi_zombie_remastered_dlc1 (Verrückt)
-* nazi_zombie_remastered_dlc2 (Shi No Numa)
-* nazi_zombie_remastered_dlc3 (Der Riese)
+nazi_zombie_remastered (Nacht Der Untoten) 
+
+nazi_zombie_remastered_dlc1 (Verrückt)
+
+nazi_zombie_remastered_dlc2 (Shi No Numa)
+
+nazi_zombie_remastered_dlc3 (Der Riese)
 
 ## Change Notes
 
