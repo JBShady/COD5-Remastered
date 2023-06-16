@@ -65,7 +65,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Updated flamethrower icon with custom HD version still in the correct art style
 * Updated perk and powerup shaders with custom made HD versions still in the correct art style
 * Created new better looking icons for Sticky Grenades and Type 97 frags still using the correct art style.
-* Changed the Monkey bomb icon to look more recognizable while still in the greyscale WaW icon art style.
+* Changed the Monkey bomb icon to look more recognizable while still in the correct  art style.
 * Removed grenade indicators from special grenades because these grenades cannot be picked up and display the incorrect icon
 * Fixed the round counter not changing white when going to round 6.
 * When no interact button is mapped, it will switch to the controller blue "X" so that players can enjoy a more immersive controller experience.
@@ -480,4 +480,4 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * RealVenom - Fixed Ray Gun viewmodel animation at high FOVs
 * Jbird632 - Working sticky grenades on AI & "Reward All Perks" scripts
 * Inspired by JBleezy's Black Ops 1 Reimagined mod
-* Thank you to the members of both my own & UGX WaW's Discord for helping me along the way
+* Thank you to the members of both my own & UGX's Discord for helping me along the way
