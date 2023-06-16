@@ -45,6 +45,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Fixed clientside sounds and effects from looping or playing at different speeds depending on the client's FPS
 * Fixed player being able to pull out equipment while drinking perks or purchasing the Bowie Knife 
 * Fixed voiceover categories played with a delay having the ability to overlap with other lines
+* Player no longer receives a free Colt when they have no weapons, instead the screen is just blank like future zombie games.
 * Voiceover interactions disabled on a player size of 1 to fix character responses sometimes playing in solo
 
 ### Zombies
@@ -243,7 +244,6 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Pack-a-Punch hintstring disappears when you are holding an upgraded weapon or when another player's weapon is in the machine.
 * Added several unused voiceover lines when a player picks up the Carpenter power up.
 * Player surrounded voiceover now also plays in solo, but without the responses from other characters and at a lower percent chance.
-* Player no longer receives a free Colt when they have no weapons, instead the screen is just blank like future zombie games.
 * The post-teleporter FOV effect now uses your set FOV when doing the effect instead of zooming out into the default 65.
 * Tweaked teleporter cooldown message to be plural, as all teleporters are set on cooldown after one is used
 * Fixed teleporter cooldown message showing on top of other teleporters that still need to be linked, which do not get effected by the cooldown. 
