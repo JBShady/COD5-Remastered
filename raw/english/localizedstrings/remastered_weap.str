@@ -50,7 +50,7 @@ REFERENCE           NAMBU
 LANG_ENGLISH        "Type 14 Nambu"
 
 REFERENCE           NAMBU_UP
-LANG_ENGLISH        "DEVILDOG F0c-k3r"
+LANG_ENGLISH        "Sayonara F0-k3r"
 
 REFERENCE           STG
 LANG_ENGLISH        "StG-44"
@@ -99,6 +99,9 @@ LANG_ENGLISH        "Katana"
 
 REFERENCE           VODKA
 LANG_ENGLISH        "Vodka Bottle"
+
+REFERENCE           BEAKER
+LANG_ENGLISH        "Beaker"
 
 
 ENDMARKER

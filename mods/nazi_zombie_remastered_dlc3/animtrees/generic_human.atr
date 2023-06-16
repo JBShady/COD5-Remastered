@@ -2782,12 +2782,12 @@ body
 			ai_zombie_boardtear_r_6
 			ai_zombie_boardtear_roof            
 			ai_zombie_boardtear_crawl_l_1
-	                ai_zombie_boardtear_crawl_l_2
-	                ai_zombie_boardtear_crawl_l_3
-                        ai_zombie_boardtear_crawl_l_4
-	                ai_zombie_boardtear_crawl_l_5
-	                ai_zombie_boardtear_crawl_l_6
-	            ai_zombie_boardtear_crawl_m_1
+	        ai_zombie_boardtear_crawl_l_2
+			ai_zombie_boardtear_crawl_l_3
+			ai_zombie_boardtear_crawl_l_4
+			ai_zombie_boardtear_crawl_l_5
+			ai_zombie_boardtear_crawl_l_6
+			ai_zombie_boardtear_crawl_m_1
             ai_zombie_boardtear_crawl_m_2
             ai_zombie_boardtear_crawl_m_3
             ai_zombie_boardtear_crawl_m_4

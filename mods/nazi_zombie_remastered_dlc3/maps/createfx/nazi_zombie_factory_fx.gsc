@@ -307,7 +307,7 @@ main()
      	ent.v[ "angles" ] = ( 270, 0, 0 );
      	ent.v[ "fxid" ] = "zombie_mainframe_link_all";
      	ent.v[ "delay" ] = 0;
-     	ent.v[ "exploder" ] = 101;
+     	ent.v[ "exploder" ] = 169;
      	ent.v[ "soundalias" ] = "nil";
  
      	ent = maps\_utility::createExploder( "zombie_mainframe_link_single" );
@@ -355,7 +355,7 @@ main()
      	ent.v[ "angles" ] = ( 272, 90, -90 );
      	ent.v[ "fxid" ] = "zombie_mainframe_linked";
      	ent.v[ "delay" ] = 0;
-     	ent.v[ "exploder" ] = 101;
+     	ent.v[ "exploder" ] = 169;
      	ent.v[ "soundalias" ] = "nil";
  
      	ent = maps\_utility::createExploder( "transporter_pad_start" );

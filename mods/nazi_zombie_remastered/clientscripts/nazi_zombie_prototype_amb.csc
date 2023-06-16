@@ -34,19 +34,29 @@ main()
 
 
 
-  declareMusicState("SPLASH_SCREEN"); //one shot dont transition until done
-	musicAlias("mx_splash_screen", 12);	
-	musicwaittilldone();
- 
+	declareMusicState("SPLASH_SCREEN"); //one shot dont transition until done
+		musicAlias("mx_splash_screen", 12);	
+		musicAliasloop("mx_zombie_wave_1", 0, 4); // add music start here because we dont do the below "round_begin" music state on round 1 
+		musicwaittilldone();
 
-  declareMusicState("WAVE_1"); 
-	musicAliasloop("mx_zombie_wave_1", 0, 4);	
+	declareMusicState("round_begin");
+		musicAlias("chalk", 2);
+		musicAliasloop("mx_zombie_wave_1", 0, 4);
+		musicwaittilldone();
 
-  declareMusicState("eggs"); 
-	musicAlias("mx_eggs", 0);
+	declareMusicState ("round_end"); 
+		musicAlias("round_over", 2);
+		musicwaittilldone();
 
-  declareMusicState("end_of_game");
-	musicAlias("mx_game_over", 2);
+	declareMusicState("WAVE_1"); 
+		musicAliasloop("mx_zombie_wave_1", 0, 4);	
+		musicwaittilldone();
+
+	declareMusicState("eggs"); 
+		musicAlias("mx_eggs", 2);
+
+	declareMusicState("end_of_game");
+		musicAlias("mx_game_over", 0);
 
 	thread radio_init();
 
@@ -77,12 +87,28 @@ fade(id, time)
 	stopSound(id);
 }
 
+stop_radio_listener()
+{
+	while(1)
+	{
+		level waittill ("ktr");
+		level.stop_radio = true;
+		level notify("kzmb_next_song");
+		//iprintlnbold ("ran next song func in csc");
+		//register_clientflag_callback("scriptmover", level._ZOMBIE_RADIO_CLIENTFLAG, , true::next_song();
+		level waittill ("rrd");
+		level.stop_radio = false;
+		wait(0.5);
+	}
+	
+}
+
 
 radio_advance()
 {
 	for(;;)
 	{
-		while(SoundPlaying(level.radio_id) || level.radio_index == 0)
+		while(SoundPlaying(level.radio_id) || level.radio_index == 0 || level.stop_radio == true )
 		{
 			wait(1);
 		}
@@ -99,36 +125,50 @@ radio_thread()
 	assert(isdefined(level.radio_songs));
 	assert(isdefined(level.radio_index));
 	assert(level.radio_songs.size > 0);
-
+	if(!IsDefined (level.stop_radio))
+	{
+		level.stop_radio = false;
+	}
 	println("Starting radio at "+self.origin);
 
 	for(;;)
 	{
 		level waittill("kzmb_next_song");
-
-		println("client changing songs");
-
+		
 		playsound(0, "static", self.origin);
 
-		if(SoundPlaying(level.radio_id))
+		if ( level.stop_radio == false)
 		{
-			fade(level.radio_id, 1);
-		}
-		else
-		{
-			wait(.5);
-		}
+			println("client changing songs");
 
-		level.radio_id = playsound(0, level.radio_songs[level.radio_index], self.origin);
-	
-		level.radio_index += 1;
+//			playsound(0, "static", self.origin);
+
+			if(SoundPlaying(level.radio_id))
+			{
+				fade(level.radio_id, 1);
+			}
+			else
+			{
+				wait(.5);
+			}
+
+			level.radio_id = playsound(0, level.radio_songs[level.radio_index], self.origin);
 		
-		if(level.radio_index >= level.radio_songs.size)
-		{
-			level.radio_index = 0;
+			level.radio_index += 1;
+			
+			if(level.radio_index >= level.radio_songs.size)
+			{
+				level.radio_index = 0;
+			}
+			wait(1);
 		}
-
-		wait(1);
+		else 
+		{
+			if(IsDefined (level.radio_id))
+			{
+				fade(level.radio_id, 1);
+			}
+		}
 	}
 }
 
@@ -166,4 +206,6 @@ radio_init()
 	
 	array_thread(radios, ::radio_thread );
 	array_thread(radios, ::radio_advance );
+
+	level thread stop_radio_listener();
 }

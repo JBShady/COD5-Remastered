@@ -291,7 +291,6 @@ play_rando_perk_dialog()
 }
 vending_randomization_effect(index)
 {
-
 	level.perks_opened = level.perks_opened + 1;
 
 	vending_triggers = getentarray("zombie_vending","targetname");
@@ -308,6 +307,11 @@ vending_randomization_effect(index)
 		{
 			break;
 		}
+	}
+
+	if(index == 1) //dr hut
+	{
+		machines[j].origin = machines[j].origin + (-5,-5,0);
 	}
 	
 /*	if(isDefined(level.first_time_opening_perk_hut))

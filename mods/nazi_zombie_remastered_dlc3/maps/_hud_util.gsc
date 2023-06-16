@@ -399,9 +399,18 @@ createBar( color, width, height, flashFrac )
 }
 
 
-createPrimaryProgressBar()
+createPrimaryProgressBar(revive)
 {
-	bar = createBar( (1, 1, 1), level.primaryProgressBarWidth, level.primaryProgressBarHeight );
+	if(revive == true)
+	{
+		primaryProgressBarHeight = level.primaryProgressBarHeight;
+	}
+	else
+	{
+		primaryProgressBarHeight = 6; // for deploy/other egg steps--thicker
+	}
+
+	bar = createBar( (1, 1, 1), level.primaryProgressBarWidth, primaryProgressBarHeight );
 	if ( level.splitScreen )
 		bar setPoint("TOP", undefined, level.primaryProgressBarX, level.primaryProgressBarY);
 	else

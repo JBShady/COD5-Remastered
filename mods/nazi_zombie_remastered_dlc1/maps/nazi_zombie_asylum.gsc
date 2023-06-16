@@ -17,7 +17,6 @@ main()
 	precacheshellshock("electrocution");
 	
 	//add_zombie_hint( "default_buy_door_2500", &"ZOMBIE_BUTTON_BUY_OPEN_DOOR_2500" );
-	maps\_zombiemode_weapons::add_zombie_weapon( "mine_bouncing_betty",&"ZOMBIE_WEAPON_SATCHEL_2000", 2000 );
 	
 	precachemodel("tag_origin");
 	precachemodel("zombie_zapper_power_box");
@@ -209,7 +208,7 @@ intro_screen()
 	for(i = 0;  i < 3; i++)
 	{
 		level.intro_hud[i] = newHudElem();
-		level.intro_hud[i].x = 3;
+		level.intro_hud[i].x = 4;
 		level.intro_hud[i].y = 0;
 		level.intro_hud[i].alignX = "left";
 		level.intro_hud[i].alignY = "bottom";
@@ -1141,6 +1140,8 @@ electric_trap_think()
 					
 					//turn the damage detection trigger off until the flames are used again
 			 		self.zombie_dmg_trig trigger_off();
+					self notify("trap_over");
+
 					wait(30);
 					array_thread (valve_trigs,::trigger_on);
 				
@@ -1174,8 +1175,10 @@ electric_trap_move_switch(parent)
 		tswitch playsound("amb_sparks_l_b");
 		tswitch waittill("rotatedone");
 		self notify("switch_activated");
-		self waittill("available");
+		self waittill("trap_over");
 		tswitch rotatepitch(180,.5);
+		tswitch playsound("switch_up");
+		self waittill("available");
 		
 		//turn the light back green once the trap is available again
 		north_zapper_light_green();
@@ -1188,8 +1191,10 @@ electric_trap_move_switch(parent)
 		tswitch playsound("amb_sparks_l_b");
 		tswitch waittill("rotatedone");
 		self notify("switch_activated");
-		self waittill("available");
+		self waittill("trap_over");
 		tswitch rotatepitch(-180,.5);
+		tswitch playsound("switch_up");
+		self waittill("available");
 		
 		south_zapper_light_green();
 		
@@ -1652,6 +1657,17 @@ master_electric_switch()
 	if ( cheat != true )
 	{
 		trig waittill("trigger",user);
+		players = getplayers();
+
+		if(players.size == 4 && randomintrange(0,4) == 0 ) // new vox egg, only if we have 4 players and 25% chances
+		{
+			power_dist = distanceSquared(trig.origin, players[3].origin); 
+			if(power_dist < 400 * 400 ) // only if player 4 is close to the power switch
+			{
+				players[3] thread maps\_zombiemode_spawner::do_player_playdialog("plr_3_", "nvox_gen_power_0", 0.1);
+				wait(0.1);
+			}
+		}
 	}
 	
 	array_thread(door_trigs,::trigger_off);
@@ -2522,198 +2538,251 @@ spectator_respawn_new()
 
 mount_mg_trigger()
 {
-		// Set up trigger & variables
-		mg_zone = spawn( "trigger_radius",( 1231.1, 616.9, 70), 0, 5, 10 );	// For volume area (first, must be in area)
-		mg_look_zone = spawn( "trigger_radius",( 1200, 619, 70), 0, 3, 10 ); // For what player must look at (then, must be looking at this)
+	// Set up trigger & variables
+	mg_zone = spawn( "trigger_radius",( 1231.1, 616.9, 70), 0, 5, 10 );	// For volume area (first, must be in area)
+	mg_look_zone = spawn( "trigger_radius",( 1200, 619, 70), 0, 3, 10 ); // For what player must look at (then, must be looking at this)
 
-		mg_zone waittill( "trigger", player ); 
+	mg_zone waittill( "trigger", player ); 
 
-		level.deploying = 0;
-		initial_hold_time = 5;
-		countdown_time = initial_hold_time;
-		actual_weapon = 0;
-		animation = 0;
-		level.is_deployed = 0;
+	level.deploying = 0;
+	initial_hold_time = 5;
+	countdown_time = initial_hold_time;
+	actual_weapon = 0;
+	animation = 0;
+	level.is_deployed = 0;
 
-		for(;;) // While a player is in the trigger, this runs forever
+	for(;;) // While a player is in the trigger, this runs forever
+	{
+	    wait(0.05);	
+		if( level.intermission == true || level.falling_down == true )
 		{
-		    wait(0.05);	
-			if( level.intermission == true || level.falling_down == true )
+			if( isdefined( player.deployProgressBar ) )
 			{
-				continue;
+				player.deployProgressBar destroyElem();
 			}
-				 	
-		    if( !player IsTouching(mg_zone) || !player isLookingAtMe(mg_look_zone) ) // If player actively leaves trigger (even if while holding F), reset all parameters/undo all weapon stuff
-		    {
-		    	//iprintln("Resetting trigger, ", player," left zone");
-		    	animation = undefined;
-		        countdown_time = initial_hold_time;
-
-				if( level.deploying == 1) // If we were actually deploying, only then do we worry about the weapon crap, otherwise we can just leave them as is
-				{
-					player takeweapon("bipod_deploying");
-					player TakeWeapon(actual_weapon + "_deploying");
-					player SwitchToWeapon( actual_weapon ); 
-			    	level.deploying = 0;
-		        }
-		        player is_leaving_trigger(true);
-				if( isdefined( player.deployProgressBar ) )
-				{
-					player.deployProgressBar destroyElem();
-				}
-				if( isdefined( player.deployTextHud ) )
-				{
-					player.deployTextHud destroy();
-				}	
-				mg_zone waittill( "trigger", player ); // And now we wait here for another player
-				//iprintln(player, " entered trigger");
-		    }
-
-			index = maps\_zombiemode_weapons::get_player_index( player ); // Gather info for VOX
-			plr = "plr_" + index + "_";	
-
-			mg_zone SetVisibleToPlayer(player); // Need to test this again, but this is to hide hintstring from other players while another player is in trigger
-
-			current_weapon = player GetCurrentWeapon();
-
-			if( !player isLookingAtMe(mg_look_zone) ) // Player looks away at any point during trigger, we send him back to the start & reset hintstring
+			if( isdefined( player.deployTextHud ) )
 			{
-				mg_zone sethintstring("");
-				mg_zone SetCursorHint("HINT_NOICON");
-				continue;
+				player.deployTextHud destroy();
 			}
+			continue;
+		}
+			 	
+	    if( !player IsTouching(mg_zone) || !player isLookingAtMe(mg_look_zone) ) // If player actively leaves trigger (even if while holding F), reset all parameters/undo all weapon stuff
+	    {
+	    	//iprintln("Resetting trigger, ", player," left zone");
+	    	animation = undefined;
+	        countdown_time = initial_hold_time;
 
-			if( !isSubStr(current_weapon, "_deploying") ) // Creates a "perma" variable that remembers our original deployable weapon even if the animation begins (which gives us a new "fake" temporary weapon)
+			if( level.deploying == 1) // If we were actually deploying, only then do we worry about the weapon crap, otherwise we can just leave them as is
 			{
-				actual_weapon = current_weapon;
-				animation = actual_weapon + "_deploying";
-			}
-
-			if( isSubStr(current_weapon, "bipod") /*&& level.deploying != 1*/) // Set up hint; normal hint if holding a deployable weapon and not currently deploying. New: decided to keep hold F on screen when deploying, like bomb plant
-			{
-				mg_zone sethintstring(&"REMASTERED_ZOMBIE_DEPLOY");
-				mg_zone SetCursorHint("HINT_ACTIVATE");
-			}
-			else if( level.deploying != 1) // Set up hint; if holding a non-deployable weapon and we're not deploying
-			{
-				mg_zone sethintstring(&"REMASTERED_ZOMBIE_INVALID_WEP");
-				mg_zone SetCursorHint("HINT_NOICON");
-			}
-
-			// If a player attempts to deploy a valid weapon
-		    if ( player UseButtonPressed() && isSubStr(actual_weapon, "bipod") && player IsTouching(mg_zone) && (!player maps\_laststand::player_is_in_laststand() ) && (!player isThrowingGrenade() ) && (!player isMeleeing() ) )
-		    {
-				if( player GetAmmoCount(actual_weapon) == 0 ) // No ammo case, begins deploying but with no ammo so we instantly reject them
+				if( player HasWeapon("m7_launcher_zombie") )
 				{
-					mg_zone sethintstring(&"REMASTERED_ZOMBIE_NEED_AMMO");
-					mg_zone SetCursorHint("HINT_NOICON");		
-					player playlocalsound("dryfire_rifle_plr"); // Ammo balancing? should we let deployment with just >0 or something higher, >100? If latter, remove empty click sound because weapon isn't necessarily empty
-					player thread create_and_play_dialog( plr, "nvox_ammo_deploy", 2 );
-					player playlocalsound("door_deny");
-					wait(1);
-					continue;
-				}
-				//iprintln("Deploying MG");
-
-				if( !isdefined(player.deployProgressBar) )
-				{
-					player setstance( "stand" ); // just once
-
-					player.deployProgressBar = player createPrimaryProgressBar(false);
-					player.deployProgressBar setPoint("CENTER", undefined, 0, -60);
-					player.deployProgressBar updateBar( 0.01, 1 / initial_hold_time );
+					player setactionslot(3,"altMode","m7_launcher_zombie");
 				}
 
-				if( !isdefined(player.deployTextHud) )
+				if( (isDefined(player.betties) && player.betties) )
 				{
-					player.deployTextHud = newclientHudElem( player );	
-					player.deployTextHud.alignX = "center";
-					player.deployTextHud.alignY = "middle";
-					player.deployTextHud.horzAlign = "center";
-					player.deployTextHud.vertAlign = "bottom";
-					player.deployTextHud.x = 0;
-					player.deployTextHud.y = -316; 
-					player.deployTextHud.fontScale = 1.4;
-					player.deployTextHud setText( &"REMASTERED_ZOMBIE_DEPLOYING" );
+					player setactionslot(4,"weapon","mine_bouncing_betty");
+					player.betties = undefined;
 				}
-	
-		    	level.deploying = 1;
-		        countdown_time -= 0.05;
-
-		        player is_leaving_trigger(false);
-
-				if( countdown_time > 4) // Puts away weapon off-screen
-				{
-					//iprintlnbold("Removing wep: ", countdown_time);
-					player giveweapon("bipod_deploying");
-					player SwitchToWeapon("bipod_deploying");
-				}
-				if( countdown_time <= 3.7) // Begin deployment animation after ~3 seconds
-				{
-					//iprintlnbold("Beginning anim: ", countdown_time);
-					//player takeweapon("bipod_deploying"); // <- this was causing issues, also does it cause change in timing? anim not lined up with deployment anymore
-					player giveweapon(animation);
-					player SwitchToWeapon(animation);
-				}
-		        if ( countdown_time <= 0 ) // Loop ends after a successful deployment
-		        {
-		        	//iprintln("Timer complete");
-		        	break;
-		    	}
-		    }
-		    else if ( countdown_time != initial_hold_time ) // If deployment attempt fails (lets go of F or something goes wrong where our countdown timer stops midway through, such as downing)
-		    {
-		        // Clean up variables, weapons, and player abilities
-				if( isdefined( player.deployProgressBar ) )
-				{
-					player.deployProgressBar destroyElem();
-				}
-				if( isdefined( player.deployTextHud ) )
-				{
-					player.deployTextHud destroy();
-				}		
-				//iprintln("Deploy failed");
-		    	level.deploying = 0;
-		    	animation = undefined;
-		        countdown_time = initial_hold_time;
-				player playlocalsound("door_deny");
 
 				player takeweapon("bipod_deploying");
 				player TakeWeapon(actual_weapon + "_deploying");
-				player SwitchToWeapon( actual_weapon ); // dont need to check for betties or for none, actual weapon can ONLY be a legit bipod mg, so theyll always be able to switch back to it if trigger fails
+				player SwitchToWeapon( actual_weapon ); 
+		    	level.deploying = 0;
+	        }
+	        player is_leaving_trigger(true);
+			if( isdefined( player.deployProgressBar ) )
+			{
+				player.deployProgressBar destroyElem();
+			}
+			if( isdefined( player.deployTextHud ) )
+			{
+				player.deployTextHud destroy();
+			}	
+			mg_zone waittill( "trigger", player ); // And now we wait here for another player
+			//iprintln(player, " entered trigger");
+	    }
 
-		        player is_leaving_trigger(true);
-		    }
+		index = maps\_zombiemode_weapons::get_player_index( player ); // Gather info for VOX
+		plr = "plr_" + index + "_";	
+
+		mg_zone SetVisibleToPlayer(player); // Need to test this again, but this is to hide hintstring from other players while another player is in trigger
+
+		current_weapon = player GetCurrentWeapon();
+
+		if( !player isLookingAtMe(mg_look_zone) ) // Player looks away at any point during trigger, we send him back to the start & reset hintstring
+		{
+			mg_zone sethintstring("");
+			mg_zone SetCursorHint("HINT_NOICON");
+			continue;
 		}
 
-		// Code continues here after a succesful deployment as we exit the for loop, cleans up weapons and removes the deployed weapon
-		//iprintlnbold("Deployment success");
-		if( isdefined( player.deployProgressBar ) )
+		if( !isSubStr(current_weapon, "_deploying") ) // Creates a "perma" variable that remembers our original deployable weapon even if the animation begins (which gives us a new "fake" temporary weapon)
 		{
-			player.deployProgressBar destroyElem();
-		}
-		if( isdefined( player.deployTextHud ) )
-		{
-			player.deployTextHud destroy();
-		}	
-		player TakeWeapon(actual_weapon + "_deploying");
-		player TakeWeapon(actual_weapon);
-
-		primaryWeapons = player GetWeaponsListPrimaries();
-		if( IsDefined( primaryWeapons ) && primaryWeapons.size > 0 )
-		{
-			player SwitchToWeapon( primaryWeapons[0] );
+			actual_weapon = current_weapon;
+			animation = actual_weapon + "_deploying";
 		}
 
-		player is_leaving_trigger(true);
+		if( isSubStr(current_weapon, "bipod") /*&& level.deploying != 1*/) // Set up hint; normal hint if holding a deployable weapon and not currently deploying. New: decided to keep hold F on screen when deploying, like bomb plant
+		{
+			mg_zone sethintstring(&"REMASTERED_ZOMBIE_DEPLOY");
+			mg_zone SetCursorHint("HINT_ACTIVATE");
+		}
+		else if( level.deploying != 1) // Set up hint; if holding a non-deployable weapon and we're not deploying
+		{
+			mg_zone sethintstring(&"REMASTERED_ZOMBIE_INVALID_WEP");
+			mg_zone SetCursorHint("HINT_NOICON");
+		}
 
-		level thread mount_mg(actual_weapon); // This places the actual turret & model depending on what weapon was deployed
+		// If a player attempts to deploy a valid weapon
+	    if ( player UseButtonPressed() && isSubStr(actual_weapon, "bipod") && player IsTouching(mg_zone) && (!player maps\_laststand::player_is_in_laststand() ) && (!player isThrowingGrenade() ) && (!player isMeleeing() ) )
+	    {
+			if( player getFractionMaxAmmo(actual_weapon) < 0.5 ) // Not enough ammo case, begins deploying but with no ammo so we instantly reject them
+			{
+				//iprintlnbold( getFractionMaxAmmo(actual_weapon) );
+				mg_zone sethintstring(&"REMASTERED_ZOMBIE_NEED_AMMO");
+				mg_zone SetCursorHint("HINT_NOICON");		
+				if(player GetAmmoCount(actual_weapon) == 0)
+				{
+					player playlocalsound("dryfire_rifle_plr"); 
+				}
+				player thread create_and_play_dialog( plr, "nvox_ammo_deploy", 2 );
+				player playlocalsound("door_deny");
+				wait(1);
+				continue;
+			}
+			//iprintln("Deploying MG");
 
-		player playlocalsound("weap_pickup_plr");
+			if( !isdefined(player.deployProgressBar) )
+			{
+				player setstance( "stand" ); // just once
+				if( player HasWeapon("mine_bouncing_betty") ) // Need a check for weapon because if we have 0 ammo we do not want to clear this slot, it will prevent it from re-appearing
+				{
+					player.betties = true;
+					player setactionslot(4,"" ); // Hides betties
+				}
+				if( player HasWeapon("m7_launcher_zombie") )
+				{
+					player setactionslot(3,"" ); // Hides rifle grenade
+				}
 
-		player thread create_and_play_dialog( plr, "nvox_mg_deploy", 0.25 );
-		mg_zone delete(); // move to start of the end?
-		mg_look_zone delete();
+				player.deployProgressBar = player createPrimaryProgressBar(false);
+				player.deployProgressBar setPoint("CENTER", undefined, 0, -60);
+				player.deployProgressBar updateBar( 0.01, 1 / initial_hold_time );
+			}
+
+			if( !isdefined(player.deployTextHud) )
+			{
+				player.deployTextHud = newclientHudElem( player );	
+				player.deployTextHud.alignX = "center";
+				player.deployTextHud.alignY = "middle";
+				player.deployTextHud.horzAlign = "center";
+				player.deployTextHud.vertAlign = "bottom";
+				player.deployTextHud.x = 0;
+				player.deployTextHud.y = -316; 
+				player.deployTextHud.fontScale = 1.4;
+				player.deployTextHud setText( &"REMASTERED_ZOMBIE_DEPLOYING" );
+			}
+
+	    	level.deploying = 1;
+	        countdown_time -= 0.05;
+
+	        player is_leaving_trigger(false);
+
+			if( countdown_time > 4) // Puts away weapon off-screen
+			{
+				//iprintlnbold("Removing wep: ", countdown_time);
+				player giveweapon("bipod_deploying");
+				player SwitchToWeapon("bipod_deploying");
+			}
+			if( countdown_time <= 3.7) // Begin deployment animation after ~3 seconds
+			{
+				//iprintlnbold("Beginning anim: ", countdown_time);
+				//player takeweapon("bipod_deploying"); // <- this was causing issues, also does it cause change in timing? anim not lined up with deployment anymore
+				player giveweapon(animation);
+				player SwitchToWeapon(animation);
+			}
+	        if ( countdown_time <= 0 ) // Loop ends after a successful deployment
+	        {
+	        	//iprintln("Timer complete");
+	        	break;
+	    	}
+	    }
+	    else if ( countdown_time != initial_hold_time ) // If deployment attempt fails (lets go of F or something goes wrong where our countdown timer stops midway through, such as downing)
+	    {
+			if( player HasWeapon("m7_launcher_zombie") )
+			{
+				player setactionslot(3,"altMode","m7_launcher_zombie");
+			}
+
+			if( (isDefined(player.betties) && player.betties) )
+			{
+				player setactionslot(4,"weapon","mine_bouncing_betty");
+				player.betties = undefined;
+			}
+
+	        // Clean up variables, weapons, and player abilities
+			if( isdefined( player.deployProgressBar ) )
+			{
+				player.deployProgressBar destroyElem();
+			}
+			if( isdefined( player.deployTextHud ) )
+			{
+				player.deployTextHud destroy();
+			}		
+			//iprintln("Deploy failed");
+	    	level.deploying = 0;
+	    	animation = undefined;
+	        countdown_time = initial_hold_time;
+			player playlocalsound("door_deny");
+
+			player takeweapon("bipod_deploying");
+			player TakeWeapon(actual_weapon + "_deploying");
+			player SwitchToWeapon( actual_weapon ); // dont need to check for betties or for none, actual weapon can ONLY be a legit bipod mg, so theyll always be able to switch back to it if trigger fails
+
+	        player is_leaving_trigger(true);
+	    }
+	}
+	if( player HasWeapon("m7_launcher_zombie") )
+	{
+		player setactionslot(3,"altMode","m7_launcher_zombie");
+	}
+
+	if( (isDefined(player.betties) && player.betties) )
+	{
+		player setactionslot(4,"weapon","mine_bouncing_betty");
+		player.betties = undefined;
+	}
+
+	// Code continues here after a succesful deployment as we exit the for loop, cleans up weapons and removes the deployed weapon
+	//iprintlnbold("Deployment success");
+	if( isdefined( player.deployProgressBar ) )
+	{
+		player.deployProgressBar destroyElem();
+	}
+	if( isdefined( player.deployTextHud ) )
+	{
+		player.deployTextHud destroy();
+	}	
+	player TakeWeapon(actual_weapon + "_deploying");
+	player TakeWeapon(actual_weapon);
+
+	primaryWeapons = player GetWeaponsListPrimaries();
+	if( IsDefined( primaryWeapons ) && primaryWeapons.size > 0 )
+	{
+		player SwitchToWeapon( primaryWeapons[0] );
+	}
+
+	player is_leaving_trigger(true);
+
+	level thread mount_mg(actual_weapon); // This places the actual turret & model depending on what weapon was deployed
+
+	player playlocalsound("weap_pickup_plr");
+
+	player thread create_and_play_dialog( plr, "nvox_mg_deploy", 0.25 );
+	mg_zone delete(); // move to start of the end?
+	mg_look_zone delete();
 
 }
 
@@ -2855,7 +2924,7 @@ mg_clean_up(player)
 
 	index = maps\_zombiemode_weapons::get_player_index( player );
 	plr = "plr_" + index + "_";	
-	player thread create_and_play_dialog( plr, "nvox_mg_destroy", 0.05 );
+	player thread create_and_play_dialog( plr, "nvox_mg_destroy", 0.25 );
 
 	wait(2.8); // Cooldown, "let the dust settle" before deploying again
 

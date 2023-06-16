@@ -754,6 +754,13 @@ give_model( class )
 			
 			//SetDvar( "cg_ScoresColor_Gamertag_0" , GetDvar( "cg_hudGrenadeIndicatorTargetColor") );
 
+			character = GetDvarint("character");
+			if(isDefined(character) && character > 0 && character < 5) // Can only be a int value 1,2,3,or 4
+			{
+				self.body_select = character - 1; // convert to player index which starts at 0
+				self.mybod = self.body_select;
+				self.entity_num = self.body_select;
+			}
 
 			switch( self.body_select)
 			{

@@ -368,7 +368,7 @@ menuDef
 		name			"weaponinfo"
 		rect			0 0 0 0 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
 		fullScreen		0
-		visible when ( !SUBTITLES_ACTIVE && CHAPLIN_CHEAT_OFF && dvarBool( mgNameHide ) != 1 && dvarBool( ammoCounterHide ) == 0 && dvarBool( hud_missionFailed ) == 0 && !flashbanged() && !ui_active() && dvarint( ui_hud_hardcore ) == 0 );
+		visible when ( !SUBTITLES_ACTIVE && CHAPLIN_CHEAT_OFF && dvarBool( mgNameHide ) != 1 && dvarBool( ammoCounterHide ) == 0 && dvarBool( hud_missionFailed ) == 0 /*&& !flashbanged()*/ && !ui_active() && dvarint( ui_hud_hardcore ) == 0 );
 
 /*		itemDef
 		{
@@ -508,7 +508,7 @@ menuDef
 		name			"heatinfo"
 		rect			0 0 0 0 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
 		fullScreen		0
-		visible			when ( !SUBTITLES_ACTIVE && CHAPLIN_CHEAT_OFF && dvarBool( ammoCounterHide ) == 0 && dvarBool( hud_missionFailed ) == 0 && !flashbanged() && !ui_active() && dvarint( ui_hud_hardcore ) == 0 );
+		visible			when ( !SUBTITLES_ACTIVE && CHAPLIN_CHEAT_OFF && dvarBool( ammoCounterHide ) == 0 && dvarBool( hud_missionFailed ) == 0 /*&& !flashbanged()*/ && !ui_active() && dvarint( ui_hud_hardcore ) == 0 );
 		
 		itemDef
 		{
@@ -1074,7 +1074,7 @@ menuDef
  	   	rect			BOTTOM_RECT_X (BOTTOM_RECT_Y-42) 25 25 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
 		exp				rect Y( (BOTTOM_RECT_Y-42) - (ONLINEGAME * ONLINEGAME_OFFSET) );
  	   	fullScreen		0
-		visible			when( !inkillcam() && !flashbanged() && !ui_active() && !scoped() && (dvarString( createfx ) != "on") && dvarint( ui_hud_hardcore ) == 0 );
+		visible			when( !inkillcam() /*&& !flashbanged()*/ && !ui_active() && !scoped() && (dvarString( createfx ) != "on") && dvarint( ui_hud_hardcore ) == 0 );
 
 		itemDef // Up
         {
@@ -1100,8 +1100,18 @@ menuDef
 			textscale	0.25
 			textalign	ITEM_ALIGN_CENTER
 			textstyle	ITEM_TEXTSTYLE_SHADOWED
-			visible 	when( ActionSlotUsable( 1 ) )
+			visible 	when( ActionSlotUsable( 1 ) && dvarInt( "cg_drawXboxHUD" ) != 1 )
 			decoration 
+		}
+		itemDef
+		{
+			name			"xbox_up"
+			rect			-12 -5 24 24
+			forecolor		1 1 1 0.65
+			ownerdraw		CG_PLAYER_ACTIONSLOT_DPAD // this bit is weird
+			background		"hud_arrow_up"
+			visible 	when( ActionSlotUsable( 1 ) && dvarInt( "cg_drawXboxHUD" ) == 1 )
+			decoration
 		}
 
 		itemDef // Left
@@ -1110,7 +1120,20 @@ menuDef
             rect			(-DPAD_ICON_SPACING - DPAD_BASE_SIZE) DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
 			ownerdraw		CG_PLAYER_ACTIONSLOT_3
 			forecolor		1 1 1 HUD_ALPHA
-			visible			1 
+			visible 		when( dvarInt( "cg_drawXboxHUD" ) != 1 )
+			decoration
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			textfont		UI_FONT_DEFAULT
+        }
+		itemDef // Left
+        {
+            name			"slot3_xbox"
+            rect			(-DPAD_ICON_SPACING - DPAD_BASE_SIZE + 37) DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
+			ownerdraw		CG_PLAYER_ACTIONSLOT_3
+			forecolor		1 1 1 HUD_ALPHA
+			visible 		when( dvarInt( "cg_drawXboxHUD" ) == 1 )
 			decoration
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textalign		ITEM_ALIGN_LEFT
@@ -1127,8 +1150,18 @@ menuDef
 			textscale	0.25
 			textalign	ITEM_ALIGN_CENTER
 			textstyle	ITEM_TEXTSTYLE_SHADOWED
-			visible 	when( ActionSlotUsable( 3 ) )
+			visible 	when( ActionSlotUsable( 3 ) && dvarInt( "cg_drawXboxHUD" ) != 1 )
 			decoration 
+		}
+		itemDef
+		{
+			name			"xbox_left"
+			rect			(-DPAD_ICON_SPACING - DPAD_BASE_SIZE_HALF + 10) DPAD_ICON_Y  24 24
+			forecolor		1 1 1 0.65
+			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND // this bit is weird
+			background		"hud_arrow_left"
+			visible 	when( ActionSlotUsable( 3 ) && dvarInt( "cg_drawXboxHUD" ) == 1 )
+			decoration
 		}
 
 		itemDef // Right
@@ -1137,13 +1170,27 @@ menuDef
             rect			DPAD_ICON_SPACING DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
 			ownerdraw		CG_PLAYER_ACTIONSLOT_4
 			forecolor		1 1 1 HUD_ALPHA
-			visible			1
+			visible 		when( dvarInt( "cg_drawXboxHUD" ) != 1 )
 			decoration
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textalign		ITEM_ALIGN_LEFT
 			textscale		TEXTSIZE_SMALL
 			textfont		UI_FONT_DEFAULT
         }
+		itemDef // Right
+        {
+            name			"slot4_xbox"
+            rect			(DPAD_ICON_SPACING - 41) DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
+			ownerdraw		CG_PLAYER_ACTIONSLOT_4
+			forecolor		1 1 1 HUD_ALPHA
+			visible 		when( dvarInt( "cg_drawXboxHUD" ) == 1 )
+			decoration
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			textfont		UI_FONT_DEFAULT
+        }
+
 		itemDef 
 		{
 			rect		(DPAD_ICON_SPACING + DPAD_BASE_SIZE_HALF) DPAD_LABEL_Y 1 1
@@ -1154,8 +1201,18 @@ menuDef
 			textscale	0.25
 			textalign	ITEM_ALIGN_CENTER
 			textstyle	ITEM_TEXTSTYLE_SHADOWED
-			visible 	when( ActionSlotUsable( 4 ) )
+			visible 	when( ActionSlotUsable( 4 ) && dvarInt( "cg_drawXboxHUD" ) != 1 )
 			decoration 
+		}
+		itemDef
+		{
+			name			"xbox_right"
+			rect			(DPAD_ICON_SPACING + DPAD_BASE_SIZE_HALF - 33) DPAD_ICON_Y  24 24
+			forecolor		1 1 1 0.65
+			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND // this bit is weird
+			background		"hud_arrow_right"
+			visible 	when( ActionSlotUsable( 4 ) && dvarInt( "cg_drawXboxHUD" ) == 1 )
+			decoration
 		}
     }
 #endif

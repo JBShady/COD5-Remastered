@@ -5,8 +5,11 @@
 init()
 {
 	players = get_players();
-	for( i = 0; i < players.size; i++ )
-		players[i] thread setup_players_health();
+
+	if(players.size == 1)
+	{
+		players[0] thread setup_players_health();
+	}
 }
 
 setup_players_health()
@@ -14,7 +17,7 @@ setup_players_health()
 	self endon( "disconnect" );
 	self endon( "death" );
 
-	if(getDvarInt( "health_hud") == 1)
+	if(getDvarInt( "cg_drawHealthCount" ) == 1)
 	{
 
 		healthtext = newClientHudElem( self );

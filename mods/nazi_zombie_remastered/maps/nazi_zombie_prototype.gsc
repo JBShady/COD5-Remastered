@@ -473,7 +473,7 @@ intro_screen()
 	for(i = 0;  i < 3; i++)
 	{
 		level.intro_hud[i] = newHudElem();
-		level.intro_hud[i].x = 3;
+		level.intro_hud[i].x = 4;
 		level.intro_hud[i].y = 0;
 		level.intro_hud[i].alignX = "left";
 		level.intro_hud[i].alignY = "bottom";
@@ -498,7 +498,6 @@ intro_screen()
 	level.intro_hud[2].y = -70;
 	
 	
-	//level.intro_hud[0] settext("German-Occupied Europe");
 	level.intro_hud[0] settext(&"REMASTERED_ZOMBIE_INTRO_PROTO_LEVEL_PLACE");
 	level.intro_hud[1] settext(&"REMASTERED_ZOMBIE_INTRO_PROTO_LEVEL_TIME");
 
@@ -581,6 +580,8 @@ player_zombie_awareness()
 {
 	self endon("disconnect");
 	self endon("death");
+	self endon("end_game_quiet");
+
 	players = getplayers();
 	wait(6);
 	index = maps\_zombiemode_weapons::get_player_index(self);
@@ -634,7 +635,6 @@ player_zombie_awareness()
 
 		if(players.size > 0) //NEW
 		{
-			//Plays 'teamwork' style dialog if there are more than 1 player...
 			close_zombs = 0;
 			for(i=0;i<zombs.size;i++)
 			{
@@ -643,7 +643,6 @@ player_zombie_awareness()
 					close_zombs ++;
 				}
 			}
-			//if(close_zombs > 4 )
 			if(close_zombs > 4 && players.size > 1)
 			{
 				if(randomintrange(0,20) <= 5) // slightly hider odds than dlc2/dlc3, players less likely to be surviving while surrounded since no jug
@@ -704,9 +703,9 @@ play_music_easter_egg()
 	
 	level.eggs = 1;
 	setmusicstate("eggs");
-	wait(232);	
+	wait(234);	
 
-	level.eggs = 0;
 	setmusicstate("WAVE_1");
+	level.eggs = 0;
 
 }

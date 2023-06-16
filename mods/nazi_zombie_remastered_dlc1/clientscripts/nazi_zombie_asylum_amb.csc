@@ -31,7 +31,7 @@ main()
 			addAmbientElement( "bathroom", "amb_water_drips_rand", 0.2, 0.5, 50, 350 );
 
  		declareAmbientRoom( "bathroom" );
- 			setAmbientRoomReverb ("bathroom","SMALLROOM", 0.7, 1);
+ 			setAmbientRoomReverb ("bathroom","SMALLROOM", 1, 0.7);
 
         declareAmbientPackage( "outside" );
             addAmbientElement( "zombies", "amb_spooky_2d", 5, 8, 300, 2000 );
@@ -64,17 +64,18 @@ main()
 	musicwaittilldone();
 
   declareMusicState("WAVE_1"); 
-	musicAliasloop("mx_zombie_wave_1", 4, 4);	
-
+	musicAliasloop("mx_zombie_wave_1", 0, 4);	
+	musicwaittilldone();
+	
   declareMusicState("eggs"); 
-	musicAlias("mx_eggs", 0);
+	musicAlias("mx_eggs", 2);
 
   declareMusicState("mx_dog_round");
 	musicAliasloop("mx_dog_wave", 2, 0.5);
 
 
   declareMusicState("end_of_game");
-	musicAlias("mx_game_over", 2);
+	musicAlias("mx_game_over", 2 );
 
 
 

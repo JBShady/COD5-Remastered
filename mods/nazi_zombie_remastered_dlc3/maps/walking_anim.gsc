@@ -13,21 +13,24 @@ walk_main()
 {
 	self endon("disconnect");
 
-	self SetClientDvars("bg_bobAmplitudeStanding", "0.012 0.005");
-
-	self SetClientDvars("cg_bobWeaponMax", "5");
-
 	while(1)
 	{
+		self setClientDvar("cg_bobWeaponMax", "5");
+		self setClientDvar( "bg_fallDamageMinHeight", "150" );
+		
+		self setClientDvar( "player_deathInvulnerableToProjectile", "0" );
+		self setClientDvar( "player_deathInvulnerableTime", "0" );
+		self setClientDvar( "player_deathInvulnerableToMelee", "0" );
+
 		if( self ADSButtonPressed())
 		{
 			self setClientDvar("cg_bobweaponamplitude", "0.16");	
-			//self setClientDvar("bg_bobAmplitudeStanding", "0.007 0.007");	
+			self setClientDvar("bg_bobAmplitudeStanding", "0.007 0.007");	
 		}
 		else
 		{
 			self setClientDvar("cg_bobweaponamplitude", "0.9");
-			//self SetClientDvars("bg_bobAmplitudeStanding", "0.012 0.005");
+			self setClientDvar("bg_bobAmplitudeStanding", "0.012 0.005");
 		}
 		wait(0.05);
 	}
@@ -52,10 +55,10 @@ prone_checks()
 {
 	self endon("disconnect");
 	
-	self SetClientDvar("bg_bobAmplitudeProne","0.06 0.04");
-
 	while(1)
 	{
+		self SetClientDvar("bg_bobAmplitudeProne","0.08 0.04");
+
 		if( self GetStance() == "prone" || self GetStance() == "crouch" )
 		{
 			self SetClientDvar("cg_gun_move_minspeed", 0);

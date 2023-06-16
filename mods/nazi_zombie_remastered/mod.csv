@@ -7,7 +7,6 @@ xmodel,char_usa_marine_gear_nogear
 material,specialty_doublepoints_zombies
 material,specialty_instakill_zombies
 xmodel,zombie_carpenter
-// test
 sound,dlc_vox
 // test
 sound,nazi_zombie_prototype
@@ -26,8 +25,8 @@ xmodel,viewmodel_zombie_db_shotgun_sawed_new
 xmodel,weapon_mp_db_shotgun_sawed
 xmodel,viewmodel_rus_dp28_bipod_lmg
 xmodel,weapon_rus_dp28_bipod_lmg
-xmodel,vm_fg42
-xmodel,viewmodel_mp_mg42_mg
+xmodel,viewmodel_zombie_fg42_2023
+xmodel,viewmodel_ger_mg42_bipod_mg
 xmodel,weapon_mp_mg42_bipod_mg
 xmodel,viewmodel_zombie_mp40_smg
 xmodel,weapon_zombie_mp40_smg
@@ -35,7 +34,7 @@ xmodel,viewmodel_rus_svt40_rifle
 xmodel,weapon_mp_svt40_rifle
 xmodel,viewmodel_jap_type99_bipod_lmg
 xmodel,weapon_jap_type99_bipod_lmg
-xmodel,viewmodel_zombie_type100_smg_remastered
+xmodel,viewmodel_zombie_type100_smg_remastered_2023
 xmodel,weapon_zombie_type100_smg
 menufile,ui/objective_info.menu
 menufile,ui_mp/options_multi.menu
@@ -49,13 +48,14 @@ menufile,ui/options_sound_pc.menu
 menufile,ui_mp/options_voice.menu
 menufile,ui/challenges_proto.menu
 menufile,ui/collectibles_prototype.menu
+menufile,ui_mp/leftside_controls.inc
+menufile,ui/choices_setup_common.menu
+menufile,ui/options_misc_pc.menu
+menufile,ui/options_look_pc.menu
+menufile,ui/options_move_pc.menu
+menufile,ui/options_shoot_pc.menu
+menufile,ui/options_coop_pc.menu
 stringtable,maps/didyouknow_coop.csv
-material,nacht_info
-material,char1_bio
-material,char2_bio
-material,char3_bio
-material,char4_bio
-material,classified_bio
 fx,env/light/fx_ray_sun_sm_short
 fx,misc/fx_zombie_mini_nuke
 sound,weapons,,all_sp
@@ -123,3 +123,13 @@ localize,remastered_zombie
 localize,remastered_weap
 xanim,viewmodel_ray_gun_idle_new
 menufile,ui/hud.menu
+rawfile,init_remastered.cfg
+xmodel,viewmodel_usa_double_barrel_2023
+localize,key
+material,char1_bio
+material,char2_bio
+material,char3_bio
+material,char4_bio
+material,hud_arrow_left
+material,hud_arrow_right
+material,hud_arrow_up

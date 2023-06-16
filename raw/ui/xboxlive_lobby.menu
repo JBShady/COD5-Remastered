@@ -310,17 +310,16 @@
 		//CHOICE_BUTTON_FOCUS_VIS_EX_ADV( 4, "@PLATFORM_GAME_SUMMARY_CAP", open "popup_unlock", exec "set ui_hint_text @MPUI_DESC_GAME_SUMMARY", CLEARUIHINT, SHOW_ALWAYS, ;, SHOW_ALWAYS )
 
 		//CHOICE_BUTTON_FOCUS_VIS_EX_ADV( 5, "@MPUI_CHALLENGES", SETUP_ACTION_CHALLENGES, exec "set ui_hint_text @MPUI_DESC_CHALLENGES", CLEARUIHINT, SHOW_ALWAYS, SETUP_EXTRA_LAST name last_in_list1;, SHOW_ALWAYS )
-/*
-		CHOICE_BUTTON_VIS( 5, "MAP INTEL", open credits_menu;, when( !localvarBool( ui_hideBack ) ); )
+
+		CHOICE_BUTTON_VIS( 5, "@REMASTERED_MAP_INTEL", open menu_collectibles;, when( !localvarBool( ui_hideBack ) ); )
 
 		#define SETUP_ACTION_CHALLENGES \
 				statSetUsingTable( 263, 1 ); \
-
+				/*exec "uploadstats";*/ \
 				open menu_challenges
-		CHOICE_BUTTON_BG( 4, when( !localVarBool( ui_hideBack ) ) )
-		CHOICE_HIGHLIGHT( 4, 1 )
-		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 4, "CHARACTER BIOS", SETUP_ACTION_CHALLENGES, CLEARUIHINT;, ;, when( !localVarBool( ui_hideBack ) ), name challenges )	
-*/
+		CHOICE_BUTTON_BG( 6, when( !localVarBool( ui_hideBack ) ) )
+		CHOICE_HIGHLIGHT( 6, 1 )
+		CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 6, "@REMASTERED_HERO_BIO_CAP", SETUP_ACTION_CHALLENGES, CLEARUIHINT;, ;, when( !localVarBool( ui_hideBack ) ), name challenges )	
 
 #endif
 

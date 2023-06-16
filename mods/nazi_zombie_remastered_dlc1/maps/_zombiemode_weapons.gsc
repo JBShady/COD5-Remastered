@@ -85,7 +85,7 @@ init_weapons()
 {
 	// Zombify
 	PrecacheItem( "zombie_melee" );
-	PrecacheItem( "falling_hands" )
+	PrecacheItem( "falling_hands" );
 
 
 	// Pistols
@@ -175,7 +175,8 @@ init_weapons()
 	// Flamethrower                                     	
 	add_zombie_weapon( "m2_flamethrower_zombie", 			&"ZOMBIE_WEAPON_M2_FLAMETHROWER_3000", 		3000,	"nvox_flame", 5);	
 
-	// Special                                          	
+	// Special       
+	add_zombie_weapon( "mine_bouncing_betty",					&"ZOMBIE_WEAPON_SATCHEL_2000",				2000,	"" );
 	add_zombie_weapon( "mortar_round", 						&"ZOMBIE_WEAPON_MORTARROUND_2000", 			2000,	"" );
 	add_zombie_weapon( "satchel_charge", 					&"ZOMBIE_WEAPON_SATCHEL_2000", 				2000,	"" );
 	add_zombie_weapon( "ray_gun", 							&"ZOMBIE_WEAPON_RAYGUN_10000", 				10000,	"nvox_raygun", 5 );

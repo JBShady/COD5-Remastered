@@ -68,19 +68,24 @@ tesla_damage_init( hit_location, hit_origin, player )
 	player.tesla_powerup_dropped = false;
 	player.tesla_arc_count = 0;
 	
-	self tesla_arc_damage( self, player, 1 );
+	upgraded_status = (self.damageweapon == "tesla_gun_upgraded" );
+
+	self tesla_arc_damage( self, player, 1, upgraded_status );
 	
 	if( player.tesla_enemies_hit >= 4)
 	{
 		player thread tesla_killstreak_sound();
 	}
-
+	if( player.tesla_enemies_hit >= 10 && isDefined(level.teleporters_are_broken) && level.teleporters_are_broken == true )
+	{
+		level notify("tesla_damage", player, self); // for egg
+	}
 	player.tesla_enemies_hit = 0;
 }
 
 
 // this enemy is in the range of the source_enemy's tesla effect
-tesla_arc_damage( source_enemy, player, arc_num )
+tesla_arc_damage( source_enemy, player, arc_num, upgraded_status )
 {
 	player endon( "disconnect" );
 
@@ -88,7 +93,7 @@ tesla_arc_damage( source_enemy, player, arc_num )
 
 	tesla_flag_hit( self, true );
 	wait_network_frame();
-	self thread tesla_do_damage( source_enemy, arc_num, player );
+	self thread tesla_do_damage( source_enemy, arc_num, player, upgraded_status );
 
 	radius_decay = level.zombie_vars["tesla_radius_decay"] * arc_num;
 	enemies = tesla_get_enemies_in_area( self GetTagOrigin( "j_head" ), level.zombie_vars["tesla_radius_start"] - radius_decay, player );
@@ -110,7 +115,7 @@ tesla_arc_damage( source_enemy, player, arc_num )
 		}
 
 		player.tesla_enemies_hit++;
-		enemies[i] tesla_arc_damage( self, player, arc_num + 1 );
+		enemies[i] tesla_arc_damage( self, player, arc_num + 1, upgraded_status );
 	}
 }
 
@@ -214,13 +219,20 @@ tesla_flag_hit( enemy, hit )
 }
 
 
-tesla_do_damage( source_enemy, arc_num, player )
+tesla_do_damage( source_enemy, arc_num, player, upgraded_status )
 {
 	player endon( "disconnect" );
 
 	if ( arc_num > 1 )
 	{
-		wait( RandomFloat( 0.2, 0.6 ) * arc_num );
+		time = RandomFloat( 0.2, 0.6 ) * arc_num;
+
+		if(upgraded_status)
+		{
+			time /= 1.25;
+		}
+
+		wait(time);
 	}
 
 	if( !IsDefined( self ) || !IsAlive( self ) )
@@ -272,6 +284,7 @@ tesla_do_damage( source_enemy, arc_num, player )
 	player.tesla_network_death_choke++;
 
 	self.tesla_death = true;
+
 	self tesla_play_death_fx( arc_num );
 	
 	// use the origin of the arc orginator so it pics the correct death direction anim
@@ -527,10 +540,6 @@ tesla_pvp_thread()
 			if(self hasperk("specialty_armorvest") )
 			{
 				self.maxhealth = 250;
-/*				if(getDvarInt("classic_perks") == 1)
-				{
-					self.maxhealth = 160;
-				}*/
 			}
 			else
 			{

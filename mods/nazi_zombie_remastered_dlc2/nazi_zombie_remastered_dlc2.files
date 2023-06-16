@@ -39,6 +39,7 @@ clientscripts\nazi_zombie_sumpf_amb.csc
 clientscripts\nazi_zombie_sumpf_fx.csc
 common_scripts\utility.gsc
 fx\maps\zombie\fx_meteor_ambient_small.efx
+images\~~bottle_glass_s-rgb&bottle_g~b6862253.iwi
 images\~i_richtofen_diary_pencil_c-r~e96b2516.iwi
 images\~zombie_vending_doubletap_pri~c705eadc.iwi
 images\~zombie_vending_jugg_price_sp~008fcd24.iwi
@@ -61,6 +62,9 @@ images\gamefonts_pc.iwi
 images\grenadeicon.iwi
 images\hint_usable.iwi
 images\hud_air_raid.iwi
+images\hud_arrow_left.iwi
+images\hud_arrow_right.iwi
+images\hud_arrow_up.iwi
 images\hud_m2_flamethrower.iwi
 images\hud_rope.iwi
 images\hud_sack.iwi
@@ -80,13 +84,14 @@ images\jap_katana_c.iwi
 images\katana.iwi
 images\line_alt.iwi
 images\line_bio.iwi
+images\loadscreen_zombie_sumpf.iwi
 images\makin_door_wood2_c.iwi
 images\makin_door_wood2_n.iwi
 images\nikolai_bio.iwi
 images\pby_crew_viewarm_c.iwi
 images\richtofen_bio.iwi
 images\richtofen_diary.iwi
-images\shi_no_numa_info.iwi
+images\side_small.iwi
 images\specialty_2x_zombies.iwi
 images\specialty_doubletap_zombies.iwi
 images\specialty_fastreload_zombies.iwi
@@ -96,6 +101,7 @@ images\specialty_quickrevive_zombies.iwi
 images\takeo_bio.iwi
 images\viewmodel_jap_infantry_c.iwi
 images\viewmodel_rus_guard_c.iwi
+images\w_bar_mp_c.iwi
 images\zombie_vending_doubletap_price_c.iwi
 images\zombie_vending_jugg_price_c.iwi
 images\zombie_vending_revive_price_c.iwi
@@ -149,7 +155,6 @@ maps\nazi_zombie_sumpf_zipline.gsc
 maps\nazi_zombie_sumpf_zone_management.gsc
 maps\walking_anim.gsc
 mod.csv
-sound\sfx\Levels\zombie\perksacola\jingle\jugga_old_jingle.wav
 weapons\sp\bazooka_zombie
 weapons\sp\falling_hands
 weapons\sp\m1garand_gl_zombie
@@ -167,7 +172,6 @@ weapons\sp\type99_rifle_scoped_zombie
 weapons\sp\zombie_30cal
 weapons\sp\zombie_bar
 weapons\sp\zombie_colt
-weapons\sp\zombie_colt_upgraded
 weapons\sp\zombie_doublebarrel
 weapons\sp\zombie_doublebarrel_sawed
 weapons\sp\zombie_dp28
@@ -183,7 +187,6 @@ weapons\sp\zombie_m1garand
 weapons\sp\zombie_mg42
 weapons\sp\zombie_mp40
 weapons\sp\zombie_nambu
-weapons\sp\zombie_nambu_upgraded
 weapons\sp\zombie_perk_bottle_doubletap
 weapons\sp\zombie_perk_bottle_jugg
 weapons\sp\zombie_perk_bottle_revive
@@ -194,9 +197,7 @@ weapons\sp\zombie_stg44
 weapons\sp\zombie_svt40
 weapons\sp\zombie_thompson
 weapons\sp\zombie_tokarev
-weapons\sp\zombie_tokarev_upgraded
 weapons\sp\zombie_type100_smg
 weapons\sp\zombie_type99_lmg
 weapons\sp\zombie_type99_rifle
 weapons\sp\zombie_walther
-weapons\sp\zombie_walther_upgraded

@@ -90,9 +90,9 @@
 		style			WINDOW_STYLE_FILLED
 		soundloop 		"music_mainmenu"
 		border			0
-		onOpen			{ setdvar invite_visible "0"; setLocalVarBool ui_inOverlay 1; }
+		onOpen			{ setdvar invite_visible "0"; setLocalVarBool ui_inOverlay 1; setLocalVarBool ui_hideBack 1;  }
 		onEsc			{ close self; }
-		onClose			{ setdvar invite_visible "1"; setLocalVarBool ui_inOverlay 0; }
+		onClose			{ setdvar invite_visible "1"; setLocalVarBool ui_inOverlay 0; setLocalVarBool ui_hideBack 0;  }
 
 		// background from overlaybg.inc
 		BACKGROUND_BLACK_LETTERBOX_BLURWORLD_VIS( 0 , 0 )

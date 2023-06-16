@@ -106,6 +106,7 @@ initZipline ()
 	
 	//wait for activation
 	zipPowerTrigger thread recallZipSwitch(180);
+	zipPowerTrigger.lever playsound("switch");		
 	zipPowerTrigger waittill("recallLeverDone");
 	
 	who thread play_zipline_dialog();
@@ -126,7 +127,8 @@ initZipline ()
 	zipBuyTrigger[0].blocker waittill ("rotatedone");
 	zipBuyTrigger[0].blocker thread objectSolid(); 	
 	
-	waittime = 40;
+	//waittime = 40;
+	waittime = 15; // initial waittime is half of normal cooldown, first time use
 					
 	/#
 		if ( GetDVarInt( "zombie_cheat" ) > 0 )
@@ -134,12 +136,14 @@ initZipline ()
 			waittime = 5;
 		}
 	#/
-					
+	statictrig thread recallZipSwitch (-180);
+	statictrig.lever playsound("switch_up");		
+	statictrig waittill ("recallLeverDone");
+
 	wait (waittime);	
 	
-	statictrig thread recallZipSwitch (-180);
-	statictrig waittill ("recallLeverDone");
-	
+	statictrig.lever playsound("amb_sparks");	// ready sound	
+
 	//zipline can now be used
 	array_thread (zipBuyTrigger,::zipThink);
 }	
@@ -237,12 +241,12 @@ play_zipline_dialog()
 recallZipSwitch(dir)
 {
 	self.lever rotatepitch( dir, .5 );
-	org = getent("zip_line_switch","targetname");
+/*	org = getent("zip_line_switch","targetname");
 	if(IsDefined(org))
 	{
 		playsoundatposition ("purchase", org.origin);
 		org playsound("switch");		
-	}
+	}*/
 	
 	self.lever waittill ("rotatedone");
 	
@@ -315,6 +319,7 @@ zipThink()
 						if (IsDefined(self.script_noteworthy) && self.script_noteworthy == "static")
 						{
 							self thread recallZipSwitch (180);
+							self.lever playsound("switch");		
 							self waittill ("recallLeverDone");
 						}
 						
@@ -337,7 +342,8 @@ zipThink()
 							self triggerOff();
 						}
 						
-						waittime = 40;
+						//waittime = 40;
+						waittime = 30; //small buff, only 30 seconds now
 					
 						/#
 							if ( GetDVarInt( "zombie_cheat" ) > 0 )
@@ -345,15 +351,17 @@ zipThink()
 								waittime = 5;
 							}
 						#/
-					
-						wait (waittime);	
-						
 						//if we used the electric switch, flip it back up after the cool down
 						if (IsDefined(self.script_noteworthy) && self.script_noteworthy == "static")
 						{
 							self thread recallZipSwitch (-180);
-							self waittill ("recallLeverDone");
+							self.lever playsound("switch_up");		
 						}
+
+						wait (waittime);	
+						
+						self.lever playsound("amb_sparks");		
+
 						
 						for (i=0; i<zipBuyTrigger.size; i++)
 						{
@@ -376,6 +384,7 @@ zipThink()
 			else
 			{
 				play_sound_on_ent( "no_purchase" );
+				who thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
 			}
 		}
 	}
@@ -669,7 +678,18 @@ activateZip(rider)
 		self.riders[i].on_zipline = false;
 		self.riders[i] allowcrouch (true);
 		self.riders[i] allowprone (true);
-		
+
+		if(self.riders[i] hasperk("specialty_armorvest") )
+		{
+			self.riders[i].health = 250;
+			self.riders[i].maxhealth = 250;
+		}
+		else
+		{
+			self.riders[i].health = 100;
+			self.riders[i].maxhealth = 100;
+		}
+			
 	}
 		
 	//put handle back in neutral
@@ -734,8 +754,10 @@ playerZipDamage(parent)
 
 	if( !isDefined(self.zipshock) && !self maps\_laststand::player_is_in_laststand() && parent.canshock == true)
 	{
+		self stopShellshock();
+
 		self.zipshock = 1;		
-					
+
 		self shellshock("death", 3);
 		
 		wait(2);

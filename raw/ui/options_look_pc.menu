@@ -1,0 +1,74 @@
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+#define OPTIONS_STYLE			1
+
+#define 	CHOICE_SEP_1		33
+
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+
+{
+	menuDef
+	{
+		name			"options_look"
+		fullScreen		0
+		rect			0 0 640 480
+		focusColor		COLOR_FOCUSED
+		soundloop		""
+		onOpen
+		{
+			close options_move;
+			close options_shoot;
+			close options_invehicle;
+			close options_misc;
+			close options_graphics;
+			close options_sound;
+			close options_game;
+			close options_view;
+			close options_defaults;
+			close options_driverinfo;
+			close options_credits;
+			close options_multi;
+			close options_graphics_defaults;
+			close options_graphics_texture;
+			close options_control_defaults;
+			close options_coop;
+
+			setLocalVarBool ui_hideBack 1;
+		}
+		onClose
+		{
+			setLocalVarBool ui_hideBack 0;
+		}
+		onESC
+		{
+			close self;
+		}
+
+		#include "ui_mp/leftside_controls.inc"
+		
+		CHOICE_SECTION_TITLE( 21, "@MENU_LOOK_CAP" )
+		CHOICE_DVARYESNO( 22, "@MENU_INVERT_MOUSE", ui_mousePitch, uiScript update ui_mousePitch )
+		CHOICE_BIND( 23, "@MENU_LEAN_LEFT", "+leanleft", ; )
+		CHOICE_BIND( 24, "@MENU_LEAN_RIGHT", "+leanright", ; )
+		CHOICE_BIND( 25, "@MENU_LOOK_UP", "+lookup", ; )
+		CHOICE_BIND( 26, "@MENU_LOOK_DOWN", "+lookdown", ; )
+		CHOICE_BIND( 27, "@MENU_TURN_LEFT", "+left", ; )
+		CHOICE_BIND( 28, "@MENU_TURN_RIGHT", "+right", ; )
+		CHOICE_BIND( 29, "@MENU_MOUSE_LOOK", "+mlook", ; )
+		CHOICE_BIND( 30, "@MENU_CENTER_VIEW", "centerview", ; )
+		CHOICE_DVARYESNO( 31, "@MENU_FREE_LOOK", cl_freelook, ; )
+		CHOICE_DVARYESNO( 32, "@MENU_SMOOTH_MOUSE", m_filter, ; )
+		CHOICE_DVARSLIDER( 33, "@MENU_MOUSE_SENSITIVITY", sensitivity, 5, 1, 30, ; )
+
+		CHOICE_SEPARATOR( CHOICE_SEP_1 )
+
+		CHOICE_DVARFLOATLIST( 34, "@REMASTERED_CTRL_INVERSION", input_invertpitch, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, ; )
+		CHOICE_DVARFLOATLIST( 35, "@REMASTERED_CTRL_SENSE", input_viewSensitivity, { "@REMASTERED_LOW" 0.6 "@REMASTERED_MED" 1 "3" 1.4 "@REMASTERED_HI" 1.8 "5" 2 "6" 2.2 "@REMASTERED_V_HI" 2.6 "8" 3 "9" 3.5 "@REMASTERED_INSANE" 4 }, ; )
+
+		//CHOICE_BACK( "@MENU_BACK", close self )
+
+		CHOICE_KEYBINDHELP
+	}
+}

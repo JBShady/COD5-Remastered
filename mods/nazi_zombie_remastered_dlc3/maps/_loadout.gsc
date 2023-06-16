@@ -652,6 +652,12 @@ give_loadout(wait_for_switch_weapon)
 	self SetActionSlot( 3, "altMode" );	// toggles between attached grenade launcher
 	self SetActionSlot( 4, "" );
 
+	if(GetDvarInt("sumpf_quest") == 1 && (self.body_select == 3 || self.entity_num == 3) ) // checks completion status & if we are threading on a solo/co-op richtofen player  
+	{
+		self setactionslot(1,"weapon","zombie_item_journal"); 
+		self.has_special_weap = "zombie_item_journal";
+	}
+
 	if( IsDefined( level.player_actionslots ) )
 	{
 		for( i = 0; i < level.player_actionslots.size; i++ )
@@ -757,6 +763,14 @@ give_model( class )
 
 			//SetDvar( "cg_ScoresColor_Gamertag_0" , GetDvar( "cg_hudGrenadeIndicatorTargetColor") );
 
+			character = GetDvarint("character");
+			if(isDefined(character) && character > 0 && character < 5) // Can only be a int value 1,2,3,or 4
+			{
+				self.body_select = character - 1; // convert to player index which starts at 0
+				self.mybod = self.body_select;
+				self.entity_num = self.body_select;
+			}
+			
 			switch( self.body_select)
 			{
 			case 0:

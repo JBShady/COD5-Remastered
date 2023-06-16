@@ -421,14 +421,6 @@ teleporter_map_light( light_name, on_msg )
 			{
 				lamps[i].fx delete();
 			}
-//			lamps[i].fx = spawn(p, lamps[i].origin, "script_model" );
-//			lamps[i].fx setmodel("tag_origin");
-//			lamps[i].fx.angles = lamps[i].angles+(-90,0,0);
-//			lamps[i].fx.angles = (45,0,0);
-angles = lamps[i].angles;
-println( light_name + "- model angles : "+angles[0]+", "+angles[1]+", "+angles[2] );
-//			playfxontag(p, level._effect["zapper_light_notready"],lamps[i].fx,"tag_origin");
-
 			angles = get_guide_struct_angles( lamps[i] );			
 			lamps[i].fx = SpawnFx( p, level._effect["zapper_light_notready"], lamps[i].origin, 0, AnglesToForward( angles ) );
 			TriggerFX(lamps[i].fx);
@@ -454,6 +446,45 @@ println( light_name + "- model angles : "+angles[0]+", "+angles[1]+", "+angles[2
 			TriggerFX(lamps[i].fx);
 		}
 	}
+
+	level waittill( "turn_off_sounds_lights" );	// power lights off to red when teles shut down
+
+	players = getlocalplayers();
+	for ( p=0; p<players.size; p++ )
+	{
+		lamps = GetEntArray( p, light_name, "targetname" );
+		for ( i=0; i<lamps.size; i++ )
+		{ 
+			lamps[i] SetModel( "zombie_zapper_cagelight_red" );
+			if(isDefined(lamps[i].fx))
+			{
+				lamps[i].fx delete();
+			}
+			angles = get_guide_struct_angles( lamps[i] );			
+			lamps[i].fx = SpawnFx( p, level._effect["zapper_light_notready"], lamps[i].origin, 0, AnglesToForward( angles ) );
+			TriggerFX(lamps[i].fx);
+		}
+	}
+
+	level waittill( on_msg );	// power lights on when individual tele notify
+	
+	players = getlocalplayers();
+	for ( p=0; p<players.size; p++ )
+	{
+		lamps = GetEntArray( p, light_name, "targetname" );
+		for ( i=0; i<lamps.size; i++ )
+		{
+			lamps[i] SetModel( "zombie_zapper_cagelight_green" );
+			if(isDefined(lamps[i].fx))
+			{
+				lamps[i].fx delete();
+			}
+			angles = get_guide_struct_angles( lamps[i] );			
+			lamps[i].fx = SpawnFx( p, level._effect["zapper_light_ready"], lamps[i].origin, 0, AnglesToForward( angles ) );
+			TriggerFX(lamps[i].fx);
+		}
+	}
+
 }
 
 //
@@ -483,9 +514,46 @@ teleporter_map_light_receiver()
 	}
 
 	level waittill( "pap1" );	// Pack-a-Punch On
-	wait( 1.5 );	// dramatic pause
+	realwait( 1.5 );	// dramatic pause
 	
 	level.map_light_receiver_on = true;
+	players = getlocalplayers();
+	for ( p=0; p<players.size; p++ )
+	{
+		lamps = GetEntArray( p, "sm_light_tp_r", "targetname" );
+		for ( i=0; i<lamps.size; i++ )
+		{
+			lamps[i] SetModel( "zombie_zapper_cagelight_green" );
+			if(isDefined(lamps[i].fx))
+			{
+				lamps[i].fx delete();
+			}
+			angles = get_guide_struct_angles( lamps[i] );			
+			lamps[i].fx = SpawnFx( p, level._effect["zapper_light_ready"], lamps[i].origin, 0, AnglesToForward( angles ) );
+			TriggerFX(lamps[i].fx);
+		}
+	}
+
+	level waittill("turn_off_sounds_lights"); // when teles break down turn off mainframe light too
+
+	players = getlocalplayers();
+	for ( p=0; p<players.size; p++ )
+	{
+		lamps = GetEntArray( p, "sm_light_tp_r", "targetname" );
+		for ( i=0; i<lamps.size; i++ )
+		{
+			lamps[i] SetModel( "zombie_zapper_cagelight_red" );
+			if(isDefined(lamps[i].fx))
+			{
+				lamps[i].fx delete();
+			}
+			angles = get_guide_struct_angles( lamps[i] );
+			lamps[i].fx = SpawnFx( p, level._effect["zapper_light_notready"], lamps[i].origin, 0, AnglesToForward( angles ) );
+			TriggerFX(lamps[i].fx);
+		}
+	}
+
+	level waittill("pap1_resume"); // when power gen gets turned back on we are green--uses same notify as sounds for generator
 	players = getlocalplayers();
 	for ( p=0; p<players.size; p++ )
 	{
@@ -536,7 +604,7 @@ teleporter_map_light_receiver_flash()
 				TriggerFX(lamps[i].fx);
 			}
 		}
-		wait( 0.5 );
+		realwait( 0.5 );
 
 		players = getlocalplayers();
 		for ( p=0; p<players.size; p++ )
@@ -551,7 +619,7 @@ teleporter_map_light_receiver_flash()
 				}
 			}
 		}
-		wait( 0.5 );
+		realwait( 0.5 );
 	}
 }
 

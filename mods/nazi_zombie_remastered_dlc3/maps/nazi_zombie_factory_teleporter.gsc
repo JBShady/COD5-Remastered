@@ -52,11 +52,7 @@ teleporter_init()
 	
 	level.teleport_ae_funcs = [];
 	
-	players = get_players();
-	if( !IsSplitscreen() /*&& players.size == 1*/)
-	{
-		level.teleport_ae_funcs[level.teleport_ae_funcs.size] = maps\nazi_zombie_factory_teleporter::teleport_aftereffect_fov;
-	}
+	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = maps\nazi_zombie_factory_teleporter::teleport_aftereffect_fov;
 	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = maps\nazi_zombie_factory_teleporter::teleport_aftereffect_shellshock;
 	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = maps\nazi_zombie_factory_teleporter::teleport_aftereffect_shellshock_electric;
 	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = maps\nazi_zombie_factory_teleporter::teleport_aftereffect_bw_vision;
@@ -117,8 +113,14 @@ pad_manager()
 	for ( i = 0; i < level.teleporter_pad_trig.size; i++ )
 	{
 		// shut off the pads
-		level.teleporter_pad_trig[i] sethintstring( &"REMASTERED_ZOMBIE_TELEPORT_COOLDOWN" );
-		level.teleporter_pad_trig[i] teleport_trigger_invisible( false );
+		if (!isDefined(level.teleporters_are_broken) ) 
+		{
+			if( level.teleporter_pad_trig[i].teleport_active == true ) // extra check so we only put cooldown message if the tele is actually active, this is for cases where player tries to activate link 2 or 3 right after link 1
+			{
+				level.teleporter_pad_trig[i] sethintstring( &"REMASTERED_ZOMBIE_TELEPORT_COOLDOWN" );
+			}
+			level.teleporter_pad_trig[i] teleport_trigger_invisible( false );
+		}
 	}
 
 	level.is_cooldown = true;
@@ -127,7 +129,12 @@ pad_manager()
 
 	for ( i = 0; i < level.teleporter_pad_trig.size; i++ )
 	{
-		if ( level.teleporter_pad_trig[i].teleport_active )
+		if (isDefined(level.teleporters_are_broken) && level.teleporters_are_broken == true)
+		{
+			level.teleporter_pad_trig[i] teleport_trigger_invisible( false );
+			level.teleporter_pad_trig[i] sethintstring( &"REMASTERED_ZOMBIE_LINK_INTERRUPTED" );
+		}
+		else if ( level.teleporter_pad_trig[i].teleport_active )
 		{
 			level.teleporter_pad_trig[i] sethintstring( &"ZOMBIE_TELEPORT_TO_CORE" );
 		}
@@ -297,8 +304,7 @@ teleport_pad_active_think( index )
 	while ( 1 )
 	{
 		self waittill( "trigger", user );
-
-		if ( is_player_valid( user ) && user.score >= level.teleport_cost && !level.is_cooldown )
+		if ( is_player_valid( user ) && user.score >= level.teleport_cost && !level.is_cooldown && !isdefined(level.teleporters_are_broken) )
 		{
 			for ( i = 0; i < level.teleporter_pad_trig.size; i++ )
 			{
@@ -306,22 +312,188 @@ teleport_pad_active_think( index )
 			}
 
 			user maps\_zombiemode_score::minus_to_player_score( level.teleport_cost );
-
+		
 			// Non-threaded so the trigger doesn't activate before the cooldown
-			self player_teleporting( index );
+			if(isDefined(level.current_limit) && level.current_limit == false)
+			{
+				self player_teleporting_fail( index );
+
+			}
+			else
+			{
+				self player_teleporting( index, user );
+			}
 		}
-		else
+		else if(!level.is_cooldown && !isdefined(level.teleporters_are_broken) )
 		{
 			play_sound_on_ent( "no_purchase" );
 		}
+		else if(isDefined(level.teleporters_are_broken) && level.teleporters_are_broken == true)
+		{
+			user thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog(); 
+		}
 	}
 }
+player_teleporting_fail( index )
+{
+	level.panel_trigger_sync delete(); // Remove the generic "limit disabled" hint, as we will now switch to emergency hint w/ light
 
+	level.teleporters_are_broken = true;
+
+	// begin the teleport
+	// add 3rd person fx
+	teleport_pad_start_exploder( index );
+
+	// play startup fx at the core
+	exploder( 105 );
+
+	//AUDIO
+	ClientNotify( "tpw" + index ); 
+
+	// start fps fx
+	self thread teleport_pad_player_fx( level.teleport_delay );
+	
+	// wait a bit
+	wait( level.teleport_delay );
+
+	// end fps fx
+	self notify( "fx_done" );
+
+	location = undefined;
+
+	switch ( index )
+	{
+	case 0:
+		location = (1262.5, 1274.7, 200.125);
+		break;
+
+	case 1:
+		location = (297.5, -3194.4, 189.125);
+		break;
+
+	case 2:
+		location = (-1783.8, -1109, 231.125);
+		break;
+	}
+
+	playsoundatposition("teleporter_fail", location + (0,0,10) );
+
+	playFx(level._effect["teleporter_smoke_fail"], location + (0,0,3) );
+	
+	stop_exploder( 101 );
+
+	stop_exploder( 102 );
+
+	stop_exploder( 103 );
+
+	stop_exploder( 104 );
+
+	ClientNotify( "turn_off_sounds_lights" ); // turns off generators/tele sounds so they seem "broken"
+
+	if ( level.is_cooldown == false )
+	{
+		thread pad_manager(); 
+	}
+
+	players = get_players(); 
+	j = undefined;
+	for( i = 0; i < players.size; i++ ) 
+	{
+		if(Distance2D(players[i].origin, self.origin) < 88)
+		{
+			if( !players[i] maps\_laststand::player_is_in_laststand() )
+			{
+				players[i] stopShellshock();
+				if(!players[i] hasperk("specialty_armorvest") || players[i].health - 100 < 1)
+				{
+					radiusdamage(players[i].origin,10,10,10);
+				}
+				else
+				{
+					players[i] dodamage(10, players[i].origin);
+				}
+				players[i] shellshock( "electrocution", 2.5 );
+
+				j = i; // lets grab the last player we looped through who was within the radius for extra vox response
+			}
+		}
+	}
+
+	level thread continue_player_teleporting_fail(players[j]);
+}
+
+continue_player_teleporting_fail(player)
+{
+	wait(1);
+	index = maps\_zombiemode_weapons::get_player_index( player );
+	plr = "plr_" + index + "_";
+	player thread create_and_play_dialog( plr, "vox_gen_respond_neg", 0.25 ); // so we can sometimes get a neg response
+
+	level thread maps\nazi_zombie_factory::mainframe_panel_d();
+
+	fx_light = spawn("script_model", (-177, 295.1, 144));
+	fx_light setModel("tag_origin");
+	playFxOnTag(level._effect["zapper_light_notready"], fx_light, "tag_origin");
+
+	level waittill ( "between_round_over" ); // when we fail, we wait till we get to the next round over before cleaning up panel
+	
+	fx_light delete();
+	level.panel_trigger_failsafe delete();
+
+	level thread maps\nazi_zombie_factory::mainframe_panel_e();
+
+	wait(randomintrange(60,240));
+
+	players = get_players(); 
+	for( i = 0; i < players.size; i++ ) 
+	{
+		if(players[i] hasweapon("zombie_item_journal") && players[i].has_special_weap == "zombie_item_journal" )
+		{
+			if(players[i] GetCurrentWeapon() == "zombie_item_journal" )
+			{
+				primaryWeapons = players[i] GetWeaponsListPrimaries();
+				if( IsDefined( primaryWeapons ) && primaryWeapons.size > 0 )
+				{
+					players[i] SwitchToWeapon( primaryWeapons[0] );
+				}	
+			}
+			players[i] takeweapon("zombie_item_journal"); 
+			players[i] setactionslot(1,""); 
+			players[i].has_special_weap = undefined;
+			players[i] playlocalsound("gren_pickup_plr");
+		}
+
+	}
+
+}
+shout_fire_if_tesla(user)
+{
+	players = getplayers();
+
+	if(randomintrange(0,4) == 0 ) // 25% chance reminder to "fire" 
+	{
+		for ( i = 0; i < players.size; i++ )
+		{	
+			if(players[i] getCurrentWeapon() == "tesla_gun_upgraded" ) // if someone is holding correct wep , character who pressed teleport shouts to fire
+			{
+				index = maps\_zombiemode_weapons::get_player_index(user);
+				plr = "plr_" + index + "_";
+				user thread create_and_play_dialog( plr, "vox_gen_fire", 0.1 );
+			}
+		}
+	}
+}
 //-------------------------------------------------------------------------------
 // handles moving the players and fx, etc...moved out so it can be threaded
 //-------------------------------------------------------------------------------
-player_teleporting( index )
+player_teleporting( index, user )
 {
+	if(isDefined(level.teleporting_out_ready) && level.teleporting_out_ready == true)
+	{
+		level notify("teleporting_out");
+		level thread shout_fire_if_tesla(user);
+	}
+
 	time_since_last_teleport = GetTime() - level.teleport_time;
 
 	// begin the teleport
@@ -525,6 +697,13 @@ teleport_players()
 				players_touching[player_idx] = i;
 				player_idx++;
 
+				if( isDefined(level.teleporting_out_ready) && level.teleporting_out_ready == true )
+				{
+					if((players_touching.size) == getplayers().size)
+					{
+						level.all_players_teleported = true;
+					}
+				}
 				if ( isdefined( image_room[i] ) && !players[i] maps\_laststand::player_is_in_laststand() )
 				{
 					players[i] disableOffhandWeapons();
@@ -720,6 +899,7 @@ teleport_core_think()
 							if ( level.active_links == 3 )
 							{
 								exploder( 101 );
+								exploder( 169 ); // seperated generator and mainframe fx so that when we re-nable gen for egg we dont spam mainframe pap fx
 								ClientNotify( "pap1" );	// Pack-A-Punch door on
 								teleporter_vo( "linkall", trigger );
 								if( level.round_number <= 7 )
@@ -923,7 +1103,7 @@ play_packa_see_vox()
 		self waittill("trigger", who);
 		if ( level.active_links < 3 )
 		{
-		who thread teleporter_vo_play( "vox_perk_packa_see" );
+			who thread teleporter_vo_play( "vox_perk_packa_see" );
 		}
 	}
 }
@@ -971,13 +1151,13 @@ teleport_aftereffects()
 
 teleport_aftereffect_shellshock()
 {
-	println( "*** Explosion Aftereffect***\n" );
+	//iprintln( "*** Explosion Aftereffect***\n" );
 	self shellshock( "explosion", 4 );
 }
 
 teleport_aftereffect_shellshock_electric()
 {
-	println( "***Electric Aftereffect***\n" );
+	//iprintln( "***Electric Aftereffect***\n" );
 	self shellshock( "electrocution", 4 );
 }
 

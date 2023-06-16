@@ -8,7 +8,6 @@ init()
 	init_weapon_upgrade();
 	init_weapon_cabinet();
 	treasure_chest_init();
-	level thread add_limited_tesla_gun();
 	level.box_moved = false;
 }
 
@@ -52,6 +51,7 @@ add_zombie_weapon( weapon_name, hint, cost, weaponVO, variation_count, ammo_cost
 	struct.cost = cost;
 	struct.sound = weaponVO;
 	struct.variation_count = variation_count;
+    struct.is_in_box = level.zombie_include_weapons[weapon_name];
 
 	if( !IsDefined( ammo_cost ) )
 	{
@@ -63,35 +63,35 @@ add_zombie_weapon( weapon_name, hint, cost, weaponVO, variation_count, ammo_cost
 	level.zombie_weapons[weapon_name] = struct;
 }
 
-include_zombie_weapon( weapon_name )
+include_zombie_weapon( weapon_name, in_box )
 {
 	if( !IsDefined( level.zombie_include_weapons ) )
 	{
 		level.zombie_include_weapons = [];
 	}
+	if( !isDefined( in_box ) )
+	{
+		in_box = true;
+	}
 
-	level.zombie_include_weapons[weapon_name] = true;
+	level.zombie_include_weapons[weapon_name] = in_box;
 }
 
 init_weapons()
 {
 	// Zombify
 	PrecacheItem( "zombie_melee" );
-	PrecacheItem( "falling_hands" )
+	PrecacheItem( "falling_hands" );
 
 
 	// Pistols
 	add_zombie_weapon( "colt", 									&"ZOMBIE_WEAPON_COLT_50", 					50,		"vox_crappy",	8 );
 	add_zombie_weapon( "colt_dirty_harry", 						&"ZOMBIE_WEAPON_COLT_DH_100", 				100,	"vox_357",		5 );
 	add_zombie_weapon( "zombie_colt", 							&"ZOMBIE_WEAPON_ZOMBIECOLT_25", 			25, 	"vox_crappy",	8 );
-	add_zombie_weapon( "zombie_colt_upgraded", 					&"ZOMBIE_WEAPON_ZOMBIECOLT_25", 			25, 	"",				8 );
 	add_zombie_weapon( "sw_357", 								&"ZOMBIE_WEAPON_SW357_100", 				100, 	"vox_357",		5 );
 	add_zombie_weapon( "zombie_tokarev", 						&"ZOMBIE_WEAPON_TOKAREV_50", 				50, 	"vox_crappy",	8 );
-	add_zombie_weapon( "zombie_tokarev_upgraded", 				&"ZOMBIE_WEAPON_TOKAREV_50", 				50, 	"",				8 );
 	add_zombie_weapon( "zombie_walther", 						&"ZOMBIE_WEAPON_WALTHER_50", 				50, 	"vox_crappy",	8 );
-	add_zombie_weapon( "zombie_walther_upgraded", 				&"ZOMBIE_WEAPON_WALTHER_50", 				50, 	"",				8 );
 	add_zombie_weapon( "zombie_nambu", 							&"ZOMBIE_WEAPON_NAMBU_50", 					50, 	"vox_crappy",	8 );
-	add_zombie_weapon( "zombie_nambu_upgraded", 				&"ZOMBIE_WEAPON_NAMBU_50",		 			50, 	"",				8 );
 
 	// Bolt Action                                      		
 	add_zombie_weapon( "kar98k", 								&"ZOMBIE_WEAPON_KAR98K_200", 				200,	"", 0);
@@ -152,7 +152,8 @@ init_weapons()
 	// Flamethrower                                     	
 	add_zombie_weapon( "m2_flamethrower_zombie", 			&"ZOMBIE_WEAPON_M2_FLAMETHROWER_3000", 		3000,	"vox_flame", 7);	
 
-	// Special                                          	
+	// Special
+	add_zombie_weapon( "mine_bouncing_betty",					&"ZOMBIE_WEAPON_SATCHEL_2000",				2000,	"" );
 	add_zombie_weapon( "mortar_round", 						&"ZOMBIE_WEAPON_MORTARROUND_2000", 			2000,	"" );
 	add_zombie_weapon( "satchel_charge", 					&"ZOMBIE_WEAPON_SATCHEL_2000", 				2000,	"" );
 	add_zombie_weapon( "ray_gun", 							&"ZOMBIE_WEAPON_RAYGUN_10000", 				10000,	"vox_raygun", 6 );
@@ -166,27 +167,6 @@ init_weapons()
 	add_limited_weapon( "m2_flamethrower_zombie", 1 );
 	add_limited_weapon( "tesla_gun", 1);
 }   
-
-//remove this function and whenever it's call for production. this is only for testing purpose.
-add_limited_tesla_gun()
-{
-
-	weapon_spawns = GetEntArray( "weapon_upgrade", "targetname" ); 
-
-	for( i = 0; i < weapon_spawns.size; i++ )
-	{
-		hint_string = weapon_spawns[i].zombie_weapon_upgrade; 
-		if(hint_string == "tesla_gun")
-		{
-			weapon_spawns[i] waittill("trigger");
-			weapon_spawns[i] trigger_off();
-			break;
-
-		}
-		
-	}
-
-}
 
 
 add_limited_weapon( weapon_name, amount )
@@ -258,7 +238,12 @@ get_ammo_cost( weapon_name )
 	return level.zombie_weapons[weapon_name].ammo_cost;
 }
 
-
+get_is_in_box( weapon_name )
+{
+        AssertEx( IsDefined( level.zombie_weapons[weapon_name] ), weapon_name + " was not included or is not part of the zombie weapon list." );
+        
+        return level.zombie_weapons[weapon_name].is_in_box;
+}
 
 // for the random weapon chest
 treasure_chest_init()
@@ -992,11 +977,21 @@ treasure_chest_ChooseRandomWeapon( player )
 	filtered = [];
 	for( i = 0; i < keys.size; i++ )
 	{
+		if( !get_is_in_box( keys[i] ) )
+		{
+			continue;
+		}
+
 		if( player HasWeapon( keys[i] ) )
 		{
 			continue;
 		}
-				
+			
+		if( !IsDefined( keys[i] ) )
+		{
+			continue;
+		}
+
 		//chrisP - make sure the chest doesn't give the player a bouncing betty
 		if(keys[i] == "mine_bouncing_betty" || (isSubStr(keys[i], "zombie_item")) || keys[i] == "zombie_colt" || keys[i] == "zombie_walther" || keys[i] == "zombie_tokarev" || keys[i] == "zombie_nambu" || keys[i] == "stielhandgranate")
 		{
@@ -1016,9 +1011,6 @@ treasure_chest_ChooseRandomWeapon( player )
 			}
 		}*/
 		// PI_CHANGE_END
-		
-		if( !IsDefined( keys[i] ) )
-			continue;
 
 		filtered[filtered.size] = keys[i];
 	}
@@ -1038,7 +1030,7 @@ treasure_chest_ChooseRandomWeapon( player )
 					if( level.pulls_since_last_ray_gun > 11 )
 					{
 						// calculate the number of times we have to add it to the array to get the desired percent
-						number_to_add = .15 * filtered.size;
+						number_to_add = .1 * filtered.size;
 						for(i=1; i<number_to_add; i++)
 						{
 							filtered[filtered.size] = "ray_gun";
@@ -1048,7 +1040,7 @@ treasure_chest_ChooseRandomWeapon( player )
 					else if( level.pulls_since_last_ray_gun > 7 )
 					{
 						// calculate the number of times we have to add it to the array to get the desired percent
-						number_to_add = .1 * filtered.size;
+						number_to_add = .05 * filtered.size;
 						for(i=1; i<number_to_add; i++)
 						{
 							filtered[filtered.size] = "ray_gun";
@@ -1067,7 +1059,7 @@ treasure_chest_ChooseRandomWeapon( player )
 				// calculate the number of times we have to add it to the array to get the desired percent
 				player.groups_killed = 0; // reset counter
 
-				number_to_add = .2 * filtered.size;
+				number_to_add = .15 * filtered.size;
 				for(i=1; i<number_to_add; i++)
 				{
 					filtered[filtered.size] = "tesla_gun";
@@ -1082,7 +1074,7 @@ treasure_chest_ChooseRandomWeapon( player )
 				if( level.round_number > 10 )
 				{
 					// calculate the number of times we have to add it to the array to get the desired percent
-					number_to_add = .2 * filtered.size;
+					number_to_add = .15 * filtered.size;
 					for(i=1; i<number_to_add; i++)
 					{
 						filtered[filtered.size] = "tesla_gun";
@@ -1092,7 +1084,7 @@ treasure_chest_ChooseRandomWeapon( player )
 				else if( level.round_number > 5 )
 				{
 					// calculate the number of times we have to add it to the array to get the desired percent
-					number_to_add = .15 * filtered.size;
+					number_to_add = .1 * filtered.size;
 					for(i=1; i<number_to_add; i++)
 					{
 						filtered[filtered.size] = "tesla_gun";

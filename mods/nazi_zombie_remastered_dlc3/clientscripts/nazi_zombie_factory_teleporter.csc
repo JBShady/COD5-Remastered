@@ -19,10 +19,8 @@ setup_teleport_aftereffects()
 	waitforclient( 0 );
 	
 	level.teleport_ae_funcs = [];
-	if( getlocalplayers().size == 1 )
-	{
-		level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_fov;
-	}
+
+	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_fov;
 	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_shellshock;
 	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_shellshock_electric;
 	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_bw_vision;
@@ -77,7 +75,7 @@ teleport_aftereffect_shellshock_electric( localClientNum )
 
 teleport_aftereffect_fov( localClientNum )
 {
-	println( "***FOV Aftereffect***\n" );
+	//iprintlnbold( "***FOV Aftereffect***\n" );
 
 	start_fov = 30;
 	//end_fov = 65;
@@ -97,42 +95,42 @@ teleport_aftereffect_fov( localClientNum )
 
 teleport_aftereffect_bw_vision( localClientNum )
 {
-	println( "***B&W Aftereffect***\n" );
+	//iprintlnbold( "***B&W Aftereffect***\n" );
 	savedVis = GetVisionSetNaked( localClientNum );
 	VisionSetNaked( localClientNum, "cheat_bw_invert_contrast", 0.4 );
-	wait( 1.25 );
+	realwait( 1.25 );
 	VisionSetNaked( localClientNum, savedVis, 1 );
 }
 
 teleport_aftereffect_red_vision( localClientNum )
 {
-	println( "***Red Aftereffect***\n" );
+	//iprintlnbold( "***Red Aftereffect***\n" );
 	savedVis = GetVisionSetNaked( localClientNum );
 	VisionSetNaked( localClientNum, "zombie_turned", 0.4 );
-	wait( 1.25 );
+	realwait( 1.25 );
 	VisionSetNaked( localClientNum, savedVis, 1 );
 }
 
 teleport_aftereffect_flashy_vision( localClientNum )
 {
-	println( "***Flashy Aftereffect***\n" );
+	//iprintlnbold( "***Flashy Aftereffect***\n" );
 	savedVis = GetVisionSetNaked( localClientNum );
 	VisionSetNaked( localClientNum, "cheat_bw_invert_contrast", 0.1 );
-	wait( 0.4 );
+	realwait( 0.4 );
 	VisionSetNaked( localClientNum, "cheat_bw_contrast", 0.1 );
-	wait( 0.4 );
+	realwait( 0.4 );
 	VisionSetNaked( localClientNum, "cheat_invert_contrast", 0.1 );
-	wait( 0.4 );
+	realwait( 0.4 );
 	VisionSetNaked( localClientNum, "cheat_contrast", 0.1 );
-	wait( 0.4 );
+	realwait( 0.4 );
 	VisionSetNaked( localClientNum, savedVis, 5 );
 }
 
 teleport_aftereffect_flare_vision( localClientNum )
 {
-	println( "***Flare Aftereffect***\n" );
+	//iprintlnbold( "***Flare Aftereffect***\n" );
 	savedVis = GetVisionSetNaked( localClientNum );
 	VisionSetNaked( localClientNum, "flare", 0.4 );
-	wait( 1.25 );
+	realwait( 1.25 );
 	VisionSetNaked( localClientNum, savedVis, 1 );
 }

@@ -76,11 +76,13 @@
 		CHOICE_DDVARALTTEXT_VIS( 25, "@MENU_ANTIALIASING", "@MENU_OFF", when( dvarint(r_aasamples)==1 && dvarBool( cl_ingame ) ) )
 		CHOICE_DDVARALTTEXT_VIS( 25, "@MENU_ANTIALIASING", "@MENU_2X", when( dvarint(r_aasamples)==2 && dvarBool( cl_ingame ) ) )
 		CHOICE_DDVARALTTEXT_VIS( 25, "@MENU_ANTIALIASING", "@MENU_4X", when( dvarint(r_aasamples)==4 && dvarBool( cl_ingame ) ) )
+		CHOICE_DDVARALTTEXT_VIS( 25, "@MENU_ANTIALIASING", "@REMASTERED_8X", when( dvarint(r_aasamples)==8 && dvarBool( cl_ingame ) ) )
+		CHOICE_DDVARALTTEXT_VIS( 25, "@MENU_ANTIALIASING", "@REMASTERED_16X", when( dvarint(r_aasamples)==16 && dvarBool( cl_ingame ) ) )
 
 		CHOICE_DVARENUMLIST_VIS( 22, "@MENU_VIDEO_MODE", ui_r_mode, r_mode, setLocalVarBool ui_showApply 1, when( dvarint(sv_running)==0 && !dvarBool( cl_ingame ) ); )
 		CHOICE_DVARENUMLIST_VIS( 23, "@MENU_SCREEN_REFRESH_RATE", ui_r_displayRefresh, r_displayRefresh, setLocalVarBool ui_showApply 1;, when( ( (dvarint(sv_running)==0) || ( localVarInt(ui_allow_graphic_change)==1 ) ) && ( !dvarBool( cl_ingame ) ) ); )
 		CHOICE_DVARSTRINGLIST_VIS( 24, "@MENU_ASPECT_RATIO", ui_r_aspectratio, { "@MENU_AUTO"; "auto"; "@MENU_STANDARD_4_3"; "standard"; "@MENU_WIDE_16_10"; "wide 16:10"; "@MENU_WIDE_16_9"; "wide 16:9" }, setLocalVarBool ui_showApply 1, when( ( (dvarint(sv_running)==0) || ( localVarInt(ui_allow_graphic_change)==1 ) ) && ( !dvarBool( cl_ingame ) ) ); )
-		CHOICE_DVARFLOATLIST_VIS( 25, "@MENU_ANTIALIASING", ui_r_aasamples, { "@MENU_OFF" 1 "@MENU_2X" 2 "@MENU_4X" 4 }, setLocalVarBool ui_showApply 1;, when( ( (dvarint(sv_running)==0) || ( localVarInt(ui_allow_graphic_change)==1 ) ) && ( !dvarBool( cl_ingame ) ) ); )
+		CHOICE_DVARFLOATLIST_VIS( 25, "@MENU_ANTIALIASING", ui_r_aasamples, { "@MENU_OFF" 1 "@MENU_2X" 2 "@MENU_4X" 4 "@REMASTERED_8X" 8 "@REMASTERED_16X" 16 }, setLocalVarBool ui_showApply 1;, when( ( (dvarint(sv_running)==0) || ( localVarInt(ui_allow_graphic_change)==1 ) ) && ( !dvarBool( cl_ingame ) ) ); )
 
 		//CHOICE_DVARYESNO( 23, "@MENU_FULLSCREEN", ui_r_fullscreen, setLocalVarBool ui_showApply 1 )
 		//CHOICE_DVARSTRINGLIST( 26, "@MENU_RENDERING_METHOD_PREFERENCE", ui_r_rendererpreference, { "@MENU_AUTO"; "Default"; "2.0"; "Shader model 2.0"; "3.0"; "Shader Model 3.0"  }, setLocalVarBool ui_showApply 1 )
@@ -97,16 +99,23 @@
 
 		
 		CHOICE_DVARYESNO( 29, "@MENU_SHADOWS", sm_enable, ; )
-		CHOICE_DVARYESNO( 30, "@REMASTERED_FOG", r_fog, ; )
+
+		//CHOICE_DVARYESNO( 30, "@REMASTERED_FOG", r_fog_settings , ;  )
+		CHOICE_DVARYESNO_VIS( 30, "@REMASTERED_FOG", r_fog_settings , ;, when( !dvarBool( cl_ingame ) ) )
+		CHOICE_DVARYESNO_VIS( 30, "@REMASTERED_FOG", r_fog , exec "setfromdvar r_fog_settings r_fog" , when( dvarBool( cl_ingame ) ) )
+
 		CHOICE_DVARYESNO( 31, "@MENU_SPECULAR_MAP", r_specular, ; )
 		//CHOICE_DVARFLOATLIST( 31, "@MENU_NUMBER_OF_DYNAMIC_LIGHTS", r_dlightlimit, { "@MENU_OFF" 0 "@MENU_LOW" 2 "@MENU_NORMAL" 4 }, ; )
 		CHOICE_DVARYESNO( 32, "@MENU_OPTION_OCEAN_SIMILATION", r_gfxopt_water_simulation, ; )
 		CHOICE_DVARYESNO( 33, "@MENU_OPTION_DYNAMIC_FOLIAGE", r_gfxopt_dynamic_foliage, ; )
 		CHOICE_DVARYESNO( 34, "@MENU_OPTION_BULLET_IMPACTS", fx_marks, ; )
-		CHOICE_DVARFLOATLIST_VIS( 35, "@MENU_NUMBER_OF_CORPSES", ai_corpsecount, { "@MENU_TINY" 3 "@MENU_SMALL" 5 "@MENU_MEDIUM" 10 "@MENU_LARGE" 20 "@MENU_INSANE" 32 }, ;, when( !dvarint( ui_multiplayer ) && (!INGAME && dvarInt(r_filmUseTweaks)==0) ) )
 
-		CHOICE_DVARYESNO_VIS( 35, "@REMASTERED_CINEMATIC", r_filmUseTweaks , ; , when(INGAME || dvarInt(r_filmUseTweaks)==1 ) )
-		CHOICE_DVARFLOATLIST_VIS( 36, "@MENU_NUMBER_OF_CORPSES", ai_corpsecount, { "@MENU_TINY" 3 "@MENU_SMALL" 5 "@MENU_MEDIUM" 10 "@MENU_LARGE" 20 "@MENU_INSANE" 32 }, ;, when( !dvarint( ui_multiplayer ) && (INGAME || dvarInt(r_filmUseTweaks)==1) ) )
+		CHOICE_DVARFLOATLIST_VIS( 35, "@MENU_NUMBER_OF_CORPSES", ai_corpsecount, { "@MENU_TINY" 3 "@MENU_SMALL" 5 "@MENU_MEDIUM" 10 "@MENU_LARGE" 20 "@MENU_INSANE" 32 }, ;, when( !dvarint( ui_multiplayer ) ) )
+	
+		//CHOICE_DVARYESNO( 36, "@REMASTERED_CINEMATIC", r_filmUseTweaks_settings , ; )
+
+		CHOICE_DVARYESNO_VIS( 36, "@REMASTERED_CINEMATIC", r_filmUseTweaks_settings , ;, when( !dvarBool( cl_ingame ) ) )
+		CHOICE_DVARYESNO_VIS( 36, "@REMASTERED_CINEMATIC", r_filmUseTweaks , exec "setfromdvar r_filmUseTweaks_settings r_filmUseTweaks" , when( dvarBool( cl_ingame ) ) )
 
 		//CHOICE_BUTTON( 35, "@MENU_TEXTURE_SETTINGS", close self; open options_graphics_texture )
 
@@ -208,7 +217,7 @@
 			exec "setfromdvar ui_r_picmip			r_picmip";
 			exec "setfromdvar ui_r_picmip_bump		r_picmip_bump";
 			exec "setfromdvar ui_r_picmip_spec		r_picmip_spec";
-			exec "setfromdvar ui_r_picmip_manual	r_picmip_manual";
+			exec "setfromdvar ui_r_picmip_manual	r_picmip_manual";	
 		}
 		onClose
 		{
@@ -227,14 +236,21 @@
 
 		CHOICE_DVARSTRINGLIST( 22, "@MENU_TEXTURE_MIPMAPS", r_texFilterMipMode, { "@MENU_AUTOMATIC"; "Unchanged"; "@MENU_BILINEAR"; "Force Bilinear"; "@MENU_TRILINEAR"; "Force Trilinear" }, setLocalVarBool ui_showApply 1 )
 		CHOICE_DVARSLIDER( 23, "@MENU_TEXTURE_ANISOTROPY", r_texFilterAnisoMin, 1, 1, 16, setLocalVarBool ui_showApply 1 )
-		CHOICE_DVARFLOATLIST( 25, "@MENU_TEXTURE_QUALITY", ui_r_picmip_manual, { "@MENU_AUTOMATIC" 0 "@MENU_MANUAL" 1 }, setLocalVarBool ui_showApply 1 )
-		CHOICE_DVARFLOATLIST_VIS( 26, "@MENU_TEXTURE_RESOLUTION", ui_r_picmip, { "@MENU_LOW" 3 "@MENU_NORMAL" 2 "@MENU_HIGH" 1 "@MENU_EXTRA" 0 }, setLocalVarBool ui_showApply 1, when( dvarint( ui_r_picmip_manual ) ) )
-		CHOICE_DVARFLOATLIST_VIS( 27, "@MENU_NORMAL_MAP_RESOLUTION", ui_r_picmip_bump, { "@MENU_LOW" 3 "@MENU_NORMAL" 2 "@MENU_HIGH" 1 "@MENU_EXTRA" 0 }, setLocalVarBool ui_showApply 1, when( dvarint( ui_r_picmip_manual ) ) )
-		CHOICE_DVARFLOATLIST_VIS( 28, "@MENU_SPECULAR_MAP_RESOLUTION", ui_r_picmip_spec, { "@MENU_LOW" 3 "@MENU_NORMAL" 2 "@MENU_HIGH" 1 "@MENU_EXTRA" 0 }, setLocalVarBool ui_showApply 1, when( dvarint( ui_r_picmip_manual ) ) )
+		CHOICE_DVARFLOATLIST( 26, "@MENU_TEXTURE_QUALITY", ui_r_picmip_manual, { "@MENU_AUTOMATIC" 0 "@MENU_MANUAL" 1 }, setLocalVarBool ui_showApply 1 )
+		CHOICE_DVARFLOATLIST_VIS( 27, "@MENU_TEXTURE_RESOLUTION", ui_r_picmip, { "@MENU_LOW" 3 "@MENU_NORMAL" 2 "@MENU_HIGH" 1 "@MENU_EXTRA" 0 }, setLocalVarBool ui_showApply 1, when( dvarint( ui_r_picmip_manual ) ) )
+		CHOICE_DVARFLOATLIST_VIS( 28, "@MENU_NORMAL_MAP_RESOLUTION", ui_r_picmip_bump, { "@MENU_LOW" 3 "@MENU_NORMAL" 2 "@MENU_HIGH" 1 "@MENU_EXTRA" 0 }, setLocalVarBool ui_showApply 1, when( dvarint( ui_r_picmip_manual ) ) )
+		CHOICE_DVARFLOATLIST_VIS( 29, "@MENU_SPECULAR_MAP_RESOLUTION", ui_r_picmip_spec, { "@MENU_LOW" 3 "@MENU_NORMAL" 2 "@MENU_HIGH" 1 "@MENU_EXTRA" 0 }, setLocalVarBool ui_showApply 1, when( dvarint( ui_r_picmip_manual ) ) )
 
-		CHOICE_DVARFLOATLIST_VIS( 24, "@REMASTERED_LOD", lod_bias_enable, { "@REMASTERED_DETAIL" 0 "@REMASTERED_LOW_DETAIL" 1 }, ;, when( !INGAME ) ) // Increases LOD bias for detailed models, on by default, requires reset so only accessible on main menu
-		CHOICE_DDVARALTTEXT_VIS( 24, "@REMASTERED_LOD", "@REMASTERED_DETAIL", when( INGAME && dvarString( "lod_bias_enable") == "0" ) )
-		CHOICE_DDVARALTTEXT_VIS( 24, "@REMASTERED_LOD", "@REMASTERED_LOW_DETAIL", when( INGAME && dvarString( "lod_bias_enable") == "1" ) )
+		//when on menu, we are just changing the dummy var because our client script will set the actual 2 dvars
+		CHOICE_DVARFLOATLIST_VIS( 24, "@REMASTERED_LOD_RIGID", r_lodBiasRigid_settings, { "@REMASTERED_HIGH" -200 "@REMASTERED_DEFAULT" 0 }, ; , when( !dvarint(cl_ingame) ) ) // Increases LOD bias for detailed models
+		CHOICE_DVARFLOATLIST_VIS( 25, "@REMASTERED_LOD_SKINNED", r_lodBiasSkinned_settings, { "@REMASTERED_HIGH" -200 "@REMASTERED_DEFAULT" 0 }, ; , when( !dvarint(cl_ingame) ) ) // Increases LOD bias for detailed models
+
+		//however, when we are in game we will edit the actual settings
+		CHOICE_DVARFLOATLIST_VIS( 24, "@REMASTERED_LOD_RIGID", r_lodBiasRigid, { "@REMASTERED_HIGH" -200 "@REMASTERED_DEFAULT" 0 }, exec "setfromdvar r_lodBiasRigid_settings r_lodBiasRigid" , when( dvarint(cl_ingame) ) ) 
+		CHOICE_DVARFLOATLIST_VIS( 25, "@REMASTERED_LOD_SKINNED", r_lodBiasSkinned, { "@REMASTERED_HIGH" -200 "@REMASTERED_DEFAULT" 0 }, exec "setfromdvar r_lodBiasSkinned_settings r_lodBiasSkinned" , when( dvarint(cl_ingame) ) ) 
+
+		//CHOICE_DDVARALTTEXT_VIS( 24, "@REMASTERED_LOD", "@REMASTERED_DETAIL", when( INGAME && dvarString( "lod_bias_enable") == "0" ) )
+		//CHOICE_DDVARALTTEXT_VIS( 24, "@REMASTERED_LOD", "@REMASTERED_LOW_DETAIL", when( INGAME && dvarString( "lod_bias_enable") == "1" ) )
 
 		itemDef 
 		{

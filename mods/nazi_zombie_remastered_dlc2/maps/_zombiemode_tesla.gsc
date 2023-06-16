@@ -136,6 +136,11 @@ tesla_arc_damage( source_enemy, player, arc_num )
 			
 	for( i = 0; i < enemies.size; i++ )
 	{
+		if( enemies[i] == self )
+		{
+			continue;
+		}
+
 		if ( tesla_end_arc_damage( arc_num + 1, player.tesla_enemies_hit ) )
 		{			
 			tesla_flag_hit( enemies[i], false );
@@ -196,6 +201,11 @@ tesla_get_enemies_in_area( origin, distance, player )
 	{
 		for ( i = 0; i < zombies.size; i++ )
 		{
+	        if ( !IsDefined( zombies[i] ) )
+	        {
+	                continue;
+	        }
+
 			test_origin = zombies[i] GetTagOrigin( "j_head" );
 
 			if ( IsDefined( zombies[i].zombie_tesla_hit ) && zombies[i].zombie_tesla_hit == true )
@@ -304,7 +314,7 @@ tesla_do_damage( source_enemy, arc_num, player )
 	
 	// use the origin of the arc orginator so it pics the correct death direction anim
 	origin = source_enemy.origin;
-	if ( source_enemy == self )
+	if ( source_enemy == self || !IsDefined( origin ) )
 	{
 		origin = player.origin;
 	}
@@ -412,8 +422,15 @@ tesla_play_arc_fx( target )
 		tag = "J_Spine1";
 	}
 	
+	target_tag = "J_SpineUpper";
+
+	if ( target enemy_is_dog() )
+	{
+		target_tag = "J_Spine1";
+	}
+	
 	origin = self GetTagOrigin( tag );
-	target_origin = target GetTagOrigin( tag );
+	target_origin = target GetTagOrigin( target_tag );
 	distance_squared = level.zombie_vars["tesla_min_fx_distance"] * level.zombie_vars["tesla_min_fx_distance"];
 
 	if ( DistanceSquared( origin, target_origin ) < distance_squared )
@@ -577,10 +594,6 @@ tesla_pvp_thread()
 			if(self hasperk("specialty_armorvest") )
 			{
 				self.maxhealth = 250;
-/*				if(getDvarInt("classic_perks") == 1)
-				{
-					self.maxhealth = 160;
-				}*/
 			}
 			else
 			{

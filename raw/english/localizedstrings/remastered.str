@@ -30,52 +30,52 @@ REFERENCE           GERMAN_HERO_DESC
 LANG_ENGLISH        ""Beware The Doc." A message that was scrawled across walls of every town under Axis control. Starvation may cripple you, dysentery may wreck you, and gunfire may rip the flesh from your bones, but "Beware The Doc." \n...\nThis is Dr. Richtofen, known affectionately as "The Butcher" to his victims as they scream in agony moments before he snuffs out their light. All through his career, Richtofen has been at the forefront of torture and information extraction research. Richtofen is an incurable sociopath and sees no moral distinction between natural death and murder; the victim is the victim, regardless of how their demise manifests itself. \n...\nDr. Richtofen has a collection of stuffed animals, most of them posed in positions of terror at the instant of their death. \n"
 
 REFERENCE           CHAR_ONE_NAME
-LANG_ENGLISH        "Unknown Identity"
+LANG_ENGLISH        "Unknown"
 
 REFERENCE           CHAR_ONE_DESC
-LANG_ENGLISH        "Killed in action. \n...\nRANK: Private First Class\nCOLOR HAIR: Brown\nCOLOR EYES: Green\nWEIGHT: 145\nHEIGHT: 5'8\nAGE: Low-20s \n...\nUnfinished letter, found in uniform pocket.\n "Good evening, sweetie, it has been a while. I have a couple big plans for the coming months together that I cannot wait to tell you about when I get home. I got my last box of junk sent off to you today. Included in this one are a couple souvenirs from Bielefeld. We are becoming very hot...Rumor has it that we will be leaving in a day or so for the staging area near Le Havre, which we should not be at for over three or four days before catching the ol' boat for home. Anyways, I love you---get set, because here I come."\n"
+LANG_ENGLISH        "Officially declared "killed in action" from plane crash, body not recovered. \n...\nRANK: Private First Class\nCOLOR HAIR: Brown\nCOLOR EYES: Green\nWEIGHT: 145\nHEIGHT: 5'8\nAGE: Low-20s \n...\nUnfinished letter, found in uniform pocket.\n "Good evening, sweetie, it has been a while. I have a couple big plans for the coming months together that I cannot wait to tell you about when I get home. I got my last box of junk sent off to you today. Included in this one are a couple souvenirs from Bielefeld. We are becoming very hot...Rumor has it that we will be leaving in a day or so for the staging area near Le Havre, which we should not be at for over three or four days before catching the ol' boat for home. Anyways, I love you---get set, because here I come."\n"
 
 REFERENCE           CHAR_TWO_NAME
-LANG_ENGLISH        "Unknown Identity"
+LANG_ENGLISH        "Unknown"
 
 REFERENCE           CHAR_TWO_DESC
-LANG_ENGLISH        "Killed in action. \n...\nRANK: Private First Class\nCOLOR HAIR: Blond\nCOLOR EYES: Blue\nWEIGHT: 175\nHEIGHT: 5'10\nAGE: Low-20s \n...\nBelieved to have previously served in a Marine Raider battalion. Likely transferred to Britain for S.O. duties after Raider units were disbanded.\n"
+LANG_ENGLISH        "Officially declared "killed in action" from plane crash, body not recovered. \n...\nRANK: Private First Class\nCOLOR HAIR: Blond\nCOLOR EYES: Blue\nWEIGHT: 175\nHEIGHT: 5'10\nAGE: Low-20s \n...\nBelieved to have previously served in a Marine Raider battalion. Likely transferred to Britain for S.O. duties after Raider units were disbanded.\n"
 
 REFERENCE           CHAR_THREE_NAME
 LANG_ENGLISH        "Jesse"
 
 REFERENCE           CHAR_THREE_DESC
-LANG_ENGLISH        "Killed in action. \n...\nRANK: Corporal\nCOLOR HAIR: Brown\nCOLOR EYES: Brown\nWEIGHT: 150\nHEIGHT: 5'9\nAGE: Mid-20s \n...\nMedical notes record, found in uniform pocket.\nComplaint: "Hearing sounds and voices."\nDoctor Remarks: "Likely experiencing mild combat fatigue. All vitals clear."\nRet'd to duty: May 10th \n"
+LANG_ENGLISH        "Officially declared "killed in action" from plane crash, body not recovered. \n...\nRANK: Corporal\nCOLOR HAIR: Brown\nCOLOR EYES: Brown\nWEIGHT: 150\nHEIGHT: 5'9\nAGE: Mid-20s \n...\nMedical notes record, found in uniform pocket.\nComplaint: "Hearing sounds and voices."\nDoctor Remarks: "Likely experiencing mild combat fatigue. All vitals clear."\nRet'd to duty: May 10th \n"
 
 REFERENCE           CHAR_FOUR_NAME
 LANG_ENGLISH        "Sarge"
 
 REFERENCE           CHAR_FOUR_DESC
-LANG_ENGLISH        "Killed in action. \n...\nRANK: Sergeant\nCOLOR HAIR: Brown\nCOLOR EYES: Blue\nWEIGHT: 190\nHEIGHT: 6'0\nAGE: Mid-30s \n...\n Last contact on June 3rd 1945. Believed to have been assigned with guarding the transportation of cargo loaded into the bomb bay of a B-17. While in flight, the plane plummeted and crashed, cause unknown. Entire aft-waist section behind wings towards the empennage was completely torn off, whereabouts unknown. No known survivors. \n"
+LANG_ENGLISH        "Officially declared "killed in action" from plane crash, body not recovered. \n...\nRANK: Sergeant\nCOLOR HAIR: Brown\nCOLOR EYES: Blue\nWEIGHT: 190\nHEIGHT: 6'0\nAGE: Mid-30s \n...\n Last contact on June 3rd, 1945. Believed to have been assigned with guarding cargo loaded into the bomb bay of a B-17. While in flight, the plane plummeted and crashed. Cause unknown. Entire aft-waist section behind wings towards the empennage was completely torn off. No known survivors. \n"
 
 REFERENCE           CHAR_ONE_NAME_ASY
 LANG_ENGLISH        "John "Banana""
 
 REFERENCE           CHAR_ONE_DESC_ASY
-LANG_ENGLISH        "Missing in action. \n...\nUNKNOWN \nJOHN \n401547      \nTYPE O \nT2/42 \nUSMCR \n...\n4-man Marine fire team assigned with rescuing and extracting captured OSS operative. \n"
+LANG_ENGLISH        "Missing in action. \n...\nJOHN \n401547      \nTYPE O \nT2/42 \nUSMCR \n...\nPart of 4-man Marine fire team assigned with aiding the rescue and extraction of a captured OSS operative. \n"
 
 REFERENCE           CHAR_TWO_NAME_ASY
 LANG_ENGLISH        ""Smokey""
 
 REFERENCE           CHAR_TWO_DESC_ASY
-LANG_ENGLISH        "Missing in action. \n...\nNAME REDACTED\n \n410386    C \nTYPE A \nT. 1/43 \nUSMCR \n...\n4-man Marine fire team assigned with rescuing and extracting captured OSS operative. \n"
+LANG_ENGLISH        "Missing in action. \n...\nNAME REDACTED\n \n410386    C \nTYPE A \nT. 1/43 \nUSMCR \n...\nPart of 4-man Marine fire team assigned with aiding the rescue and extraction of a captured OSS operative. \n"
 
 REFERENCE           CHAR_THREE_NAME_ASY
-LANG_ENGLISH        "Marine #3"
+LANG_ENGLISH        ""Corporal""
 
 REFERENCE           CHAR_THREE_DESC_ASY
-LANG_ENGLISH        "Missing in action. \n...\nNAME REDACTED\n \n400628    P \nTYPE AB \nT1/42 \nUSMCR \n...\nSquad leader assigned with directing his team in/out of the Wittenau Sanatorium facility and confirming identity of captive. \n"
+LANG_ENGLISH        "Missing in action. \n...\nNAME REDACTED\n \n400628    P \nTYPE AB \nT1/42 \nUSMCR \n...\nSquad leader assigned with directing his team in/out of the Wittenau Sanatorium facility, confirming identity of captive, and retrieving captive by any means necessary. Use of deadly force was authorized. \n"
 
 REFERENCE           CHAR_FOUR_NAME_ASY
 LANG_ENGLISH        "Paxton "Gunner" Ridge"
 
 REFERENCE           CHAR_FOUR_DESC_ASY
-LANG_ENGLISH        "Missing in action. \n...\nRIDGE \nPAXTON \n310574    P \nTYPE-A- \nT10/41 \nUSMC \n...\n4-man Marine fire team assigned with rescuing and extracting captured OSS operative. \n"
+LANG_ENGLISH        "Missing in action. \n...\nRIDGE \nPAXTON \n310574    P \nTYPE-A- \nT10/41 \nUSMC \n...\nPart of 4-man Marine fire team assigned with aiding the rescue and extraction of a captured OSS operative. \nHZFSBTHIHUKVULKWLALYUVAMVBUKOVZAPSLZHWWYV\nHJOPUNZTVRLFVBAVMHTTVZTVRLFABYULKOLNVAIHU\nHUHSVZAALHTMHJPSPAFVCLYYBULZJHWPUNVUMVVA \n"
 
 REFERENCE           CHAR_DIALOGUE
 LANG_ENGLISH        "Character Dialogue"
@@ -124,6 +124,9 @@ LANG_ENGLISH        "Enemy Pushing"
 
 REFERENCE           LAST_STAND
 LANG_ENGLISH        "Last Stand"
+
+REFERENCE           HUD
+LANG_ENGLISH        "HUD"
 
 REFERENCE           CROSSHAIR
 LANG_ENGLISH        "Crosshair"
@@ -185,29 +188,53 @@ LANG_ENGLISH        "10 (Insane)"
 REFERENCE           SUPER_SPRINTERS
 LANG_ENGLISH        "Enemy Intensity"
 
-REFERENCE           LOD
-LANG_ENGLISH        "LOD Range"
+REFERENCE           LOD_RIGID
+LANG_ENGLISH        "LOD Range (Rigid)"
 
-REFERENCE           DETAIL
-LANG_ENGLISH        "High"
+REFERENCE           LOD_SKINNED
+LANG_ENGLISH        "LOD Range (Skinned)"
 
-REFERENCE           LOW_DETAIL
-LANG_ENGLISH        "Normal"
-
-REFERENCE           CONTROLLER_ENABLE
-LANG_ENGLISH        "Enable"
+REFERENCE           DEFAULT
+LANG_ENGLISH        "Default"
 
 REFERENCE           CONTROLLER_SUPPORT
-LANG_ENGLISH        "Controller Support"
-
-REFERENCE           CONTROLLER_EXECUTED
-LANG_ENGLISH        "Enabled"
+LANG_ENGLISH        "Controller Mode"
 
 REFERENCE           CONTROLLER_V1
-LANG_ENGLISH        "To enable or reset controller bindings, click the above setting."
+LANG_ENGLISH        "Binds controller and switches to console style HUD buttons."
 
 REFERENCE           CONTROLLER_V2
-LANG_ENGLISH        "Controller script executed. \nWarning: Only Xbox controllers have native support."
+LANG_ENGLISH        "Controller script executed. \nHUD using D-pad arrows and ^4X^7 on hints. \nWarning: Only Xbox controllers have native support."
+
+REFERENCE           CONTROLLER_V2_PS3
+LANG_ENGLISH        "Controller script executed. \nHUD using D-pad arrows and ^1@^7 on hints. \nWarning: PlayStation controllers require external software."
+
+REFERENCE           HINT_GAMETYPE
+LANG_ENGLISH        "Adjusts the flow of zombie waves. Classic mode reverts back to the 24 per-round limit in solo and removes Carpenter power-ups."
+
+REFERENCE           HINT_GAMETYPE_ALT
+LANG_ENGLISH        "Adjusts the flow of zombie waves. Classic mode removes Carpenter power-ups."
+
+REFERENCE           HINT_LASTSTAND
+LANG_ENGLISH        "Adjusts the balance of last stand. Classic mode reverts back to 30-second bleedouts and disables solo Quick Revive lives for a more challenging experience."
+
+REFERENCE           HINT_LASTSTAND_ALT
+LANG_ENGLISH        "Adjusts the balance of last stand. Classic mode reverts back to 30-second bleedouts for a more challenging experience."
+
+REFERENCE           HINT_PUSHING
+LANG_ENGLISH        "Adjusts the zombie "grabbing" effect. Classic mode makes zombies more dangerous as they can stick to you like the original release."
+
+REFERENCE           HINT_SPRINTERS
+LANG_ENGLISH        "Adjusts the intensity of zombie waves. Classic mode removes any newly added super-sprinter variations for an experience closer to the original release."
+
+REFERENCE           CLEARANCE
+LANG_ENGLISH        "Clearance Code:"
+
+REFERENCE           ACC1
+LANG_ENGLISH        "Select Access Granted"
+
+REFERENCE           ACC2
+LANG_ENGLISH        "Full Access Granted"
 
 REFERENCE           ZOMBIE_SURVIVOR
 LANG_ENGLISH        "Soul Survivor"
@@ -305,6 +332,9 @@ LANG_ENGLISH        "Locksmith"
 REFERENCE           ZOMBIE_FAST_LINK
 LANG_ENGLISH        "Der Electrician"
 
+REFERENCE           ZOMBIE_EE_FACTORY
+LANG_ENGLISH        "Industrial Extraordinaire"
+
 REFERENCE           ZOMBIE_PAP_ONCE_DESC
 LANG_ENGLISH        "Upgrade a weapon using the Pack-a-Punch Machine."
 
@@ -335,8 +365,26 @@ LANG_ENGLISH        "Open all the doors in the map."
 REFERENCE           ZOMBIE_FAST_LINK_DESC
 LANG_ENGLISH        "Link all the teleport pads before Round 8."
 
+REFERENCE           ZOMBIE_EE_FACTORY_DESC
+LANG_ENGLISH        "Restore facility operations after starting the plan."
+
 REFERENCE           DESC
 LANG_ENGLISH        "Achievement Description:"
+
+REFERENCE           ITEM
+LANG_ENGLISH        "Item"
+
+REFERENCE           SCORE
+LANG_ENGLISH        "Scoreboard"
+
+REFERENCE           CHANGE_STANCE
+LANG_ENGLISH        "Change Stance"
+
+REFERENCE           8X
+LANG_ENGLISH        "8x"
+
+REFERENCE           16X
+LANG_ENGLISH        "16x"
 
 
 ENDMARKER

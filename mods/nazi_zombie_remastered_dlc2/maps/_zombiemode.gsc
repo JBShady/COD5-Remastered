@@ -94,30 +94,6 @@ main()
 
 	players = get_players();
 
-    if( getDvar( "classic_zombies" ) == "" )
-    setDvar( "classic_zombies", 0 );
-	
-	if(players.size != 1)
-	{
-	setDvar( "classic_zombies", 0);
-	self SetClientDvar("classic_zombies", 0);
-	}
-
-    if( getDvar( "lod_bias_enable" ) == "" )
-    setDvar( "lod_bias_enable", 0 );
-
-    if( getDvar( "grabby_zombies" ) == "" )
-    setDvar( "grabby_zombies", 0 );
-
-    if( getDvar( "health_hud" ) == "" )
-    setDvar( "health_hud", 0 );
-
-    if( getDvar( "character_dialog" ) == "" )
-    setDvar( "character_dialog", 0 );
-
-    if( getDvar( "classic_perks" ) == "" )
-    setDvar( "classic_perks", 0 );
-
 	if( players.size == 1 && getdvarint("classic_perks") == 0 ) // Make sure classic perks are disabled, thus the new remastered solo revives will be enabled
 	{
 		level.solo_quick_revive = true;
@@ -141,7 +117,7 @@ main()
 	//level thread check_for_jugg_perk();
 
 	//chrisp - adding spawning vo 
-	level thread spawn_vo();
+	//level thread spawn_vo();
 	
 	//add ammo tracker for VO
 	level thread track_players_ammo_count();
@@ -779,7 +755,7 @@ init_anims()
 		level.scr_anim["zombie"]["run8"] 	= %ai_zombie_jap_run_v2;
 		level.scr_anim["zombie"]["run9"] 	= %ai_zombie_jap_run_v1;
 		level.scr_anim["zombie"]["run10"] 	= %ai_zombie_jap_run_v2;
-		level.scr_anim["zombie"]["run11"] 	= %ai_zombie_jap_run_v5;
+		level.scr_anim["zombie"]["run11"] 	= %ai_zombie_jap_run_v6;
 		//new one ^ diluted with repeat of normal anims, rare
 
 		level.scr_anim["zombie"]["walk5"] 	= %ai_zombie_jap_walk_v1;
@@ -792,7 +768,7 @@ init_anims()
 		level.scr_anim["zombie"]["sprint4"] = %ai_zombie_jap_run_v3;
 		level.scr_anim["zombie"]["sprint5"] = %ai_zombie_sprint_v1;
 		level.scr_anim["zombie"]["sprint6"] = %ai_zombie_sprint_v2;
-		level.scr_anim["zombie"]["sprint7"] = %ai_zombie_jap_run_v6;
+		level.scr_anim["zombie"]["sprint7"] = %ai_zombie_jap_run_v5; // swapped 5 and 6. 5 is actually faster, so it should be under the sprint category
 		//new one ^ diluted with a repeat of normal anims, rare
 
 
@@ -1008,8 +984,10 @@ onPlayerConnect()
 		player thread onPlayerSpawned(); 
 		player thread onPlayerDisconnect(); 
 		player thread player_revive_monitor();
-
 		player thread watchGrenadeThrow();
+
+		player thread maps\nazi_zombie_sumpf_bouncing_betties::bouncing_betty_watch(); 
+		player thread maps\nazi_zombie_sumpf_bouncing_betties::betty_no_weapons(); 
 
 		player thread wait_for_sticky_fired(); 
 
@@ -1040,55 +1018,27 @@ onPlayerConnect_clientDvars()
 		"ui_hud_hardcore", "0",
 		"player_backSpeedScale", "0.9",
 		"player_strafeSpeedScale", "0.9",
-		"player_sprintStrafeSpeedScale", "0.8",
-		"player_deathInvulnerableTime", "1000", // coop invulnerable time
-		"player_deathInvulnerableToProjectile", "0",
-		"player_deathInvulnerableToMelee", "0",
-		"aim_automelee_range", "96",
+		"player_sprintStrafeSpeedScale", "0.8" );
 
+	self SetClientDvars(
+		"aim_automelee_range", "96",
         "aim_automelee_lerp", "50",
         "aim_automelee_region_height", "240",
         "aim_automelee_region_width", "320",
         "player_meleechargefriction", "2500"); 
     
-    if( getDvar( "lod_bias_enable" ) != "1" ) // if its set to 0, or if its not been set by player at all, auto enable higher detail
-    {
-		self SetClientDvars( "lod_bias_enable", 0 );
-		self setclientdvar("r_lodBiasRigid", -200);
-		self setclientdvar("r_lodBiasSkinned", -200);
-	}
-	else if( getDvar( "lod_bias_enable" ) == "1" )
+	self SetClientDvars(
+		"cg_overheadIconsize", "0",
+        "cg_overheadRanksize", "0"); 
+
+	if( getDvar( "classic_perks" ) == "" || getDvar("classic_perks") == "0" ) // if dvar doesn't exist or is disabled, we stay default
 	{
-		self SetClientDvars( "lod_bias_enable", 1 ); // disables LOD bias effects
-	}
-
-    if( getDvar( "grabby_zombies" ) != "1" )
-    {
-  		self SetClientDvars( "grabby_zombies", 0 );
-	}
-	else if( getDvar( "grabby_zombies" ) == "1" )
-    {
-    	self SetClientDvars( "grabby_zombies", 1 );
-	}
-
-    if( getDvar( "character_dialog" ) != "1" )
-    {
-    	self SetClientDvars( "character_dialog", 0 );
-	}
-	else if( getDvar( "character_dialog" ) == "1" )
-    {
-    	self SetClientDvars( "character_dialog", 1 );
-	}
-
-	if( getDvar( "classic_perks" ) != "1" )
-	{
-		self SetClientDvars( "classic_perks", 0 );
+		//self SetClientDvars( "classic_perks", 0 );
 		self setclientdvar("player_lastStandBleedoutTime", 45);
 	}
-	
-	if( getDvar( "classic_perks" ) == "1" )
+	else if( getDvar( "classic_perks" ) == "1" )
 	{
-		self SetClientDvars( "classic_perks", 1 );
+		//self SetClientDvars( "classic_perks", 1 );
 		self setclientdvar("player_lastStandBleedoutTime", 30);
 	}
 
@@ -1096,16 +1046,6 @@ onPlayerConnect_clientDvars()
 
 }
 
-getName()
-{
-	name = self.playername;
-	if(name[0] != "[")
-		return name;
-	for(m = name.size-1; m >= 0; m--)
-		if(name[m] == "]")
-			break;
-	return(getSubStr(name, m+1));
-}
 
 onPlayerDisconnect()
 {
@@ -1129,6 +1069,10 @@ onPlayerSpawned()
 			self SetClientDvar( "cg_ScoresColor_Gamertag_3" , GetDvar( "cg_ScoresColor_Gamertag_3") );
 			level.solo_egg = 0;
 		}
+		self SetClientDvars(
+			"cg_overheadIconsize", "0",
+	        "cg_overheadRanksize", "0"); 
+		
 		self.can_solo_revive = false;
 
 		self SetClientDvars( "cg_thirdPerson", "0",
@@ -1151,22 +1095,17 @@ onPlayerSpawned()
 				self thread player_zombie_breadcrumb();
 				self thread player_reload();
 				self SetClientDvars(
+				"player_backSpeedScale", "0.9",
+				"player_strafeSpeedScale", "0.9",
+				"player_sprintStrafeSpeedScale", "0.8",
+
 				"aim_automelee_range", "96",
-				"player_deathInvulnerableTime", "1000",
-				"player_deathInvulnerableToProjectile", "0",
-				"player_deathInvulnerableToMelee", "0",
 		        "aim_automelee_lerp", "50",
 		        "aim_automelee_region_height", "240",
 		        "aim_automelee_region_width", "320",
 		        "player_meleechargefriction", "2500" );
-		        
-				if( getDvar( "lod_bias_enable" ) == "0" )
-				{
-					self setclientdvar("r_lodBiasRigid", -200);
-					self setclientdvar("r_lodBiasSkinned", -200);
-				}
-
-				if( getDvar( "classic_perks" ) == "0" )
+		     
+				if( getDvar( "classic_perks" ) == "" || getDvar("classic_perks") == "0" ) // if dvar doesn't exist or is disabled, we stay default
 				{
 					self setclientdvar("player_lastStandBleedoutTime", 45);
 				}
@@ -1174,17 +1113,6 @@ onPlayerSpawned()
 				{
 					self setclientdvar("player_lastStandBleedoutTime", 30);
 				}
-/*				self.my_name = self GetName();
-				if(self.my_name == "PaxtonRidge")
-				{
-				self iprintlnbold("Camera Mode Enabled");
-			    //self thread noclip();
-			    self TakeAllWeapons();
-				self SetClientDvar( "cg_draw2d" , 0 );
-
-				//self.sessionstate = "spectator";
-				self.ignoreme = true;
-				}*/
 
 				//Init stat tracking variables
 				self.stats["kills"] = 0;
@@ -1246,6 +1174,8 @@ spawnSpectator()
 	self endon( "spawned_spectator" ); 
 	self notify( "spawned" ); 
 	self notify( "end_respawn" );
+
+	setClientSysState( "levelNotify", "fov_death", self );
 
 	if( level.intermission )
 	{
@@ -1342,9 +1272,10 @@ spectator_toggle_3rd_person()
 	self endon( "spawned_player" ); // If a player respawns
 	level endon( "intermission" ); // Game over, if all players die
 
+	wait(0.05); // ensure that we save our fov before we mess with it below
 	// We start by setting up everything for 3rd person, only below do we start the toggling if a player so chooses
 	third_person = true;
-	self SetClientDvars( "cg_thirdPerson", "1",	"cg_thirdPersonAngle", "354" );
+	self SetClientDvars( "cg_thirdPerson", "1",	"cg_thirdPersonAngle", "354", "cg_fov", "40" );
 	self setDepthOfField( 0, 128, 512, 4000, 6, 1.8 );
 
 	self.viewChangeSpec = newClientHudElem( self );
@@ -1363,50 +1294,55 @@ spectator_toggle_3rd_person()
 
 	self thread reset_spec_hud();
 
-	while( 1 )
-	{
-		if(self useButtonPressed()) 
+    while(1)
+    {
+		countdown_time = 0.25;
+		for(;;)
 		{
-			initial_hold_time = 0.25; 
-			countdown_time = initial_hold_time;
-			for(;;)
-			{
-			    wait(0.05);
-			    if ( self UseButtonPressed() )
-			    {
-			        countdown_time -= 0.05;
-			        if ( countdown_time <= 0 ) break;
-			    }
-			    else if ( countdown_time != initial_hold_time )  
-			        countdown_time = initial_hold_time;
-			}
-
-			if( third_person )
-			{
-				third_person = false;
-				self SetClientDvars( "cg_thirdPerson", "1",	"cg_thirdPersonAngle", "354" );
-				self setDepthOfField( 0, 128, 512, 4000, 6, 1.8 );
-				self.viewChangeSpec SetText( &"REMASTERED_ZOMBIE_ENTER_FIRST_PERSON" );
-				wait(0.5);
-			}
-			else
-			{
-				third_person = true;
-				self SetClientDvars( "cg_thirdPerson", "0", "cg_thirdPersonAngle", "0" );
-				self setDepthOfField( 0, 0, 512, 4000, 4, 0 );
-				self.viewChangeSpec SetText( &"REMASTERED_ZOMBIE_ENTER_THIRD_PERSON" );
-				wait(0.5);
-			}
+		    wait(0.05);
+			if ( self meleeButtonPressed() )
+		    {
+		        countdown_time -= 0.05;
+		        if ( countdown_time <= 0 ) break;
+		    }
+		    else if ( countdown_time != 0.25 )  
+		        countdown_time = 0.25;
 		}
-		wait(0.05);
-	}
-	// move a lil more centered with other text in 1920 x 1080 res
+
+    	third_person = !third_person;
+        self set_third_person(third_person);
+
+		wait(0.5);
+    }
 	// destroy hud when respawn and if last person dies
+}
+
+set_third_person( value )
+{
+	if( value )
+	{
+		self SetClientDvars( "cg_thirdPerson", "1", "cg_thirdPersonAngle", "354", "cg_fov", "40" );
+		
+		self.viewChangeSpec SetText( &"REMASTERED_ZOMBIE_ENTER_FIRST_PERSON" );
+
+		self setDepthOfField( 0, 128, 512, 4000, 6, 1.8 );
+	}
+	else
+	{
+		self SetClientDvars( "cg_thirdPerson", "0", "cg_thirdPersonAngle", "0", "cg_fov", "65" );
+		
+		self.viewChangeSpec SetText( &"REMASTERED_ZOMBIE_ENTER_THIRD_PERSON" );
+
+		self setDepthOfField( 0, 0, 512, 4000, 4, 0 );
+	}
 }
 
 reset_spec_hud()
 {
-	self waittill( "spawned_player" );
+	self waittill_any( "spawned_player", "fix_your_fov" );
+	
+	setClientSysState( "levelNotify", "fov_reset", self );
+
 	self.viewChangeSpec destroy();
 	self.viewChangeSpec = undefined;
 }
@@ -1445,8 +1381,26 @@ spectators_respawn()
 				if( isDefined( players[i].has_special_weap ) && players[i].has_special_weap )
 				{
 					wait(0.1);
-					players[i] giveweapon( players[i].has_special_weap ); 
 					players[i] setactionslot(1,"weapon", players[i].has_special_weap ); 
+
+					if(players[i].has_special_weap == "zombie_item_journal")
+					{
+						if(level.intel_obtained < 3) // if journal we only give it back if we haven't completed the intel, but once we have 3 intel we don't need the actual wep
+						{
+							players[i] giveweapon( players[i].has_special_weap ); 
+						}
+					}
+					else if(players[i].has_special_weap == "zombie_item_radio")
+					{
+						if(	level.radio_finished == false ) // if radio step is not done we have to give back actual radio
+						{
+							players[i] giveweapon( players[i].has_special_weap ); 
+						}
+					}
+					else
+					{
+						players[i] giveweapon( players[i].has_special_weap ); 
+					}
 				}
 
 			}
@@ -1844,6 +1798,7 @@ round_start()
 	{
 		players[i] giveweapon( "stielhandgranate" );	
 		players[i] setweaponammoclip( "stielhandgranate", 0);
+		players[i] SetClientDvars( "ammoCounterHide", "0", "miniscoreboardhide", "0" );	 // fail safe incase our hud is still hidden
 	}
 
 	level.chalk_hud1 = create_chalk_hud( 2 );
@@ -1963,6 +1918,9 @@ chalk_one_up()
 	else if( level.round_number < 11 )
 	{
 		hud = level.chalk_hud2;
+
+      	if(level.round_number == 6)
+        	hud.color = (1, 1, 1);
 	}
 
 	if( intro )
@@ -1986,7 +1944,7 @@ chalk_one_up()
 
 	//	play_sound_at_pos( "chalk_one_up", ( 0, 0, 0 ) );
 
-	if(IsDefined(level.eggs) && level.eggs !=1 )
+	if(IsDefined(level.eggs) && level.eggs != 1 && level.intermission == false )
 	{
 		if(level.doground_nomusic ==0 )
 		{
@@ -2069,22 +2027,25 @@ chalk_round_hint()
 		huds[i] FadeOverTime( time * 0.25 );
 		huds[i].color = ( 1, 1, 1 );
 	}
-	if(IsDefined(level.eggs) && level.eggs !=1)
+	if(IsDefined(level.eggs) && level.eggs != 1 && level.intermission == false)
 	{
-		if(IsDefined(level.doground_nomusic  && level.doground_nomusic == 0 ))
+		if(IsDefined(level.doground_nomusic && level.doground_nomusic == 0 ))
 		{
 			setmusicstate("round_end");
-			wait( time * 0.25 );
 		}
 		else if(IsDefined(level.doground_nomusic  && level.doground_nomusic == 1 ))
 		{
 			play_sound_2D( "bright_sting" );
-				
 		}
+	}
+
+	if(IsDefined(level.doground_nomusic && level.doground_nomusic == 0 ))
+	{
+		wait( time * 0.25 );
 	}
 	//	play_sound_at_pos( "end_of_round", ( 0, 0, 0 ) );
 
-
+ 	prev_round = level.round_number;
 
 	// Pulse
 	fade_time = 0.5;
@@ -2103,6 +2064,16 @@ chalk_round_hint()
 		}
 
 		wait( fade_time );
+
+        if(prev_round < level.round_number)
+        {
+            chalk_one_up();
+            prev_round = level.round_number;
+            
+            // Makes the second chalk HUD on round 6 flash white too when it first appears (looks nicer) - Feli
+            if(level.round_number == 6 && huds.size == 1 && IsDefined(level.chalk_hud2))
+                huds[huds.size] = level.chalk_hud2;
+        }
 
 		for( i = 0; i < huds.size; i++ )
 		{
@@ -2666,12 +2637,16 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 			iprintlnbold(idamage);
 	}*/
 	
-	if( sMeansOfDeath == "MOD_FALLING" )
+	if( sMeansOfDeath == "MOD_FALLING" && (iDamage > self.maxhealth * 0.30) ) // only do shellshock on fall damage if damage is greater than 30% of health (if we have jug then basically we never get that then)
 	{
+		self stopShellshock();
+
 		sMeansOfDeath = "MOD_EXPLOSIVE";
 	}
-
-	//self iprintlnbold(sMeansOfDeath);
+	else if( sMeansOfDeath == "MOD_FALLING" || sMeansOfDeath == "MOD_HIT_BY_OBJECT" || sMeansOfDeath == "MOD_CRUSH" || sMeansOfDeath == "MOD_DROWN" ) // patch co-op restart from peter
+	{
+		sMeansOfDeath = "MOD_RIFLE_BULLET";
+	}
 
 	if( isDefined( eAttacker ) )
 	{
@@ -2698,12 +2673,10 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 	}
 	finalDamage = iDamage;
 
-
 	if (sMeansOfDeath == "MOD_GRENADE_SPLASH" || sMeansOfDeath == "MOD_GRENADE")  // For all grenade explosive damage. Molotovs, M1 Launcher, Frags, and anything else
 	{
 		if( self.health > 75 )
 		{
-
 			if(isSubStr(sWeapon, "molotov") )
 			{
 				finalDamage = radiusDamage(eInflictor.origin, 200,120,50, eAttacker); 
@@ -2730,7 +2703,6 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 	{
 		if( self.health > 75 )
 		{
-
 			if(isSubStr(sWeapon, "panzer") || isSubStr(sWeapon, "bazooka"))
 			{
 				finalDamage = radiusDamage(eInflictor.origin, 256,125,50, eAttacker);
@@ -2741,11 +2713,14 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 			}
 			else if(isSubStr(sWeapon, "tesla_gun") ) 
 			{
-				finalDamage = 90;	
-			}
-			else if(isSubStr(sWeapon, "colt_upgraded") || isSubStr(sWeapon, "tokarev_upgraded") || isSubStr(sWeapon, "nambu_upgraded") || isSubStr(sWeapon, "walther_upgraded") )
-			{
-				finalDamage = radiusDamage(eInflictor.origin, 200,115,50, eAttacker);
+				if(self.health > 90 )
+				{
+					finalDamage = 90;	
+				}
+				else
+				{
+					finalDamage = 75;
+				}
 			}
 			else // For anything else, do Vanilla damage
 			{
@@ -2789,6 +2764,8 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 	{
 		if( self HasPerk( "specialty_quickrevive" ) )
 		{
+			self UnsetPerk( "specialty_quickrevive" );
+
 			self.can_solo_revive = true;
 			self thread maps\_laststand::PlayerLastStand( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime );
 		
@@ -2832,81 +2809,6 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 		self maps\_callbackglobal::finishPlayerDamageWrapper( eInflictor, eAttacker, finalDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, modelIndex, psOffsetTime ); 
 	}
 }
-
-/*
-player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, modelIndex, psOffsetTime )
-{
-
-
-	if( iDamage < self.health )
-	{
-		if ( IsDefined( eAttacker ) )
-		{
-			eAttacker.sound_damage_player = self;
-
-
-			if( level.player_is_speaking != 1 )
-			{
-				soundnum = maps\_zombiemode_weapons::get_player_index(self);
-				ran = randomintrange(0, 11);
-				self playsound( "plr_" + soundnum + "_vox_gen_pain_" + ran );
-			}
-		}
-		
-		//iprintlnbold(iDamage);
-		return;
-	}
-	if( level.intermission )
-	{
-		level waittill( "forever" );
-	}
-
-	players = get_players();
-	count = 0;
-	for( i = 0; i < players.size; i++ )
-	{
-		if( players[i] == self || players[i].is_zombie || players[i] maps\_laststand::player_is_in_laststand() || players[i].sessionstate == "spectator" )
-		{
-			count++;
-		}
-	}
-
-// SOLO REVIVE
-	if( players.size == 1 )
-	{
-		if( self HasPerk( "specialty_quickrevive" ) )
-		{
-			self.can_solo_revive = true;
-			self thread maps\_laststand::PlayerLastStand( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime );
-			//self thread maps\_zombiemode_perks::say_down_vo();
-			thread maps\_zombie_poi::init();
-			wait(10.5);
-			//GAY 2
-			self thread maps\_zombiemode_perks::say_revived_vo();
-			return;
-		}
-		else
-		{
-			self.can_solo_revive = false;
-		}
-	}
-
-	if( count < players.size )
-	{
-		return;
-	}
-
-	self.intermission = true;
-
-	self thread maps\_laststand::PlayerLastStand( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime );
-	self player_fake_death();
-
-	if( count == players.size )
-	{
-		end_game();
-	}
-}
-*/
 
 end_game()
 {
@@ -2983,6 +2885,8 @@ end_game()
 	wait( 1 );
 	//play_sound_at_pos( "end_of_game", ( 0, 0, 0 ) );
 	wait( 2 );
+	level.player_is_speaking = 1;
+
 	intermission();
 
 	wait( level.zombie_vars["zombie_intermission_time"] );
@@ -2994,6 +2898,7 @@ end_game()
 	
 	if( is_coop() )
 	{
+		wait(4); // extra lil wait because sometimes co-op lobbies the intermission cuts off early since music can start a bit later
 		ExitLevel( false );
 	}
 	else
@@ -3058,7 +2963,10 @@ player_fake_death()
 		self giveweapon("falling_hands");
 		self SwitchToWeapon("falling_hands");
 	}
+
 	wait(1);
+	
+	self SetStance( "prone" );
 	self FreezeControls( true );
 }
 player_revived()
@@ -3538,7 +3446,8 @@ intermission()
 		setclientsysstate( "levelNotify", "zi", players[i] ); // Tell clientscripts we're in zombie intermission
 
 		players[i] SetClientDvars( "cg_thirdPerson", "0" );
-		
+		players[i] notify("fix_your_fov");
+
 		if(isDefined(players[i].viewChangeSpec) )
 		{
 			players[i].viewChangeSpec destroy();
@@ -3636,7 +3545,6 @@ player_intermission()
 	org = undefined;
 	while( 1 )
 	{
-		level.player_is_speaking = 1; // Make sure no one accidently talks during intermission
 		points = array_randomize( points );
 		for( i = 0; i < points.size; i++ )
 		{
@@ -3810,7 +3718,7 @@ player_reload()
 		ammo_count = self GetWeaponAmmoClip( weap ); // For weapon they are reloading, only shout reload if the mag is actually empty at 0
 		zombies = getaiarray("axis" );
 		zombies = get_array_of_closest( self.origin, zombies, undefined, undefined, 500 ); // Also, only shout reload when zombies are near, or else no reason to tell teammates
-		if( zombies.size > 0 && ammo_count == 0 && (weap == "zombie_mg42" || weap == "zombie_30cal" || weap == "zombie_type99_lmg" || weap == "zombie_dp28") ) 
+		if( zombies.size > 1 && ammo_count == 0 && (weap == "zombie_mg42" || weap == "zombie_30cal" || weap == "zombie_type99_lmg" || weap == "zombie_dp28") ) 
 		{
 			self thread add_reload_vox();
 		}
@@ -3961,7 +3869,7 @@ disable_character_dialog()
 	}
 
 }
-
+/*
 check_for_old_jug()
 {
 
@@ -3991,4 +3899,4 @@ check_for_old_jug()
 		}
 			wait(0.5);
 	}
-}
+}*/

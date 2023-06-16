@@ -130,6 +130,7 @@ zombie_spawn,SFX\Levels\zombie\maps\asylum\dirt_spawn_##,,,1,1,250,2000,3,priori
 glass_pane_break,SFX/Destruction/Glass/imp_glass_pane_##,,,0.9,1,250,2500,,,,,full_vol,,,,4000,,curve2,0.9,1.1,,3d,,,,,nazi_zombie_asylum,,,,,,,,,,,,,,,,,,40,60,0.25,1,,
 no_purchase_door,SFX\Levels\zombie\no_purchase_dr_##,,,1,1,50,850,,,,,full_vol,,,,4000,,curve2,0.9,1.1,,3d,,,,,,,,,,,,,,,,,,,,,,,40,60,0.25,1,,
 # Switch,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+switch_up,SFX\Levels\zombie\traps\log_trap\switch\switch.wav,,,0.40,0.40,50,500,2,reject,,,full_vol,,curve3,,,,,1,1,,3d,,,,,,,,,,,,,,,,,0,,,no,,,80,80,0.25,1,,
 switch_flip,SFX\Levels\zombie\maps\asylum\switch\flip\flip.wav,,,1,1,250,2500,1,oldest,,,full_vol,,,,4000,,curve2,1,1,,3d,,,,,,,,,,,,,,,,,,,,,,,100,100,0.25,1,,
 amb_sparks_l_b,SFX\Levels\zombie\maps\asylum\switch\flip\amb_sparks_l.wav,,,1,1,250,2500,1,oldest,,,full_vol,,,,4000,,curve2,1,1,,3d,,,,,,,,,,,,,,,,,,,,,,,100,100,0.25,1,,
 amb_sparks_r_b,SFX\Levels\zombie\maps\asylum\switch\flip\amb_sparks_r.wav,,,1,1,250,2500,1,oldest,,,full_vol,,,,4000,,curve2,1,1,,3d,,,,,,,,,,,,,,,,,,,,,,,100,100,0.25,1,,
@@ -140,7 +141,7 @@ amb_sparks_r_end,SFX\Levels\zombie\maps\asylum\switch\power_right_end.wav,,,1,1,
 generator_loop,SFX\Levels\zombie\maps\asylum\switch\generator\gen_loop.wav,,,1,1,150,1200,,,,,ambience,,curve3,,2000,,curve2,1,1,,3d,,,looping,,nazi_zombie_asylum,,,,,,,,,50,250,0.8,0.15,,,,,,50,95,0.25,1,,yes
 players_ambience,SFX\Levels\zombie\maps\asylum\switch\amb\ambience.wav,,,1,1,100,750,,,,,ambience,,curve3,,950,,curve2,1,1,,2d,streamed,,looping,,nazi_zombie_asylum,,,,,3000,,,,,,,0.15,,,no,,,50,95,0.25,1,,yes
 turn_on,SFX\Levels\zombie\maps\asylum\switch\amb\turn_on.wav,,,0.45,0.45,100,750,,,,,full_vol,,curve3,,950,,curve2,1,1,,2d,streamed,,,,nazi_zombie_asylum nazi_zombie_factory,,,,,1000,wpn_all,,,,,,0.15,,,no,,,50,95,0.25,1,,yes
-circuit,SFX\Levels\zombie\maps\asylum\switch\circuit_##,,,1,1,250,5500,,,,,full_vol,,,,5500,,curve2,0.8,1.1,,3d,,,,,nazi_zombie_asylum,,,,,,,,,,,,,,,,,,100,100,0.25,1,,
+circuit,SFX\Levels\zombie\maps\asylum\switch\circuit_##,,,1,1,250,5500,,,,,full_vol,,,,5500,,curve2,0.8,1.1,,3d,,,,,,,,,,,,,,,,,,,,,,,100,100,0.25,1,,
 low_arc,SFX\Levels\zombie\maps\asylum\switch\arc_##,,,0.8,1,50,750,,,,,ambience,,curve3,,1000,,curve2,0.8,1.1,,3d,,,looping,,nazi_zombie_asylum,,,,,,,,,,,,0.35,,,,,,40,55,0.25,1,,yes
 alarm,SFX\Levels\zombie\maps\asylum\switch\alarm_##,,,1,1,250,2500,1,oldest,,,full_vol,,,,4000,,curve2,1,1,,3d,,,,master,nazi_zombie_asylum,,,,,1250,,,,,,,0.15,,,,,,100,100,0.25,1,,
 warning,SFX\Levels\zombie\maps\asylum\traps\warning_##,,,0.55,0.55,250,5000,1,reject,,,full_vol,,,,8000,,curve1,1,1,,3d,,,,master,nazi_zombie_asylum,,,,,,,,,,,,0.15,,,,,,100,100,0.25,1,,
@@ -166,6 +167,7 @@ barrel_explode_dist,SFX/Destruction/explosion_dist_##,,,0.9,1,3000,12000,3,oldes
 barrel_explode_distR,SFX/Destruction/explosion_dist_##,,,0.9,1,3000,12000,3,oldest,,,full_vol,,curve5,,13000,,,0.9,1.1,,3d,,,,,nazi_zombie_asylum,,,bomb_falloff,,,,0.4,,,,,0.2,,,no,right_player,6,50,90,0.55,1,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 sparks,SFX\Levels\sniper\sparks_##,,,0.8,1,500,5000,,,,,explosion,,curve3,,10000,,curve2,0.9,1.05,,3d,,,,,,,,,,,,0.5,,,,,,,,,,,50,95,0.25,1,,
+fuse_sparks,SFX\Levels\sniper\sparks_##,,,0.5,0.7,50,250,,,,,explosion,,curve3,,10000,,curve2,0.9,1.05,,3d,,,,,,,,,,,,0.5,,,,,,,,,,,50,95,0.25,1,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 explo_shockwave_l,SFX/Levels/Makin/exp_sweetner/exp_decay_R.wav,,,0.9,0.95,1200,6000,1,priority,,,full_vol,,curve3,,18000,,,0.98,1.02,,3d,,,,0.85,nazi_zombie_asylum,,,explo_shockwave_r,,250,,,,,,,0.2,,no,no,left_player,4,50,90,0.25,1,,yes
 explo_shockwave_r,SFX/Levels/sniper/dist_explos/explo_sweetner_right.wav,,,0.9,0.95,1200,6000,1,priority,,,full_vol,,curve3,,18000,,,1,1,,3d,,,,0.85,nazi_zombie_asylum,,,bomb_far_falloff_glo,,350,,,,,,,0.2,,no,no,right_player,4,50,90,0.25,1,,yes
@@ -440,3 +442,8 @@ bowie_catch,sfx\weapon\bowie\bowie_catch.wav,,,1,1,,,,,,,full_vol,,,0.8,,,,1,1,,
 zombie_impact_helmet,SFX\projectile\bullet\headshot\helmet_##,,,0.7,0.7,750,1500,4,priority,,,full_vol,,curve2,0.55,2000,,log2,0.9,1.1,,3d,,,,0.8,,,,,,,,,,,,,0.1,,,,,,40,80,0.35,0.8,,
 mx_jugger_old_jingle,SFX\Levels\zombie\perksacola\jingle\jugga_old_jingle.wav,,,1,1,50,500,,,,,full_vol,,,0.8,1800,,curve0,1,1,,3d,streamed,,,,,,,,,,,,,100,200,0.5,0.25,,,,,,90,90,0.25,1,,
 mx_jugger_old_sting,custom\jugga_old_sting.wav,,,1,1,50,800,,,,,full_vol,,,0.8,1800,,curve0,1,1,,3d,,,,,,,,,,,,,,100,200,0.5,0.15,,,,,,90,90,0.25,1,,
+book_raise,custom\book_raise_##,,,0.6,0.65,50,500,2,reject,,,character,,,0.7,,,,0.95,1.05,,2d,,,,,,,,,,,,,,,,,,,,,,,10,85,0.7,1,,
+sack_drop,SFX\mp\flag\drop.wav,,,1,1,50,500,,,,,full_vol,,,,1750,,curve2,0.85,1.2,,2d,,,,,,,,,,,,,,100,250,0.8,0.25,,,,,,10,15,0.25,1,,
+teleporter_fail,custom\teleporter_fail.wav,,,1,1,200,1000,2,reject,,,full_vol,,curve3,,,,,1,1,,3d,,,,,,,,,,,,,,,,,0,,,no,,,80,80,0.25,1,,
+bowl_sting_ending,Stream\Music\Mission\L_Battlefield\MX_SBowl.wav,,,0.9,0.9,,,,,,,music,,,,,,,,,,2d,,,,,,,,,,,music_all,,,,,,0,,,,,,90,90,0.25,1,,
+zombie_theater,custom\zombie_theater.wav,,,0.7,0.7,,,,,,,music,,,,,,,,,,2d,,,,,,,,,,,music_all,,,,,,0,,,,,,100,100,0.25,1,,

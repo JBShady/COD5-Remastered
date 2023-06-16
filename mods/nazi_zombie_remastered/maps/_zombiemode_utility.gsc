@@ -1144,26 +1144,22 @@ setup_responders( player, partner1, partner2, partner3, response )
 	players = getplayers();
 
 	possible_responses = [];
-	possible_responses[0] = partner1;
-	possible_responses[1] = partner2;
-	possible_responses[2] = partner3;
+	possible_responses[0] = partner1; // an int
+	possible_responses[1] = partner2; // an int
+	possible_responses[2] = partner3; // an int
 	
 	set_partner = possible_responses[randomintrange(0, players.size - 1 )];
-							// If player size is 1: Won't run anyways, but range would be 0 to 0
+							// If player size is 1: Won't run anyways because of a check before this function, but range would be 0 to 0
 							// If player size is 2: Range will be 0 to 2,  adjusted is 0 to 1, 1 is ignored, meaning only responder 0 is active
 							// If player size is 3: Range will be 0 to 3 , adjusted is 0 to 2, 2 is ignored, meaning only responder 0 and 1 is active
-							// If player size is 4, range will be o to 4, adjusted is 0 to 3, 3 is ignored, meaning only responder 0 and 1 and 2 is active (all teammates)
+							// If player size is 4, range will be 0 to 4, adjusted is 0 to 3, 3 is ignored, meaning only responder 0 and 1 and 2 is active (all teammates, because the first talker cant count as a responder)
 
-	//playHero = isdefined(players[hero]);
-	//playRival = isdefined(players[rival]);
-
-	//if( distancesquared (player.origin, players[set_partner].origin) < 500*500)
-	//{
+	indexPartner = maps\_zombiemode_weapons::get_player_index(players[set_partner]); // we grab the index of the player # who is chosen so we can compare their indext to their player # position, say Player 3
+	if(set_partner == indexPartner ) // if for some reason Player 3 has an index of player 4 (meaning that the original player 3 left, and player 4 has now been demoted to player 3), then we will NOT play a line
+	{
 		plr = "plr_" + set_partner + "_";
 		players[set_partner] create_and_play_responses( plr, "vox_" + response, 0.25 );
-		//iprintln(plr, " is talking");
-	//}
-
+	}	
 }
 create_and_play_responses( player_index, dialog_category, waittime )
 {              	

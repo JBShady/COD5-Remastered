@@ -113,8 +113,8 @@ powerup_hud_overlay()
 	{
 		if(level.egg_begun == 1)
 		{
-			level.powerup_hud[0].y = -45;
-			level.powerup_hud[1].y = -45;
+			level.powerup_hud[0].y = -50;
+			level.powerup_hud[1].y = -50;
 		}
 
 		if(level.zombie_vars["zombie_powerup_insta_kill_time"] < 5)
@@ -469,6 +469,11 @@ powerup_drop(drop_point)
 		{
 			valid_drop = true;
 		}
+	}
+
+	if(flag( "dog_round" )) // forces a dog max ammo, sometimes dogs can be register as outside of the map but because they always spawn inside the map its ok we dont need to check this
+	{
+		valid_drop = true;
 	}
 	
 	if(!valid_drop)

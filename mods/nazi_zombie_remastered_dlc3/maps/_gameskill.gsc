@@ -1104,6 +1104,7 @@ playerHurtcheck()
 		self.hurtAgain = true;
 		self.damagePoint = point;
 		self.damageAttacker = attacker;
+
 // MikeD (8/7/2007): New player_burned effect.
 		if( IsDefined (mod) && mod == "MOD_BURNED" )
 		{
@@ -1623,7 +1624,8 @@ playerBreathingSound( healthcap )
 			if( sound_on )
 			{
 				// MikeD (8/1/2008): Stop the CSC sound loop of the "breathing_hurt"
-				setclientsysstate( "levelNotify", "rfo2", self );
+				wait(0.75);
+				setclientsysstate( "levelNotify", "rfo2", self ); 
 				sound_on = false;
 			}
 			continue;
@@ -1634,6 +1636,7 @@ playerBreathingSound( healthcap )
 			sound_on = true;
 			setclientsysstate( "levelNotify", "rfo1", self );
 		}
+
 	}
 }
 

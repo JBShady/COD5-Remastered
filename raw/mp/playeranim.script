@@ -1,0 +1,2320 @@
+
+//==========================================================================
+//
+// Character Animation Script     M U L T I P L A Y E R
+//
+// All player states should have animations sutable for a two handed rifle type weapon.
+//
+// This defines the animations and events that might occur at different times
+// for this character. State changes, and random behaviour during idle/alert
+// states will look here for default behaviour, if that character doesn't have
+// something specific in their scripts for that level.
+//
+//==========================================================================
+
+// playerAnimType:
+// Set in "Player Anim Type" in the weapon gdt file.
+// Full list specified in playeranimtypes.txt.
+// Asset manager choices specified in weapon gdf files.
+
+//==========================================================================
+// DEFINES
+//
+// These can be used to simplify the scripting, by defining replacement strings
+
+DEFINES
+
+// weaponclasses
+set weaponclass autofire = mg AND smg
+
+// movetypes
+set movetype moving = walk AND walkcr AND walkcrbk AND walkbk AND run AND runbk AND runcr AND runcrbk AND walkprone AND walkpronebk
+set movetype crouching = idlecr AND runcr AND runcrbk AND walkcr AND walkcrbk
+set movetype prone = idleprone AND walkprone AND walkpronebk
+set movetype backstep = walkbk AND runbk AND walkcrbk AND walkpronebk
+
+// playerAnimTypes
+set playerAnimType grenadeonly = all NOT m203 NOT rocketlauncher
+
+//#IF level_name vehicle_test OR living_battlefield OR mp_physics_test
+//#ADD_VEHICLE lvt4 default gunners 4
+//#END_IF
+
+#IF level_name mp_ca_vehicle_test OR mp_downfall OR mp_outskirts OR mp_roundhouse OR mp_seelow
+#ADD_VEHICLE t34 tank drivers 1 gunners 1
+#ADD_VEHICLE panzer tank drivers 1 gunners 1
+#END_IF
+
+#ADD_VEHICLE triple25 tank drivers 1 gunners 1
+
+//==========================================================================
+// ANIMATIONS
+//
+//	NOTE: scripts are chosen by first-come-first-serve basis. The first match
+//	found is the one used.
+//
+// format:
+//
+// state <state description>
+// {
+//		<movement type>
+//		{
+//			[DEFAULT / <condition type> [<condition value>], ...]
+//			{
+//				<both/legs/torso/turret> <animation> [sound <filename>]
+//				<both/legs/torso/turret> <animation> [sound <filename>]
+//				...
+//			}
+//		}
+//	}
+//
+//	legend:
+//
+//	<state description>: relaxed, alert, combat
+//
+//	<movement type>: idle, idlecr, idleprone,
+//                   walk, walkbk, walkcr, walkcrbk, walkprone, walkpronebk.
+//                   run, runbk, runcr, runcrbk, 
+//                   straferight, strafeleft, turnright, turnleft
+//
+//	<condition type>: playerAnimType, weaponclass, position, enemy_weapon, underwater, mounted, movetype, underhand, leaning, weapon_position, perk
+//
+//	<condition value>:
+//
+//		playerAnimType: <weapon Player Anim Type in gdt>
+//		position: behind, infront, right, left
+//		enemy_weapon: <see weapon pickup names>
+//		underwater: <no values>
+//		mounted: mg42
+//		movetype: <see movement types>
+//		underhand: <no values>
+//		leaning: right, left
+//		weaponclass: rifle, sniper, smg, mg, pistol, grenade, rocketlauncher, flamethrower, turret, non-player
+//		weapon_position: hip, ads
+//		strafing: not, left, right - will never be left or right while moving backwards
+//		perk: laststand, grenadedeath
+//		attachment: bayonet
+//
+// NOTES:
+// - The player walks when they are ADS, so they can not ADS while running.
+//
+
+ANIMATIONS
+
+
+STATE COMBAT
+{
+	idle
+	{
+#FOR_ALL_VEHICLES
+		vehicle_name %vehicle_name, vehicle_seat_to gunner1
+		{
+			both %vehicle_name + Gunner_aim turretanim
+		}
+#END_FOR_ALL_VEHICLES
+		vehicle_name triple25, vehicle_seat_to driver
+		{
+			both triple25Gunner_aim turretanim
+		}
+		//mounted mg42, firing
+		//{
+		//	both standSAWgunner_aim turretanim
+		//}
+		mounted mg42
+		{
+			both standSAWgunner_aim turretanim
+		}
+		playerAnimType radio
+		{
+			both p_handheldradio_idle
+		}
+		playerAnimType reviver
+		{
+		  torso p_revive_reviving
+		}
+		perk laststand
+		{
+			both pb_laststand_idle
+		}
+		playerAnimType none
+		{
+			both p_handheldradio_idle
+		}
+		playerAnimType gas
+		{
+			both pb_flamethrower_stand_idle
+		} 
+		playerAnimType briefcase
+		{
+			both p_bomb_stand_loop
+		}
+		playerAnimType c4
+		{
+			both pb_hold_idle_satchel
+		}
+		playerAnimType hold
+		{
+			both pb_hold_idle
+		}
+		weaponclass pistol, weapon_position ads
+		{
+			both pb_stand_ads_pistol
+		}
+		weaponclass pistol
+		{
+			both pb_stand_alert_pistol
+		}
+		weaponclass rocketlauncher, weapon_position ads
+		{
+			both pb_stand_ads_RPG
+		}
+		playerAnimType gas, weapon_position ads
+		{
+			both pb_flamethrower_stand_idle
+		}	
+		weaponclass rocketlauncher
+		{
+			both pb_stand_alert_RPG
+		}
+		weapon_position ads
+		{
+			both pb_stand_ads
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_stand_grenade_pullpin
+		}
+		default // two handed rifle type weapon
+		{
+			both pb_stand_alert
+		}
+	}
+	idlecr
+	{
+		//mounted mg42, firing
+		//{
+		//	both crouchSAWgunner_aim turretanim
+		//}
+		mounted mg42
+		{
+			both crouchSAWgunner_aim turretanim
+		}	
+		playerAnimType radio
+		{
+			both p_handheldradio_crouch_idle
+		}
+		playerAnimType reviver
+		{
+		 	torso p_crouch_revive_reviving
+		}
+		perk laststand
+		{
+			both pb_laststand_idle 
+		}
+		playerAnimType gas
+		{
+			both pb_flamethrower_crouch_idle
+		} 
+		playerAnimType none
+		{	
+			both pb_crouch_bombplant
+		}
+		playerAnimType briefcase
+		{
+			both p_bomb_crouch_loop
+		}
+		playerAnimType c4
+		{
+			both pb_crouch_hold_idle_satchel
+		}
+		playerAnimType hold
+		{
+			both pb_crouch_hold_idle
+		}
+		weaponclass pistol, weapon_position ads
+		{
+			both pb_crouch_ads_pistol
+		}
+		weaponclass pistol
+		{
+			both pb_crouch_alert_pistol
+		}
+	  weaponclass rocketlauncher, weapon_position ads
+		{
+   			both pb_crouch_ads_RPG
+		}
+  	weaponclass rocketlauncher
+		{
+   			both pb_crouch_alert_RPG
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_crouch_grenade_pullpin
+		}
+		weapon_position ads
+		{
+			both pb_crouch_ads
+		}
+		default // two handed rifle type weapon
+		{
+			both pb_crouch_alert
+		}
+	}
+	idleprone
+	{
+		//mounted mg42, firing
+		//{
+		//	both proneSAWgunner_aim turretanim
+		//}
+		mounted mg42
+		{
+			both proneSAWgunner_aim turretanim
+		}
+		playerAnimType radio
+		{
+			both p_handheldradio_prone_idle
+		}
+		playerAnimType reviver
+		{
+			torso p_prone_revive_reviving
+		}
+		perk laststand
+		{
+			both pb_laststand_idle
+		}
+		playerAnimType briefcase
+		{
+			both p_bomb_prone_loop
+		}
+		playerAnimType c4
+		{
+			both pb_prone_hold_satchel
+		}
+		playerAnimType hold
+		{
+			both pb_prone_hold
+		}
+		playerAnimType none
+		{
+			both pb_prone_bombplant
+		}
+		weaponclass pistol
+		{
+			both pb_prone_aim_pistol
+		}
+  		weaponclass rocketlauncher
+  		{
+   			both pb_prone_aim_RPG
+  		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_prone_aim_grenade
+		}
+		default
+		{
+			both pb_prone_aim
+		}
+	}
+	
+// FLINCHING
+	flinch_forward
+	{
+		weaponclass pistol 
+		{
+			torso pt_flinch_pistol_forward
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			torso pt_flinch_grenade_forward
+		}
+		default 
+		{
+			torso pt_flinch_forward
+		}
+	}
+	flinch_backward
+	{
+		weaponclass pistol 
+		{
+			torso pt_flinch_pistol_back
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			torso pt_flinch_grenade_back
+		}
+		default 
+		{
+			torso pt_flinch_back
+		}
+	}
+	flinch_left
+	{
+		weaponclass pistol 
+		{
+			torso pt_flinch_pistol_left
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			torso pt_flinch_grenade_left
+		}
+		default 
+		{
+			torso pt_flinch_left
+		}
+	}
+	flinch_right
+	{
+		weaponclass pistol 
+		{
+			torso pt_flinch_pistol_right
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			torso pt_flinch_grenade_right
+		}
+		default 
+		{
+			torso pt_flinch_right
+		}
+	}
+
+// STUMBLE
+	stumble_forward
+	{
+		// pistol
+		weaponclass pistol, strafing left
+		{
+			both pb_stumble_pistol_left
+		}
+		weaponclass pistol, strafing right
+		{
+			both pb_stumble_pistol_right
+		}
+		weaponclass grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_stumble_grenade_left
+		}
+		weaponclass grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_stumble_grenade_right
+		}
+		weaponclass pistol 
+		{
+			both pb_stumble_pistol_forward
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_stumble_grenade_forward
+		}
+
+		// rifle	
+		strafing left
+		{
+			both pb_stumble_left
+		}
+		strafing right
+		{
+			both pb_stumble_right
+		}
+		default 
+		{
+			both pb_stumble_forward
+		}
+	}
+	stumble_backward
+	{
+		weaponclass pistol, strafing left
+		{
+			both pb_stumble_pistol_left
+		}
+		weaponclass pistol, strafing right
+		{
+			both pb_stumble_pistol_right
+		}
+		weaponclass grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_stumble_grenade_left
+		}
+		weaponclass grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_stumble_grenade_right
+		}
+	
+		weaponclass pistol 
+		{
+			both pb_stumble_pistol_back
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_stumble_grenade_back
+		}
+		
+		// rifle	
+		strafing left
+		{
+			both pb_stumble_left
+		}
+		strafing right
+		{
+			both pb_stumble_right
+		}		
+		default 
+		{
+			both pb_stumble_back
+		}
+	}
+
+// STUMBLE WALK
+	stumble_walk_forward
+	{
+		// pistol
+		weaponclass pistol AND grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_stumble_pistol_walk_left
+		}
+		weaponclass pistol AND grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_stumble_pistol_walk_right
+		}
+		weaponclass pistol AND grenade, playerAnimType grenadeonly
+		{
+			both pb_stumble_pistol_walk_forward
+		}
+
+		// rifle	
+		strafing left
+		{
+			both pb_stumble_walk_left
+		}
+		strafing right
+		{
+			both pb_stumble_walk_right
+		}
+		default 
+		{
+			both pb_stumble_walk_forward
+		}
+	}
+	stumble_walk_backward
+	{
+		// pistol
+		weaponclass pistol AND grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_stumble_pistol_walk_left
+		}
+		weaponclass pistol AND grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_stumble_pistol_walk_right
+		}	
+		weaponclass pistol AND grenade, playerAnimType grenadeonly
+		{
+			both pb_stumble_pistol_walk_back
+		}
+		// rifle	
+		strafing left
+		{
+			both pb_stumble_walk_left
+		}
+		strafing right
+		{
+			both pb_stumble_walk_right
+		}		
+		default 
+		{
+			both pb_stumble_walk_back
+		}
+	}
+
+// STUMBLE CROUCH
+	stumble_crouch_forward
+	{
+		// pistol
+		weaponclass pistol AND grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_stumble_pistol_left
+		}
+		weaponclass pistol AND grenade, strafing right, playerAnimType grenadeonly
+		{ 
+			both pb_stumble_pistol_right
+		}
+		weaponclass pistol AND grenade, playerAnimType grenadeonly
+		{
+			both pb_stumble_pistol_forward
+		}
+
+		// rifle	
+		strafing left
+		{
+			both pb_stumble_left
+		}
+		strafing right
+		{
+			both pb_stumble_right
+		}
+		default 
+		{
+			both pb_stumble_forward
+		}
+	}
+	stumble_crouch_backward
+	{
+		// pistol
+		weaponclass pistol AND grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_stumble_pistol_left
+		}
+		weaponclass pistol AND grenade, strafing right, playerAnimType grenadeonly
+		{ 
+			both pb_stumble_pistol_right
+		}	
+		weaponclass pistol AND grenade, playerAnimType grenadeonly
+		{
+			both pb_stumble_pistol_back
+		}
+		strafing left
+		{
+			both pb_stumble_left
+		}
+		strafing right
+		{
+			both pb_stumble_right
+		}		
+		default 
+		{
+			both pb_stumble_back
+		}
+	}
+
+	walk
+	{
+		playerAnimType none
+		{
+			both pb_stand_shoot_walk_forward_unarmed
+		}
+		playerAnimType c4
+		{
+			both pb_hold_run_satchel
+		}
+		playerAnimType hold and radio
+		{
+			both pb_hold_run
+		}
+		weaponclass rocketlauncher, strafing left 
+		{
+			both pb_walk_left_RPG_ads
+		}
+		weaponclass rocketlauncher, strafing right 
+		{
+			both pb_walk_right_RPG_ads
+		}
+		weaponclass rocketlauncher 
+		{
+			both pb_walk_forward_RPG_ads
+		}
+		playerAnimType gas
+		{
+			both pb_flamethrower_combatrun_c
+		}
+		weaponclass pistol , strafing left
+		{
+			both pb_combatwalk_left_loop_pistol
+		}
+		weaponclass pistol, strafing right
+		{
+			both pb_combatwalk_right_loop_pistol
+		}
+		weaponclass pistol
+		{
+			both pb_combatwalk_forward_loop_pistol
+		}
+		weaponclass grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_combatrun_left_loop_grenade
+		}
+		weaponclass grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_combatrun_right_loop_grenade
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_combatrun_forward_loop_stickgrenade
+		}
+		strafing left
+		{
+			both pb_stand_shoot_walk_left
+		}
+		strafing right
+		{
+			both pb_stand_shoot_walk_right
+		}
+		default // two handed rifle type weapon
+		{
+			both pb_stand_shoot_walk_forward
+		}
+	}
+	walkbk // Always ADS when walking
+	{
+		playerAnimType none
+		{
+			both pb_stand_shoot_walk_forward_unarmed
+		}
+		playerAnimType c4
+		{
+			both pb_hold_run_back_satchel
+		}
+		playerAnimType hold and radio
+		{
+			both pb_hold_run_back
+		}
+		weaponclass rocketlauncher 
+		{
+			both pb_walk_back_RPG_ads
+		}
+		weaponclass pistol, strafing left
+		{
+			both pb_combatwalk_left_loop_pistol
+		}
+		weaponclass pistol, strafing right
+		{
+			both pb_combatwalk_right_loop_pistol
+		}		
+		weaponclass pistol
+		{
+			both pb_combatwalk_back_loop_pistol
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_combatrun_back_loop_grenade
+		}
+		strafing left
+		{
+			both pb_stand_shoot_walk_left
+		}
+		strafing right
+		{
+			both pb_stand_shoot_walk_right
+		}		
+		default
+		{
+			both pb_stand_shoot_walk_back
+		}
+	}
+	walkcr
+	{
+		playerAnimType none
+		{
+			both pb_crouch_walk_forward_unarmed
+		}
+		playerAnimType c4, strafing left
+		{
+			both pb_crouch_hold_run_left_satchel
+		}
+		playerAnimType c4, strafing right
+		{
+			both pb_crouch_hold_run_right_satchel
+		}
+		playerAnimType c4
+		{
+			both pb_crouch_hold_run_satchel
+		}
+		playerAnimType hold and radio, strafing left
+		{
+			both pb_crouch_hold_run_left
+		}
+		playerAnimType hold and radio, strafing right
+		{
+			both pb_crouch_hold_run_right
+		}
+		playerAnimType hold and radio
+		{
+			both pb_crouch_hold_run
+		}
+		weaponclass rocketlauncher, strafing left 
+		{
+			both pb_crouch_walk_left_RPG
+		}
+		weaponclass rocketlauncher, strafing right 
+		{
+			both pb_crouch_walk_right_RPG
+		}
+		weaponclass rocketlauncher 
+		{
+			both pb_crouch_walk_forward_RPG
+		}
+		weaponclass pistol AND grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_crouch_walk_left_pistol
+		}
+		weaponclass pistol AND grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_crouch_walk_right_pistol
+		}
+		weaponclass pistol AND grenade, playerAnimType grenadeonly
+		{
+			both pb_crouch_walk_forward_pistol
+		}
+		strafing left
+		{
+			both pb_crouch_shoot_run_left
+		}
+		strafing right
+		{
+			both pb_crouch_shoot_run_right
+		}
+		default // two handed rifle type weapon
+		{
+			both pb_crouch_shoot_run_forward
+		}
+	}
+
+	walkcrbk
+	{
+		playerAnimType none
+		{
+			both pb_crouch_walk_forward_unarmed
+		}
+		playerAnimType c4
+		{
+			both pb_crouch_hold_run_back_satchel
+		}
+		playerAnimType hold and radio
+		{
+			both pb_crouch_hold_run_back
+		}
+		weaponclass rocketlauncher 
+		{
+			both pb_crouch_walk_back_RPG
+		}
+		weaponclass pistol AND grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_crouch_walk_left_pistol
+		}
+		weaponclass pistol AND grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_crouch_walk_right_pistol
+		}		
+		weaponclass pistol AND grenade, playerAnimType grenadeonly
+		{
+			both pb_crouch_walk_back_pistol
+		}
+		strafing left
+		{
+			both pb_crouch_shoot_run_left
+		}
+		strafing right
+		{
+			both pb_crouch_shoot_run_right
+		}		
+		default // two handed rifle type weapon
+		{
+			both pb_crouch_shoot_run_back
+		}
+	}
+	walkprone
+	{
+		weaponclass pistol, strafing left
+		{
+			both pb_prone_crawl_left
+		}
+		weaponclass pistol, strafing right
+		{
+			both pb_prone_crawl_right
+		}
+		weaponclass grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_prone_grenade_crawl_left
+		}
+		playerAnimType c4, strafing left
+		{
+			both pb_prone_crawl_left_hold_satchel
+		}
+		playerAnimType c4, strafing right
+		{
+			both pb_prone_crawl_right_hold_satchel
+		}
+		playerAnimType c4
+		{
+			both pb_prone_crawl_hold_satchel
+		}
+		playerAnimType hold and radio, strafing left
+		{
+			both pb_prone_crawl_left_hold
+		}
+		playerAnimType hold and radio, strafing right
+		{
+			both pb_prone_crawl_right_hold
+		}
+		playerAnimType hold and radio
+		{
+			both pb_prone_crawl_hold
+		}
+		weaponclass grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_prone_grenade_crawl_right
+		}
+		weaponclass pistol, strafing left
+		{
+			both pb_prone_pistolcrawl_L
+		}
+		weaponclass pistol, strafing right
+		{
+			both pb_prone_pistolcrawl_R
+		}
+		weaponclass pistol
+		{
+			both pb_prone_pistolcrawl_F
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_prone_grenade_crawl
+		}
+		strafing left
+		{
+			both pb_prone_crawl_left
+		}
+		strafing right
+		{
+			both pb_prone_crawl_right
+		}
+		default
+		{
+			both pb_prone_crawl
+		}
+	}
+	walkpronebk
+	{
+		weaponclass grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_prone_grenade_crawl_left
+		}
+		weaponclass grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_prone_grenade_crawl_right
+		}
+		playerAnimType c4
+		{
+			both pb_prone_crawl_back_hold_satchel
+		}		
+		playerAnimType hold and radio
+		{
+			both pb_prone_crawl_back_hold
+		}	
+		weaponclass pistol
+		{
+			both pb_prone_pistolcrawl_B
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_prone_grenade_crawl_back
+		}
+		default
+		{
+			both pb_prone_crawl_back
+		}
+	}
+	run
+	{
+		playerAnimType none
+		{
+			both pb_pistol_run_fast
+		}
+		playerAnimType c4, strafing left
+		{
+			both pb_hold_run_left_satchel
+		}
+		playerAnimType c4, strafing right
+		{
+			both pb_hold_run_right_satchel
+		}
+		playerAnimType c4
+		{
+			both pb_hold_run_satchel
+		}
+		playerAnimType hold and radio, strafing left
+		{
+			both pb_hold_run_left
+		}
+		playerAnimType hold and radio, strafing right
+		{
+			both pb_hold_run_right
+		}
+		playerAnimType hold and radio
+		{
+			both pb_hold_run
+		}
+		weaponclass rocketlauncher, strafing left 
+		{
+			both pb_walk_left_RPG_ads
+		}
+		weaponclass rocketlauncher, strafing right 
+		{
+			both pb_walk_right_RPG_ads
+		}
+		weaponclass rocketlauncher 
+		{
+			both pb_walk_forward_RPG_ads
+		}
+		playerAnimType gas
+		{
+			both pb_flamethrower_combatrun_c
+		}
+		weaponclass pistol, strafing left
+		{
+			both pb_combatrun_left_loop_pistol
+		}
+		weaponclass pistol, strafing right
+		{
+			both pb_combatrun_right_loop_pistol
+		}
+		weaponclass grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_combatrun_left_loop_grenade
+		}
+		weaponclass grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_combatrun_right_loop_grenade
+		}
+		strafing left
+		{
+			both pb_combatrun_left_loop
+		}
+		strafing right
+		{
+			both pb_combatrun_right_loop
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_combatrun_forward_loop_stickgrenade
+		}
+		weaponclass pistol
+		{
+			both pb_pistol_run_fast
+		}
+		default
+		{
+			both pb_combatrun_forward_loop
+		}
+	}
+// STUMBLE SPRINT
+	stumble_sprint_forward
+	{
+		default 
+		{
+			both pb_stumble_forward
+		}
+	}
+	sprint
+	{
+		playerAnimType none
+		{
+			both pb_sprint
+		}
+		playerAnimType c4
+		{
+			both pb_sprint_hold_satchel
+		}
+		playerAnimType hold and radio
+		{
+			both pb_sprint_hold
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_sprint
+		}
+		weaponclass pistol
+		{
+			both p_sprint_pistol_a
+		}
+ 		weaponclass rocketlauncher 
+		{
+ 			both pb_sprint_RPG
+		}
+		default
+		{
+			both pb_sprint
+		}
+	}
+	swim
+	{
+		strafing left
+		{
+			both p_swim_left
+		}
+		strafing right
+		{
+			both p_swim_right
+		}
+		default
+		{
+			both p_swim_forward
+		}
+	}
+	swimbk
+	{
+		strafing left
+		{
+			both p_swim_left
+		}
+		strafing right
+		{
+			both p_swim_right
+		}
+		default
+		{
+			both p_swim_tread
+		}
+	}
+	runbk
+	{
+		playerAnimType none
+		{
+			both pb_combatrun_back_loop_grenade
+		}
+		playerAnimType c4
+		{
+			both pb_hold_run_back_satchel
+		}
+		playerAnimType hold and radio
+		{
+			both pb_hold_run_back
+		}
+		weaponclass pistol, strafing left
+		{
+			both pb_combatrun_left_loop_pistol
+		}
+		weaponclass pistol, strafing right
+		{
+			both pb_combatrun_right_loop_pistol
+		}
+		weaponclass grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_combatrun_left_loop_grenade
+		}
+		weaponclass grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_combatrun_right_loop_grenade
+		}
+		weaponclass pistol 
+		{
+			both pb_combatrun_back_loop_pistol
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_combatrun_back_loop_grenade
+		}
+ 		weaponclass rocketlauncher 
+		{
+ 			both pb_walk_back_RPG_ads
+ 		}
+		strafing left
+		{
+			both pb_combatrun_left_loop
+		}
+		strafing right
+		{
+			both pb_combatrun_right_loop
+		}		
+		default
+		{
+			both pb_combatrun_back_loop
+		}
+	}
+	runcr
+	{
+		playerAnimType none
+		{
+			both pb_crouch_run_forward_grenade
+		}
+		weaponclass rocketlauncher, strafing left 
+		{
+			both pb_crouch_run_left_RPG
+		}
+		weaponclass rocketlauncher, strafing right 
+		{
+			both pb_crouch_run_right_RPG
+		}
+		weaponclass rocketlauncher 
+		{
+			both pb_crouch_run_forward_RPG
+		}
+		weaponclass pistol, strafing left
+		{
+			both pb_crouch_run_left_pistol
+		}
+		weaponclass pistol, strafing right
+		{
+			both pb_crouch_run_right_pistol
+		}
+		playerAnimType c4, strafing left
+		{
+			both pb_crouch_hold_run_left_satchel
+		}
+		playerAnimType c4, strafing right
+		{
+			both pb_crouch_hold_run_right_satchel
+		}
+		playerAnimType c4
+		{
+			both pb_crouch_hold_run_satchel
+		}
+		playerAnimType hold and radio, strafing left
+		{
+			both pb_crouch_hold_run_left
+		}
+		playerAnimType hold and radio, strafing right
+		{
+			both pb_crouch_hold_run_right
+		}
+		playerAnimType hold and radio
+		{
+			both pb_crouch_hold_run
+		}
+ 	  weaponclass grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_crouch_run_left_grenade
+		}
+    weaponclass grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_crouch_run_right_grenade
+		}
+		weaponclass pistol
+		{
+			both pb_crouch_run_forward_pistol
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_crouch_run_forward_grenade
+		}
+		strafing left
+		{
+			both pb_crouch_run_left
+		}
+		strafing right
+		{
+			both pb_crouch_run_right
+		}
+		default
+		{
+			both pb_crouch_run_forward
+		}
+	}
+
+	runcrbk
+	{
+		playerAnimType none
+		{
+			both pb_crouch_run_back_grenade
+		}
+		weaponclass rocketlauncher 
+		{
+			both pb_crouch_run_back_RPG
+		}
+		weaponclass pistol, strafing left
+		{
+			both pb_crouch_run_left_pistol
+		}
+		weaponclass pistol, strafing right
+		{
+			both pb_crouch_run_right_pistol
+		}
+		playerAnimType c4
+  		{
+   			both pb_crouch_hold_run_back_satchel
+  		}
+ 		playerAnimType hold and radio
+  		{
+   			both pb_crouch_hold_run_back
+  		}
+   	        weaponclass grenade, strafing left, playerAnimType grenadeonly
+		{
+			both pb_crouch_run_left_grenade
+		}
+  	        weaponclass grenade, strafing right, playerAnimType grenadeonly
+		{
+			both pb_crouch_run_right_grenade
+		}
+		weaponclass pistol
+		{
+			both pb_crouch_run_back_pistol
+		}
+		weaponclass grenade, playerAnimType grenadeonly
+		{
+			both pb_crouch_run_back_grenade
+		}
+		strafing left
+		{
+			both pb_crouch_run_left
+		}
+		strafing right
+		{
+			both pb_crouch_run_right
+		}		
+		default
+		{
+			both pb_crouch_run_back
+		}
+	}
+
+	climbup
+	{
+		default
+		{
+			// Can't play the chicken dance here as a temp because it has no movement speed
+			both pb_climbup
+		}
+	}
+	climbdown
+	{
+		default
+		{
+			// Can't play the chicken dance here as a temp because it has no movement speed
+			both pb_climbdown
+		}
+	}
+	turnrightcr
+	{
+		movetype idlecr AND turnrightcr
+		{
+			legs pl_crouchturn_90right
+		}
+	}
+	turnleftcr
+	{
+		movetype idlecr AND turnleftcr
+		{
+			legs pl_crouchturn_90left
+		}
+	}
+
+	//==========
+	// PI - DAY : Mantle animations
+	mantle_up_57
+	{
+		default 
+		{
+			both mp_mantle_up_57
+		}
+	}
+	mantle_up_51
+	{
+		default 
+		{
+			both mp_mantle_up_51
+		}
+	}
+	mantle_up_45
+	{
+		default 
+		{
+			both mp_mantle_up_45
+		}
+	}
+	mantle_up_39
+	{
+		default 
+		{
+			both mp_mantle_up_39
+		}
+	}
+	mantle_up_33
+	{
+		default 
+		{
+			both mp_mantle_up_33
+		}
+	}
+	mantle_up_27
+	{
+		default 
+		{
+			legs mp_mantle_up_27
+		}
+	}
+	mantle_up_21
+	{
+		default 
+		{
+			legs mp_mantle_up_21
+		}
+	}
+	mantle_over_high
+	{
+		default 
+		{
+			both mp_mantle_over_high
+		}
+	}
+	mantle_over_mid
+	{
+		default 
+		{
+			both mp_mantle_over_mid
+		}
+	}
+	mantle_over_low
+	{
+		default 
+		{
+			legs mp_mantle_over_low
+		}
+	}
+}
+
+//==========================================================================
+// EVENTS
+//
+// format:
+//
+// <event description>
+// {
+//		[DEFAULT / <condition type> [<condition value>], ...]
+//		{
+//			<both/legs/torso> <animation> [sound <filename>]
+//			<both/legs/torso> <animation> [sound <filename>]
+//			...
+//		}
+// }
+//
+// legend:
+//
+// <event description>: pain, death, fireweapon, jump, jumpbk, land, dropweapon,
+//		raiseweapon, reload, crouch_to_prone, shellshock
+//		prone_to_crouch, meleeattack
+//
+//	NOTE: for gameplay anims (weapons firing, reload, etc) that show no legs movement
+//		only the torso should animation from here, leave the legs doing what their
+//		locomotive anims want them to do
+//
+
+EVENTS
+
+fireweapon
+{
+// MG42
+	mounted mg42
+	{
+		// Ignore the fireweapon event while on a turret
+	}
+
+// PISTOLS
+	perk laststand
+	{
+		torso pt_laststand_fire
+	}
+	weaponclass pistol, movetype prone
+	{
+		torso pt_prone_shoot_pistol
+	}
+	weaponclass pistol, movetype moving
+	{
+		// Play no special firing animation
+	}
+	weaponclass pistol, movetype crouching, weapon_position ads
+	{
+		torso pt_crouch_shoot_ads_pistol
+	}
+	weaponclass pistol, movetype crouching
+	{
+		torso pt_crouch_shoot_pistol
+	}
+	weaponclass pistol, weapon_position ads
+	{
+		torso pb_stand__shoot_ads_pistol
+	}
+	weaponclass pistol
+	{
+		torso pt_stand_shoot_pistol
+	}
+	playerAnimType reviver
+	{
+	  torso p_revive_reviving
+	}
+
+// MG & SMG
+	weaponclass autofire, movetype prone
+	{
+		torso pt_prone_shoot_auto duration 150
+	}
+	weaponclass autofire, movetype moving
+	{
+		// Play no special firing animation
+	}
+	weaponclass autofire, movetype crouching, weapon_position ads
+	{
+		torso pt_crouch_shoot_auto_ads duration 150
+	}
+	weaponclass autofire, movetype crouching
+	{
+		torso pt_crouch_shoot_auto duration 150
+	}
+	weaponclass autofire, weapon_position ads
+	{
+		torso pt_stand_shoot_auto_ads duration 150
+	}
+	weaponclass autofire
+	{
+		torso pt_stand_shoot_auto duration 150
+	}
+
+// PROJECTILE WEAPONS (assume ads since you can't fire these from the hip)
+	weaponclass rocketlauncher, movetype moving
+	{
+		// Play no special firing animation
+	}
+	weaponclass rocketlauncher, movetype crouching
+	{
+		torso pt_crouch_shoot_ads
+	}
+	weaponclass rocketlauncher, movetype prone
+	{
+		torso pt_prone_shoot_RPG
+	}
+	weaponclass rocketlauncher
+	{
+		torso pt_stand_shoot_RPG
+	}
+
+// GRENADES
+	weaponclass grenade, movetype prone, playerAnimType c4
+	 {
+		  torso pt_hold_prone_throw_satchel
+	 }
+	 weaponclass grenade, movetype idlecr, playerAnimType c4
+	 {
+		 torso pt_hold_throw_satchel
+	 }
+	 weaponclass grenade, playerAnimType c4
+	 {
+ 		 torso pt_hold_throw_satchel
+	 }
+	 weaponclass grenade, movetype prone, playerAnimType hold and radio
+	 {
+		  torso pt_hold_prone_throw
+	 }
+	 weaponclass grenade, movetype idlecr, playerAnimType hold and radio
+	 {
+		 torso pt_hold_throw
+	 }
+	 weaponclass grenade, playerAnimType hold and radio
+	 {
+ 		 torso pt_hold_throw
+	 }
+	 weaponclass grenade, movetype prone, playerAnimType grenadeonly  // All prone
+	 {
+		  torso pt_prone_grenade_throw
+	 }
+	 weaponclass grenade, movetype idlecr, playerAnimType grenadeonly // Crouch, still
+	 {
+		torso pt_crouch_grenade_throw
+	 }
+	 weaponclass grenade, movetype crouching, playerAnimType grenadeonly // Crouch, moving
+	 {
+ 		 torso pt_crouch_grenade_throw
+	 }
+ 	weaponclass grenade, movetype idle, playerAnimType grenadeonly  // Stand still
+	 {
+		  torso pt_stand_grenade_throw blendtime 10 
+	 }
+	 weaponclass grenade, playerAnimType grenadeonly     // Stand, moving
+ 	{
+ 		 torso pt_stand_grenade_throw blendtime 10 
+ 	}
+
+// SPECIAL ITEMS (VODKA, JOURNAL, RADIO)
+	weaponclass item, playerAnimType hold
+	{
+		//ignore fire anim
+	}
+	weaponclass item, playerAnimType radio
+	{
+		//ignore fire anim
+	}
+
+//bolt (RIFLES)
+	playerAnimType sniper, movetype prone
+	{
+		torso pt_prone_shoot_auto
+	}
+	playerAnimType sniper, movetype moving
+	{
+		// Play no special firing animation
+	}
+	playerAnimType sniper, movetype crouching, weapon_position ads
+	{
+		torso pt_crouch_shoot_ads
+	}
+	playerAnimType sniper, movetype crouching
+	{
+		torso pt_crouch_shoot
+	}
+	playerAnimType sniper, weapon_position ads
+	{
+		torso pt_rifle_fire_ads
+	}
+	playerAnimType sniper
+	{
+		torso pt_rifle_fire
+	}
+	playerAnimType gas, movetype moving
+	{
+		torso pt_flamethrower_fire_center
+	}
+	playerAnimType gas, movetype crouching
+	{
+		torso pt_flamethrower_crouch_fire_center
+	}
+// DEFAULT (RIFLES)
+	 playerAnimType other, movetype prone
+	 {
+	  torso pt_prone_shoot_auto
+	 }
+	 playerAnimType other
+	 {
+	  torso pt_stand_shoot_shotgun
+	 }
+	 movetype prone
+	 {
+	  torso pt_prone_shoot_auto
+	 }
+	 movetype moving
+	 {
+	  // Play no special firing animation
+	 }
+	 movetype crouching, weapon_position ads
+	 {
+	  torso pt_crouch_shoot_ads
+	 }
+	 movetype crouching
+	 {
+	  torso pt_crouch_shoot
+	 }
+	 weapon_position ads
+ 	{
+ 	 torso pt_stand_shoot_ads
+	 }
+	 default
+	 {
+ 	 torso pt_stand_shoot
+	 }
+}
+
+
+prone_to_crouch
+{
+	 movetype moving
+	 {
+		both pb_prone2crouchrun
+	 }
+	default
+	{
+		both pb_prone2crouch
+	}
+}
+
+crouch_to_prone
+{
+	default
+	{
+		both pb_crouch2prone
+	}
+}
+
+meleeattack
+{
+	weaponclass pistol AND grenade, movetype prone, playerAnimType grenadeonly
+	{
+		torso pt_melee_prone_pistol
+	}
+	weaponclass pistol AND grenade, playerAnimType grenadeonly
+	{
+		torso pt_melee_prone_pistol
+	}
+	movetype prone
+	{
+		torso pt_melee_prone
+	}
+	movetype crouching
+	{
+		torso pt_melee_crouch_left2left
+		torso pt_melee_crouch_left2right
+		torso pt_melee_crouch_right2left
+	}
+	attachment bayonet
+	{
+		torso p_bayonet_stab_melee
+	}
+	default
+	{
+		torso pt_melee_right2right_1 duration 400
+		torso pt_melee_right2right_2 duration 400
+		torso pt_melee_right2left duration 300
+		torso pt_melee_left2left_1 duration 400
+		torso pt_melee_left2right duration 300
+	}
+}
+
+knife_melee
+{
+	perk laststand
+ 	{
+ 		torso p_revive_down_melee_swipe
+ 	}
+ 	weaponclass rocketlauncher, movetype crouching
+	{
+		torso p_knife_crouch_bazooka_swipe
+	}
+	weaponclass rocketlauncher, movetype prone
+	{
+		torso p_knife_prone_bazooka_swipe
+	}
+	weaponclass rocketlauncher
+	{
+		torso p_knife_stand_bazooka_swipe
+	}
+	weaponclass pistol, movetype crouching
+	{
+		torso p_knife_crouch_pistol_swipe
+	}
+	weaponclass pistol, movetype prone
+	{
+		torso p_knife_prone_pistol_swipe
+	}
+	weaponclass pistol
+	{
+		torso pt_melee_pistol_1
+	}
+	movetype crouching
+	{
+		torso p_knife_crouch_rifle_swipe
+	}
+	movetype prone
+	{
+		torso p_knife_prone_rifle_swipe
+	}
+	default
+	{
+		torso p_knife_stand_rifle_swipe
+	}
+}
+
+knife_melee_charge
+{
+	weaponclass rocketlauncher, movetype crouching
+	{
+		torso p_knife_crouch_bazooka
+	}
+	weaponclass rocketlauncher, movetype prone
+	{
+		torso p_knife_prone_bazooka
+	}
+	weaponclass rocketlauncher
+	{
+		torso p_knife_stand_bazooka
+	}
+	weaponclass pistol, movetype crouching
+	{
+		torso p_knife_crouch_pistol
+	}
+	weaponclass pistol, movetype prone
+	{
+		torso p_knife_prone_pistol
+	}
+	weaponclass pistol
+	{
+		torso p_knife_stand_pistol
+	}
+	movetype crouching
+	{
+		torso p_knife_crouch_rifle
+	}
+	movetype prone
+	{
+		torso p_knife_prone_rifle
+	}
+	default
+	{
+		torso p_knife_stand_rifle
+	}
+}
+
+dropweapon
+{
+	movetype prone
+	{
+		torso pt_prone_pullout_pose
+	}
+	movetype crouching
+	{
+		torso pt_crouch_pullout_pose
+	}
+	weaponclass item, movetype idlecr, playerAnimType hold
+	{
+		//special item switch, crouch (JOURNAL)
+		//Looks like putting item away
+		 torso pt_hold_throw_satchel
+	}
+	weaponclass item, playerAnimType hold
+	{
+		//special item switch, stand (JOURNAL)
+		//For "opening book"
+		torso pt_hold_throw
+	}
+	weaponclass item, movetype idlecr, playerAnimType radio
+	{
+		//special item switch, crouch (RADIO, VODKA)
+		//Looks like putting item away
+		torso pt_hold_throw_satchel
+	}
+	weaponclass item, playerAnimType radio
+	{
+		//special item switch, stand (RADIO, VODKA)
+		//SKIP
+	}
+	default
+	{
+		torso pt_stand_pullout_pose
+	}
+}
+
+raiseweapon
+{
+	// (Boon 07-11-2003) Don't want anything here - just blend into the correct pose.
+}
+
+reload
+{
+	perk laststand
+ 	{
+   		torso pt_laststand_reload
+  }
+	weaponclass pistol, movetype idlecr
+	{
+		torso pt_reload_crouch_pistol
+	}
+	weaponclass pistol, movetype crouching
+	{
+		torso pt_reload_crouchwalk_pistol
+	}
+	weaponclass pistol, movetype prone
+	{
+		torso pt_reload_prone_pistol
+	}
+ 	 weaponclass rocketlauncher, movetype prone
+ 	{
+	   	torso pt_reload_prone_RPG
+	}
+ 	 weaponclass rocketlauncher
+ 	{
+	   	torso pt_reload_stand_RPG
+	}
+	weaponclass pistol
+	{
+		torso pt_reload_stand_pistol
+	}
+	playerAnimType smg, movetype prone
+	{
+		torso pt_reload_prone_auto
+	}
+	playerAnimType smg, movetype idlecr
+	{
+		torso pt_reload_stand_auto_mp40
+	}
+	playerAnimType smg, movetype crouching
+	{
+		torso pt_reload_crouchwalk
+	}
+	playerAnimType smg
+	{
+		torso pt_reload_stand_auto_mp40
+	}
+	playerAnimType autorifle, movetype prone
+	{
+		torso pt_reload_prone_auto
+	}
+	playerAnimType autorifle, movetype idlecr
+	{
+		torso pt_reload_crouch_rifle
+	}
+	playerAnimType autorifle, movetype crouching
+	{
+		torso pt_reload_crouchwalk
+	}
+	playerAnimType autorifle
+	{
+		torso pt_reload_stand_auto
+	}
+	movetype idlecr
+	{
+		torso pt_reload_crouch_rifle
+	}
+	movetype crouching
+	{
+		torso pt_reload_crouch_rifle
+	}
+	movetype prone
+	{
+		torso pt_reload_prone_auto
+	}
+	default
+	{
+		torso pt_reload_stand_rifle
+	}
+}
+
+jump
+{
+	playerAnimType none, movetype run
+	{
+		both pb_runjump_takeoff duration 5 blendtime 100
+	}
+	playerAnimType none
+	{
+		both pb_standjump_takeoff duration 5 blendtime 100
+	}
+	weaponclass rocketlauncher, movetype run
+	{
+		both pb_runjump_takeoff duration 5 blendtime 100
+	}
+	weaponclass rocketlauncher
+	{
+		both pb_standjump_takeoff duration 5 blendtime 100
+	}
+	movetype run
+	{
+		both pb_runjump_takeoff duration 5 blendtime 100
+	}
+	default
+	{
+		both pb_standjump_takeoff duration 5 blendtime 100
+	}
+}
+
+jumpbk
+{
+	movetype crouching AND prone
+	{
+		both pb_chicken_dance_crouch duration 5 blendtime 100
+	}
+
+	playerAnimType none, movetype run
+	{
+		both pb_standjump_takeoff duration 5 blendtime 100
+	}
+	playerAnimType none
+	{
+		both pb_standjump_takeoff duration 5 blendtime 100
+	}
+	weaponclass rocketlauncher, movetype run
+	{
+		both pb_standjump_takeoff duration 5 blendtime 100
+	}
+	weaponclass rocketlauncher
+	{
+		both pb_standjump_takeoff duration 5 blendtime 100
+	}
+	
+	weaponclass grenade, movetype run, playerAnimType grenadeonly
+	{
+		both pb_standjump_takeoff duration 5 blendtime 100
+	}
+	weaponclass grenade, playerAnimType grenadeonly
+	{
+		both pb_standjump_takeoff duration 5 blendtime 100
+	}
+	
+	movetype run
+	{
+		both pb_standjump_takeoff duration 5 blendtime 100
+	}
+	default
+	{
+		both pb_standjump_takeoff duration 5 blendtime 100
+	}
+}
+
+land
+{
+	movetype run
+	{
+		both pb_runjump_land duration 100 blendtime 50
+	}
+	weaponclass pistol AND grenade, playerAnimType grenadeonly
+	{
+		both pb_standjump_land_pistol duration 5
+	}
+	default
+	{
+		both pb_standjump_land duration 100 blendtime 50
+	}
+}
+
+shellshock
+{
+	movetype prone
+	{
+
+	}
+	movetype moving
+	{
+		torso pb_stand_shellshock duration 5000 blendtime 50
+	}
+	movetype idle
+	{
+		torso pb_stand_shellshock duration 5000 blendtime 50
+	}
+	movetype crouching
+	{
+		torso pb_stand_shellshock duration 5000 blendtime 50
+	}
+}
+
+DEATH
+{
+	movetype crouching, perk laststand
+	{
+		both pb_laststand_death
+	}	
+	movetype prone, perk laststand
+	{
+		both pb_laststand_death
+	}
+	perk laststand
+	{
+		both pb_laststand_death
+	}
+	movetype prone
+	{
+		both pb_prone_death_quickdeath
+	}
+	movetype idlecr
+	{
+		both pb_crouch_death_headshot_front
+		both pb_crouch_death_clutchchest
+		both pb_crouch_death_flip
+		both pb_crouch_death_fetal
+		both pb_crouch_death_falltohands
+	}
+	movetype runbk
+	{
+		both pb_death_run_back
+	}
+	movetype run AND runcr, strafing left
+	{
+		both pb_death_run_left
+	}
+	movetype run AND runcr, strafing right
+	{
+		both pb_death_run_right
+	}
+	movetype runcr
+	{
+		both pb_crouchrun_death_drop
+		both pb_crouchrun_death_crumple
+	}
+	movetype run
+	{
+		both pb_death_run_forward_crumple
+		both pb_death_run_onfront
+		both pb_death_run_stumble
+	}
+	default
+	{
+		both pb_stand_death_neckdeath
+		both pb_stand_death_headchest_topple
+		both pb_stand_death_frontspin
+		both pb_stand_death_nervedeath
+		both pb_stand_death_legs
+		both pb_stand_death_lowerback
+		both pb_stand_death_head_collapse
+		both pb_stand_death_neckdeath_thrash
+	}
+}
+
+pain
+{
+	movetype prone
+	{
+		both pb_prone_painA_holdchest
+		both pb_prone_painB_holdhead
+	}
+	movetype crouching
+	{
+		both pb_crouch_pain_holdStomach
+	}
+	default
+	{
+		both pb_crouch_pain_holdStomach
+	}
+}
+
+
+scriptevent
+{
+	event lvt_ride_player2
+	{
+		both crew_lvt4_peleliu1_character4_player
+	}
+	event lvt_ride_player3
+	{
+		both crew_lvt4_peleliu1_character5_player
+	}
+	event lvt_ride_player4
+	{
+		both crew_lvt4_peleliu1_character9_player
+	}
+	event sherman_ride_player_combat_idle_8
+	{
+		both crew_sherman_passenger8_combatidle_player
+	}
+	event sherman_ride_player_combat_idle_9
+	{
+		both crew_sherman_passenger9_combatidle_player
+	}
+	event mak_truck_hatch
+	{
+		both p_makinraid_hatch
+	}
+	event mak_bomb_stand
+	{
+		both p_bomb_stand_loop
+	}
+	event mak_bomb_crouch
+	{
+		both p_bomb_crouch_loop
+	}
+
+	//event test_this_too
+	//{
+	//	both pb_stumble_forward
+	//}
+	//default
+	//{
+	//	both mp_mantle_up_57
+	//}
+}
+
+//===========================================
+// Vehicle animations
+//
+// NOTE: %vehicle_name here relates to the "animSet" field within the vehicle_info_t. This may be shared amongst multiple
+//		 vehicles.
+//
+// This is a bit messy, but is required since at the time of parsing this file, the entities are not yet read in. So we
+// must define here, for each level, which vehicles are being used, so that we don't keep unused vehicle animations in
+// memory.
+
+// NOTE: moved the vehicle defines up, so we can also use them for other animations (like gunners)
+
+// Vehicle animations are CUT
+/*
+
+#FOR_ALL_VEHICLES
+
+vehicle_entry
+{
+
+#IF vehicle_anim_type default
+
+	// Wheeled/APC
+	vehicle_name %vehicle_name, vehicle_seat_to driver, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _enter_driver attach tag_driver
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to passenger1, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _enter_passenger1 attach tag_passenger
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to passenger2, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _enter_passenger2 attach tag_passenger2
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to passenger3, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _enter_passenger3 attach tag_passenger3
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to passenger4, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _enter_passenger4 attach tag_passenger4
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to gunner1, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _enter_gunner1 attach tag_enter_gunner1
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to gunner2, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _enter_gunner2 attach tag_enter_gunner2
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to gunner3, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _enter_gunner3 attach tag_enter_gunner3
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to gunner4, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _enter_gunner4 attach tag_enter_gunner4
+	}
+
+#END_IF
+
+#IF vehicle_anim_type tank
+	
+	// Tank
+	// Stage 1
+	vehicle_name %vehicle_name, vehicle_seat_to driver AND gunner1 AND mantle, vehicle_anim_stage 1, vehicle_entry_pos side_left
+	{
+		both p_mantle_ + %vehicle_name + _left_1 attach tag_origin
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to driver AND gunner1 AND mantle, vehicle_anim_stage 1, vehicle_entry_pos side_right
+	{
+		both p_mantle_ + %vehicle_name + _right_1 attach tag_origin
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to driver AND gunner1 AND mantle, vehicle_anim_stage 1, vehicle_entry_pos rear
+	{
+		both p_mantle_ + %vehicle_name + _rear_1 attach tag_origin
+	}
+	// Stage 2
+	// Driver/Gunner
+	vehicle_name %vehicle_name, vehicle_seat_to driver AND gunner1, vehicle_anim_stage 2, vehicle_entry_pos side_left
+	{
+		both p_mantle_ + %vehicle_name + _left_2_turret attach tag_turret
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to driver AND gunner1, vehicle_anim_stage 2, vehicle_entry_pos side_right
+	{
+		both p_mantle_ + %vehicle_name + _right_2_turret attach tag_turret
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to driver AND gunner1, vehicle_anim_stage 2, vehicle_entry_pos rear
+	{
+		both p_mantle_ + %vehicle_name + _rear_2_turret attach tag_turret
+	}
+	// Mantle
+	vehicle_name %vehicle_name, vehicle_seat_to mantle, vehicle_anim_stage 2, vehicle_entry_pos side_left
+	{
+		both p_mantle_ + %vehicle_name + _left_2_grenade attach tag_turret
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to mantle, vehicle_anim_stage 2, vehicle_entry_pos side_right
+	{
+		both p_mantle_ + %vehicle_name + _right_2_grenade attach tag_turret
+	}
+	vehicle_name %vehicle_name, vehicle_seat_to mantle, vehicle_anim_stage 2, vehicle_entry_pos rear
+	{
+		both p_mantle_ + %vehicle_name + _rear_2_grenade attach tag_turret
+	}
+	
+#END_IF
+
+}
+
+vehicle_change_seat
+{
+
+#IF vehicle_anim_type default
+
+	// GUNNER 1
+	vehicle_name %vehicle_name, vehicle_seat_from gunner1, vehicle_seat_to gunner2, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _gunner1_gunner2 attach tag_gunner1
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from gunner1, vehicle_seat_to gunner3, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _gunner1_gunner3 attach tag_gunner1
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from gunner1, vehicle_seat_to gunner4, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _gunner1_gunner4 attach tag_gunner1
+	}
+
+	// GUNNER 2
+	vehicle_name %vehicle_name, vehicle_seat_from gunner2, vehicle_seat_to gunner1, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _gunner2_gunner1 attach tag_gunner2
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from gunner2, vehicle_seat_to gunner3, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _gunner2_gunner3 attach tag_gunner2
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from gunner2, vehicle_seat_to gunner4, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _gunner2_gunner4 attach tag_gunner2
+	}
+
+	// GUNNER 3
+	vehicle_name %vehicle_name, vehicle_seat_from gunner3, vehicle_seat_to gunner1, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _gunner3_gunner1 attach tag_gunner3
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from gunner3, vehicle_seat_to gunner2, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _gunner3_gunner2 attach tag_gunner3
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from gunner3, vehicle_seat_to gunner4, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _gunner3_gunner4 attach tag_gunner3
+	}
+
+	// GUNNER 4
+	vehicle_name %vehicle_name, vehicle_seat_from gunner4, vehicle_seat_to gunner1, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _gunner4_gunner1 attach tag_gunner4
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from gunner4, vehicle_seat_to gunner2, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _gunner4_gunner2 attach tag_gunner4
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from gunner4, vehicle_seat_to gunner3, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _gunner4_gunner3 attach tag_gunner4
+	}
+
+#END_IF
+
+}
+
+vehicle_exit
+{
+
+#IF vehicle_anim_type default
+
+	// Wheeled/APC
+	vehicle_name %vehicle_name, vehicle_seat_from driver, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _exit_driver attach tag_driver
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from passenger1, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _exit_passenger1 attach tag_passenger
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from passenger2, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _exit_passenger2 attach tag_passenger2
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from passenger3, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _exit_passenger3 attach tag_passenger3
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from passenger4, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _exit_passenger4 attach tag_passenger4
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from gunner1, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _exit_gunner1 attach tag_gunner1
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from gunner2, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _exit_gunner2 attach tag_gunner2
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from gunner3, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _exit_gunner3 attach tag_gunner3
+	}
+	vehicle_name %vehicle_name, vehicle_seat_from gunner4, vehicle_anim_stage 1
+	{
+		both mp_ + %vehicle_name + _exit_gunner4 attach tag_gunner4
+	}
+
+#END_IF
+
+}
+
+#END_FOR_ALL_VEHICLES
+
+ */

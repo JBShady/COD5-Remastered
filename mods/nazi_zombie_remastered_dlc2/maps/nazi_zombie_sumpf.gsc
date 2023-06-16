@@ -51,10 +51,6 @@ main()
 	level.character_tasks_completed = 0; // for our 4 player tasks, compare to playercount	
 	level.sack_has_been_found = 0; // for flogger step
 	level.meteor_ready = 0; // for our 20 zaps
-
-
-	maps\_zombiemode_weapons::add_zombie_weapon( "mine_bouncing_betty",&"ZOMBIE_WEAPON_SATCHEL_2000", 2000 );		
-	maps\_zombiemode_weapons::add_zombie_weapon( "ptrs41_zombie", 						&"ZOMBIE_WEAPON_PTRS41_750", 				750,	"vox_sniper", 5);	
 	
 	//precachestring(&"ZOMBIE_BETTY_ALREADY_PURCHASED");
 	precachestring(&"REMASTERED_ZOMBIE_BETTY_HOWTO");
@@ -183,15 +179,10 @@ add_tesla_gun()
 include_weapons()
 {
 	// Pistols
-	include_weapon( "zombie_colt" );
-	include_weapon( "zombie_tokarev" );
-	include_weapon( "zombie_nambu" );
-	include_weapon( "zombie_walther" );
-
-	include_weapon( "zombie_colt_upgraded" );
-	include_weapon( "zombie_walther_upgraded" );
-	include_weapon( "zombie_nambu_upgraded" );
-	include_weapon( "zombie_tokarev_upgraded" );
+	include_weapon( "zombie_colt", false );
+	include_weapon( "zombie_tokarev", false );
+	include_weapon( "zombie_nambu", false );
+	include_weapon( "zombie_walther", false );
 
 	include_weapon( "sw_357" );
 	
@@ -221,7 +212,7 @@ include_weapons()
 	// Grenade
 	include_weapon( "molotov" );
 	include_weapon( "st_grenade" );
-	include_weapon( "stielhandgranate" );
+	include_weapon( "stielhandgranate", false );
 
 	// Grenade Launcher	
 	include_weapon( "m1garand_gl_zombie" );
@@ -250,24 +241,8 @@ include_weapons()
 	include_weapon( "ray_gun" );
 	include_weapon( "tesla_gun" );
 	//bouncing betties
-	include_weapon("mine_bouncing_betty");
-	
-	//include_weapon("falling_hands");
-	// limited weapons
-	maps\_zombiemode_weapons::add_limited_weapon( "zombie_colt", 0 );
-	maps\_zombiemode_weapons::add_limited_weapon( "zombie_tokarev", 0 );
-	maps\_zombiemode_weapons::add_limited_weapon( "zombie_nambu", 0 );
-	maps\_zombiemode_weapons::add_limited_weapon( "zombie_walther", 0 );
-	maps\_zombiemode_weapons::add_limited_weapon( "zombie_colt_upgraded", 0 );
-	maps\_zombiemode_weapons::add_limited_weapon( "zombie_tokarev_upgraded", 0 );
-	maps\_zombiemode_weapons::add_limited_weapon( "zombie_nambu_upgraded", 0 );
-	maps\_zombiemode_weapons::add_limited_weapon( "zombie_walther_upgraded", 0 );
-	maps\_zombiemode_weapons::add_limited_weapon( "stielhandgranate", 0 );
+	include_weapon("mine_bouncing_betty", false);
 
-	//maps\_zombiemode_weapons::add_limited_weapon( "zombie_type99_rifle", 0 );
-	//maps\_zombiemode_weapons::add_limited_weapon( "zombie_gewehr43", 0 );
-	//maps\_zombiemode_weapons::add_limited_weapon( "zombie_m1garand", 0 );
-	
 }
 
 include_powerups()
@@ -279,10 +254,15 @@ include_powerups()
 	include_powerup( "carpenter" );
 }
 
-include_weapon( weapon_name )
+include_weapon( weapon_name, in_box )
 {
-	maps\_zombiemode_weapons::include_zombie_weapon( weapon_name );
+	if( !isDefined( in_box ) )
+	{
+		in_box = true;
+	}
+	maps\_zombiemode_weapons_sumpf::include_zombie_weapon( weapon_name, in_box );
 }
+
 
 include_powerup( powerup_name )
 {
@@ -391,8 +371,19 @@ turnLightGreen(name)
 			old_light_effect = getent(zapper_lights[i].target, "targetname");
 			light_effect = spawn("script_model",old_light_effect.origin);
 			//light_effect = spawn("script_model",zapper_lights[i].origin);
-			light_effect setmodel("tag_origin");	
-			light_effect.angles = (0,270,0);
+			light_effect setmodel("tag_origin");
+			if(name == "pendulum_light" && i == 0 ) // messed w the angles a bit for flogger, fx show up better now in game
+			{
+				light_effect.angles = (180,270,0);
+			}	
+			else if(name == "pendulum_light" && i == 1 )
+			{
+				light_effect.angles = (0,270,90);
+			}	
+			else
+			{
+				light_effect.angles = (0,270,0);
+			}
 			light_effect.targetname = "effect_" + name + i;
 			old_light_effect delete();
 			zapper_lights[i].target = light_effect.targetname;
@@ -413,7 +404,18 @@ turnLightRed(name)
 			light_effect = spawn("script_model",old_light_effect.origin);
 			//light_effect = spawn("script_model",zapper_lights[i].origin);
 			light_effect setmodel("tag_origin");	
-			light_effect.angles = (0,270,0);
+			if(name == "pendulum_light" && i == 0 ) // messed w the angles a bit for flogger, fx show up better now in game
+			{
+				light_effect.angles = (180,270,0);
+			}	
+			else if(name == "pendulum_light" && i == 1 )
+			{
+				light_effect.angles = (0,270,90);
+			}	
+			else
+			{
+				light_effect.angles = (0,270,0);
+			}
 			light_effect.targetname = "effect_" + name + i;
 			old_light_effect delete();
 			zapper_lights[i].target = light_effect.targetname;
@@ -522,11 +524,13 @@ play_oh_shit_dialog()
 
 level_start_vox()
 {
+
 	wait( 8 );//moved here
 	index = maps\_zombiemode_weapons::get_player_index( self );
 	plr = "plr_" + index + "_";
 	// wait( 6 );//commented out
 	self thread create_and_play_dialog( plr, "vox_level_start", 0.25 );
+
 }
 
 intro_screen()
@@ -538,7 +542,7 @@ intro_screen()
 	for(i = 0;  i < 3; i++)
 	{
 		level.intro_hud[i] = newHudElem();
-		level.intro_hud[i].x = 3;
+		level.intro_hud[i].x = 4;
 		level.intro_hud[i].y = 0;
 		level.intro_hud[i].alignX = "left";
 		level.intro_hud[i].alignY = "bottom";
@@ -595,9 +599,8 @@ intro_screen()
 
 /*
 
-// Egg descriptions
-
-// STEPS
+// SUMPF EGG STEPS
+// Doctor's Orders -- Harness the power of the Element
 
 // -- SHARED -- //
 1. “Suspicious Beginnings” - Find Richtofen's shelf and interact with it, you will hear his laugh.
@@ -606,19 +609,19 @@ intro_screen()
 2. “One & Done” - Complete only your character's tasks from the steps below depending on who you spawn as. Not eligible for achievement unless there are four players.
 
 // -- FOUR-PLAYER COOP -- //
-2. “Peter's Intel” - Peter's radio can be dislodged using a grenade weapon and dropped to the ground, but only Dempsey can recover it. To get a strong enough radio signal so the player can use it, power on the Comm Room radio hub at the desk by solving a random three-long code that must be activated in the correct order. After the radio hub is powered on, place your handheld radio on the desk to send your message, and then pick it up after it completes. However, before sending this message (at any point) there are two prerequisites that must be met, ensuring Dempsey has the required intel. First, the spawn room radio message must have been activated by interacting with the three radios placed throughout the room. Second, Dempsey must have interacted with the 115 Meteor. Without this required intel, the player will not be able to send a message and their radio will play idle static when holding it.
-3. “Secret Stash” - Nikolai must find some Vodka in the Storage Hut. Find the desk with the two crates and interact with the item, which acts as a dial. Turn the dial once to begin the step. Now, for every turn, a shiny crate will be visible elsewhere in the room in one of three possible locations. The player must align the dial until it is facing the same direction as a crate. Once aligned, the player can knife the crate to search for Vodka. However, only one of the three crate locations will have it, so the player will have to keep rotating through each of the three spots until they find it. Be careful, because if you attempt to open a crate that is not aligned with the dial, the correct crate’s location will be randomized so any progress will be reset. If successful, knifing the correct crate will reveal a bottle of Vodka.
-4. “Blade Cleaning” - Takeo must acquire a Katana from the Fishing Hut. First, pick up the medium sized rope found at one of three random locations inside the hut. Place the rope on the fishing pole to create a fishing line. Interact one more time and the fishing pole will raise a Katana out from underneath the water. However, the blade is covered in blood and Takeo will not pick it up. To clean the blade and pick it up, kill seven zombies with melee in the surrounding area, a lucky Japanese number.
-5. “Work to be Done” - Richtofen must acquire his journal from his Quarters. Pick up the journal by interacting with it and avoid touching water, or else the journal will be reset back to the start, along with any progress. While holding the journal, the player must search for three intel sites across the map to take notes at. While taking notes, the player is left vulnerable and immobile.
+2. “Peter's Intel” - Peter's radio can be dislodged using a grenade and dropped to the ground, but only Dempsey can recover it. To get a strong enough radio signal so the player can use it, power on the Comm Room radio hub at the desk by solving a random three-long code where each of the three radios must be interacted with in the correct order. After the radio hub is powered on, place your handheld radio on the desk to send your message and pick it up after it completes. However, before sending this message (at any point) there are two prerequisites that must be met, ensuring Dempsey has the required intel. First, the spawn room radio message must have been activated by interacting with the three radios throughout the room. Second, Dempsey must have interacted with the 115 meteor. Without this required intel, the player will not be able to send a message and their radio will play idle static while holding.
+3. “Secret Stash” - Nikolai must find some Vodka in the Storage Hut. Find the desk with the two crates and interact with the item--this acts as a dial. Turn the dial once to begin the step. For every turn, a shiny crate will be visible elsewhere in the room in one of three possible locations. The player must align the dial until it is facing the same direction as a crate. Once aligned, the player should knife the crate to search for Vodka. However, only one of the three crate locations will have it, so the player will have to keep rotating through each of the three spots until they find the Vodka. Be careful, because if you attempt to open a crate that is not aligned with the dial, the correct crate’s location will be randomized which resets any progress. If successful, knifing the correct crate will reveal a bottle of Vodka.
+4. “Blade Cleansing" - Takeo must acquire a Katana from the Fishing Hut. First, pick up the medium sized rope found at one of three random locations inside the hut. Place the rope on the fishing pole to create a fishing line. Interact one more time and the fishing pole will raise a Katana out from underneath the water. However, the blade is covered in blood and Takeo will not pick it up. To clean the blade and pick it up, without shooting your weapon kill seven zombies (a lucky Japanese number) with melee in the surrounding area.
+5. “Doc's On Call" - Richtofen must acquire his journal from his Quarters. Pick up the journal by interacting with it and avoid touching water, or else the journal will be reset back to the start, along with any progress. While holding the journal, the player must search for three intel sites across the map to take notes at. While taking notes, the player is left vulnerable and immobile.
 
 // -- SHARED -- //
 6. “Gear Up” - After all character tasks are complete, any player can pick up a sack found at one of three random locations in the main hut at the center of the map. This sack can be used to carry Element 115. 
-7. “Swampy Artifacts” - Locate and collect three small 115 meteor samples. One location will always be at the flogger, where players must “fling” four consecutive zombies to cause it to drop. The other two locations are randomly dispersed throughout the other three areas of the swamp. Player must have the sack to pick up these samples, or else they will be damaged.
-8. “Super Charge” - The player with the meteor must now obtain the Wunderwaffe DG-2 and successfully zap 20 zombies without swapping it out.
-9. “Tallying Time” - Interact with the tally marks showing "20" below the spawn room. If the Wunderwaffe is successfully charged, a sound will play.
-10. “Complete the Circuit” - The player with the super charged 115 and Wunderwaffe DG-2 must now shoot the large meteor outside of the map. This will result in a "nuke" effect shocking the surrounding zombies and the players will be rewarded. Our heroes would now be teleporting out of Shi No Numa.
+7. “Swamp Samples - Locate and collect three small 115 meteor samples. One location will always be at the flogger where players must “fling” four consecutive zombies to cause it to drop. The other two locations are randomly dispersed throughout the other three areas of the swamp. Player must have the sack to pick up these samples, or else the dangerous Element will cause damage when trying to pick up.
+8. “Super Charge” - The player with the meteor must now obtain the Wunderwaffe DG-2 and successfully zap 20 zombies without getting rid of the weapon.
+9. “Tallying Time” - Interact with the tally marks showing "20" below the spawn room, indicating how many zaps we collected. If the Wunderwaffe is successfully charged a sound will play, otherwise the player will groan.
+10. “Complete the Circuit” - The player with the super charged 115 and Wunderwaffe DG-2 must now shoot the large meteor outside the map. This will result in a "nuke" effect electrifying the surrounding zombies and the players will be rewarded. This is the moment when our characters would teleport out of Shi No Numa due to a rapid surge of Element 115 in the immediate area.
 
-// - User hints are only displayed for when items are required to do something (Radio, Journal). Vodka and Katana are pick-up only items and don't do anything, so no hints
+// - User hints are only displayed for when special items are required to do something (Radio, Journal). Vodka and Katana are pick-up only items and don't do anything, so no hints
 
 */
 
@@ -818,6 +821,8 @@ radio_drop()
 
 radio_code()
 {
+	level.radio_finished = false;
+
 	switch(level.partspot)
 	{
 	case 0:
@@ -847,11 +852,11 @@ radio_code()
 	{
 		if(level.magic_number == 3)
 		{
-		level.radio_c1 delete();
-		level.radio_c2 delete();
-		level.radio_c3 delete();
-		level thread morse_radio();
-		break;
+			level.radio_c1 delete();
+			level.radio_c2 delete();
+			level.radio_c3 delete();
+			level thread morse_radio();
+			break;
 		}
 		wait(0.05);
 	}
@@ -945,11 +950,11 @@ radio_c2()
 				{
 					if(randomintrange(0,4) < 1)
 					{
-					player thread create_and_play_dialog( plr, "vox_gen_ask_no", 0.25 );
+						player thread create_and_play_dialog( plr, "vox_gen_ask_no", 0.25 );
 					}
 					else
 					{
-			    	player thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog(); 
+			    		player thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog(); 
 					}
 					player playlocalsound("filecabinate_rattle");
 				}
@@ -1154,12 +1159,14 @@ pickup_radio_again()
 
 			if( index == 0 )
 			{
+				level.radio_finished = true;
+
 				player playlocalsound("gren_pickup_plr");
 
 				level.placed_radio delete();
 				placed_radio_trig delete();
 				
-				player giveweapon("zombie_item_radio"); 
+				//player giveweapon("zombie_item_radio"); 
 				player setactionslot(1,"weapon","zombie_item_radio"); 
 				player.has_special_weap = "zombie_item_radio";
 				break;
@@ -1236,7 +1243,8 @@ generic_vodka_trig(box_model)
 
 				PlayFx( level._effect["crate_destroy"], self.origin );
 				player playlocalsound("wood_break");
-			    player thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog(); 
+
+				player thread create_and_play_dialog( "plr_1_", "vox_gen_sigh", 0.05 );
 			//	PlayFx( level._effect["wood_chunk_destory"], self.origin );
 			//	playsoundatposition("wood_hard", self.origin);
 			    wait(3);
@@ -1356,14 +1364,17 @@ vodka_pickup()
 	level.vodka_finder show();
 
 	level.vodka_finder_trig = spawn( "trigger_radius",( 12627, -1167, -603), 0, 30, 25 );
+	wait_network_frame();
 
 // Spot 1, low by door
 	level.vodka_trig_first = spawn( "trigger_radius", level.vodka_box_first.origin, 0, 35, 5 );
 	level.vodka_trig_first thread generic_vodka_trig(level.vodka_box_first);
+	wait_network_frame();
 
 // Spot 2, on boxes
 	level.vodka_trig_second = spawn( "trigger_radius", level.vodka_box_second.origin, 0, 35, 5);
 	level.vodka_trig_second thread generic_vodka_trig(level.vodka_box_second);
+	wait_network_frame();
 
 // Spot 3, on barrel
 	level.vodka_trig_third = spawn( "trigger_radius", level.vodka_box_third.origin, 0, 35, 5 );
@@ -1512,7 +1523,6 @@ vodka_pickup()
 
 rope_pickup() // Change to rope
 {
-	wait(3); //temp
 	switch(level.partspot)
 	{
 	case 0:
@@ -1604,6 +1614,7 @@ katana_raise()
 			plr = "plr_" + index + "_";
 			if( index == 2 && player.has_rope == 1 ) // Has rope, first time entering trig and places it down here
 			{
+				player thread create_and_play_dialog( "plr_2_", "vox_summon_katana", 0.05 );
 				level notify("rope_placed");
 				player playlocalsound("sack_drop");
 				player.has_rope = 0;				
@@ -1747,7 +1758,12 @@ earn_katana_watcher() // Does not count Insta-Kill knives, too easy
 	{
 		while(self isTouching(fishing_hut) )
 		{
-			self waittill("knife_kill"); 
+			self waittill_either("knife_kill", "weapon_fired");
+			if ( self isFiring() && !self isMeleeing() )
+			{
+				break;
+			}
+
 			if(self isTouching(fishing_hut)  ) // Only ever count melee kills if we are touching the zone and using melee
 			{
 				self thread delay_katana_vox();
@@ -1773,7 +1789,7 @@ delay_katana_vox()
 }
 give_katana()
 {
-	wait(0.5);
+	wait_network_frame();
 	level.fishing_pole_three = spawn( "trigger_radius",( 8068.23, 3537.4, -664.875 ), 0, 30, 20 );
 	level.sword_on_rope setmodel("weapon_jap_katana_long_alt");
 
@@ -1920,7 +1936,7 @@ diary_drop()
 
 		d = self depthinwater();
 
-		if( d > 0 )
+		if( d > 1 || self maps\_laststand::player_is_in_laststand() )
 		{
 			level notify("dropped"); // Notify dropped, this ends all intel loops
 			level.intel1 delete();
@@ -1928,10 +1944,14 @@ diary_drop()
 			level.intel3 delete();
 			level.intel2_sound delete();
 
-			// Some water and visual effects
-			self setwatersheeting(true, 1.1);
-			self playlocalsound("water_burst");
-			wait(0.1);
+			if( d > 0 )
+			{
+				// Some water and visual effects
+				self setwatersheeting(true, 1.1);
+				self playlocalsound("water_burst");
+				wait(0.1);
+			}
+
 			self playlocalsound("gren_pickup_plr");
 
 			// Switch away from weapon if holding it
@@ -1966,7 +1986,7 @@ diary_drop()
 			self takeweapon("zombie_item_journal_writing");
 			break;
 		}
-		wait(0.5);
+		wait(0.05);
 	}
 }
 
@@ -1974,16 +1994,16 @@ spawn_intel_sites()
 {
 	level.intel_obtained = 0;
 
-	wait(0.05);
+	wait_network_frame();
 	level.intel1 = spawn( "trigger_radius",( 10473, 1448.5, -528.5), 0, 12, 25 );	
 	level thread intel_spawn(level.intel1);
 
-	wait(0.05);
+	wait_network_frame();
 	level.intel2 = spawn( "trigger_radius",( 7355.75, -1102.5, -679.5), 0, 12, 25 );
 	level.intel2_sound = spawn( "script_origin",( 7355.75, -1102.5, -679) );
 	level thread intel_spawn(level.intel2, level.intel2_sound);
 
-	wait(0.05);
+	wait_network_frame();
 	level.intel3 = spawn( "trigger_radius",( 11722.5, 3495, -655.5), 0, 12, 25 );
 	level thread intel_spawn(level.intel3);
 }
@@ -2016,6 +2036,8 @@ intel_spawn(intel, button_sound)
 
 	intel SetCursorHint("HINT_NOICON");
 
+	talk_once = 0; // only one shout per intel
+
     while ( true )
     {
 	    intel waittill( "trigger", DiaryHolder ); // wait for player to enter trigger
@@ -2025,31 +2047,28 @@ intel_spawn(intel, button_sound)
 		plr = "plr_" + index + "_";	
 		current_weapon = DiaryHolder GetCurrentWeapon();
 
-		if(!isDefined(DiaryHolder.talk_once))
-		{
-			DiaryHolder.talk_once = 0; // this makes it so players only shout for Richtofen once
-		}
-
-		if( index == 3 && isSubStr(current_weapon, "zombie_item_journal" ) ) // If richtofen and ready to go
+		if( index == 3 && isSubStr(current_weapon, "zombie_item_journal" ) ) // If Richtofen and holding journal--ready to go
 		{
 			intel SetCursorHint("HINT_ACTIVATE");
 			intel SetVisibleToPlayer(DiaryHolder);	
 		}
-		else
+
+		if( index != 3)
 		{
-			intel SetCursorHint("HINT_NOICON"); // For other characters or if not holding the diary
-			if(diaryholder.talk_once == 0 && index != 3 )
+			intel SetCursorHint("HINT_NOICON"); // For other characters, or if not holding the diary--no hint
+			if(talk_once == 0 )
 			{
-				DiaryHolder thread create_and_play_dialog( plr, "vox_name_richtofen", 0.25 ); // Only shouts name once, doesn't have to hold F
-				DiaryHolder.talk_once = 1;
+				DiaryHolder thread create_and_play_dialog( plr, "vox_name_richtofen", 0.1 ); // Each char can only shout name once to help find a spot, doesn't have to hold F
+				talk_once = 1;
 				continue;
 			}
 		}
-		// add delay  so you know you have to hold down F ?
-		if( !diaryholder UseButtonPressed() || !DiaryHolder IsTouching(intel) ) // From here on, player must be holding F and touching trig
+
+		if( !diaryholder UseButtonPressed() || !DiaryHolder IsTouching(intel) ) // From here on, player must be holding F and touching trig, otherwise we just go back to the start
 		{
 			continue;
 		}
+
 	    if ( isSubStr(current_weapon, "zombie_item_journal" ) && is_player_valid(DiaryHolder) && !DiaryHolder isThrowingGrenade() )
 	    {
 			DiaryHolder setactionslot(1,""); // HUD looks weird because it stops being highlighted gold when switching weapons, so might as well just hide it
@@ -2060,7 +2079,7 @@ intel_spawn(intel, button_sound)
 			DiaryHolder giveweapon("zombie_item_journal_writing");
 			DiaryHolder switchToWeapon("zombie_item_journal_writing");
 
-			DiaryHolder playlocalsound("book_open");
+			DiaryHolder playlocalsound("book_open"); // Faked weapon raise sound
 
 		    DiaryHolder DisableWeaponCycling();
 	      	DiaryHolder DisableOffhandWeapons();
@@ -2076,7 +2095,7 @@ intel_spawn(intel, button_sound)
 	    else // if Richtofen attempts to write without proper requirements met (not holding journal)
 	    {
 			DiaryHolder thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
-			wait(3);
+			wait(3); // delay so player cannot spam F on trigger
 			continue;
 	    }
     }
@@ -2095,13 +2114,18 @@ WaitForWriteDownCompletion( DiaryHolder, button_sound )
 		DiaryHolder.intelProgressBar updateBar( 0.01, 1 / timer );
 	}
 
-    while( DiaryHolder UseButtonPressed() && DiaryHolder IsTouching(self) && timer > 0 ) // we pause here while succesfully taking notes until 30 sec has passed
+    while( DiaryHolder UseButtonPressed() && DiaryHolder IsTouching(self) && (!DiaryHolder maps\_laststand::player_is_in_laststand()) && timer > 0 ) // we stay here while succesfully taking notes until 30 sec has passed
     {
+	    if ( !isSubStr( (DiaryHolder GetCurrentWeapon()), "zombie_item_journal" ) ) // if at any point we start holding another weapon (betty), we cancel
+        {
+        	break;
+        }
+
         timer -= 0.05;
 		DiaryHolder playloopsound("journal_loop");
 		if(isDefined(button_sound) )
 		{
-			button_sound playloopsound("switches_loop");
+			button_sound playloopsound("switches_loop"); // for intel site 2, where player is at radio
 		}
         wait(0.05);
     }
@@ -2110,7 +2134,7 @@ WaitForWriteDownCompletion( DiaryHolder, button_sound )
 
 	if(isDefined(button_sound) )
 	{
-		button_sound stoploopsound(); // for intel site 2, where player is at radio
+		button_sound stoploopsound(); 
 	}
 
 	if( isdefined( DiaryHolder.intelProgressBar ) )
@@ -2140,12 +2164,16 @@ WaitForWriteDownCompletion( DiaryHolder, button_sound )
 		}
 		// FULLY RESET JOURNAL, THIS FIXES IT ON HUD & GIVES BACK AMMO SO WE CAN HAVE NORMAL ANIMS--WORKS BECAUSE WE'RE NOT EVEN USING THIS SPECIFIC WEP DURING WRITING ANIM
 		DiaryHolder takeweapon("zombie_item_journal"); 
-		DiaryHolder giveweapon("zombie_item_journal"); 
+
+        level.intel_obtained++;
+		if(level.intel_obtained != 3)
+		{
+			DiaryHolder giveweapon("zombie_item_journal"); 
+		}
 		DiaryHolder setactionslot(1,"weapon","zombie_item_journal"); 
 
         self notify("write_down_complete");
 
-        level.intel_obtained++;
         if(level.intel_obtained == 3)
         {
 			level.character_tasks_completed = level.character_tasks_completed + 1;
@@ -2159,7 +2187,7 @@ WaitForWriteDownCompletion( DiaryHolder, button_sound )
         else
         {
 			wait(1.25);
-			DiaryHolder thread create_and_play_dialog( "plr_3_", "vox_gen_move" );
+			DiaryHolder thread create_and_play_dialog( "plr_3_", "vox_gen_move", 0.25 );
         }
         
         //iprintlnbold("Intels complete: ",level.intel_obtained);
@@ -2172,8 +2200,14 @@ WaitForWriteDownCancellation( DiaryHolder, intel )
     // Wait for if player stops holding the use button
     self endon("write_down_complete");
 
-    while(  DiaryHolder UseButtonPressed() && DiaryHolder isTouching(intel) )
-        wait 0.05;
+    while(  DiaryHolder UseButtonPressed() && DiaryHolder isTouching(intel) && (!DiaryHolder maps\_laststand::player_is_in_laststand()) )
+    {
+	    if ( !isSubStr( DiaryHolder GetCurrentWeapon(), "zombie_item_journal" ) ) // if we at any point start holding another weapon (betty), we cancel
+        {
+        	break;
+        }
+        wait(0.05);
+    }
 	
 	intel SetCursorHint("HINT_NOICON"); // Instantly remove hint, we are now on cooldown
 
@@ -2181,26 +2215,34 @@ WaitForWriteDownCancellation( DiaryHolder, intel )
     DiaryHolder EnableWeaponCycling();
     DiaryHolder EnableOffhandWeapons();
 
-    // SWITCH BACK TO NORMAL WEAPON
-	primaryWeapons = DiaryHolder GetWeaponsListPrimaries();
-	if( IsDefined( primaryWeapons ) && primaryWeapons.size > 0 )
-	{
-		DiaryHolder playlocalsound("book_close");
-		DiaryHolder SwitchToWeapon( primaryWeapons[0] );
-	}
-	// FULLY RESET JOURNAL, THIS FIXES IT ON HUD & GIVES BACK AMMO SO WE CAN HAVE NORMAL ANIMS--WORKS BECAUSE WE'RE NOT EVEN USING THIS SPECIFIC WEP DURING WRITING ANIM
-	DiaryHolder takeweapon("zombie_item_journal"); 
-	DiaryHolder giveweapon("zombie_item_journal"); 
-	DiaryHolder setactionslot(1,"weapon","zombie_item_journal"); 
+    if( !DiaryHolder maps\_laststand::player_is_in_laststand() ) // last stand check, because we do something different if we down while taking notes (resets all progress)
+    {
+	    // SWITCH BACK TO NORMAL WEAPON
+		primaryWeapons = DiaryHolder GetWeaponsListPrimaries();
+		if( IsDefined( primaryWeapons ) && primaryWeapons.size > 0 )
+		{
+			DiaryHolder playlocalsound("book_close");
+		    if ( isSubStr( DiaryHolder GetCurrentWeapon(), "zombie_item_journal" ) ) // if we're holding something else like a betty, that means we meant to switch to it so no need to go back to primary wep
+	        {
+				DiaryHolder SwitchToWeapon( primaryWeapons[0] );
+	        }
+		}
 
-	wait(2); // Cooldown here
+		// FULLY RESET JOURNAL, THIS FIXES IT ON HUD & GIVES BACK AMMO SO WE CAN HAVE NORMAL ANIMS--WORKS BECAUSE WE'RE NOT EVEN USING THIS SPECIFIC WEP DURING WRITING ANIM
+		DiaryHolder takeweapon("zombie_item_journal"); 
+		DiaryHolder giveweapon("zombie_item_journal"); 
+		DiaryHolder setactionslot(1,"weapon","zombie_item_journal"); 
+	}
+	wait(2); // Cooldown here so player does not spam F, anims could start to look weird, they get hard reset back to their gun and have to wait a cooldown/take their journal back out
+
+
 }
 
 
 sack_spawn()
 {
-	level thread meteor_spawn(); // lets spawn in some meteors first so if player finds them first, they know they need something to pick it up with
-	wait(0.25);
+	level thread meteor_spawn(); // lets spawn the meteors first even before sack is picked up, lets player figure it out themselves
+	wait_network_frame();
 
 	level.partspot = randomintrange(0,3);
 
@@ -2284,7 +2326,7 @@ sack_spawn()
 
 meteor_spawn()
 {
-	wait(1);
+	wait_network_frame();
 	level.meteors_found = 0;
 
 	meteor_spot_one = undefined;
@@ -2322,11 +2364,11 @@ meteor_trigs(meteor_origin)
 	meteor setmodel("fx_debris_meteor_115");
 
 	//fx
-	wait(0.1);
+	wait_network_frame();
 	playfxontag(level._effect["meteor_ambient_small"], meteor, "tag_origin");
 
 	//sound
-	wait(0.1);
+	wait_network_frame();
 	meteor_sound playloopsound("meteor_alt_loop");
 
 	while(1)
@@ -2431,7 +2473,7 @@ sack_hud_create(sack)
 		self.sack_hud.alignY = "bottom";
 		self.sack_hud.horzAlign = "right"; 
 		self.sack_hud.vertAlign = "bottom";
-		self.sack_hud.x = -200;
+		self.sack_hud.x = -230;
 		self.sack_hud.y = -1; 
 		self.sack_hud.alpha = 1;
 		self.sack_hud SetShader( shader, 32, 32 );
@@ -2472,16 +2514,6 @@ tmark()
 		index = maps\_zombiemode_weapons::get_player_index( player );
 		plr = "plr_" + index + "_";
 
-/*		if(level.round_number >= 21)
-		{
-			index = maps\_zombiemode_weapons::get_player_index( player );
-			plr = "plr_" + index + "_";
-
-		    player thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog(); 
-
-			tally_trig delete();
-			break;
-		}*/
 		while(1)
 		{
 			if( !player IsTouching( tally_trig ) )
@@ -2507,7 +2539,6 @@ tmark()
 
 			if(level.meteor_ready == 1 && player.sack == 2 )
 			{
-
 				player thread create_and_play_dialog( plr, "vox_gen_respond_pos", 0.25 );
 
 				level thread meteor_charged();
@@ -2516,11 +2547,7 @@ tmark()
 			}
 			else
 			{
-				index = maps\_zombiemode_weapons::get_player_index( player );
-				plr = "plr_" + index + "_";
-
 			    player thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog(); 
-
 				break;
 			}
 		}
@@ -2560,19 +2587,9 @@ meteor_charged()
 	players = get_players();
 	for (i = 0; i < players.size; i++)
 	{
-		players[i] playsound("shaka_sting_ending");
+		players[i] play_sound_2d("shaka_sting_ending");
 	}
 
-/*	if(level.round_number < 20)
-	{
-		wait(3);
-		for (i = 0; i < players.size; i++)
-		{
-			players[i] playsound("ann_vox_laugh_l");
-		}
-	}*/
-
-	level.attempting_overload = true;
 	level thread waffe_meteor();
 }
 
@@ -2639,7 +2656,7 @@ toilet_useage()
 	self.vox_audio_secret_available = array_remove(self.vox_audio_secret_available,sound_to_play);	
 	player maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 2.75);
 	
-	wait(292);	
+	wait(293);	
 	setmusicstate("WAVE_1");
 	level.eggs = 0;				
 }
@@ -2772,32 +2789,33 @@ radio_three()
 }
 meteor_trigger()
 {
-	level endon("meteor_triggered");
 	dmgtrig = GetEnt( "meteor", "targetname" );
-	player = getplayers();
+	players = getplayers();
 
-	level.attempting_overload = false;
+	triggers = 0;
 
-	for(i=0;i<player.size;i++)
-	{	
-		player[i].seen_meteor = false;
-		while(1)
+	while(1)
+	{
+		dmgtrig waittill("trigger", player);
+
+        if( (distancesquared(player.origin, dmgtrig.origin) < 1096 * 1096) && !isDefined(player.seen_meteor) ) // if seen meteor is true then that means dempsey can proceed with his steps
 		{
-			dmgtrig waittill("trigger", player);
-            weapon = player getcurrentweapon();
-
-            if( (distancesquared(player.origin, dmgtrig.origin) < 1096 * 1096) && level.attempting_overload == false ) // if this turns true, that means we are getting ready for the last step and shouldnt do our meteor vox anymore
-			{
-				player thread meteor_dialog();
-				player.seen_meteor = true;
-				level notify ("meteor_triggered");
-			}
-			else
-			{
-				wait(0.1);	
-			}
+			player.seen_meteor = true;
+			player thread meteor_dialog();
+			triggers++;
 		}
-	}	
+		else
+		{
+			wait(0.1);	
+		}
+
+		if(triggers >= getplayers().size )
+		{
+			break;
+		}
+
+	}
+
 	
 }
 meteor_dialog()
@@ -2826,7 +2844,7 @@ waffe_meteor()
             level thread phase_three_complete();
             level notify ("waffle_shot");
         }
-        else // Test this, new vox for if you try to shoot it during this step and aren't ready, the EE 115 dialogue gets temp disabled for this
+        else 
         {
 			inflictor thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
             wait(0.1);    
@@ -2908,12 +2926,12 @@ phase_three_complete()
 	players = get_players();
 	for (i = 0; i < players.size; i++)
 	{
-		players[i] playsound("shaka_sting_alt");
+		players[i] play_sound_2d("shaka_sting_alt");
 	}
 	
 	wait(3);
 
-	if(players.size >= 3 ) // if 3 player min add in takeo
+	if(players.size >= 4 ) // if 4 player min special scripted dialogue
 	{
 		//Takeo
 		plr = "plr_2_";
@@ -2927,11 +2945,12 @@ phase_three_complete()
 		players[i] thread give_all_perks_forever();
 		if(players.size >= 4) // must have 4 players to actually get achievement, "canon"
 		{
+			players[i] setclientdvar("sumpf_quest", 1 ); // all players can now complete der riese quest (if they load in as richtofen on der riese)
 			players[i] maps\_zombiemode_achievement::giveachievement_wrapper_new( "DLC2_ZOMBIE_EE" ); 
 		}	
 	}
 
-	if(players.size >= 2) // if 2 player min we do Dempsey/Niko
+	if(players.size >= 4 ) // if 4 player min special scripted dialogue
 	{
 		//Dempsey
 		plr = "plr_0_";
@@ -2942,29 +2961,26 @@ phase_three_complete()
 		plr = "plr_1_";
 		players[1] thread create_and_play_dialog( plr, "vox_success" );
 
-		if(players.size >= 4 ) // if full lobby we add in richtofen
-		{
-			wait(1.75);
-			//Richtofen
-			plr = "plr_3_";
-			players[3] thread create_and_play_dialog( plr, "vox_gen_compliment", 0.25 );
-		}
+		wait(1.75);
+		//Richtofen
+		plr = "plr_3_";
+		players[3] thread create_and_play_dialog( plr, "vox_gen_compliment", 0.25 );
+
 	}
-	else // Solo ending, works with any character
+	else // Otherwise if incomplete lobby, just do a random vox from someone
 	{
 		player = players[randomint(players.size)];
 		index = maps\_zombiemode_weapons::get_player_index( player );
 		plr = "plr_" + index + "_";
 		player thread create_and_play_dialog( plr, "vox_achievment", 0.25 );
 	}
-
-
-	level.attempting_overload = false; // egg is fully complete, now we re-enable if we want to do meteor vox again
-
 }
 
 give_all_perks_forever()
 {
+	self endon("disconnect");
+	self endon("death");
+	
 	if(!IsDefined(level._sq_perk_array))
 	{
 		level._sq_perk_array = [];
@@ -2997,7 +3013,6 @@ give_all_perks_forever()
 	if(!self HasPerk(level._sq_perk_array[3]) && is_player_valid(self) && (players.size != 1) )
 	{
 		self thread maps\_zombiemode_perks::give_perk(level._sq_perk_array[3]);
-		wait(0.5);
 	}
 
 	//SOLO
@@ -3014,11 +3029,8 @@ give_all_perks_forever()
 		{
 			level thread maps\_zombiemode_perks::revive_machine_exit();
 		}
-		wait(0.5);
 	}
 
-	self endon("disconnect");
-	self endon("death");
 	while(1)
 	{
 		//for(i = 3; i > level._sq_perk_array.size; i --)

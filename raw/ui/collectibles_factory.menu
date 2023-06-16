@@ -4,7 +4,7 @@
 #define CHOICE_SIZE_Y			22
 
 #define CHOICE_X_START			30//0
-#define CHOICE_Y_START			65//85//34
+#define CHOICE_Y_START			49//used to be 65 but pushed up a bit for extra ach to fit
 
 #define CHOICE_SEP_OFFSET_Y		-2
 #define CHOICE_SIDEITEM_SPACING	-310
@@ -23,7 +23,7 @@
 #define CHOICE_DVAR_TEXTALIGN	ITEM_ALIGN_MIDDLE_LEFT
 
 #undef CHOICE_SIZE_X
-#define CHOICE_SIZE_X			150
+#define CHOICE_SIZE_X			235
 
 #define ORIGIN_DESCRIPTION		(CHOICE_X_START + 15) 190
 #define COLOR_DESC_TEXT			1 1 1 0.7
@@ -90,9 +90,9 @@
 		style			WINDOW_STYLE_FILLED
 		soundloop 		"music_mainmenu"
 		border			0
-		onOpen			{ setdvar invite_visible "0"; setLocalVarBool ui_inOverlay 1; setdvar ui_selected_collectible "ZOMBIE_ALL_DOORS"; }
+		onOpen			{ setdvar invite_visible "0"; setLocalVarBool ui_inOverlay 1; setLocalVarBool ui_hideBack 1; setdvar ui_selected_collectible "ZOMBIE_ALL_DOORS"; }
 		onEsc			{ close self; }
-		onClose			{ setdvar invite_visible "1"; setLocalVarBool ui_inOverlay 0; }
+		onClose			{ setdvar invite_visible "1"; setLocalVarBool ui_inOverlay 0; setLocalVarBool ui_hideBack 0;  }
 
 		// background from overlaybg.inc
 		BACKGROUND_BLACK_LETTERBOX_BLURWORLD_VIS( 0 , 0 )
@@ -114,6 +114,13 @@
 		COLLECTIBLE_BUTTON( 9, "@REMASTERED_ZOMBIE_RAY_TESLA",ZOMBIE_RAY_TESLA, tablelookup( COLLECTIBLES_TABLE, 1,"DLC3_ZOMBIE_RAY_TESLA" , 0 ) )
 		COLLECTIBLE_BUTTON( 10, "@REMASTERED_ZOMBIE_NO_PERKS",ZOMBIE_NO_PERKS, tablelookup( COLLECTIBLES_TABLE, 1,"DLC3_ZOMBIE_NO_PERKS" , 0 ) )
 
+#define COLLECTIBLE_BUTTON( itemIndex, textArg, collectibleName, collectibleBit ) \
+	CHOICE_BUTTON_FOCUS_VIS_NOICON( itemIndex, textArg, ;, setdvar ui_selected_collectible collectibleName; setdvar ui_collectible_islocked 0;, ;, when( stat(collectibleBit) == 1 && dvarInt( factory_quest) == 1 ) ) \
+	CHOICE_BUTTON_FOCUS_VIS_NOHI_NOICON( itemIndex, "", ;, setdvar ui_selected_collectible collectibleName; setdvar ui_collectible_islocked 1;, ;, when( stat(collectibleBit) != 1 && dvarInt( factory_quest) == 1 ) ) \
+	CHOICE_DBUTTON_VIS( itemIndex, textArg, when( stat(collectibleBit) != 1 && dvarInt( factory_quest) == 1	) ) \
+
+		COLLECTIBLE_BUTTON( 11, "@REMASTERED_ZOMBIE_EE_FACTORY",ZOMBIE_EE_FACTORY, tablelookup( COLLECTIBLES_TABLE, 1,"DLC3_ZOMBIE_EE_FACTORY" , 0 ) )
+
 		// ---------------------- Final Drawing ------------------------------//
 		#define LOCAL_X_CARD_OFFSET -500
 		#define LOCAL_Y_CARD_OFFSET 80
@@ -130,8 +137,8 @@
 
 
 		// Achievement Shaders
-		PREPROC_SHADER_DRAW_ALIGNED_VIS( (LOCAL_X_TEXT_OFFSET_NEW-30) (LOCAL_Y_INFO_OFFSET_NEW+150) 64 64 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP, 0 0, "DLC3_"+dvarString( ui_selected_collectible ), 1 1 1 1, 0, 0, 0 0 0 0, when( !dvarbool( ui_collectible_islocked ) ) )
-		PREPROC_SHADER_DRAW_ALIGNED_VIS( (LOCAL_X_TEXT_OFFSET_NEW-30) (LOCAL_Y_INFO_OFFSET_NEW+150) 64 64 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP, 0 0, "DLC_ZOMBIE_LOCKED", 1 1 1 1, 0, 0, 0 0 0 0, when( dvarbool( ui_collectible_islocked ) ) )
+		PREPROC_SHADER_DRAW_ALIGNED_VIS( (LOCAL_X_TEXT_OFFSET_NEW-30) (LOCAL_Y_INFO_OFFSET_NEW+153) 64 64 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP, 0 0, "DLC3_"+dvarString( ui_selected_collectible ), 1 1 1 1, 0, 0, 0 0 0 0, when( !dvarbool( ui_collectible_islocked ) ) )
+		PREPROC_SHADER_DRAW_ALIGNED_VIS( (LOCAL_X_TEXT_OFFSET_NEW-30) (LOCAL_Y_INFO_OFFSET_NEW+153) 64 64 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP, 0 0, "DLC_ZOMBIE_LOCKED", 1 1 1 1, 0, 0, 0 0 0 0, when( dvarbool( ui_collectible_islocked ) ) )
 
 		// Map image
 		PREPROC_SHADER_DRAW_ALIGNED( (0 + MISSION_INFO_OFFSET) (-160 + MISSION_INFO_OFFSET_Y) 275 164 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_CENTER, 0 5, "loadscreen_nazi_zombie_factory_mini", 1 1 1 1, 0, 0, 0 0 0 0 )

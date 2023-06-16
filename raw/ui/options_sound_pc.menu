@@ -49,6 +49,12 @@
 #define SINGLE_PLAYER ( dvarbool( onlinegame ) == 0 && dvarbool( systemlink ) == 0 )
 #define MULTIPLAYER ( dvarbool( onlinegame ) || dvarbool( systemlink ) )
 
+#ifdef PC_INGAME
+#define INGAME 1
+#else
+#define INGAME ( dvarBool( cl_ingame ))
+#endif
+
 		#include "ui_mp/leftside_options.inc"
 		
 		CHOICE_SECTION_TITLE( 21, "@MENU_SOUND_CAP" )
@@ -58,8 +64,9 @@
 		CHOICE_DVARSLIDER( 24, "@MENU_SFX_VOLUME", snd_menu_sfx, 1.0, 0.0, 1.0, ; )
 		CHOICE_DVARSLIDER( 25, "@MENU_CINEMATICS_VOLUME", snd_cinematicVolumeScale, 1.0, 0.0, 1.0, ; )
 		CHOICE_DVARSLIDER( 26, "@MENU_MASTER_VOLUME", snd_menu_master, 1.0, 0.0, 1.0, ; )
-		CHOICE_DVARFLOATLIST_VIS( 27, "@REMASTERED_CHAR_DIALOGUE", character_dialog, { "@MENU_YES" 0 "@MENU_NO" 1 }, ;, when( !INGAME ) ) 
-		CHOICE_DVARFLOATLIST_VIS( 27, "@REMASTERED_CHAR_DIALOGUE", character_dialog, { "@MENU_YES" 0 "@MENU_NO" 1 }, ;, when( SINGLE_PLAYER ) ) 
+		CHOICE_DVARFLOATLIST_VIS( 27, "@REMASTERED_CHAR_DIALOGUE", character_dialog, { "@MENU_YES" 0 "@MENU_NO" 1 }, ;, when( !INGAME ) )
+		 
+		CHOICE_DVARFLOATLIST_VIS( 27, "@REMASTERED_CHAR_DIALOGUE", character_dialog, { "@MENU_YES" 0 "@MENU_NO" 1 }, ;, when( INGAME && SINGLE_PLAYER ) ) 
 
 		CHOICE_DDVARALTTEXT_VIS( 27, "@REMASTERED_CHAR_DIALOGUE", "@MENU_YES", when( INGAME && MULTIPLAYER && dvarString( "character_dialog") == "0" ) )
 		CHOICE_DDVARALTTEXT_VIS( 27, "@REMASTERED_CHAR_DIALOGUE", "@MENU_NO", when( INGAME && MULTIPLAYER && dvarString( "character_dialog") == "1" ) )

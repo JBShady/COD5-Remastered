@@ -4,6 +4,10 @@
 
 #using_animtree( "generic_human" );
 
+// Uses new variable set in anim script on zombies called "current_speed", which stores the name of a zombie's current movement anim. Can then use it to test if the string contains walk, run, or sprint.
+
+// issues: sometimes last zomb is weird, super sprinter last zombie got stuck idling too much, last walker zombies sometimes dont go idle at all
+
 init()
 {
 	init_smoked_anims();
@@ -52,16 +56,16 @@ trackSmokeGrenade()
 
 watchSmokeDetonation()
 {
-	self waittill( "explode", position ); // we wait for 1.5 seconds before grenade explodes after being thrown and then we start here
+	self waittill( "explode", position ); // we wait for 1.5 seconds before grenade explodes after being thrown and then we start here, first delay is set in wep file
 
-	wait(1.5); //wait another 1.5 seconds for smoke to start expanding
+	wait(1.5); // another delay of 1.5 seconds here so we let the smoke start expanding
 
 	gasEffectArea = spawn("trigger_radius", position, 0, 120, 150); 
-	durationOfSmoke = 15; 
+	durationOfSmoke = 15;  // smoke only exists for a set amount of time
 
 	for(;;)
 	{
-		wait(0.05); // Is this necessary
+		wait(0.05);
 		zombies = getaiarray("axis");
 		for(i=0;i<zombies.size;i++)
 		{
@@ -71,13 +75,13 @@ watchSmokeDetonation()
 				{
 					zombies[i].stored_speed = zombies[i].current_speed; // then we store their OG speed, this should NEVER have "confused" in it
 
-					if(isSubStr(zombies[i].current_speed, "run") && zombies.size > 1 )
+					if(isSubStr(zombies[i].current_speed, "run")  && zombies.size > 1 ) // if its run, we go down to walk
 					{
 						var = randomintrange(1, 7);
 						zombies[i] thread set_run_anim( "confused_walk" + var ); 
 						zombies[i].run_combatanim = level.scr_anim[zombies[i].animname]["walk" + var];
 					}
-					else if(isSubStr(zombies[i].current_speed, "sprint") && zombies.size > 1 )
+					else if(isSubStr(zombies[i].current_speed, "sprint") && zombies.size > 1  ) // if its sprint, we go down to run
 					{
 						var = randomintrange(1, 7);
 						zombies[i] thread set_run_anim( "confused_run" + var );
@@ -86,14 +90,14 @@ watchSmokeDetonation()
 				}   
 
 				rando = randomintrange(1,49);
-				if(rando <= 12 ) // 25% chance we do an additional taunt or idle even after being slowed, this is the only thing that effects walkers and crawlers
+				if(rando <= 12 ) // 25% chance we do an additional taunt or idle even after being slowed. This is the only thing that effects walkers and crawlers--so they pretty much get stunned a lot more which makes sense, theyre more likely to be confused by smoke
 				{
 					zombies[i] thread setSmokeStun(rando);
 				}    
 			}
-			else // then we check zombies not in the radius (this includes zombies that have since exited the radius)
+			else // then we check zombies that are not in the radius (this includes zombies that have since exited the radius)
 			{
-				if(isSubStr(zombies[i].current_speed, "confused") && isDefined(zombies[i].stored_speed) ) // if they happen to be previously confused, now we reset them back to their OG anim because they left the smoke
+				if(isSubStr(zombies[i].current_speed, "confused") && isDefined(zombies[i].stored_speed) ) // if they happen to be previously confused, now we reset them back to their OG anim because they left the smoke, otherwise we do nothing
 				{
 					zombies[i] thread set_run_anim( zombies[i].stored_speed ); 
 					zombies[i].run_combatanim = level.scr_anim[zombies[i].animname][zombies[i].stored_speed];
@@ -107,12 +111,14 @@ watchSmokeDetonation()
 	}
 
 	gasEffectArea delete();
+	// smoke ends and we wait for it to fully clear
 	wait(1);
 
+	// fail safe to reset zombies back to og speed
 	zombies = getaiarray("axis");
-	for(i=0;i<zombies.size;i++)
+	for(i=0;i<zombies.size;i++) 
 	{
-		if(isSubStr(zombies[i].current_speed, "confused") && isDefined(zombies[i].stored_speed) ) // if they happen to be previously confused, now we reset them back to their OG anim because they left the smoke
+		if(isSubStr(zombies[i].current_speed, "confused") && isDefined(zombies[i].stored_speed) ) // if they happen to be previously confused even if they never left the radius, we force them all back to their OG anim because now the smoke has faded away
 		{
 			zombies[i] thread set_run_anim( zombies[i].stored_speed ); 
 			zombies[i].run_combatanim = level.scr_anim[zombies[i].animname][zombies[i].stored_speed];
@@ -127,7 +133,7 @@ setSmokeStun(rando)
 	{
 		self.is_taunting = 0;	
 	}
-	else if(self.is_taunting == 1)
+	else if(self.is_taunting == 1) // dont spam multiple taunts all at once
 	{
 		return;
 	}
@@ -144,14 +150,13 @@ setSmokeStun(rando)
 
 	if( self.has_legs )
 	{
-		if(rando == 1)
+		if(rando == 1) // 1/12 chance we do a special taunt, otherwise just go idle
 		{
 			self do_a_taunt_smoke();
 		}
 		else
 		{
 			self animScripted( "smoke_zombie_stun", self.origin, self.angles, level._smoke_zombie_idle[0] );
-		//	wait(1); // Is this necessary?
 		}
 	}
 
@@ -171,8 +176,3 @@ do_a_taunt_smoke()
 	}
 }
 
-
-// things to test
-// if a zombie is outside of map
-// if rising
-// if entering map

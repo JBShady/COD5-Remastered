@@ -57,9 +57,113 @@ main()
 	thread clientscripts\_audio::audio_init(0);
 
 	thread clientscripts\nazi_zombie_prototype_amb::main();
+	
+	level thread player_dvar_init();
+
+	level thread fov_fix();
 
 	// This needs to be called after all systems have been registered.
 	thread waitforclient(0);
 
 	println("*** Client : zombie running...or is it chasing? Muhahahaha");
 }
+
+player_dvar_init()
+{
+	waitforclient( 0 );
+
+	players = GetLocalPlayers();
+	for(i = 0; i < players.size; i++)
+	{
+		players[i] thread dvar_update();
+	}
+}
+
+fov_fix()
+{
+	while(1)
+	{
+		level waittill( "fov_death", localClientNum ); // Wait for death
+		fov = GetDvarFloat("cg_fov"); // Save FOV
+		if(fov < 65)
+		{
+			fov = 65; // failsafe incase we save 40 as the fov from spectating
+		}
+		
+		level waittill( "fov_reset", localClientNum ); // Wait for respawn
+		SetClientDvar("cg_fov", fov); // Fix FOV in case it gets reset
+	}
+}
+
+dvar_update() // if we happen to change the dummy setting VARS on the main menu and load in-game, the actual dvar will not reflect the dummy, which in these cases we hard-code in the dvar to update
+{
+	self endon("disconnect");
+
+	if(GetDvarInt("cg_fov") == 40 ) // if still stuck on 40 fov from third person
+	{
+		SetClientDvar("cg_fov", 65); // reset back to normal
+	}
+
+	//if dvars do not exist, reset to default value just incase
+/*	if(GetDvar("r_fog_settings") == "" )
+	{
+		SetClientDvar("r_fog_settings", 1);
+	}
+	if(GetDvar("r_filmUseTweaks_settings") == "" )
+	{
+		SetClientDvar("r_filmUseTweaks_settings", 0);
+	}
+	if(GetDvar("r_lodBiasRigid_settings") == "" )
+	{
+		SetClientDvar("r_lodBiasRigid_settings", 0);
+	}
+	if(GetDvar("r_lodBiasSkinned_settings") == "" )
+	{
+		SetClientDvar("r_lodBiasSkinned_settings", 0);
+	}
+*/
+	for(;;)
+	{
+		if(GetDvarInt("r_fog_settings") == 0 )
+		{
+			SetClientDvar("r_fog", 0);
+		}
+		else if(GetDvarInt("r_fog_settings") == 1 )
+		{
+			SetClientDvar("r_fog", 1);
+		}
+
+		if(GetDvarInt("r_filmUseTweaks_settings") == 0 )
+		{
+			SetClientDvar("r_filmUseTweaks", 0);
+		}
+		else if(GetDvarInt("r_filmUseTweaks_settings") == 1 )
+		{
+			SetClientDvar("r_filmUseTweaks", 1);
+		}
+
+		if(GetDvarInt("r_lodBiasRigid_settings") == 0 )
+		{
+			SetClientDvar("r_lodBiasRigid", 0);
+		}
+		else if(GetDvarInt("r_lodBiasRigid_settings") == -200 )
+		{
+			SetClientDvar("r_lodBiasRigid", -200);
+		}
+
+		if(GetDvarInt("r_lodBiasSkinned_settings") == 0 )
+		{
+			SetClientDvar("r_lodBiasSkinned", 0);
+		}
+		else if(GetDvarInt("r_lodBiasSkinned_settings") == -200 ) 
+		{
+			SetClientDvar("r_lodBiasSkinned", -200);
+		}
+
+		wait(0.05);
+
+	}
+} // now that we are in game, we can freely edit the actual correct dvar and thus no special code is needed. however, to make sure the game remembers this when we quit back to the menu, we make sure to always update our setting dummy var in the menu file
+
+
+// The only flaw: If we try to manually edit a dvar on the main menu, depending on what your dummy dvar is set to, it may not do anything when you load in. But this is fine, all are accessible from settings there is no reason to use console

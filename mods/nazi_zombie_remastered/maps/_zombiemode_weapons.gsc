@@ -80,7 +80,7 @@ init_weapons()
 {
 	// Zombify
 	PrecacheItem( "zombie_melee" );
-	PrecacheItem( "falling_hands" )
+	PrecacheItem( "falling_hands" );
 
 	// Pistols
 	add_zombie_weapon( "zombie_colt", 							&"ZOMBIE_WEAPON_COLT_50", 							50,		"",				0);

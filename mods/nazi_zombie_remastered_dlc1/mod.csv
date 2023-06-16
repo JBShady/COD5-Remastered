@@ -39,8 +39,8 @@ xmodel,viewmodel_zombie_db_shotgun_sawed_new
 xmodel,weapon_mp_db_shotgun_sawed
 xmodel,viewmodel_rus_dp28_bipod_lmg
 xmodel,weapon_rus_dp28_bipod_lmg
-xmodel,vm_fg42
-xmodel,viewmodel_mp_mg42_mg
+xmodel,viewmodel_zombie_fg42_2023
+xmodel,viewmodel_ger_mg42_bipod_mg
 xmodel,weapon_mp_mg42_bipod_mg
 xmodel,viewmodel_zombie_mp40_smg
 xmodel,weapon_zombie_mp40_smg
@@ -48,7 +48,7 @@ xmodel,viewmodel_rus_svt40_rifle
 xmodel,weapon_mp_svt40_rifle
 xmodel,viewmodel_jap_type99_bipod_lmg
 xmodel,weapon_jap_type99_bipod_lmg
-xmodel,viewmodel_zombie_type100_smg_remastered
+xmodel,viewmodel_zombie_type100_smg_remastered_2023
 xmodel,weapon_zombie_type100_smg
 xmodel,viewmodel_usa_springfield_rifle_scoped_patched
 xmodel,weapon_usa_springfield_rifle_scoped_patched
@@ -57,6 +57,7 @@ fx,weapon/muzzleflashes/fx_30cal_bulletweap
 sound,nazi_zombie_asylum
 fx,env/light/fx_ray_sun_sm_short
 fx,misc/fx_zombie_mini_nuke
+menufile,ui/choices_setup_common.menu
 menufile,ui/objective_info.menu
 menufile,ui_mp/options_multi.menu
 menufile,ui/pc_gamesetup_coop_asylum.menu
@@ -65,10 +66,17 @@ menufile,ui/main_asylum.menu
 menufile,ui/options_game_pc_proto.menu
 menufile,ui/options_graphics_pc.menu
 menufile,ui_mp/leftside_options.inc
+menufile,ui_mp/leftside_controls.inc
 menufile,ui_mp/options_voice.menu
 menufile,ui/collectibles_asylum.menu
 menufile,ui/challenges_asylum.menu
 menufile,ui/options_sound_pc.menu
+menufile,ui/options_misc_pc.menu
+menufile,ui/choices_setup_common.menu
+menufile,ui/options_look_pc.menu
+menufile,ui/options_move_pc.menu
+menufile,ui/options_shoot_pc.menu
+menufile,ui/options_coop_pc.menu
 stringtable,maps/didyouknow_coop.csv
 xanim,ai_zombie_sprint_w_object_4
 xanim,ai_zombie_crawl_sprint
@@ -98,7 +106,6 @@ xmodel,mounted_usa_bar_bipod_lmg
 xmodel,mounted_ger_mg42_bipod_mg
 xmodel,mounted_ger_fg42_bipod_lmg
 material,mtl_weapon_mp_mg42
-weapon,sp/tabun_gas
 xmodel,viewmodel_mp_tabun
 xmodel,weapon_mp_tabun
 weapon,sp/m8_white_smoke
@@ -115,3 +122,13 @@ menufile,ui/hud.menu
 fx,maps/zombie/fx_zombie_light_glow_green
 fx,maps/zombie/fx_zombie_light_glow_red
 fx,impacts/large_woodhit_noshot
+rawfile,init_remastered.cfg
+xmodel,viewmodel_usa_double_barrel_2023
+localize,key
+material,asylum_bio1
+material,asylum_bio2
+material,asylum_bio3
+material,asylum_bio4
+material,hud_arrow_left
+material,hud_arrow_right
+material,hud_arrow_up

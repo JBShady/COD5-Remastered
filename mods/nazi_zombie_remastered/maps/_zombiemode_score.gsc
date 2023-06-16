@@ -25,7 +25,17 @@ player_add_points( event, mod, hit_location )
 		case "death":
 			points = level.zombie_vars["zombie_score_kill"]; 
 			points += player_add_points_kill_bonus( mod, hit_location ); 
-
+			if(IsDefined(self.kill_tracker))
+			{
+				self.kill_tracker++;
+			}
+			else
+			{
+				self.kill_tracker = 1;
+			}
+			//stats tracking
+			self.stats["kills"] = self.kill_tracker;
+			
 			if( level.zombie_vars["zombie_powerup_insta_kill_on"] == 1 && mod == "MOD_UNKNOWN" )
 			{
 				points = points * 2;
@@ -49,6 +59,8 @@ player_add_points( event, mod, hit_location )
 	
 	self.score += points; 
 	self.score_total += points;
+	//stat tracking
+	self.stats["score"] = self.score_total;
 	
 	self set_player_score_hud(); 
 }
@@ -183,9 +195,11 @@ player_downed_penalty()
 // Updates player score hud
 set_player_score_hud( init )
 {
-	num = self.entity_num; 
+	//num = self.entity_num; 
 
 	score_diff = self.score - self.old_score; 
+
+    if(score_diff == 0) return; // Don't display changes of 0 points - Feli
 
 	self thread score_highlight( self.score, score_diff ); 
 

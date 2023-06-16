@@ -155,6 +155,8 @@ check_point_in_active_zone( origin )
 			}
 		}
 	}
+
+	scr_org delete();
 	
 	return one_valid_zone;
 }
@@ -1812,7 +1814,7 @@ setup_response_line( player, index, response )
 	{
 		setup_rival_hero( player, 0, 1, response );	
 	}
-	if(index == 3) //RICHTOFEN: Hero Nickolai, Rival Dempsey
+	if(index == 3) //RICHTOFEN: Hero Takeo, Rival Dempsey
 	{
 		setup_rival_hero( player, 2, 0, response );
 	}
@@ -1823,10 +1825,42 @@ setup_rival_hero( player, hero, rival, response )
 {
 	players = getplayers();
 
-	playHero = isdefined(players[hero]);
-	playRival = isdefined(players[rival]);
+	playHero = isdefined(players[hero]); // if player exists in lobby, set their status to true otherwise false
+	playRival = isdefined(players[rival]); // if player exists in lobby, set their status to true otherwise false
 	
-	if(playHero && playRival)
+	// then we check range
+	if( playHero && distance (player.origin, players[hero].origin) < 500 ) // if hero is available, now lets check their distance
+	{
+		playHero = true; // we are in range
+	}
+	else
+	{
+		playHero = false; // we are out of range
+	}
+	
+	if( playRival && distance (player.origin, players[rival].origin) < 500 ) // if rival is available, now lets check their distance
+	{
+		playRival = true; // we are in range
+	}
+	else
+	{
+		playRival = false; // we are out of range
+	}
+
+	// then extra check in case our index/characters are mismatched due to players disconnecting
+	indexHero = maps\_zombiemode_weapons::get_player_index(players[hero]);
+	if(playHero && indexHero != hero ) // if the index of a player does not match what their character should be
+	{ // for example, the 2nd player might be takeo if nikolai leaves, who is normally 2nd player. But, we know takeo's index is for the 3rd player, so the game will try to play nikolai quotes on the 2nd player who is now takeo. Thus:
+		playHero = false;
+	}
+
+	indexRival = maps\_zombiemode_weapons::get_player_index(players[rival]);
+	if(playRival && indexRival != rival )
+	{
+		playRival = false;
+	}
+
+	if(playHero && playRival) // if still both are true, meaning both hero/rival are within range and in lobby, then we just randomize
 	{
 		if(randomfloatrange(0,1) < .5)
 		{
@@ -1836,29 +1870,19 @@ setup_rival_hero( player, hero, rival, response )
 		{
 			playHero = false;
 		}
-	}	
-	if( playHero )
+	}
+
+	// By this point, only one can be true, so we play a line
+	if(playHero && players.size != 1)
 	{		
-		if( distancesquared (player.origin, players[hero].origin) < 500*500)
-		{
-			plr = "plr_" + hero + "_";
-			players[hero] create_and_play_responses( plr, "vox_hr_" + response, 0.25 );
-		}
-		else
-		{
-			if(isdefined( players[rival] ) )
-			{
-				playRival = true;
-			}
-		}
+		player_responder = "plr_" + hero +"_";
+		players[hero] create_and_play_responses( player_responder, "vox_hr_" + response, 0.25 );
 	}		
-	if( playRival )
+	
+	if(playRival && players.size != 1)
 	{
-		if( distancesquared (player.origin, players[rival].origin) < 500*500)
-		{
-			plr = "plr_" + rival + "_";
-			players[rival] create_and_play_responses( plr, "vox_riv_" + response, 0.25 );
-		}
+		player_responder = "plr_" + rival +"_";
+		players[rival] create_and_play_responses( player_responder, "vox_riv_" + response, 0.25 );
 	}
 }
 

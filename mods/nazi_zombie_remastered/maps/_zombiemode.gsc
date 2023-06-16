@@ -85,38 +85,11 @@ main()
 
 	players = get_players();
 
-    if( getDvar( "classic_zombies" ) == "" )
-    setDvar( "classic_zombies", 0 );
-	
-	if(players.size != 1)
+/*	if(players.size != 1)
 	{
-	setDvar( "classic_zombies", 0);
-	self SetClientDvar("classic_zombies", 0);
-	}
+		setDvar( "classic_zombies", 0);
+	}*/
 
-    if( getDvar( "grabby_zombies" ) == "" )
-    setDvar( "grabby_zombies", 0 );
-
-    if( getDvar( "lod_bias_enable" ) == "" )
-    setDvar( "lod_bias_enable", 0 );
-
-    if( getDvar( "classic_perks" ) == "" )
-    setDvar( "classic_perks", 0 );
-
-    if( getDvar( "super_sprinters" ) == "" )
-    setDvar( "super_sprinters", 0 );
-
-    if( getDvar( "character_dialog" ) == "" )
-    setDvar( "character_dialog", 0 );
-
-    if( getDvar( "health_hud" ) == "" )
-    setDvar( "health_hud", 0 );
-
-    if( getDvar( "bio_access" ) == "" )
-    setDvar( "bio_access", 0 );
-
-/*    if( getDvar( "bio_clearance" ) == "" )
-    setDvar( "bio_clearance", 0 );*/
 	// Start the Zombie MODE!
 	level thread end_game();
 	level thread round_start();
@@ -130,6 +103,10 @@ main()
 	// Do a SaveGame, so we can restart properly when we die
 	SaveGame( "zombie_start", &"AUTOSAVE_LEVELSTART", "", true );
 
+	if(!IsDefined(level.eggs) )
+	{
+		level.eggs = 0;
+	}
 	// TESTING
 //	wait( 3 );
 //	level thread intermission();
@@ -289,6 +266,7 @@ init_levelvars()
 	level.intermission = false;
 	level.zombie_total = 0;
 	level.no_laststandmissionfail = true;
+	level.falling_down = false;
 
 	level.zombie_vars = [];
 
@@ -452,9 +430,9 @@ init_anims()
 	level._zombie_melee["zombie"][2] 				= %ai_zombie_attack_v1; 
 	level._zombie_melee["zombie"][3] 				= %ai_zombie_attack_v2;	
 	level._zombie_melee["zombie"][4]				= %ai_zombie_attack_v1;
-	level._zombie_melee["zombie"][5] 				= %ai_zombie_attack_v2; // To increase odds
-	level._zombie_melee["zombie"][6] 				= %ai_zombie_attack_forward_v1;  // To increase odds
-	level._zombie_melee["zombie"][7] 				= %ai_zombie_attack_forward_v2; // To increase odds
+	level._zombie_melee["zombie"][5] 				= %ai_zombie_attack_v2; // Slow anim, increase odds of stopping to hit
+	level._zombie_melee["zombie"][6] 				= %ai_zombie_attack_forward_v1;  // Slow anim, increase odds of stopping to hit
+	level._zombie_melee["zombie"][7] 				= %ai_zombie_attack_forward_v2; // Slow anim, increase odds of stopping to hit
 	level._zombie_melee["zombie"][8]				= %ai_zombie_attack_v4; //New, from Verruckt/Riese
 	level._zombie_melee["zombie"][9]				= %ai_zombie_attack_v6;	 //New, from Verruckt/Riese
 	level._zombie_run_melee["zombie"][0]				=	%ai_zombie_run_attack_v1; //New, from Verruckt/Riese
@@ -528,7 +506,7 @@ zombie_intro_screen( string1, string2, string3, string4, string5 )
 	setmusicstate( "SPLASH_SCREEN" );
 	wait (0.2);
 	//TUEY Set music state to WAVE_1
-	setmusicstate("WAVE_1");
+	//setmusicstate("WAVE_1");
 }
 
 players_playing()
@@ -554,11 +532,18 @@ watchGrenadeThrow()
 	
 	while(1)
 	{
-		self waittill("grenade_fire", grenade);
-		
+		self waittill("grenade_fire", grenade, type);
+
+		if ( type == "Stielhandgranate" ) // skip special grenades like molotovs
+		{
+			if( randomIntRange( 0, 4 ) == 0 ) // 1 in 4 chances of grenade out vox
+			{
+				self thread say_grenade_vo();
+			}
+		}
 		if(isdefined(grenade))
 		{
-			if(self maps\_laststand::player_is_in_laststand())
+			if(self maps\_laststand::player_is_in_laststand()) // or dead delete?
 			{
 				wait(0.05);
 				grenade delete();
@@ -608,66 +593,27 @@ onPlayerConnect_clientDvars()
 
 							"player_backSpeedScale", "0.9",
 							"player_strafeSpeedScale", "0.9",
-							"player_sprintStrafeSpeedScale", "0.8",
-
+							"player_sprintStrafeSpeedScale", "0.8" );
+	self SetClientDvars(
 							"aim_automelee_range", "96",
-							"player_deathInvulnerableTime", "1000",
-							"player_deathInvulnerableToProjectile", "0",
-							"player_deathInvulnerableToMelee", "0",
-				
 							"aim_automelee_lerp", "50",
 							"aim_automelee_region_height", "240",
 							"aim_automelee_region_width", "320",
 							"player_meleechargefriction", "2500"); //"stickiness " when knifing
 
-    if( getDvar( "lod_bias_enable" ) != "1" ) // if its set to 0, or if its not been set by player at all, auto enable higher detail
-    {
-		self SetClientDvars( "lod_bias_enable", 0 );
-		self setclientdvar("r_lodBiasRigid", -200);
-		self setclientdvar("r_lodBiasSkinned", -200);
-	}
-	else if( getDvar( "lod_bias_enable" ) == "1" )
+	self SetClientDvars(
+		"cg_overheadIconsize", "0",
+        "cg_overheadRanksize", "0"); 
+	
+	if( getDvar( "classic_perks" ) == "" || getDvar("classic_perks") == "0" ) // if dvar doesn't exist or is disabled, we stay default
 	{
-		self SetClientDvars( "lod_bias_enable", 1 ); // disables LOD bias effects
-	}
-
-	if( getDvar( "classic_perks" ) != "1" )
-	{
-		self SetClientDvars( "classic_perks", 0 );
+		//self SetClientDvars( "classic_perks", 0 );
 		self setclientdvar("player_lastStandBleedoutTime", 45);
 	}
-	
-	if( getDvar( "classic_perks" ) == "1" )
+	else if( getDvar( "classic_perks" ) == "1" )
 	{
-		self SetClientDvars( "classic_perks", 1 );
+		//self SetClientDvars( "classic_perks", 1 );
 		self setclientdvar("player_lastStandBleedoutTime", 30);
-	}
-
-    if( getDvar( "grabby_zombies" ) != "1" )
-    {
-		self SetClientDvars( "grabby_zombies", 0 );
-	}
-	else if( getDvar( "grabby_zombies" ) == "1" )
-    {
-		self SetClientDvars( "grabby_zombies", 1 );
-	}
-
-    if( getDvar( "character_dialog" ) != "1" )
-    {
-    	self SetClientDvars( "character_dialog", 0 );
-	}
-	else if( getDvar( "character_dialog" ) == "1" )
-    {
-    	self SetClientDvars( "character_dialog", 1 );
-	}
-
-    if( getDvar( "super_sprinters" ) != "1" )
-    {
-    	self SetClientDvars( "super_sprinters", 0 );
-	}
-	else if( getDvar( "super_sprinters" ) == "1" )
-    {
-    	self SetClientDvars( "super_sprinters", 1 );
 	}
 
 	self SetDepthOfField( 0, 0, 512, 4000, 4, 0 );
@@ -694,6 +640,10 @@ onPlayerSpawned()
 			self SetClientDvar( "cg_ScoresColor_Gamertag_2" , GetDvar( "cg_ScoresColor_Gamertag_2") );
 			self SetClientDvar( "cg_ScoresColor_Gamertag_3" , GetDvar( "cg_ScoresColor_Gamertag_3") );
 		}
+		self SetClientDvars(
+				"cg_overheadIconsize", "0",
+		        "cg_overheadRanksize", "0"); 
+			
 		self SetClientDvars( "cg_thirdPerson", "0",
 							 //"cg_fov", "65",
 							 "cg_thirdPersonAngle", "0" );
@@ -715,22 +665,17 @@ onPlayerSpawned()
 				self thread player_reload();
 
 				self SetClientDvars(
+				"player_backSpeedScale", "0.9",
+				"player_strafeSpeedScale", "0.9",
+				"player_sprintStrafeSpeedScale", "0.8",
+				
 				"aim_automelee_range", "96",
-				"player_deathInvulnerableTime", "1000", // coop invulnerable time
-				"player_deathInvulnerableToProjectile", "0",
-				"player_deathInvulnerableToMelee", "0",
 		        "aim_automelee_lerp", "50",
 		        "aim_automelee_region_height", "240",
 		        "aim_automelee_region_width", "320",
 		        "player_meleechargefriction", "2500" );
 				
-				if( getDvar( "lod_bias_enable" ) == "0" )
-				{
-					self setclientdvar("r_lodBiasRigid", -200);
-					self setclientdvar("r_lodBiasSkinned", -200);
-				}
-
-				if( getDvar( "classic_perks" ) == "0" )
+				if( getDvar( "classic_perks" ) == "" || getDvar("classic_perks") == "0" ) // if dvar doesn't exist or is disabled, we stay default
 				{
 					self setclientdvar("player_lastStandBleedoutTime", 45);
 				}
@@ -738,9 +683,17 @@ onPlayerSpawned()
 				{
 					self setclientdvar("player_lastStandBleedoutTime", 30);
 				}
+
+				//Init stat tracking variables
+				self.stats["kills"] = 0;
+				self.stats["score"] = 0;
+				self.stats["downs"] = 0;
+				self.stats["revives"] = 0;
+				self.stats["perks"] = 0;
+				self.stats["headshots"] = 0;
+				self.stats["zombie_gibs"] = 0;
 			}
-		}
-			
+		}	
 	}
 }
 
@@ -765,6 +718,8 @@ spawnSpectator()
 	self endon( "spawned_spectator" ); 
 	self notify( "spawned" ); 
 	self notify( "end_respawn" );
+
+	setClientSysState( "levelNotify", "fov_death", self );
 
 	if( level.intermission )
 	{
@@ -861,9 +816,11 @@ spectator_toggle_3rd_person()
 	self endon( "spawned_player" ); // If a player respawns
 	level endon( "intermission" ); // Game over, if all players die
 
+	wait_network_frame();
+	wait(0.05); // ensure that we save our fov before we mess with it below
 	// We start by setting up everything for 3rd person, only below do we start the toggling if a player so chooses
 	third_person = true;
-	self SetClientDvars( "cg_thirdPerson", "1",	"cg_thirdPersonAngle", "354" );
+	self SetClientDvars( "cg_thirdPerson", "1",	"cg_thirdPersonAngle", "354", "cg_fov", "40" );
 	self setDepthOfField( 0, 128, 512, 4000, 6, 1.8 );
 
 	self.viewChangeSpec = newClientHudElem( self );
@@ -882,54 +839,58 @@ spectator_toggle_3rd_person()
 
 	self thread reset_spec_hud();
 
-	while( 1 )
-	{
-		if(self useButtonPressed()) 
+    while(1)
+    {
+		countdown_time = 0.25;
+		for(;;)
 		{
-			initial_hold_time = 0.25; 
-			countdown_time = initial_hold_time;
-			for(;;)
-			{
-			    wait(0.05);
-			    if ( self UseButtonPressed() )
-			    {
-			        countdown_time -= 0.05;
-			        if ( countdown_time <= 0 ) break;
-			    }
-			    else if ( countdown_time != initial_hold_time )  
-			        countdown_time = initial_hold_time;
-			}
-
-			if( third_person )
-			{
-				third_person = false;
-				self SetClientDvars( "cg_thirdPerson", "1",	"cg_thirdPersonAngle", "354" );
-				self setDepthOfField( 0, 128, 512, 4000, 6, 1.8 );
-				self.viewChangeSpec SetText( &"REMASTERED_ZOMBIE_ENTER_FIRST_PERSON" );
-				wait(0.5);
-			}
-			else
-			{
-				third_person = true;
-				self SetClientDvars( "cg_thirdPerson", "0", "cg_thirdPersonAngle", "0" );
-				self setDepthOfField( 0, 0, 512, 4000, 4, 0 );
-				self.viewChangeSpec SetText( &"REMASTERED_ZOMBIE_ENTER_THIRD_PERSON" );
-				wait(0.5);
-			}
+		    wait(0.05);
+			if ( self meleeButtonPressed() )
+		    {
+		        countdown_time -= 0.05;
+		        if ( countdown_time <= 0 ) break;
+		    }
+		    else if ( countdown_time != 0.25 )  
+		        countdown_time = 0.25;
 		}
-		wait(0.05);
-	}
-	// move a lil more centered with other text in 1920 x 1080 res
+
+    	third_person = !third_person;
+        self set_third_person(third_person);
+
+		wait(0.5);
+    }
 	// destroy hud when respawn and if last person dies
+}
+
+set_third_person( value )
+{
+	if( value )
+	{
+		self SetClientDvars( "cg_thirdPerson", "1", "cg_thirdPersonAngle", "354", "cg_fov", "40" );
+		
+		self.viewChangeSpec SetText( &"REMASTERED_ZOMBIE_ENTER_FIRST_PERSON" );
+
+		self setDepthOfField( 0, 128, 512, 4000, 6, 1.8 );
+	}
+	else
+	{
+		self SetClientDvars( "cg_thirdPerson", "0", "cg_thirdPersonAngle", "0", "cg_fov", "65" );
+		
+		self.viewChangeSpec SetText( &"REMASTERED_ZOMBIE_ENTER_THIRD_PERSON" );
+
+		self setDepthOfField( 0, 0, 512, 4000, 4, 0 );
+	}
 }
 
 reset_spec_hud()
 {
-	self waittill( "spawned_player" );
+	self waittill_any( "spawned_player", "fix_your_fov" );
+	
+	setClientSysState( "levelNotify", "fov_reset", self );
+	
 	self.viewChangeSpec destroy();
 	self.viewChangeSpec = undefined;
 }
-
 
 spectators_respawn()
 {
@@ -1256,6 +1217,7 @@ round_start()
 	{
 		players[i] giveweapon( "stielhandgranate" );	
 		players[i] setweaponammoclip( "stielhandgranate", 0);
+		players[i] SetClientDvars( "ammoCounterHide", "0", "miniscoreboardhide", "0" );	 // fail safe incase our hud is still hidden
 	}
 	
 	/#
@@ -1337,6 +1299,9 @@ chalk_one_up()
 	else if( level.round_number < 11 )
 	{
 		hud = level.chalk_hud2;
+
+      	if(level.round_number == 6)
+        	hud.color = (1, 1, 1);
 	}
 
 	if( intro )
@@ -1358,7 +1323,16 @@ chalk_one_up()
 
 	wait( 0.5 );
 
-	play_sound_at_pos( "chalk_one_up", ( 0, 0, 0 ) );
+	//play_sound_at_pos( "chalk_one_up", ( 0, 0, 0 ) );
+
+	if(IsDefined(level.eggs) && level.eggs !=1 && level.round_number > 1 && level.intermission == false ) // only do this after round 1, because on round one we are using the mx splash screen which uses up our music state
+	{
+		setmusicstate("round_begin");
+	}
+	else if(IsDefined(level.eggs) && level.eggs !=1 && level.round_number == 1)
+	{
+		play_sound_at_pos( "chalk_one_up", ( 0, 0, 0 ) );
+	}
 
 	if( level.round_number == 11 && IsDefined( level.chalk_hud2 ) )
 	{
@@ -1428,8 +1402,16 @@ chalk_round_hint()
 		huds[i].color = ( 1, 1, 1 );
 	}
 
+	if(IsDefined(level.eggs) && level.eggs !=1 && level.intermission == false)
+	{
+		setmusicstate("round_end");
+	}
+
 	wait( time * 0.25 );
-	play_sound_at_pos( "end_of_round", ( 0, 0, 0 ) );
+
+	//play_sound_at_pos( "end_of_round", ( 0, 0, 0 ) );
+
+ 	prev_round = level.round_number;
 
 	// Pulse
 	fade_time = 0.5;
@@ -1448,6 +1430,16 @@ chalk_round_hint()
 		}
 
 		wait( fade_time );
+
+        if(prev_round < level.round_number)
+        {
+            chalk_one_up();
+            prev_round = level.round_number;
+            
+            // Makes the second chalk HUD on round 6 flash white too when it first appears (looks nicer) - Feli
+            if(level.round_number == 6 && huds.size == 1 && IsDefined(level.chalk_hud2))
+                huds[huds.size] = level.chalk_hud2;
+        }
 
 		for( i = 0; i < huds.size; i++ )
 		{
@@ -1481,7 +1473,7 @@ round_think()
 {
 	//TUEY - MOVE THIS LATER
 	//TUEY Set music state to round 1
-	setmusicstate( "WAVE_1" );
+	//setmusicstate( "WAVE_1" );
 
 	for( ;; )
 	{
@@ -1960,44 +1952,6 @@ playerzombie_waitfor_buttonrelease( inputType )
 	}
 }
 
-/*player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, modelIndex, psOffsetTime )
-{
-	if( iDamage < self.health )
-	{
-		return;
-	}
-
-	if( level.intermission )
-	{
-		level waittill( "forever" );
-	}
-
-	players = get_players();
-	count = 0;
-	for( i = 0; i < players.size; i++ )
-	{
-		if( players[i] == self || players[i].is_zombie || players[i] maps\_laststand::player_is_in_laststand() || players[i].sessionstate == "spectator" )
-		{
-			count++;
-		}
-	}
-
-	if( count < players.size )
-	{
-		return;
-	}
-
-	self.intermission = true;
-
-	self thread maps\_laststand::PlayerLastStand( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime );
-	self player_fake_death();
-
-	if( count == players.size )
-	{
-		end_game();
-	}
-}
-*/
 remove_ignore_attacker()
 {
 	self notify( "new_ignore_attacker" );
@@ -2023,11 +1977,17 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 			iprintlnbold(idamage);
 	}*/
 	
-	if( sMeansOfDeath == "MOD_FALLING" )
+	if( sMeansOfDeath == "MOD_FALLING" && (iDamage > self.maxhealth * 0.30) ) // only do shellshock on fall damage if damage is greater than 30% of health (if we have jug then basically we never get that then)
 	{
+		self stopShellshock();
+
 		sMeansOfDeath = "MOD_EXPLOSIVE";
 	}
-
+	else if( sMeansOfDeath == "MOD_FALLING" || sMeansOfDeath == "MOD_HIT_BY_OBJECT" || sMeansOfDeath == "MOD_CRUSH" )
+	{
+		sMeansOfDeath = "MOD_RIFLE_BULLET";
+	}
+	
 	if( isDefined( eAttacker ) )
 	{
 		if( isDefined( self.ignoreAttacker ) && self.ignoreAttacker == eAttacker ) 
@@ -2168,6 +2128,7 @@ end_game()
 	for( i = 0; i < players.size; i++ )
 	{
 		setClientSysState( "lsm", "0", players[i] );
+		players[i] notify("end_game_quiet");
 	}
 
 	self StopShellshock(); 
@@ -2235,6 +2196,10 @@ end_game()
 	wait( 1 );
 	//play_sound_at_pos( "end_of_game", ( 0, 0, 0 ) );
 	wait( 2 );
+	level.player_is_speaking = 1;
+
+	level clientNotify ("ktr"); // stop radio 
+
 	intermission();
 
 	wait( level.zombie_vars["zombie_intermission_time"] );
@@ -2255,6 +2220,7 @@ end_game()
 
 	if( is_coop() )
 	{
+		wait(7); // extra lil wait because sometimes co-op lobbies the intermission cuts off early since music can start a bit later
 		ExitLevel( false );
 	}
 	else
@@ -2292,6 +2258,8 @@ update_leaderboards()
 
 player_fake_death()
 {
+	level.falling_down = true;
+
 	level notify ("fake_death");
 	self notify ("fake_death");
 
@@ -2307,7 +2275,10 @@ player_fake_death()
 
 	self giveweapon("falling_hands");
 	self SwitchToWeapon("falling_hands");
+
 	wait(1);
+
+	self SetStance( "prone" );
 	self FreezeControls( true );
 }
 player_exit_level()
@@ -2673,6 +2644,7 @@ intermission()
 		setclientsysstate( "levelNotify", "zi", players[i] ); // Tell clientscripts we're in zombie intermission
 
 		players[i] SetClientDvars( "cg_thirdPerson", "0" );
+		players[i] notify("fix_your_fov");
 
 		if(isDefined(players[i].viewChangeSpec) )
 		{
@@ -2984,8 +2956,8 @@ player_reload()
 		mag = weaponClipSize(weap); // For weapon they are reloading, exclude clips of just 1 & 2 (Rocket launchers, double barels; these guns you end up reloading quite a bit)
 		ammo_count = self GetWeaponAmmoClip( weap ); // For weapon they are reloading, only shout reload if the mag is actually empty at 0
 		zombies = getaiarray("axis" );
-		zombies = get_array_of_closest( self.origin, zombies, undefined, undefined, 500 ); // Also, only shout reload when zombies are near, or else no reason to tell teammates
-		if( zombies.size > 0 && mag > 2 && ammo_count == 0 && weap != "zombie_colt") 
+		zombies = get_array_of_closest( self.origin, zombies, undefined, undefined, 500 ); // Also, only shout reload when more than 1 zombie is near, or else no reason to tell teammates
+		if( zombies.size > 1 && mag > 2 && ammo_count == 0 && weap != "zombie_colt") 
 		{
 			self thread add_reload_vox();
 		}
@@ -3093,7 +3065,7 @@ say_down_vo()
 			self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.2, "gen_sarge");
 		}
 	}
-	else if(get_players().size != 1)
+	else if(rando < 7 && get_players().size != 1) // only 60% chance we yell regular mandown, it can get repetitive
 	{
 		//iprintln("mandown_gen");
 		self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.2, "mandown_gen");
@@ -3161,6 +3133,34 @@ say_revived_resp_vo()
 	}
 			
 	self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.25 );
+	
+}
+
+say_grenade_vo()
+{
+	index = maps\_zombiemode_weapons::get_player_index(self);
+	
+	player_index = "plr_" + index + "_";
+	if(!IsDefined (self.vox_grenade))
+	{
+		num_variants = maps\_zombiemode_spawner::get_number_variants(player_index + "vox_grenade");
+		self.vox_grenade = [];
+		for(i=0;i<num_variants;i++)
+		{
+			self.vox_grenade[self.vox_grenade.size] = "vox_grenade_" + i;	
+		}
+		self.vox_grenade_available = self.vox_grenade;		
+	}	
+	sound_to_play = random(self.vox_grenade_available);
+	
+	self.vox_grenade_available = array_remove(self.vox_grenade_available,sound_to_play);
+	
+	if (self.vox_grenade_available.size < 1 )
+	{
+		self.vox_grenade_available = self.vox_grenade;
+	}
+			
+	self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.05 );
 	
 }
 

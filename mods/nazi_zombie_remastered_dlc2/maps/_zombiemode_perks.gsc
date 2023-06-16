@@ -285,15 +285,16 @@ turn_revive_sumpf_on()
 
 }
 
-revive_machine_exit(perk_hum)
+revive_machine_exit()
 {
 	level.revive_gone = true;
 	machine = GetEnt( "vending_revive", "targetname" );
 	machine_trigger = GetEnt( "specialty_quickrevive", "script_noteworthy" );
 	machine_bump = GetEntArray( "audio_bump_trigger", "targetname" );
 	
+	machine_trigger disable_trigger();
 
-	machine_trigger delete();
+//	machine_trigger delete();
 	wait(2.0);
 
     //Delete eletrict power surge SFX
@@ -311,7 +312,7 @@ revive_machine_exit(perk_hum)
 	machine_song.script_sound = "null";*/
 
 	machine playsound( "box_move" );
-	playsoundatposition ("whoosh", machine.origin );
+	playsoundatposition("whoosh", machine.origin );
 
 	wait( 0.1 );
 	machine playsound( "laugh_child" );
@@ -328,10 +329,8 @@ revive_machine_exit(perk_hum)
 
 	playsoundatposition ("box_poof", machine.origin);
 	
-	if(isDefined(perk_hum) )
-	{
-		perk_hum delete(); 
-	}
+	machine_trigger.perk_hum delete(); 
+	machine_trigger delete();
 	machine delete();
 }
 
@@ -430,8 +429,8 @@ vending_trigger_think()
 	notify_name = perk + "_power_on";
 	level waittill( notify_name );
 
-	perk_hum = spawn("script_origin", self.origin);
-	perk_hum playloopsound("perks_machine_loop");
+	self.perk_hum = spawn("script_origin", self.origin);
+	self.perk_hum playloopsound("perks_machine_loop");
 	
 	self thread check_player_has_perk(perk);
 	
@@ -577,7 +576,7 @@ vending_trigger_think()
 		player perk_give_bottle_end( gun, perk );
 		player.is_drinking = undefined;
 		// TODO: race condition?
-		if ( player maps\_laststand::player_is_in_laststand() )
+		if ( player maps\_laststand::player_is_in_laststand() || ( IsDefined( player.intermission ) && player.intermission ) )
 		{
 			continue;
 		}
@@ -604,7 +603,7 @@ vending_trigger_think()
 
 			if( level.solo_second_lives_left == 0 )
 			{
-				level thread revive_machine_exit(perk_hum);
+				level thread revive_machine_exit();
 			}
 		}
 /*		else if( perk == "specialty_rof" ) //Double tap buff
@@ -799,7 +798,7 @@ perk_hud_create( perk )
 		hud.alignY = "bottom";
 		hud.horzAlign = "left"; 
 		hud.vertAlign = "bottom";
-		hud.x = (self.perk_hud.size * 30) + 4; //new similar to bo1, to line up wih rounds 
+		hud.x = (self.perk_hud.size * 30) + 5; //new similar to bo1, to line up wih rounds 
 		hud.y = hud.y - 70; 
 		hud.alpha = 1;
 		hud SetShader( shader, 24, 24 );
@@ -824,6 +823,21 @@ perk_give_bottle_begin( perk )
 	self AllowSprint( false );
 	self AllowProne( false );		
 	self AllowMelee( false );
+
+	// Added checks for if they have weapon, cannot just clear it every time--this will mess up the slots if we have no ammo or if we buy the weapon after buying a perk
+	if( self HasWeapon("mine_bouncing_betty") )
+	{
+		self.betties = true; 
+		self setactionslot(4,"" ); // Hides betties
+	}
+	if( isDefined( self.has_special_weap ) && self.has_special_weap )
+	{
+		self setactionslot(1,"" ); // Hides special weapon 
+	}
+	if( self HasWeapon("m7_launcher_zombie") )
+	{
+		self setactionslot(3,"" ); // Hides rifle grenade
+	}
 
 	wait( 0.05 );
 
@@ -877,6 +891,23 @@ perk_give_bottle_end( gun, perk )
 	self AllowSprint( true );
 	self AllowProne( true );		
 	self AllowMelee( true );
+
+	if( isDefined( self.has_special_weap ) && self.has_special_weap )
+	{
+		self setactionslot(1,"weapon", self.has_special_weap ); 
+	}
+
+	if( self HasWeapon("m7_launcher_zombie") )
+	{
+		self setactionslot(3,"altMode","m7_launcher_zombie");
+	}
+
+	if( (isDefined(self.betties) && self.betties) )
+	{
+		self setactionslot(4,"weapon","mine_bouncing_betty");
+		self.betties = undefined;
+	}
+
 	weapon = "";
 	switch( perk )
 	{

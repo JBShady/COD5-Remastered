@@ -243,9 +243,11 @@ player_downed_penalty()
 // Updates player score hud
 set_player_score_hud( is_change, init )
 {
-	num = self.entity_num; 
+//	num = self.entity_num; 
 
 	score_diff = self.score - self.old_score; 
+
+    if(score_diff == 0) return; // Don't display changes of 0 points - Feli
 
 	self thread score_highlight( self.score, score_diff, is_change ); 
 

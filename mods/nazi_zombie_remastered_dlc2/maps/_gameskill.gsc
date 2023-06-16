@@ -1624,6 +1624,7 @@ playerBreathingSound( healthcap )
 			if( sound_on )
 			{
 				// MikeD (8/1/2008): Stop the CSC sound loop of the "breathing_hurt"
+				wait(0.75);
 				setclientsysstate( "levelNotify", "rfo2", self );
 				sound_on = false;
 			}

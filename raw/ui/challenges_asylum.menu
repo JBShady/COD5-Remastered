@@ -229,13 +229,13 @@
 			autowrapped
 		}
 
-/*		itemDef 
+		itemDef 
 		{
 		       name                 one_image
 				rect         45 -268 201 201 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM			
 		       forecolor            1 1 1 1
 		       style                 WINDOW_STYLE_SHADER
-		       background      "char1_bio" 
+		       background      "asylum_bio1" 
 		       decoration
 			   visible			when( localVarBool( one ) )
 		}
@@ -245,7 +245,7 @@
 				rect         45 -268 201 201 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM			
 		       forecolor            1 1 1 1
 		       style                 WINDOW_STYLE_SHADER
-		       background      "char2_bio" 
+		       background      "asylum_bio2" 
 		       decoration
 			   visible			when( localVarBool( two ) )
 		}
@@ -256,7 +256,7 @@
 				rect         45 -268 201 201 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM			
 		       forecolor            1 1 1 1
 		       style                 WINDOW_STYLE_SHADER
-		       background      "char3_bio" 
+		       background      "asylum_bio3" 
 		       decoration
 			   visible			when( localVarBool( three ) )
 		}
@@ -267,22 +267,12 @@
 				rect         45 -268 201 201 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM			
 		       forecolor            1 1 1 1
 		       style                 WINDOW_STYLE_SHADER
-		       background      "char4_bio" 
+		       background      "asylum_bio4" 
 		       decoration
 			   visible			when( localVarBool( four ) )
 
 		}
 
-		itemDef 
-		{
-		       name                 four_clasified
-		       rect                    FULLSCREEN
-		       forecolor            1 1 1 1
-		       style                 WINDOW_STYLE_SHADER
-		       background      "classified_bio" 
-		       decoration
-				visible       when( localVarBool( four ) && dvarString( "bio_clearance") != "115" )
-		}*/
 		itemDef 
 		{
 		       name                 line_bio

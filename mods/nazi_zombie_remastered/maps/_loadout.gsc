@@ -716,6 +716,13 @@ give_model( class )
 				level.character_index[ i ] = i;
 			}
 			level.character_index = array_randomize( level.character_index );	
+
+			character = GetDvarint("character");
+			if(isDefined(character) && character > 0 && character < 5) // Can only be a int value 1,2,3,or 4
+			{
+				level.character_index[0] = character - 1; // convert to player index which starts at 0
+			}
+			
 			index = maps\_zombiemode_weapons::get_player_index(self);
 			/*
 			if(isdefined(self.entity_num)){

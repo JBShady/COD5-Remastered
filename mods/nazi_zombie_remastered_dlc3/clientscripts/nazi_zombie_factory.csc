@@ -64,6 +64,10 @@ main()
 
 	level._zombieCBFunc = clientscripts\_zombie_mode::zombie_eyes;
 	
+	level thread player_dvar_init();
+
+	level thread fov_fix();
+
 	// This needs to be called after all systems have been registered.
 	thread waitforclient(0);
 
@@ -71,4 +75,101 @@ main()
 	
 }
 
+player_dvar_init()
+{
+	waitforclient( 0 );
 
+	players = GetLocalPlayers();
+	for(i = 0; i < players.size; i++)
+	{
+		players[i] thread dvar_update(i);
+		//players[i] thread fov_fix(i);
+
+	}
+}
+
+fov_fix()
+{
+	while(1)
+	{
+		level waittill( "fov_death", localClientNum ); // Wait for death
+		fov = GetDvarFloat("cg_fov"); // Save FOV
+		if(fov < 65)
+		{
+			fov = 65; // failsafe incase we save 40 as the fov from spectating
+		}
+		
+		level waittill( "fov_reset", localClientNum ); // Wait for respawn
+		SetClientDvar("cg_fov", fov); // Fix FOV in case it gets reset
+	}
+}
+
+dvar_update(localclientnum) // if we happen to change the dummy setting VARS on the main menu and load in-game, the actual dvar will not reflect the dummy, which in these cases we hard-code in the dvar to update
+{
+	self endon("disconnect");
+
+	if(GetDvarInt("cg_fov") == 40 ) // if still stuck on 40 fov from third person
+	{
+		SetClientDvar("cg_fov", 65); // reset back to normal
+	}
+	//if dvars do not exist, reset to default value just incase
+/*	if(GetDvar("r_fog_settings") == "" )
+	{
+		SetClientDvar("r_fog_settings", 1);
+	}
+	if(GetDvar("r_filmUseTweaks_settings") == "" )
+	{
+		SetClientDvar("r_filmUseTweaks_settings", 0);
+	}
+	if(GetDvar("r_lodBiasRigid_settings") == "" )
+	{
+		SetClientDvar("r_lodBiasRigid_settings", 0);
+	}
+	if(GetDvar("r_lodBiasSkinned_settings") == "" )
+	{
+		SetClientDvar("r_lodBiasSkinned_settings", 0);
+	}
+*/
+
+	for(;;)
+	{
+		if(GetDvarInt("r_fog_settings") == 0 )
+		{
+			SetClientDvar("r_fog", 0);
+		}
+		else if(GetDvarInt("r_fog_settings") == 1 )
+		{
+			SetClientDvar("r_fog", 1);
+		}
+
+		if(GetDvarInt("r_filmUseTweaks_settings") == 0 )
+		{
+			SetClientDvar("r_filmUseTweaks", 0);
+		}
+		else if(GetDvarInt("r_filmUseTweaks_settings") == 1 )
+		{
+			SetClientDvar("r_filmUseTweaks", 1);
+		}
+
+		if(GetDvarInt("r_lodBiasRigid_settings") == 0 )
+		{
+			SetClientDvar("r_lodBiasRigid", 0);
+		}
+		else if(GetDvarInt("r_lodBiasRigid_settings") == -200 )
+		{
+			SetClientDvar("r_lodBiasRigid", -200);
+		}
+
+		if(GetDvarInt("r_lodBiasSkinned_settings") == 0 )
+		{
+			SetClientDvar("r_lodBiasSkinned", 0);
+		}
+		else if(GetDvarInt("r_lodBiasSkinned_settings") == -200 ) 
+		{
+			SetClientDvar("r_lodBiasSkinned", -200);
+		}
+
+		wait(0.05);
+
+	}
+}

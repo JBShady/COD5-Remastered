@@ -18,12 +18,16 @@ init()
 	}
 
 	array_thread(trigs,::buy_bouncing_betties);
+
 	level thread give_betties_after_rounds();
+	level thread update_betty_fires();
+
 }
 
 buy_bouncing_betties()
 {
 	self.zombie_cost = 1000;
+	self UseTriggerRequireLookAt(); // new
 	self sethintstring( &"REMASTERED_ZOMBIE_BETTY_PURCHASE" );	
 	self setCursorHint( "HINT_NOICON" );
 
@@ -73,7 +77,7 @@ buy_bouncing_betties()
 
 				}
 			}
-			else if ( who.score < self.zombie_cost )
+			else if ( who.score < self.zombie_cost ) // new
 			{	
 				play_sound_on_ent( "no_purchase" );
 				//who thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
@@ -105,18 +109,20 @@ set_betty_visible()
 	}
 }
 
-bouncing_betty_watch()
+bouncing_betty_watch() // does not try to end on death, stays running forever now
 {
-	self endon("death");
+	self endon( "disconnect" );
+	self waittill( "spawned_player" ); 
 
 	while(1)
 	{
+
 		self waittill("grenade_fire",betty,weapname);
 		if(weapname == "mine_bouncing_betty")
 		{
 			betty.owner = self;
-			betty thread betty_think();
-			self thread betty_death_think();
+			betty thread betty_think(self);
+			betty thread betty_death_think(); // why is this self, what is this function doing
 		}
 	}
 }
@@ -136,19 +142,93 @@ betty_death_think()
 
 bouncing_betty_setup()
 {	
-	self thread bouncing_betty_watch();
+	// These two functions are threaded on spawn now. Endon("death") doesn't seem to actually end these functions, after we respawn they are still running
+	// Thus, we should not thread every time we purchase or else players who have respawned will then have multiple betty threads running, which is unnecssary and leads to bugs
+	//self thread bouncing_betty_watch();
+	//self thread betty_no_weapons();
 
 	self giveweapon("mine_bouncing_betty");
 	self setactionslot(4,"weapon","mine_bouncing_betty");
 	self setweaponammostock("mine_bouncing_betty",5);
 }
 
-betty_think()
+betty_no_weapons() // does not try to end on death, stays running forever now
 {
-	wait(1);
-	trigger = spawn("trigger_radius",self.origin,9,80,64);
-	trigger waittill( "trigger" );
-	trigger = trigger;
+	self endon( "disconnect" );
+	self waittill( "spawned_player" ); 
+
+	while(1)
+	{
+		primaryWeapons = self GetWeaponsListPrimaries();
+		if( IsDefined( primaryWeapons ) && primaryWeapons.size == 0 && self getAmmoCount("mine_bouncing_betty") == 0 )
+		{
+			self takeweapon("mine_bouncing_betty");
+		}
+		wait(0.05);
+	}
+}
+
+betty_think(player)
+{
+
+	wait(1); // wait is first, we do not do anything until it passes. this also ensures that the betty has been fully planted on the ground before setting up parameters
+
+	if(!isdefined(player.mines))
+	{
+		player.mines = [];
+	}
+	
+	player.mines = array_add( player.mines, self );
+
+	//player iprintlnbold("Betties placed: ", player.mines.size);
+
+	trigger = spawn("trigger_radius",self.origin,9,80,64); // why are there 9 flags set on spawn?
+	self.trigger = trigger;
+
+	if(player.mines.size <= 30)
+	{
+		while(1)
+		{
+			trigger waittill( "trigger", ent );
+
+			if(player.mines.size > 30)
+			{
+				break;
+			}
+
+			if ( isdefined( player ) && ent == player )
+			{
+				continue;
+			}
+
+			if ( ent damageConeTrace(self.origin, self) == 0 )
+			{
+				continue;
+			}
+
+			break;
+		}
+	}
+
+	wait_to_fire_betty(); //new, prevents crashing from betty spam, exploding all at once
+	
+    if(is_in_array(player.mines,self))
+    {
+    	if(player.mines.size == 1) // if we have worked our way down to just 1 betty on the map
+    	{
+    		player.mines = []; // lets reset because trying to remove last item from array
+    	}
+    	else // otherwise just remove 1
+    	{
+	        player.mines = array_remove_nokeys(player.mines,self);
+    	}
+    }
+
+	if( isdefined( trigger ) ) // delete trigger as soon as we know it is actually triggered
+	{
+		trigger delete();
+	}
+
 	self playsound("betty_activated");
 	wait(.1);	
 	fake_model = spawn("script_model",self.origin);
@@ -175,13 +255,20 @@ betty_think()
 	}
 	//radiusdamage(self.origin,128,1000,75,self.owner);
 
-	trigger delete();
-	fake_model delete();
-	tag_origin delete();
+	if( isdefined( fake_model ) )
+	{
+		fake_model delete();
+	}
+	if( isdefined( tag_origin ) )
+	{
+		tag_origin delete();
+	}
 	if( isdefined( self ) )
 	{
 		self delete();
 	}
+	//player iprintlnbold("Betties left: ", player.mines.size);
+
 }
 
 betty_smoke_trail()
@@ -252,4 +339,23 @@ show_betty_hint(string)
 	self.hintelem setText(text);
 	wait(3.5);
 	self.hintelem settext("");
+}
+
+update_betty_fires()
+{
+	while(true)
+	{
+		level.hasBettyFiredRecently = 0;
+		wait_network_frame();
+	}
+}
+
+wait_to_fire_betty()
+{
+	while(level.hasBettyFiredRecently >= 4)
+	{
+		wait_network_frame();
+	}
+
+	level.hasBettyFiredRecently++;
 }

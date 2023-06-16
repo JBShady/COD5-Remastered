@@ -128,7 +128,7 @@ couch_loop,SFX\Levels\zombie\couch_loop\whisper_00.wav,,,1,1,100,550,,,,,ambienc
 zombie_spawn,SFX\Levels\zombie\maps\asylum\dirt_spawn_##,,,1,1,250,2000,3,priority,,,full_vol,,curve4,,2250,,curve2,1,1,,3d,,,,,,,,,,,,,,,,,,,,,,,40,60,0.25,1,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 amb_behind_door,SFX\Levels\zombie\maps\asylum\door\bang_##,,,0.4,0.55,150,750,2,reject,,,full_vol,,,,3300,,curve2,0.85,1.2,,3d,,0.1,,,,,,amb_behind_door_vox,,,,,,,,,0.25,,,,,,100,100,0.25,1,,
-amb_behind_door_vox,SFX\Levels\zombie\maps\asylum\door\door_vox_##,,,0.5,0.85,150,1000,8,reject,,,full_vol,,,,3300,,curve2,0.85,1.2,,3d,,0.05,,,,,,,,,,,,,,,0.25,,,,,,100,100,0.25,1,,
+amb_behind_door_vox,SFX\Levels\zombie\maps\asylum\door\door_vox_##,,,0.5,0.85,150,1000,8,reject,,,full_vol,,,,3300,,curve2,0.85,1.2,,3d,,0.1,,,,,,,,,,,,,,,0.25,,,,,,100,100,0.25,1,,
 amb_pa_system,SFX\Levels\zombie\maps\asylum\PA\pa_system_00.wav,,,0.7,0.7,250,2250,1,reject,,,full_vol,,,,2400,,curve2,1,1,,3d,,,,0.6,,,,,,,,,,,,,0.15,,,,,,100,100,0.25,1,,
 glass_pane_break,SFX/Destruction/Glass/imp_glass_pane_##,,,0.9,1,250,2500,,,,,full_vol,,,,4000,,curve2,0.9,1.1,,3d,,,,,,,,,,,,,,,,,,,,,,,40,60,0.25,1,,
 amb_water_pipe,SFX\Levels\zombie\maps\asylum\water\pipe\water_pipe_loop.wav,,,0.4,0.4,50,500,,,,,ambience,,curve2,,,,,1,1,,3d,,,looping,,,,,,,,,,,50,150,0.5,0.3,,,,,,5,10,0.15,0.85,,
@@ -170,6 +170,7 @@ amb_wind_right,SFX\Levels\zombie\maps\asylum\halls\wind\wind_right.wav,,,1,1,50,
 amb_vent,SFX\Levels\zombie\maps\asylum\halls\vent\vent_00.wav,,,1,1,300,500,1,reject,,,ambience,,,,750,,curve1,1,1,,3d,streamed,,looping,,,,,,,,,,,,,,0.1,,,,,,40,80,0.25,1
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 # Switch,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+switch_up,SFX\Levels\zombie\traps\log_trap\switch\switch.wav,,,0.40,0.40,50,500,2,reject,,,full_vol,,curve3,,,,,1,1,,3d,,,,,,,,,,,,,,,,,0,,,no,,,80,80,0.25,1,,
 switch_flip,SFX\Levels\zombie\maps\asylum\switch\flip\flip.wav,,,1,1,250,2500,1,oldest,,,full_vol,,,,4000,,curve2,1,1,,3d,,,,,,,,,,,,,,,,,,,,,,,100,100,0.25,1
 amb_sparks_l_b,SFX\Levels\zombie\maps\asylum\switch\flip\amb_sparks_l.wav,,,1,1,250,2500,1,oldest,,,full_vol,,,,4000,,curve2,1,1,,3d,,,,,,,,,,,,,,,,,,,,,,,100,100,0.25,1
 amb_sparks_r_b,SFX\Levels\zombie\maps\asylum\switch\flip\amb_sparks_r.wav,,,1,1,250,2500,1,oldest,,,full_vol,,,,4000,,curve2,1,1,,3d,,,,,,,,,,,,,,,,,,,,,,,100,100,0.25,1
@@ -274,7 +275,7 @@ carp_loop,SFX\Levels\zombie\powerups\carp\carp_loop.wav,,,0.75,0.75,,,4,reject,,
 carp_end,SFX\Levels\zombie\powerups\carp\carp_end.wav,,,1,1,,,4,reject,,,full_vol,,,1,,,,1,1,,2d,,,,,,,,points_loop_off,,,wpn_all,,,,,,0.25,,,,,,100,100,0.25,1
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 # Player Dialog,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-raygun_stinger,SFX\UI\arcade\arcademode_kill_streak_won.wav,,1,1,1,50,1500,2,reject,1,reject,voice,,curve2,,,,,1,1,,2d,streamed,,,master,,,,,,,wpn_all,,,,,,0.5,,,,,,10,25,0.25,1
+raygun_stinger,SFX\UI\arcade\arcademode_kill_streak_won.wav,,1,1,1,50,1500,2,reject,1,reject,full_vol,,curve2,,,,,1,1,,2d,streamed,,,master,,,,,,,wpn_all,,,,,,0.5,,,,,,10,25,0.25,1
 
 # Player 0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 plr_0_nvox_mg_deploy_0,voiceovers\zombie\dlc1\Player0\weappick_mg_00.wav,,,1,1,75,1700,2,reject,1,reject,voice,,curve2,0.8,2100,,curve2,1,1,,3d,streamed,,,master,,,,,,0,,,,50,500,0.9,0.5,,,,,,10,25,0.25,1
@@ -731,6 +732,7 @@ plr_3_nvox_gen_pos_1,voiceovers\zombie\dlc1\Player3\feedback_killstreak_01.wav,,
 plr_3_nvox_gen_pos_2,voiceovers\zombie\dlc1\Player3\feedback_killstreak_06.wav,,,1,1,75,1700,2,reject,1,reject,voice,,curve2,0.8,2100,,curve2,1,1,,3d,streamed,0.5,,master,,,,,,600,,,,50,500,0.9,0.5,,,,,,10,25,0.25,1
 plr_3_nvox_gen_pos_3,voiceovers\zombie\dlc1\Player3\feedback_kill_headd_04.wav,,,1,1,75,1700,2,reject,1,reject,voice,,curve2,0.8,2100,,curve2,1,1,,3d,streamed,0.5,,master,,,,,,600,,,,50,500,0.9,0.5,,,,,,10,25,0.25,1
 plr_3_nvox_gen_pos_4,voiceovers\zombie\dlc1\Player3\feedback_kill_headd_05.wav,,,1,1,75,1700,2,reject,1,reject,voice,,curve2,0.8,2100,,curve2,1,1,,3d,streamed,0.5,,master,,,,,,600,,,,50,500,0.9,0.5,,,,,,10,25,0.25,1
+plr_3_nvox_gen_power_0,voiceovers\zombie\dlc1\Player3\special_rare_power_00.wav,,,1,1,75,1700,2,reject,1,reject,voice,,curve2,0.8,2100,,curve2,1,1,,3d,streamed,,,master,,,,,,0,,,,50,500,0.9,0.5,,,,,,25,50,0.25,1
 
 gear_deploy_plr,SFX/Character/mantle/char/gear_##,,,1,1,,,,,,,full_vol,,,0.5,,,,,,,2d,,,,,,,,,,,,,,,,,,,,,,,25,100,0.25,1
 gear_deploy,SFX/Character/mantle/char/gear_##,,,0.9,0.9,50,1000,,,,,character,,,0.5,,,,0.95,1.05,,3d,,,,,,,,,,,,,,,,,,,,,,,5,70,0.4,1

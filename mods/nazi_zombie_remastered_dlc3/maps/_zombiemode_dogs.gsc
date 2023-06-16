@@ -11,6 +11,7 @@ init()
 	flag_init( "dog_round" );
 	flag_clear( "dog_round" );
 	flag_init( "dog_clips" );
+	flag_init( "dog_round_spawning" );
 
 	PreCacheRumble( "explosion_generic" );
 
@@ -153,7 +154,7 @@ dog_round_spawning()
 	level.zombie_total = max;
 	dog_health_increase();
 
-
+	flag_set("dog_round_spawning");
 
 	count = 0; 
 	while( count < max )
@@ -262,6 +263,8 @@ dog_round_aftermath()
 {
 
 	level waittill( "last_dog_down" );
+	
+	flag_clear("dog_round_spawning");
 
 	power_up_origin = level.last_dog_origin;
 
@@ -330,6 +333,8 @@ dog_spawn_fx( ai, ent )
 
 	wait( 0.1 ); // dog should come out running after this wait
 	ai show();
+	ai.ignoreme = false; // don't let attack dogs give chase until the wolf is visible
+
 }
 
 
@@ -660,6 +665,7 @@ dog_init()
 	self.script_noteworthy = undefined;
 	self.animname = "zombie_dog"; 		
 	self.ignoreall = true; 
+	self.ignoreme = true; // don't let attack dogs give chase until the wolf is visible
 	self.allowdeath = true; 			// allows death during animscripted calls
 	self.allowpain = false;
 	self.gib_override = true; 		// needed to make sure this guy does gibs
@@ -753,7 +759,7 @@ dog_death()
 {
 	self waittill( "death" );
 
-	if( get_enemy_count() == 0 && level.zombie_total == 0 )
+	if( get_enemy_count() == 0 && level.zombie_total == 0 && flag("dog_round_spawning") )
 	{
 
 		level.last_dog_origin = self.origin;

@@ -98,10 +98,10 @@ REFERENCE           ACHIEVEMENT
 LANG_ENGLISH        "Achievement Unlocked!"
 
 REFERENCE           ENTER_FIRST_PERSON
-LANG_ENGLISH        "Hold ^3[{+activate}]^7 to enter first person view"
+LANG_ENGLISH        "Hold ^3[{+melee}]^7 to enter first person view"
 
 REFERENCE           ENTER_THIRD_PERSON
-LANG_ENGLISH        "Hold ^3[{+activate}]^7 to enter third person view"
+LANG_ENGLISH        "Hold ^3[{+melee}]^7 to enter third person view"
 
 REFERENCE           DEPLOY
 LANG_ENGLISH        "Press & Hold &&1 to deploy Machine Gun "
@@ -113,9 +113,34 @@ REFERENCE           INVALID_WEP
 LANG_ENGLISH        "Invalid Weapon"
 
 REFERENCE           NEED_AMMO
-LANG_ENGLISH        "Need Ammo"
+LANG_ENGLISH        "Need More Ammo"
+
+REFERENCE           MAINFRAME_PANEL_OVERRIDE
+LANG_ENGLISH        "Press & Hold &&1 to enable manual override"
+
+REFERENCE           MAINFRAME_PANEL_SYNC
+LANG_ENGLISH        "Awaiting synchronization"
+
+REFERENCE           MAINFRAME_PANEL_LIMIT
+LANG_ENGLISH        "Press & Hold &&1 to disable electrical current limit"
+
+REFERENCE           MAINFRAME_PANEL_LIMIT_DISABLED
+LANG_ENGLISH        "Current limiter disabled"
+
+REFERENCE           MAINFRAME_PANEL_FAILSAFE
+LANG_ENGLISH        "Emergency failsafe engaged"
+
+REFERENCE           MAINFRAME_PANEL_RECYCLE
+LANG_ENGLISH        "Press & Hold &&1 to recycle power"
+
+REFERENCE           MAINFRAME_PANEL_MAINT
+LANG_ENGLISH        "Additional maintenance required"
+
+REFERENCE           LINK_INTERRUPTED
+LANG_ENGLISH        "Link interrupted"
+
+REFERENCE           TELEPORT_LACKS_POWER
+LANG_ENGLISH        "Insufficient power supply"
 
 
 ENDMARKER
-
-

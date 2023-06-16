@@ -128,6 +128,8 @@ electric_trap_think()
 					
 					//turn the damage detection trigger off until the flames are used again
 			 		self.zombie_dmg_trig trigger_off();
+					self notify("trap_over");
+
 					wait(60);
 					//array_thread (valve_trigs,::trigger_on);
 					self trigger_on();
@@ -135,7 +137,7 @@ electric_trap_think()
 				
 					//Play the 'alarm' sound to alert players that the traps are available again (playing on a temp ent in case the PA is already in use.
 					pa_system = getent("speaker_by_log", "targetname");
-					playsoundatposition("warning", self.origin);
+					playsoundatposition("warning", pa_system.origin);
 					self notify("available");
 
 					self.in_use = 0;					
@@ -144,6 +146,7 @@ electric_trap_think()
 			else
 			{
 				play_sound_on_ent( "no_purchase" );
+				who thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
 			}
 		}
 	}
@@ -193,8 +196,10 @@ electric_trap_move_switch(parent)
 		tswitch playsound("amb_sparks_l_b");
 		tswitch waittill("rotatedone");
 		self notify("switch_activated");
-		self waittill("available");
+		self waittill("trap_over");
 		tswitch rotatepitch(-180,.5);
+		tswitch playsound("switch_up");
+		self waittill("available");
 		
 		//turn the light back green once the trap is available again
 		//north_zapper_light_green();
@@ -207,8 +212,10 @@ electric_trap_move_switch(parent)
 		tswitch playsound("amb_sparks_l_b");
 		tswitch waittill("rotatedone");
 		self notify("switch_activated");
-		self waittill("available");
+		self waittill("trap_over");
 		tswitch rotatepitch(-180,.5);
+		tswitch playsound("switch_up");
+		self waittill("available");
 		
 		//south_zapper_light_green();
 	}
@@ -220,8 +227,10 @@ electric_trap_move_switch(parent)
 		tswitch playsound("amb_sparks_l_b");
 		tswitch waittill("rotatedone");
 		self notify("switch_activated");
-		self waittill("available");
+		self waittill("trap_over");
 		tswitch rotatepitch(-180,.5);
+		tswitch playsound("switch_up");
+		self waittill("available");
 		
 		//south_zapper_light_green();
 	}
@@ -233,8 +242,10 @@ electric_trap_move_switch(parent)
 		tswitch playsound("amb_sparks_l_b");
 		tswitch waittill("rotatedone");
 		self notify("switch_activated");
-		self waittill("available");
+		self waittill("trap_over");
 		tswitch rotatepitch(-180,.5);
+		tswitch playsound("switch_up");
+		self waittill("available");
 		
 		//south_zapper_light_green();
 	}
@@ -393,34 +404,41 @@ zombie_elec_death(flame_chance)
 	
 	//10% chance the zombie will burn, a max of 6 burning zombs can be goign at once
 	//otherwise the zombie just gibs and dies
-	if(flame_chance > 90 && level.burning_zombies.size < 6)
-	{
-		level.burning_zombies[level.burning_zombies.size] = self;
-		self thread zombie_flame_watch();
-		self playsound("ignite");
-		self thread animscripts\death::flame_death_fx();
-		wait(randomfloat(1.25));		
-	}
-	else
-	{
-		
-		refs[0] = "guts";
-		refs[1] = "right_arm"; 
-		refs[2] = "left_arm"; 
-		refs[3] = "right_leg"; 
-		refs[4] = "left_leg"; 
-		refs[5] = "no_legs";
-		refs[6] = "head";
-		self.a.gib_ref = refs[randomint(refs.size)];
-
-		playsoundatposition("zombie_arc", self.origin);
-		if( !self enemy_is_dog() && randomint(100) > 50 )
+	if(!self enemy_is_dog())
+	{	
+		if(flame_chance > 90 && level.burning_zombies.size < 6)
 		{
-			self thread electroctute_death_fx();
-			self thread play_elec_vocals();
+			level.burning_zombies[level.burning_zombies.size] = self;
+			self thread zombie_flame_watch();
+			self playsound("ignite");
+			self thread animscripts\death::flame_death_fx();
+			wait(randomfloat(1.25));		
 		}
-		wait(randomfloat(1.25));
-		self playsound("zombie_arc");
+		else
+		{
+			
+			refs[0] = "guts";
+			refs[1] = "right_arm"; 
+			refs[2] = "left_arm"; 
+			refs[3] = "right_leg"; 
+			refs[4] = "left_leg"; 
+			refs[5] = "no_legs";
+			refs[6] = "head";
+			self.a.gib_ref = refs[randomint(refs.size)];
+
+			playsoundatposition("zombie_arc", self.origin);
+			if( randomint(100) > 50 )
+			{
+				self thread electroctute_death_fx();
+				self thread play_elec_vocals();
+			}
+			wait(randomfloat(1.25));
+			self playsound("zombie_arc");
+		}
+	}
+	else // if dog
+	{
+		wait(randomfloat(0.5));
 	}
 
 	self dodamage(self.health + 666, self.origin);

@@ -65,11 +65,11 @@ bowie_think()
 			continue;
 		}
 
-		if( player GetCurrentWeapon() == "mine_bouncing_betty" )
+/*		if( player GetCurrentWeapon() == "mine_bouncing_betty" || isSubStr(player GetCurrentWeapon(), "zombie_item") )
 		{
 			wait(0.1);
 			continue;
-		}
+		}*/
 		
 		if( level.intermission == true || level.falling_down == true )
 		{
@@ -157,6 +157,21 @@ do_bowie_flourish_begin()
 	self AllowProne( false );		
 	self AllowMelee( false );
 	
+	// Added checks for if they have weapon, cannot just clear it every time--this will mess up the slots if we have no ammo or if we buy the weapon after buying a perk
+	if( self HasWeapon("mine_bouncing_betty") )
+	{
+		self.betties = true;
+		self setactionslot(4,"" ); // Hides betties
+	}
+	if( isDefined( self.has_special_weap ) && self.has_special_weap )
+	{
+		self setactionslot(1,"" ); // Hides special weapon 
+	}
+	if( self HasWeapon("m7_launcher_zombie") || self HasWeapon("m7_launcher_zombie_upgraded") )
+	{
+		self setactionslot(3,"" ); // Hides rifle grenade
+	}
+
 	wait( 0.05 );
 	
 	if ( self GetStance() == "prone" )
@@ -189,6 +204,27 @@ do_bowie_flourish_end( gun )
 	self AllowSprint( true );
 	self AllowProne( true );		
 	self AllowMelee( true );
+
+	if( isDefined( self.has_special_weap ) && self.has_special_weap )
+	{
+		self setactionslot(1,"weapon", self.has_special_weap ); 
+	}
+	
+	if( self HasWeapon("m7_launcher_zombie") )
+	{
+		self setactionslot(3,"altMode","m7_launcher_zombie");
+	}
+	else if( self HasWeapon("m7_launcher_zombie_upgraded") )
+	{
+		self setactionslot(3,"altMode","m7_launcher_zombie_upgraded");
+	}
+
+	if( (isDefined(self.betties) && self.betties) )
+	{
+		self setactionslot(4,"weapon","mine_bouncing_betty");
+		self.betties = undefined;
+	}
+
 	weapon = "zombie_bowie_flourish";
 
 	// TODO: race condition?
@@ -198,9 +234,7 @@ do_bowie_flourish_end( gun )
 		return;
 	}
 
-	self TakeWeapon(weapon);
-
-	if ( gun != "none" && gun != "mine_bouncing_betty" )
+	if ( gun != "none" && gun != "mine_bouncing_betty" && (!isSubStr(gun, "zombie_item")) )
 	{
 		self SwitchToWeapon( gun );
 	}
@@ -214,7 +248,8 @@ do_bowie_flourish_end( gun )
 		}
 	}
 	
-	self waittill( "weapon_change_complete" );
+	self TakeWeapon(weapon);
+
 }
 
 bowie_show( player )

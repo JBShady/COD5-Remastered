@@ -8,7 +8,6 @@ init()
 	init_weapon_upgrade();
 	init_weapon_cabinet();
 	treasure_chest_init();
-	level thread add_limited_tesla_gun();
 	level.box_moved = false;
 }
 
@@ -52,6 +51,7 @@ add_zombie_weapon( weapon_name, hint, cost, weaponVO, variation_count, ammo_cost
 	struct.cost = cost;
 	struct.sound = weaponVO;
 	struct.variation_count = variation_count;
+    struct.is_in_box = level.zombie_include_weapons[weapon_name];
 
 	if( !IsDefined( ammo_cost ) )
 	{
@@ -63,34 +63,35 @@ add_zombie_weapon( weapon_name, hint, cost, weaponVO, variation_count, ammo_cost
 	level.zombie_weapons[weapon_name] = struct;
 }
 
-include_zombie_weapon( weapon_name )
+include_zombie_weapon( weapon_name, in_box )
 {
 	if( !IsDefined( level.zombie_include_weapons ) )
 	{
 		level.zombie_include_weapons = [];
 	}
+	if( !isDefined( in_box ) )
+	{
+		in_box = true;
+	}
 
-	level.zombie_include_weapons[weapon_name] = true;
+	level.zombie_include_weapons[weapon_name] = in_box;
 }
 
 init_weapons()
 {
 	// Zombify
 	PrecacheItem( "zombie_melee" );
+	PrecacheItem( "falling_hands" );
 
 
 	// Pistols
 	add_zombie_weapon( "colt", 									&"ZOMBIE_WEAPON_COLT_50", 					50,		"vox_crappy",	8 );
 	add_zombie_weapon( "colt_dirty_harry", 						&"ZOMBIE_WEAPON_COLT_DH_100", 				100,	"vox_357",		5 );
 	add_zombie_weapon( "zombie_colt", 							&"ZOMBIE_WEAPON_ZOMBIECOLT_25", 			25, 	"vox_crappy",	8 );
-	add_zombie_weapon( "zombie_colt_upgraded", 					&"ZOMBIE_WEAPON_ZOMBIECOLT_25", 			25, 	"",				8 );
 	add_zombie_weapon( "sw_357", 								&"ZOMBIE_WEAPON_SW357_100", 				100, 	"vox_357",		5 );
 	add_zombie_weapon( "zombie_tokarev", 						&"ZOMBIE_WEAPON_TOKAREV_50", 				50, 	"vox_crappy",	8 );
-	add_zombie_weapon( "zombie_tokarev_upgraded", 				&"ZOMBIE_WEAPON_TOKAREV_50", 				50, 	"",				8 );
 	add_zombie_weapon( "zombie_walther", 						&"ZOMBIE_WEAPON_WALTHER_50", 				50, 	"vox_crappy",	8 );
-	add_zombie_weapon( "zombie_walther_upgraded", 				&"ZOMBIE_WEAPON_WALTHER_50", 				50, 	"",				8 );
 	add_zombie_weapon( "zombie_nambu", 							&"ZOMBIE_WEAPON_NAMBU_50", 					50, 	"vox_crappy",	8 );
-	add_zombie_weapon( "zombie_nambu_upgraded", 				&"ZOMBIE_WEAPON_NAMBU_50",		 			50, 	"",				8 );
 
 	// Bolt Action                                      		
 	add_zombie_weapon( "kar98k", 								&"ZOMBIE_WEAPON_KAR98K_200", 				200,	"", 0);
@@ -99,7 +100,7 @@ init_weapons()
 	add_zombie_weapon( "mosin_rifle_bayonet", 					&"ZOMBIE_WEAPON_MOSIN_B_200", 				200,	"", 0 );
 	add_zombie_weapon( "springfield", 							&"ZOMBIE_WEAPON_SPRINGFIELD_200", 			200,	"", 0 );
 	add_zombie_weapon( "springfield_bayonet", 					&"ZOMBIE_WEAPON_SPRINGFIELD_B_200", 		200,	"", 0 );
-	add_zombie_weapon( "zombie_type99_rifle", 					"Press & hold &&1 to buy Type 99 Arisaka [Cost: 200]", 				200,	"vox_crappy", 8 );
+	add_zombie_weapon( "zombie_type99_rifle", 					&"REMASTERED_ZOMBIE_WEAPON_TYPE99_200", 				200,	"vox_crappy", 8 );
 	add_zombie_weapon( "type99_rifle_bayonet", 					&"ZOMBIE_WEAPON_TYPE99_B_200", 				200,	"", 0 );
 
 	// Semi Auto                                        		
@@ -115,7 +116,7 @@ init_weapons()
 	add_zombie_weapon( "molotov", 								&"ZOMBIE_WEAPON_MOLOTOV_200", 				200,	"vox_crappy", 8 );
 	add_zombie_weapon( "molotov_zombie", 								&"ZOMBIE_WEAPON_MOLOTOV_200", 				200,	"vox_crappy", 8 );
 	add_zombie_weapon( "st_grenade", 						&"ZOMBIE_WEAPON_STICKGRENADE_250", 			250,	"vox_sticky" , 4 );
-	add_zombie_weapon( "stielhandgranate", 						"Press & hold &&1 to buy Type 97 Grenade [Cost: 250]", 		250,	"" ,			0, 250 );
+	add_zombie_weapon( "stielhandgranate", 						&"REMASTERED_ZOMBIE_WEAPON_TYPE97FRAG_250", 		250,	"" ,			0, 250 );
 	add_zombie_weapon( "type97_frag", 							&"ZOMBIE_WEAPON_TYPE97FRAG_250", 			250,	"" , 0 );
 
 	// Scoped
@@ -125,8 +126,8 @@ init_weapons()
 	// Full Auto                                                                                	
 	add_zombie_weapon( "zombie_mp40", 								&"ZOMBIE_WEAPON_MP40_1000", 				1000,	"vox_mp40", 7 ); 
 	add_zombie_weapon( "zombie_ppsh", 								&"ZOMBIE_WEAPON_PPSH_2000", 				2000,	"vox_ppsh", 6 );
-	add_zombie_weapon( "zombie_stg44", 							"Press & hold &&1 to buy StG-44 [Cost: 1200]", 				1200,	"vox_mg",		9 );
-	add_zombie_weapon( "zombie_thompson", 						"Press & hold &&1 to buy M1A1 Thompson [Cost: 1200]", 			1200,	"",				0 );
+	add_zombie_weapon( "zombie_stg44", 							&"REMASTERED_ZOMBIE_WEAPON_STG44_1200", 				1200,	"",		0 );
+	add_zombie_weapon( "zombie_thompson", 						&"REMASTERED_ZOMBIE_WEAPON_THOMPSON_1200", 			1200,	"",				0 );
 	add_zombie_weapon( "zombie_type100_smg", 						&"ZOMBIE_WEAPON_TYPE100_1000", 				1000,	"", 0 );
 
 	// Shotguns                                         	
@@ -135,7 +136,7 @@ init_weapons()
 	add_zombie_weapon( "zombie_shotgun", 							&"ZOMBIE_WEAPON_SHOTGUN_1500", 				1500,	"vox_shotgun", 7);
 
 	// Heavy Machineguns                                	
-	add_zombie_weapon( "zombie_bar", 								"Press & hold &&1 to buy M1918 BAR [Cost: 1800]", 					1800,	"vox_bar", 6 );
+	add_zombie_weapon( "zombie_bar", 								&"REMASTERED_ZOMBIE_WEAPON_BAR_1800", 					1800,	"vox_bar", 6 );
 	add_zombie_weapon( "zombie_dp28", 									&"ZOMBIE_WEAPON_DP28_2250", 				2250,	"vox_mg" ,		9 );
 	add_zombie_weapon( "zombie_fg42", 								&"ZOMBIE_WEAPON_FG42_1500", 				1500,	"vox_mg" , 9 ); 
 	add_zombie_weapon( "zombie_30cal", 							&"ZOMBIE_WEAPON_30CAL_3000", 				3000,	"vox_mg", 9 );
@@ -151,7 +152,8 @@ init_weapons()
 	// Flamethrower                                     	
 	add_zombie_weapon( "m2_flamethrower_zombie", 			&"ZOMBIE_WEAPON_M2_FLAMETHROWER_3000", 		3000,	"vox_flame", 7);	
 
-	// Special                                          	
+	// Special
+	add_zombie_weapon( "mine_bouncing_betty",					&"ZOMBIE_WEAPON_SATCHEL_2000",				2000,	"" );
 	add_zombie_weapon( "mortar_round", 						&"ZOMBIE_WEAPON_MORTARROUND_2000", 			2000,	"" );
 	add_zombie_weapon( "satchel_charge", 					&"ZOMBIE_WEAPON_SATCHEL_2000", 				2000,	"" );
 	add_zombie_weapon( "ray_gun", 							&"ZOMBIE_WEAPON_RAYGUN_10000", 				10000,	"vox_raygun", 6 );
@@ -165,27 +167,6 @@ init_weapons()
 	add_limited_weapon( "m2_flamethrower_zombie", 1 );
 	add_limited_weapon( "tesla_gun", 1);
 }   
-
-//remove this function and whenever it's call for production. this is only for testing purpose.
-add_limited_tesla_gun()
-{
-
-	weapon_spawns = GetEntArray( "weapon_upgrade", "targetname" ); 
-
-	for( i = 0; i < weapon_spawns.size; i++ )
-	{
-		hint_string = weapon_spawns[i].zombie_weapon_upgrade; 
-		if(hint_string == "tesla_gun")
-		{
-			weapon_spawns[i] waittill("trigger");
-			weapon_spawns[i] trigger_off();
-			break;
-
-		}
-		
-	}
-
-}
 
 
 add_limited_weapon( weapon_name, amount )
@@ -257,7 +238,12 @@ get_ammo_cost( weapon_name )
 	return level.zombie_weapons[weapon_name].ammo_cost;
 }
 
-
+get_is_in_box( weapon_name )
+{
+        AssertEx( IsDefined( level.zombie_weapons[weapon_name] ), weapon_name + " was not included or is not part of the zombie weapon list." );
+        
+        return level.zombie_weapons[weapon_name].is_in_box;
+}
 
 // for the random weapon chest
 treasure_chest_init()
@@ -418,8 +404,10 @@ show_magic_box()
 			pieces[i] show();
 		}
 	}
-	pieces[0] playsound ( "box_poof_land" );
-	pieces[0] playsound( "couch_slam" );
+	//pieces[0] playsound ( "box_poof_land" );
+	//pieces[0] playsound( "couch_slam" );
+	playsoundatposition( "box_poof_land", pieces[0].origin );
+	playsoundatposition( "couch_slam", pieces[0].origin );
 }
 
 treasure_chest_think()
@@ -517,8 +505,8 @@ treasure_chest_think()
 		// Let the player grab the weapon and re-enable the box //
 
 		self.grab_weapon_hint = true;
-		level thread treasure_chest_user_hint( self, user );
-		self sethintstring( &"ZOMBIE_TRADE_WEAPONS" ); 
+		self.chest_user = user;
+		self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS" ); 
 		self setCursorHint( "HINT_NOICON" ); 
 		self setvisibletoplayer( user );
 
@@ -535,7 +523,7 @@ treasure_chest_think()
 			{
 
 
-				if( grabber == user && is_player_valid( user ) && user GetCurrentWeapon() != "mine_bouncing_betty" && !IsDefined( user.is_drinking ) )
+				if( grabber == user && is_player_valid( user ) && user GetCurrentWeapon() != "mine_bouncing_betty" && (!isSubStr(user GetCurrentWeapon(), "zombie_item")) && !IsDefined( user.is_drinking ) )
 				{
 					self notify( "user_grabbed_weapon" );
 					user thread treasure_chest_give_weapon( weapon_spawn_org.weapon_string );
@@ -553,6 +541,7 @@ treasure_chest_think()
 		}
 
 		self.grab_weapon_hint = false;
+		self.chest_user = undefined;
 
 		weapon_spawn_org notify( "weapon_grabbed" );
 
@@ -593,6 +582,53 @@ treasure_chest_think()
 	self thread treasure_chest_think();
 }
 
+decide_hide_show_hint( endon_notify )
+{
+	if( isDefined( endon_notify ) )
+	{
+		self endon( endon_notify );
+	}
+
+	while( true )
+	{
+		players = get_players();
+		for( i = 0; i < players.size; i++ )
+		{
+			if( players[i] can_buy_weapon() )
+			{
+				self SetInvisibleToPlayer( players[i], false );
+			}
+			else
+			{
+				self SetInvisibleToPlayer( players[i], true );
+			}
+		}
+		wait( 0.1 );
+	}
+}
+
+can_buy_weapon()
+{
+	if( isDefined( self.is_drinking ) && self.is_drinking )
+	{
+		return false;
+	}
+	if( self GetCurrentWeapon() == "mine_bouncing_betty" )
+	{
+		return false;
+	}
+	if( isSubStr(self GetCurrentWeapon(), "zombie_item") )
+	{
+		return false;
+	}
+	if( self in_revive_trigger() )
+	{
+		return false;
+	}
+	
+	return true;
+}
+
 treasure_chest_move_vo()
 {
 
@@ -621,7 +657,7 @@ treasure_chest_move_vo()
 	plr = "plr_" + index + "_";
 	sound_to_play = "vox_box_move" + "_" + randomintrange(0, variation_count);
 
-	self maps\_zombiemode_spawner::do_player_playdialog(plr, sound_to_play, 0.05);
+	self maps\_zombiemode_spawner::do_player_playdialog(plr, sound_to_play, 4);
 
 }
 
@@ -926,7 +962,10 @@ treasure_chest_lid_close( timedOut )
 	closeTime = 0.5;
 
 	self RotateRoll( closeRoll, closeTime, ( closeTime * 0.5 ) );
-	play_sound_at_pos( "close_chest", self.origin );
+	if (!flag("moving_chest_now"))
+	{
+		play_sound_at_pos( "close_chest", self.origin );
+	}	
 }
 
 treasure_chest_ChooseRandomWeapon( player )
@@ -938,13 +977,23 @@ treasure_chest_ChooseRandomWeapon( player )
 	filtered = [];
 	for( i = 0; i < keys.size; i++ )
 	{
+		if( !get_is_in_box( keys[i] ) )
+		{
+			continue;
+		}
+
 		if( player HasWeapon( keys[i] ) )
 		{
 			continue;
 		}
-				
+			
+		if( !IsDefined( keys[i] ) )
+		{
+			continue;
+		}
+
 		//chrisP - make sure the chest doesn't give the player a bouncing betty
-		if(keys[i] == "mine_bouncing_betty" || keys[i] == "zombie_colt" || keys[i] == "zombie_walther" || keys[i] == "zombie_tokarev" || keys[i] == "zombie_nambu" || keys[i] == "stielhandgranate")
+		if(keys[i] == "mine_bouncing_betty" || (isSubStr(keys[i], "zombie_item")) || keys[i] == "zombie_colt" || keys[i] == "zombie_walther" || keys[i] == "zombie_tokarev" || keys[i] == "zombie_nambu" || keys[i] == "stielhandgranate")
 		{
 			continue;
 		}
@@ -962,9 +1011,6 @@ treasure_chest_ChooseRandomWeapon( player )
 			}
 		}*/
 		// PI_CHANGE_END
-		
-		if( !IsDefined( keys[i] ) )
-			continue;
 
 		filtered[filtered.size] = keys[i];
 	}
@@ -984,7 +1030,7 @@ treasure_chest_ChooseRandomWeapon( player )
 					if( level.pulls_since_last_ray_gun > 11 )
 					{
 						// calculate the number of times we have to add it to the array to get the desired percent
-						number_to_add = .15 * filtered.size;
+						number_to_add = .1 * filtered.size;
 						for(i=1; i<number_to_add; i++)
 						{
 							filtered[filtered.size] = "ray_gun";
@@ -994,7 +1040,7 @@ treasure_chest_ChooseRandomWeapon( player )
 					else if( level.pulls_since_last_ray_gun > 7 )
 					{
 						// calculate the number of times we have to add it to the array to get the desired percent
-						number_to_add = .1 * filtered.size;
+						number_to_add = .05 * filtered.size;
 						for(i=1; i<number_to_add; i++)
 						{
 							filtered[filtered.size] = "ray_gun";
@@ -1013,7 +1059,7 @@ treasure_chest_ChooseRandomWeapon( player )
 				// calculate the number of times we have to add it to the array to get the desired percent
 				player.groups_killed = 0; // reset counter
 
-				number_to_add = .2 * filtered.size;
+				number_to_add = .15 * filtered.size;
 				for(i=1; i<number_to_add; i++)
 				{
 					filtered[filtered.size] = "tesla_gun";
@@ -1028,7 +1074,7 @@ treasure_chest_ChooseRandomWeapon( player )
 				if( level.round_number > 10 )
 				{
 					// calculate the number of times we have to add it to the array to get the desired percent
-					number_to_add = .2 * filtered.size;
+					number_to_add = .15 * filtered.size;
 					for(i=1; i<number_to_add; i++)
 					{
 						filtered[filtered.size] = "tesla_gun";
@@ -1038,7 +1084,7 @@ treasure_chest_ChooseRandomWeapon( player )
 				else if( level.round_number > 5 )
 				{
 					// calculate the number of times we have to add it to the array to get the desired percent
-					number_to_add = .15 * filtered.size;
+					number_to_add = .1 * filtered.size;
 					for(i=1; i<number_to_add; i++)
 					{
 						filtered[filtered.size] = "tesla_gun";
@@ -1326,12 +1372,19 @@ treasure_chest_give_weapon( weapon_string )
 	primaryWeapons = self GetWeaponsListPrimaries(); 
 	current_weapon = undefined; 
 
+	if( self HasWeapon( weapon_string ) )
+	{
+		self GiveMaxAmmo( weapon_string );
+		self SwitchToWeapon( weapon_string );
+		return;
+	}
+	
 	// This should never be true for the first time.
 	if( primaryWeapons.size >= 2 ) // he has two weapons
 	{
 		current_weapon = self getCurrentWeapon(); // get hiss current weapon
 
-		if ( current_weapon == "mine_bouncing_betty" )
+		if ( current_weapon == "mine_bouncing_betty" || (isSubStr(current_weapon, "zombie_item")) )
 		{
 			current_weapon = undefined;
 		}
@@ -1360,7 +1413,7 @@ treasure_chest_give_weapon( weapon_string )
 	{
 		for( i = 0; i < primaryWeapons.size; i++ )
 		{
-			if( primaryWeapons[i] == "zombie_colt" || primaryWeapons[i] == "zombie_tokarev" || primaryWeapons[i] == "zombie_nambu" || primaryWeapons[i] == "zombie_walther" )
+			if( primaryWeapons.size == 1 || primaryWeapons[i] == "zombie_colt" || primaryWeapons[i] == "zombie_tokarev" || primaryWeapons[i] == "zombie_nambu" || primaryWeapons[i] == "zombie_walther" )
 			{
 				continue; 
 			}
@@ -1587,7 +1640,7 @@ weapon_spawn_think()
 		
 	}
 
-
+	self thread decide_hide_show_hint();
 
 	self.first_time_triggered = false; 
 	for( ;; )
@@ -1601,22 +1654,9 @@ weapon_spawn_think()
 			continue;
 		}
 
-		if( player in_revive_trigger() )
+		if( !player can_buy_weapon() )
 		{
 			wait( 0.1 );
-			continue;
-		}
-
-		if(isdefined(player.is_drinking))
-		{
-			wait(0.1);
-			continue;
-
-		}
-
-		if( player GetCurrentWeapon() == "mine_bouncing_betty" )
-		{
-			wait(0.1);
 			continue;
 		}
 
@@ -1631,7 +1671,8 @@ weapon_spawn_think()
 					player_has_weapon = true; 
 				}
 			}
-		}		
+		}	
+
 
 		if( !player_has_weapon )
 		{
@@ -1665,7 +1706,7 @@ weapon_spawn_think()
 				{
 					player maps\_zombiemode_score::minus_to_player_score( cost ); 
 				}
-
+				
 				player weapon_give( self.zombie_weapon_upgrade ); 
 			}
 			else
@@ -1760,7 +1801,7 @@ weapon_give( weapon )
 	{
 		current_weapon = self getCurrentWeapon(); // get his current weapon
 
-		if ( current_weapon == "mine_bouncing_betty" )
+		if ( current_weapon == "mine_bouncing_betty" || (isSubStr(current_weapon, "zombie_item")) )
 		{
 			current_weapon = undefined;
 		}
@@ -1778,7 +1819,7 @@ weapon_give( weapon )
 	{
 		for( i = 0; i < primaryWeapons.size; i++ )
 		{
-			if( primaryWeapons[i] == "zombie_colt" || primaryWeapons[i] == "zombie_tokarev" || primaryWeapons[i] == "zombie_nambu" || primaryWeapons[i] == "zombie_walther" )
+			if( primaryWeapons.size == 1 || primaryWeapons[i] == "zombie_colt" || primaryWeapons[i] == "zombie_tokarev" || primaryWeapons[i] == "zombie_nambu" || primaryWeapons[i] == "zombie_walther" )
 			{
 				continue; 
 			}
@@ -1833,6 +1874,7 @@ play_weapon_vo(weapon)
 	if( level.zombie_weapons[weapon].sound != "")
 	{
 		weap = level.zombie_weapons[weapon].sound;
+		waittime = 0.05;
 //		iprintlnbold("Play_Weap_VO_" + weap);
 		switch(weap)
 		{
@@ -1892,6 +1934,7 @@ play_weapon_vo(weapon)
 				}
 				sound_to_play = random(level.vox_raygun_available);
 				level.vox_raygun_available = array_remove(level.vox_raygun_available,sound_to_play);
+				waittime = 1.5;
 				break;
 			case "vox_tesla":
 				if (level.vox_tesla_available.size < 1 )
@@ -1900,6 +1943,7 @@ play_weapon_vo(weapon)
 				}
 				sound_to_play = random(level.vox_tesla_available);
 				level.vox_tesla_available = array_remove(level.vox_tesla_available,sound_to_play);
+				waittime = 1.5;
 				break;
 			case "vox_sticky":
 				if (level.vox_sticky_available.size < 1 )
@@ -1952,7 +1996,7 @@ play_weapon_vo(weapon)
 		//self playsound ("plr_" + index + "_" + sound_to_play);
 		//iprintlnbold (sound_to_play);
 		
-		self maps\_zombiemode_spawner::do_player_playdialog(plr, sound_to_play, 0.05);
+		self maps\_zombiemode_spawner::do_player_playdialog(plr, sound_to_play, waittime);
 
 	}
 }

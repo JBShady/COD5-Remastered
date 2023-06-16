@@ -69,15 +69,16 @@ main()
 
 	declareMusicState("WAVE_1"); 
 		musicAliasloop("mx_zombie_wave_1", 0, 4);	
+		musicwaittilldone();
 
  	declareMusicState("eggs"); 
-		musicAlias("mx_eggs", 0);
+		musicAlias("mx_eggs", 2);
 
  	declareMusicState("mx_dog_round");
 		musicAliasloop("mx_dog_wave", 0, 0.5);
 
 	declareMusicState("end_of_game");
-		musicAlias("mx_game_over", 2);
+		musicAlias("mx_game_over", 0);
 
 
 	thread radio_init();
@@ -100,6 +101,7 @@ main()
 	thread pole_fx_audio_init(2);
 	
 	thread homepad_loop();
+	thread homepad_loop_resume(); // for egg
 	thread power_audio_2d();
 	thread linkall_2d();
 }
@@ -247,7 +249,7 @@ generator_sound()
 {
 	if(isdefined( self ) )
 	{
-		wait(3);
+		realwait(3);
 		playsound(0, "switch_progress", self.origin);
 		playsound(0, "gen_start", self.origin);
 		g1 = clientscripts\_audio::playloopat(0,"gen_loop",self.origin, 1);
@@ -354,15 +356,31 @@ homepad_loop()
 	level waittill( "pap1" );
 	homepad = getstruct( "homepad_power_looper", "targetname" );
 	home_breaker = getstruct( "homepad_breaker", "targetname" );
-	
+	home_breaker_loopsound = undefined;
+
 	if(isdefined( homepad ))
 	{
 		clientscripts\_audio::playloopat( 0, "homepad_power_loop", homepad.origin, 1 );
 	}
 	if(isdefined( home_breaker ) )
 	{
+		home_breaker_loopsound = clientscripts\_audio::playloopat( 0, "break_arc", home_breaker.origin, 1 ); // set returned val  to a variable so we can stop it later
+	}
+
+	level waittill( "turn_off_sounds_lights" ); // for egg so we can turn off the side generator
+	stoploopsound(0, home_breaker_loopsound, 0.1 );
+}
+
+homepad_loop_resume()
+{
+	level waittill( "pap1_resume" );
+	home_breaker = getstruct( "homepad_breaker", "targetname" );
+
+	if(isdefined( home_breaker ) )
+	{
 		clientscripts\_audio::playloopat( 0, "break_arc", home_breaker.origin, 1 );
 	}
+
 }
 
 teleport_pad_init( pad )  //Plays loopers on each pad as they get activated, threads the teleportation audio
@@ -459,10 +477,10 @@ pa_countdown( pad )
 			count--;
 		}
 		playsound( 0, "pa_buzz", self.origin );
-		wait(1.2);
+		realwait(1.2);
 		self thread pa_play_dialog( "pa_audio_link_fail" );
 	}
-	wait(1);
+	realwait(1);
 }
 
 pa_countdown_success( pad )
@@ -470,7 +488,7 @@ pa_countdown_success( pad )
 	level waittill( "scd" + pad );
 	
 	playsound( 0, "pa_buzz", self.origin );
-	wait(1.2);
+	realwait(1.2);
 	//self pa_play_dialog( "pa_audio_link_yes" );
 	self pa_play_dialog( "pa_audio_act_pad_" + pad );
 }
@@ -480,10 +498,10 @@ pa_teleport( pad )  //Plays after successful teleportation, threads cooldown cou
 	while(1)
 	{
 		level waittill( "tpc" + pad );
-		wait(1);
+		realwait(1);
 		
 		playsound( 0, "pa_buzz", self.origin );
-		wait(1.2);
+		realwait(1.2);
 		self pa_play_dialog( "pa_teleport_finish" );
 	}
 }
@@ -495,11 +513,11 @@ pa_electric_trap( location )
 		level waittill( location );
 		
 		playsound( 0, "pa_buzz", self.origin );
-		wait(1.2);
+		realwait(1.2);
 		self thread pa_play_dialog( "pa_trap_inuse_" + location );
 		realwait(58.5);
 		playsound( 0, "pa_buzz", self.origin );
-		wait(1.2);
+		realwait(1.2);
 		self thread pa_play_dialog( "pa_trap_active_" + location );
 	}
 }
@@ -535,7 +553,7 @@ teleport_2d()  //Plays a 2d sound for a teleporting player 1.7 seconds after act
 
 power_audio_2d()
 {
-	wait(2);
+	realwait(2);
 	playsound( 0, "power_down_2d", (0,0,0) );
 	level waittill ("pl1");
 	playsound( 0, "power_up_2d", (0,0,0) );
@@ -590,9 +608,9 @@ pole_fx_audio( pad )
 
 pa_level_start()
 {
-	wait(2);
+	realwait(2);
 	playsound( 0, "pa_buzz", self.origin );
-	wait(1.2);
+	realwait(1.2);
 	self pa_play_dialog( "pa_level_start" );
 }
 
@@ -601,6 +619,6 @@ pa_power_on()
 	level waittill ("pl1");
 	
 	playsound( 0, "pa_buzz", self.origin );
-	wait(1.2);
+	realwait(1.2);
 	self pa_play_dialog( "pa_power_on" );
 }

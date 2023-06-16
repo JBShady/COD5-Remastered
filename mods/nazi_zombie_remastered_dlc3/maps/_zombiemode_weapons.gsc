@@ -9,7 +9,6 @@ init()
 	init_pay_turret();
 	init_weapon_cabinet();
 	treasure_chest_init();
-	level thread add_limited_tesla_gun();
 	level.box_moved = false;
 }
 
@@ -186,7 +185,7 @@ init_weapons()
 {
 	// Zombify
 	PrecacheItem( "zombie_melee" );
-	PrecacheItem( "falling_hands" )
+	PrecacheItem( "falling_hands" );
 	// VOX TIPS:
 	// Add to both _upgraded and normal version
 	// Last integer corresponds to # of voice lines, but make sure it's +1 than the number in soundalias (because of index starting at 0)
@@ -341,26 +340,6 @@ init_weapons()
 
 }   
 
-//remove this function and whenever it's call for production. this is only for testing purpose.
-add_limited_tesla_gun()
-{
-
-	weapon_spawns = GetEntArray( "weapon_upgrade", "targetname" ); 
-
-	for( i = 0; i < weapon_spawns.size; i++ )
-	{
-		hint_string = weapon_spawns[i].zombie_weapon_upgrade; 
-		if(hint_string == "tesla_gun")
-		{
-			weapon_spawns[i] waittill("trigger");
-			weapon_spawns[i] trigger_off();
-			break;
-
-		}
-		
-	}
-
-}
 
 
 add_limited_weapon( weapon_name, amount )
@@ -785,15 +764,15 @@ treasure_chest_think()
 			play_sound_on_ent( "no_purchase" );
     		if( RandomIntRange( 0, 100 ) >= 75 )
     		{
-			user thread play_no_money_box_dialog();
+				user thread play_no_money_box_dialog();
     		}
     		else if( RandomIntRange( 0, 100 ) >= 90 )
     		{
-			user thread play_no_money_weapon_dialog();
+				user thread play_no_money_weapon_dialog();
     		}
     		else
     		{
-			user thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
+				user thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
 			}
 			continue;	
 			//THIS IS GOOD, for the box + uses new/other sounds
@@ -852,7 +831,7 @@ treasure_chest_think()
 			{
 
 
-				if( grabber == user && is_player_valid( user ) && user GetCurrentWeapon() != "mine_bouncing_betty" )
+				if( grabber == user && is_player_valid( user ) && user GetCurrentWeapon() != "mine_bouncing_betty" && (!isSubStr(user GetCurrentWeapon(), "zombie_item")) )
 				{
 					bbPrint( "zombie_uses: playername %s playerscore %d round %d cost %d name %s x %f y %f z %f type magic_accept",
 						user.playername, user.score, level.round_number, cost, weapon_spawn_org.weapon_string, self.origin );
@@ -976,6 +955,10 @@ can_buy_weapon()
 		return false;
 	}
 	if( self GetCurrentWeapon() == "mine_bouncing_betty" )
+	{
+		return false;
+	}
+	if( isSubStr(self GetCurrentWeapon(), "zombie_item") )
 	{
 		return false;
 	}
@@ -1639,7 +1622,7 @@ treasure_chest_give_weapon( weapon_string )
 	{
 		current_weapon = self getCurrentWeapon(); // get hiss current weapon
 
-		if ( current_weapon == "mine_bouncing_betty" )
+		if ( current_weapon == "mine_bouncing_betty" || (isSubStr(current_weapon, "zombie_item")) )
 		{
 			current_weapon = undefined;
 		}
@@ -2236,7 +2219,7 @@ weapon_give( weapon, is_upgrade )
 	{
 		current_weapon = self getCurrentWeapon(); // get his current weapon
 
-		if ( current_weapon == "mine_bouncing_betty" )
+		if ( current_weapon == "mine_bouncing_betty" || (isSubStr(current_weapon, "zombie_item")) )
 		{
 			current_weapon = undefined;
 		}

@@ -17,7 +17,7 @@ init()
 		//level.laststandpistol = "zombie_tokarev";
 		//level.laststandpistol = "zombie_nambu";
 		//level.laststandpistol = "zombie_walther";
-		level.solo_laststandpistol = level.laststandpistol + "_upgraded";
+		level.solo_laststandpistol = level.laststandpistol /*+ "_upgraded"*/;
 
 		PrecacheItem( level.laststandpistol );
 		PrecacheItem( level.solo_laststandpistol );
@@ -41,7 +41,7 @@ init()
 
 	if( GetDvar( "revive_trigger_radius" ) == "" )
 	{
-		SetDvar( "revive_trigger_radius", "40" ); 
+		SetDvar( "revive_trigger_radius", "60" ); 
 	}
 }
 
@@ -291,6 +291,11 @@ laststand_giveback_player_weapons()
 
 		if( WeaponType( weapon ) != "grenade" )
 			self SetWeaponAmmoStock( weapon, self.weaponAmmo[weapon]["stock"] );
+	}
+
+	if( self HasWeapon("m1garand_gl_zombie") ) // Failsafe for if we have M1 launcher and we down while drinking a perk, makes sure the action slot gets set
+	{
+		self setactionslot(3,"altMode","m7_launcher_zombie");
 	}
 
 	// if we can't figure out what the last active weapon was, try to switch a primary weapon
@@ -630,6 +635,9 @@ can_revive( revivee )
 	if( !SightTracePassed( self.origin + ( 0, 0, 50 ), revivee.origin + ( 0, 0, 30 ), false, undefined ) )				
 		return false;
 	
+	if(level.falling_down == true)
+		return false;
+	
 	//chrisp - fix issue where guys can sometimes revive thru a wall	
 	if(!bullettracepassed(self.origin + (0,0,50), revivee.origin + ( 0, 0, 30 ), false, undefined) )
 	{
@@ -645,11 +653,7 @@ can_revive( revivee )
 		}
 	}
 
-	//if the level is nazi_zombie_asylum and playeris drinking, disable the trigger
-	if(level.script == "nazi_zombie_asylum" && isdefined(self.is_drinking))
-		return false;
-
-	if(level.script == "nazi_zombie_sumpf" && isdefined(self.is_drinking))
+	if(isdefined(self.is_drinking))
 		return false;
 
 	return true;

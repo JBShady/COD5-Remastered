@@ -1,0 +1,57 @@
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+#define 	OPTIONS_STYLE			1
+#define 	CHOICE_SEP_1			23
+//#define 	CHOICE_SEP_2			27
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+{
+	menuDef 
+	{
+		name			"options_coop"
+		fullScreen		0
+		rect			0 0 640 480
+		focusColor		COLOR_FOCUSED
+		soundloop		""
+		onOpen
+		{
+			exec "setfromdvar ui_name name";
+			
+			close options_look;
+			close options_move;
+			close options_shoot;
+			close options_invehicle;
+			close options_graphics;
+			close options_sound;
+			close options_game;
+			close options_view;
+			close options_defaults;
+			close options_driverinfo;
+			close options_credits;
+			close options_graphics_defaults;
+			close options_graphics_texture;
+			close options_control_defaults;
+			close options_multi;
+
+			setLocalVarBool ui_hideBack 1;
+		}
+		onClose
+		{
+			setLocalVarBool ui_hideBack 0;
+		}
+		onESC 
+		{ 
+			close self;		
+		}
+
+		#include "ui_mp/leftside_controls.inc"
+		
+		CHOICE_SECTION_TITLE_VIS( 21, "@MENU_MULTIPLAYER_CONTROLS_CAP", when( dvarint( ui_multiplayer ) ); )
+		CHOICE_SECTION_TITLE_VIS( 21, "@MENU_COOPERATIVE_CONTROLS_CAP", when( !dvarint( ui_multiplayer ) ); )
+
+		CHOICE_BIND( 22, "@MENU_VOICE_CHAT_BUTTON", "+talk", ; )
+		CHOICE_BIND( 23, "@MENU_CHAT", "chatmodepublic", ; )
+		CHOICE_KEYBINDHELP
+	}
+}

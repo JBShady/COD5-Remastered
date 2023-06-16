@@ -34,7 +34,7 @@ init()
 
 	if( GetDvar( "revive_trigger_radius" ) == "" )
 	{
-		SetDvar( "revive_trigger_radius", "40" ); 
+		SetDvar( "revive_trigger_radius", "60" ); 
 	}
 }
 
@@ -90,6 +90,8 @@ PlayerLastStand( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sH
 
 	//CODER_MOD: TOMMYK 06/26/2008 - For coop scoreboards
 	self.downs++;
+	//stat tracking
+	self.stats["downs"] = self.downs;
 	dvarName = "player" + self GetEntityNumber() + "downs";
 	setdvar( dvarName, self.downs );
 
@@ -557,6 +559,9 @@ can_revive( revivee )
 	if( !SightTracePassed( self.origin + ( 0, 0, 50 ), revivee.origin + ( 0, 0, 30 ), false, undefined ) )				
 		return false;
 
+	if(level.falling_down == true)
+		return false;
+
     //chrisp - fix issue where guys can sometimes revive thru a wall        
     if(!bullettracepassed(self.origin + (0,0,50), revivee.origin + ( 0, 0, 30 ), false, undefined) )
     {
@@ -683,6 +688,8 @@ revive_success( reviver )
 	
 	//CODER_MOD: TOMMYK 06/26/2008 - For coop scoreboards
 	reviver.revives++;
+	//stat tracking
+	reviver.stats["revives"] = reviver.revives;
 	
 	// CODER MOD: TOMMY K - 07/30/08
 	reviver thread maps\_arcademode::arcadeMode_player_revive();

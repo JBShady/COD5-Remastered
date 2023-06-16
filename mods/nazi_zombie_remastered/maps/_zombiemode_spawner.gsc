@@ -1159,12 +1159,12 @@ NewHelmetLaunch( model, origin, angles, damageDir )
 	launchForce = damageDir; 
   
 //	launchForce = launchForce * randomFloatRange( 1100, 4000 ); 
-	launchForce = launchForce * randomFloatRange( 1000, 2000 ); 
+	launchForce = launchForce * randomFloatRange( 1000, 1750 ); 
 
 	forcex = launchForce[0]; 
 	forcey = launchForce[1]; 
 //	forcez = randomFloatRange( 800, 3000 ); 
-	forcez = randomFloatRange( 900, 2200 ); 
+	forcez = randomFloatRange( 900, 2000 ); 
 
 	contactPoint = self.origin +( randomfloatrange( -1, 1 ), randomfloatrange( -1, 1 ), randomfloatrange( -1, 1 ) ) * 5; 
 
@@ -1331,6 +1331,18 @@ zombie_gib_on_damage()
 		if( self head_should_gib( attacker, type, point ) && type != "MOD_BURNED" )
 		{
 			self zombie_head_gib( attacker );
+			if(IsDefined(attacker.headshot_count))
+			{
+				attacker.headshot_count++;
+			}
+			else
+			{
+				attacker.headshot_count = 1;
+			}
+			//stats tracking
+			attacker.stats["headshots"] = attacker.headshot_count;
+			attacker.stats["zombie_gibs"]++;
+
 			continue;
 		}
 
@@ -1513,6 +1525,9 @@ zombie_gib_on_damage()
 			{
 				// force gibbing if the zombie is still alive
 				self thread animscripts\death::do_gib();
+				
+				//stat tracking
+				attacker.stats["zombie_gibs"]++;
 			}
 		}
 	}
@@ -1712,9 +1727,14 @@ zombie_death_animscript()
 	// Give attacker points
 	level zombie_death_points( self.origin, self.damagemod, self.damagelocation, self.attacker, self );
 
-	if( self.damagemod == "MOD_BURNED" )
+	if( self.damagemod == "MOD_BURNED" || (self.damageWeapon == "molotov" && (self.damagemod == "MOD_GRENADE" || self.damagemod == "MOD_GRENADE_SPLASH")) )
 	{
-		self thread animscripts\death::flame_death_fx();
+		if(level.flame_death_fx_frame < 5 )
+		{
+			level.flame_death_fx_frame++;
+			level thread reset_flame_death_fx_frame();
+			self thread animscripts\death::flame_death_fx();
+		}
 	}
 	if( self.damagemod == "MOD_GRENADE" || self.damagemod == "MOD_GRENADE_SPLASH" ) 
 	{
@@ -1722,6 +1742,16 @@ zombie_death_animscript()
 	}
 
 	return false;
+}
+
+reset_flame_death_fx_frame()
+{
+	level notify("reset_flame_death_fx_frame");
+	level endon("reset_flame_death_fx_frame");
+
+	wait_network_frame();
+
+	level.flame_death_fx_frame = 0;
 }
 
 damage_on_fire( player )
@@ -2226,7 +2256,7 @@ do_player_playdialog(player_index, sound_to_play, waittime, response)
 		self waittill("sound_done" + sound_to_play);
 		wait(waittime);		
 		level.player_is_speaking = 0;
-		if( isdefined( response ) )
+		if( isdefined( response ) && level.falling_down == false ) // as soon as last character starts falling down we dont want any other replies, as other players are down
 		{
 			level thread setup_response_line( self, index, response ); 
 		}
@@ -2277,7 +2307,7 @@ play_death_vo(hit_location, player,mod,zombie)
 	{
 		level.zombie_vars["zombie_insta_kill"] = 0;
 	}
-	if(hit_location == "head" && level.zombie_vars["zombie_insta_kill"] != 1   )
+	if(hit_location == "head" && level.zombie_vars["zombie_insta_kill"] == 0   )
 	{
 		//no VO for non bullet headshot kills
 		if( mod != "MOD_PISTOL_BULLET" &&	mod != "MOD_RIFLE_BULLET" )

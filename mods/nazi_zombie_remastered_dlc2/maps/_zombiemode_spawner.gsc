@@ -586,7 +586,11 @@ tear_into_building()
 
 		self.goalradius = 4;
 		self SetGoalPos( self.attacking_spot, self.first_node.angles );
-		self waittill( "orientdone" );
+		self waittill( "goal" );
+		//	MM- 05/09
+		//	If you wait for "orientdone", you NEED to also have a timeout.
+		//	Otherwise, zombies could get stuck waiting to do their facing.
+		self waittill_notify_or_timeout( "orientdone", 1 );
 
 		self zombie_history( "tear_into_building -> Reach position and orientated" );		
 
@@ -595,6 +599,10 @@ tear_into_building()
 		if( all_chunks_destroyed( self.first_node.barrier_chunks ) )
 		{
 			self zombie_history( "tear_into_building -> all chunks destroyed" );
+			for( i = 0; i < self.first_node.attack_spots_taken.size; i++ )
+			{
+				self.first_node.attack_spots_taken[i] = false;
+			}
 			return;
 		}
 
@@ -933,8 +941,6 @@ zombie_tear_notetracks( msg, chunk, node )
 				PlayFx( level._effect["wood_chunk_destory"], chunk.origin + ( randomint( 40 ), randomint( 40 ), randomint( 20 ) ) );
 	
 				level thread maps\_zombiemode_blockers::remove_chunk( chunk, node, true );
-				chunk.successfully_destroyed = true;
-				chunk notify("destroyed");
 			}
 		}
 	}
@@ -943,38 +949,17 @@ zombie_tear_notetracks( msg, chunk, node )
 check_for_zombie_death(zombie)
 {
 	self endon("destroyed");
-	
-	wait(2.5);
+	zombie waittill( "death" );
+
 	self.target_by_zombie = undefined;
 
 
 }
 
 
-
 get_tear_anim( chunk, zombo )
 {
 
-	//level._zombie_board_tearing["left"]["one"] = %ai_zombie_boardtear_l_1;
-	//level._zombie_board_tearing["left"]["two"] = %ai_zombie_boardtear_l_2;
-	//level._zombie_board_tearing["left"]["three"] = %ai_zombie_boardtear_l_3;
-	//level._zombie_board_tearing["left"]["four"] = %ai_zombie_boardtear_l_4;
-	//level._zombie_board_tearing["left"]["five"] = %ai_zombie_boardtear_l_5;
-	//level._zombie_board_tearing["left"]["six"] = %ai_zombie_boardtear_l_6;
-
-	//level._zombie_board_tearing["middle"]["one"] = %ai_zombie_boardtear_m_1;
-	//level._zombie_board_tearing["middle"]["two"] = %ai_zombie_boardtear_m_2;
-	//level._zombie_board_tearing["middle"]["three"] = %ai_zombie_boardtear_m_3;
-	//level._zombie_board_tearing["middle"]["four"] = %ai_zombie_boardtear_m_4;
-	//level._zombie_board_tearing["middle"]["five"] = %ai_zombie_boardtear_m_5;
-	//level._zombie_board_tearing["middle"]["six"] = %ai_zombie_boardtear_m_6;
-
-	//level._zombie_board_tearing["right"]["one"] = %ai_zombie_boardtear_r_1;
-	//level._zombie_board_tearing["right"]["two"] = %ai_zombie_boardtear_r_2;
-	//level._zombie_board_tearing["right"]["three"] = %ai_zombie_boardtear_r_3;
-	//level._zombie_board_tearing["right"]["four"] = %ai_zombie_boardtear_r_4;
-	//level._zombie_board_tearing["right"]["five"] = %ai_zombie_boardtear_r_5;
-	//level._zombie_board_tearing["right"]["six"] = %ai_zombie_boardtear_r_6;
 	anims = [];
 	anims[anims.size] = %ai_zombie_door_tear_left;
 	anims[anims.size] = %ai_zombie_door_tear_right;
@@ -1116,16 +1101,130 @@ get_tear_anim( chunk, zombo )
 	}
 	else
 	{
-		anims = [];
-		anims[anims.size] = %ai_zombie_attack_crawl;
-		anims[anims.size] = %ai_zombie_attack_crawl_lunge;
 
-		tear_anim = anims[RandomInt( anims.size )];
+		if(isdefined(chunk.script_noteworthy))
+		{
+
+			if(zombo.attacking_spot_index == 0)
+			{
+				if(chunk.script_noteworthy == "1")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_m_1;
+
+				}
+				else if(chunk.script_noteworthy == "2")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_m_2;
+				}
+				else if(chunk.script_noteworthy == "3")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_m_3;
+				}
+				else if(chunk.script_noteworthy == "4")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_m_4;
+				}
+				else if(chunk.script_noteworthy == "5")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_m_5;
+				}
+				else if(chunk.script_noteworthy == "6")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_m_6;
+				}
+
+			}
+			else if(zombo.attacking_spot_index == 1)
+			{
+				if(chunk.script_noteworthy == "1")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_r_1;
+
+				}
+				else if(chunk.script_noteworthy == "3")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_r_3;
+				}
+				else if(chunk.script_noteworthy == "4")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_r_4;
+				}
+				else if(chunk.script_noteworthy == "5")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_r_5;
+				}
+				else if(chunk.script_noteworthy == "6")
+				{
+					tear_anim = %ai_zombie_boardtear_crawl_r_6;
+				}
+				else if(chunk.script_noteworthy == "2")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_r_2;
+				}
+
+			}
+			else if(zombo.attacking_spot_index == 2)
+			{
+				if(chunk.script_noteworthy == "1")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_l_1;
+
+				}
+				else if(chunk.script_noteworthy == "2")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_l_2;
+				}
+				else if(chunk.script_noteworthy == "4")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_l_4;
+				}
+				else if(chunk.script_noteworthy == "5")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_l_5;
+				}
+				else if(chunk.script_noteworthy == "6")
+				{
+					tear_anim = %ai_zombie_boardtear_crawl_l_6;
+				}
+				else if(chunk.script_noteworthy == "3")
+				{
+
+					tear_anim = %ai_zombie_boardtear_crawl_l_3;
+				}
+
+			}
+
+
+
+		}
+		else
+		{
+			anims = [];
+			anims[anims.size] = %ai_zombie_attack_crawl;
+			anims[anims.size] = %ai_zombie_attack_crawl_lunge;
+
+			tear_anim = anims[RandomInt( anims.size )];
+		}
+		
 	}
 
 	return tear_anim; 
 }
-
 cap_zombie_head_gibs()
 {
 	if( !isDefined( level.max_head_gibs_per_frame ) )
@@ -1236,12 +1335,12 @@ NewHelmetLaunch( model, origin, angles, damageDir )
 	launchForce = damageDir; 
   
 //	launchForce = launchForce * randomFloatRange( 1100, 4000 ); 
-	launchForce = launchForce * randomFloatRange( 1000, 2000 ); 
+	launchForce = launchForce * randomFloatRange( 1000, 1750 ); 
 
 	forcex = launchForce[0]; 
 	forcey = launchForce[1]; 
 //	forcez = randomFloatRange( 800, 3000 ); 
-	forcez = randomFloatRange( 900, 2200 ); 
+	forcez = randomFloatRange( 900, 2000 ); 
 
 	contactPoint = self.origin +( randomfloatrange( -1, 1 ), randomfloatrange( -1, 1 ), randomfloatrange( -1, 1 ) ) * 5; 
 
@@ -1630,7 +1729,8 @@ zombie_should_gib( amount, attacker, type )
 		case "MOD_FALLING": 
 		case "MOD_SUICIDE": 
 		case "MOD_TRIGGER_HURT":
-		case "MOD_BURNED":
+		case "MOD_BURNED":	
+			return false; 
 		case "MOD_MELEE":	
 			if( isPlayer( attacker ) && randomFloat( 1 ) > 0.3 && attacker GetCurrentWeapon() == "zombie_item_katana" )
 			{
@@ -1808,54 +1908,64 @@ designate_rival_hero(player, hero, rival)
 {
 	players = getplayers();
 
-	//iprintlnbold("designating_rival");
-/*
-	playHero = isdefined(players[hero]);
-	playRival = isdefined(players[rival]);
+	playHero = isdefined(players[hero]); // if player exists in lobby, set their status to true otherwise false
+	playRival = isdefined(players[rival]); // if player exists in lobby, set their status to true otherwise false
 	
-	if(playHero && playRival)
+	// then we check range
+	if( playHero && distance (player.origin, players[hero].origin) < 400 ) // if hero is available, now lets check their distance
+	{
+		playHero = true; // we are in range
+	}
+	else
+	{
+		playHero = false; // we are out of range
+	}
+	
+	if( playRival && distance (player.origin, players[rival].origin) < 400 ) // if rival is available, now lets check their distance
+	{
+		playRival = true; // we are in range
+	}
+	else
+	{
+		playRival = false; // we are out of range
+	}
+
+	// then extra check in case our index/characters are mismatched due to players disconnecting
+	indexHero = maps\_zombiemode_weapons::get_player_index(players[hero]);
+	if(playHero && indexHero != hero ) // if the index of a player does not match what their character should be
+	{ // for example, the 2nd player might be takeo if nikolai leaves, who is normally 2nd player. But, we know takeo's index is for the 3rd player, so the game will try to play nikolai quotes on the 2nd player who is now takeo. Thus:
+		playHero = false;
+	}
+
+	indexRival = maps\_zombiemode_weapons::get_player_index(players[rival]);
+	if(playRival && indexRival != rival )
+	{
+		playRival = false;
+	}
+
+	if(playHero && playRival) // if still both are true, meaning both hero/rival are within range and in lobby, then we just randomize
 	{
 		if(randomfloatrange(0,1) < .5)
 		{
 			playRival = false;
-			iprintlnbold("Index ",hero," is playing as hero");
 		}
 		else
 		{
 			playHero = false;
-			iprintlnbold("Index ",rival," is playing as hero");
 		}
-	}
-*/
-	if(randomfloatrange(0,1) < .5)
-	{
-		playHero = true;
-		playRival = false;
-	}
-	else
-	{
-		playHero = false;
-		playRival = true;
 	}
 
-	if(playHero == true)
+	// By this point, only one can be true, so we play a line
+	if(playHero)
 	{		
-		if( distance (player.origin, players[hero].origin) < 400 && players.size != 1 )
-		{
-			//iprintlnbold("Index ",hero," is playing as hero");
-			player_responder = "plr_" + hero +"_";
-			players[hero] play_headshot_response_hero(player_responder);
-		}
+		player_responder = "plr_" + hero +"_";
+		players[hero] play_headshot_response_hero(player_responder);
 	}		
 	
-	if(playRival == true)
+	if(playRival)
 	{
-		if( distance (player.origin, players[rival].origin) < 400 && players.size != 1 )
-		{
-			//iprintlnbold("Index ",rival," is playing as rival");
-			player_responder = "plr_" + rival +"_";
-			players[rival] play_headshot_response_rival(player_responder);
-		}
+		player_responder = "plr_" + rival +"_";
+		players[rival] play_headshot_response_rival(player_responder);
 	}
 }
 play_death_vo(hit_location, player,mod,zombie)
@@ -1898,7 +2008,7 @@ play_death_vo(hit_location, player,mod,zombie)
 	{
 		level.zombie_vars["zombie_insta_kill"] = 0;
 	}
-	if(hit_location == "head" && level.zombie_vars["zombie_insta_kill"] != 1   )
+	if(hit_location == "head" && level.zombie_vars["zombie_insta_kill"] == 0   )
 	{
 		//no VO for non bullet headshot kills
 		if( mod != "MOD_PISTOL_BULLET" &&	mod != "MOD_RIFLE_BULLET" )
@@ -1910,7 +2020,7 @@ play_death_vo(hit_location, player,mod,zombie)
 		{
 			//sound = "plr_" + index + "_vox_kill_headdist" + "_" + randomintrange(0, 11);
 			plr = "plr_" + index + "_";
-			player thread play_headshot_dialog (plr);
+			player play_headshot_dialog (plr);
 
 			if(index == 0 && players.size != 1 ) // DEMPSEY gets a headshot, NIKOLAI (Hero), RICHTOFEN (Rival)
 			{	
@@ -1963,32 +2073,6 @@ play_death_vo(hit_location, player,mod,zombie)
 		player play_flamethrower_dialog (plr);
 		return;
 	}	
-	//check for close range kills, and play a special sound, unless instakill is on 
-	if(distance(player.origin,zombie.origin) < 64 && level.zombie_vars["zombie_insta_kill"] == 0 && mod != "MOD_BURNED")
-	{
-		//sound = "plr_" + index + "_vox_close" + "_" + randomintrange(0, 6);
-		rand = randomintrange(0, 100);
-		if(rand < 40)
-		{
-			plr = "plr_" + index + "_";
-			player play_closekill_dialog (plr);				
-
-		}
-		else if( mod == "MOD_MELEE" )
-		{
-			plr = "plr_" + index + "_";
-			player create_and_play_dialog ( plr, "vox_gen_exert", 0.05 );
-			//return;
-		}
-		return;
-	}	
-	else if( mod == "MOD_MELEE" && level.zombie_vars["zombie_insta_kill"] == 0 )
-	{
-		plr = "plr_" + index + "_";
-		player create_and_play_dialog ( plr, "vox_gen_exert", 0.05 );
-		return;
-	}
-
 
 	//special case for close range melee attacks while insta-kill is on
 	if (level.zombie_vars["zombie_insta_kill"] != 0)
@@ -2002,14 +2086,7 @@ play_death_vo(hit_location, player,mod,zombie)
 		}
 		
 	}
-	if( mod == "MOD_PROJECTILE")
-	{	
-		//Plays explosion dialog
-		plr = "plr_" + index + "_";
-		player play_explosion_dialog(plr);
-		return;
 
-	}
 	//Explosive Kills
 	if((mod == "MOD_GRENADE_SPLASH" || mod == "MOD_GRENADE") && level.zombie_vars["zombie_insta_kill"] == 0 )
 	{
@@ -2018,6 +2095,40 @@ play_death_vo(hit_location, player,mod,zombie)
 		player play_explosion_dialog(plr);
 		return;
 
+	}
+
+	if( mod == "MOD_PROJECTILE")
+	{	
+		//Plays explosion dialog
+		plr = "plr_" + index + "_";
+		player play_explosion_dialog(plr);
+		return;
+
+	}
+
+	if(IsDefined(zombie) && distance(player.origin,zombie.origin) < 64 && level.zombie_vars["zombie_insta_kill"] == 0 && mod != "MOD_BURNED")
+	{
+		rand = randomintrange(0, 100);
+		if(rand < 40)
+		{
+			plr = "plr_" + index + "_";
+			player play_closekill_dialog (plr);				
+
+		}
+		else if( mod == "MOD_MELEE" )
+		{
+			plr = "plr_" + index + "_";
+			player create_and_play_dialog ( plr, "vox_gen_exert", 0.05 );
+		}
+		return;
+	}	
+
+	//This is at the end because all other dialogue takes precedent	
+	if( mod == "MOD_MELEE" && level.zombie_vars["zombie_insta_kill"] == 0 )
+	{
+		plr = "plr_" + index + "_";
+		player create_and_play_dialog ( plr, "vox_gen_exert", 0.05 );
+		return;
 	}
 
 	
@@ -2056,7 +2167,6 @@ play_headshot_response_hero(player_index)
 		if(!IsDefined (self.vox_resp_hr_headdist))
 		{
 			num_variants = get_number_variants(player_index + "vox_resp_hr_headdist");
-		//	iprintlnbold(num_variants);
 			self.vox_resp_hr_headdist = [];
 			for(i=0;i<num_variants;i++)
 			{
@@ -2068,10 +2178,7 @@ play_headshot_response_hero(player_index)
 		{
 			self.one_at_a_time_hero = 1;
 			sound_to_play = random(self.vox_resp_hr_headdist_available);
-			
-			//iprintlnbold(player_index + sound_to_play);
-		
-			wait( RandomFloatRange(2.25, 3.0) ); // because of the wait, some headshot vox takes too long so only about 1/2 will actually go through which is fine, keeps it fun & rare
+					
 			self do_player_playdialog(player_index, sound_to_play, waittime);
 			self.vox_resp_hr_headdist_available = array_remove(self.vox_resp_hr_headdist_available,sound_to_play);			
 			if (self.vox_resp_hr_headdist_available.size < 1 )
@@ -2103,12 +2210,9 @@ play_headshot_response_rival(player_index)
 		{
 			self.one_at_a_time_rival = 1;
 			sound_to_play = random(self.vox_resp_riv_headdist_available);
-			
-			//iprintlnbold(player_index + sound_to_play);
-			
-			self.vox_resp_riv_headdist_available = array_remove(self.vox_resp_riv_headdist_available,sound_to_play);	
-			wait( RandomFloatRange(2.25, 3.0) ); // because of the wait, some headshot vox takes too long so only about 1/2 will actually go through which is fine, keeps it fun & rare
+						
 			self do_player_playdialog(player_index, sound_to_play, waittime);
+			self.vox_resp_riv_headdist_available = array_remove(self.vox_resp_riv_headdist_available,sound_to_play);	
 			if (self.vox_resp_riv_headdist_available.size < 1 )
 			{
 				self.vox_resp_riv_headdist_available = self.vox_resp_riv_headdist;
@@ -2260,30 +2364,35 @@ get_number_variants(aliasPrefix)
 }	
 play_headshot_dialog(player_index)
 {
-		
+		if(!IsDefined( self.one_at_a_time))
+		{
+			self.one_at_a_time = 0;
+		}
+
 		waittime = 0.25;
 		if(!IsDefined (self.vox_kill_headdist))
 		{
 			num_variants = get_number_variants(player_index + "vox_kill_headdist");
-			//iprintlnbold(num_variants);
 			self.vox_kill_headdist = [];
 			for(i=0;i<num_variants;i++)
 			{
 				self.vox_kill_headdist[self.vox_kill_headdist.size] = "vox_kill_headdist_" + i;
-				//iprintlnbold("vox_kill_headdist_" + i);	
 			}
 			self.vox_kill_headdist_available = self.vox_kill_headdist;
 		}
-		sound_to_play = random(self.vox_kill_headdist_available);
-		//iprintlnbold("LINE:" + player_index + sound_to_play);
-		self do_player_playdialog(player_index, sound_to_play, waittime);
-		self.vox_kill_headdist_available = array_remove(self.vox_kill_headdist_available,sound_to_play);
-	
-		if (self.vox_kill_headdist_available.size < 1 )
+		if(self.one_at_a_time == 0)
 		{
-			self.vox_kill_headdist_available = self.vox_kill_headdist;
+			self.one_at_a_time = 1;
+			sound_to_play = random(self.vox_kill_headdist_available);
+			self do_player_playdialog(player_index, sound_to_play, waittime);
+			self.vox_kill_headdist_available = array_remove(self.vox_kill_headdist_available,sound_to_play);
+		
+			if (self.vox_kill_headdist_available.size < 1 )
+			{
+				self.vox_kill_headdist_available = self.vox_kill_headdist;
+			}
+			self.one_at_a_time = 0;
 		}
-
 }
 play_tesla_dialog(player_index)
 {
@@ -2427,12 +2536,31 @@ zombie_death_animscript()
 	//ChrisP - 12/8/08 - added additional 'self' argument
 	level zombie_death_points( self.origin, self.damagemod, self.damagelocation, self.attacker,self );
 
-	if( self.damagemod == "MOD_BURNED" )
+	if( self.damagemod == "MOD_BURNED" || (self.damageWeapon == "molotov" && (self.damagemod == "MOD_GRENADE" || self.damagemod == "MOD_GRENADE_SPLASH")) )
 	{
-		self thread animscripts\death::flame_death_fx();
+		if(level.flame_death_fx_frame < 5 && !self enemy_is_dog())
+		{
+			level.flame_death_fx_frame++;
+			level thread reset_flame_death_fx_frame();
+			self thread animscripts\death::flame_death_fx();
+		}
+	}
+	if( self.damagemod == "MOD_GRENADE" || self.damagemod == "MOD_GRENADE_SPLASH" ) 
+	{
+		level notify( "zombie_grenade_death", self.origin );
 	}
 
 	return false;
+}
+
+reset_flame_death_fx_frame()
+{
+	level notify("reset_flame_death_fx_frame");
+	level endon("reset_flame_death_fx_frame");
+
+	wait_network_frame();
+
+	level.flame_death_fx_frame = 0;
 }
 
 damage_on_fire( player )
@@ -2513,11 +2641,11 @@ zombie_damage( mod, hit_location, hit_origin, player )
 	{
 		if ( isdefined( player ) && isalive( player ) )
 		{
-			self DoDamage( level.round_number + randomint( 100, 500 ), self.origin, player);
+			self DoDamage( level.round_number + randomintrange( 100, 500 ), self.origin, player);
 		}
 		else
 		{
-			self DoDamage( level.round_number + randomint( 100, 500 ), self.origin, undefined );
+			self DoDamage( level.round_number + randomintrange( 100, 500 ), self.origin, undefined );
 		}
 	}
 	else if( mod == "MOD_PROJECTILE" || mod == "MOD_EXPLOSIVE" || mod == "MOD_PROJECTILE_SPLASH" || mod == "MOD_PROJECTILE_SPLASH")
@@ -3176,7 +3304,11 @@ do_zombie_rise()
 		spot.angles = (0, 0, 0);
 	}
 	#/
-
+	if( !isDefined( spot.angles ) )
+	{
+		spot.angles = (0, 0, 0);
+	}
+	
 	anim_org = spot.origin;
 	anim_ang = spot.angles;
 

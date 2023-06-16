@@ -396,10 +396,7 @@ combine_center_building_zones()
 
 	// we can now activate bouncing betties
    level thread maps\nazi_zombie_sumpf_bouncing_betties::purchase_bouncing_betties();
-     
-	//bouncing betties!!
-	level thread maps\nazi_zombie_sumpf_bouncing_betties::give_betties_after_rounds();
-	
+
 	//ESM - initialize the ammo box
 //	level thread maps\nazi_zombie_sumpf_ammo_box::initAmmoBox();	
 }

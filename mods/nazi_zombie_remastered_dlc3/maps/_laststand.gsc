@@ -41,7 +41,7 @@ init()
 
 	if( GetDvar( "revive_trigger_radius" ) == "" )
 	{
-		SetDvar( "revive_trigger_radius", "40" ); 
+		SetDvar( "revive_trigger_radius", "60" ); 
 	}
 }
 
@@ -313,9 +313,18 @@ laststand_giveback_player_weapons()
 			self SetWeaponAmmoStock( weapon, self.weaponAmmo[weapon]["stock"] );
 	}
 
+	if( self HasWeapon("m1garand_gl_zombie") ) // Failsafe for if we have M1 launcher and we down while drinking a perk, makes sure the action slot gets set
+	{
+		self setactionslot(3,"altMode","m7_launcher_zombie");
+	}
+	else if( self HasWeapon("m1garand_gl_zombie_upgraded") ) // Failsafe for if we have M1 launcher and we down while drinking a perk, makes sure the action slot gets set
+	{
+		self setactionslot(3,"altMode","m7_launcher_zombie_upgraded");
+	}
+
 	// if we can't figure out what the last active weapon was, try to switch a primary weapon
 	//CHRIS_P: - don't try to give the player back the mortar_round weapon ( this is if the player killed himself with a mortar round)
-	if( self.lastActiveWeapon != "none" && self.lastActiveWeapon != "mortar_round" && self.lastActiveWeapon != "mine_bouncing_betty" )
+	if( self.lastActiveWeapon != "none" && self.lastActiveWeapon != "mortar_round" && self.lastActiveWeapon != "mine_bouncing_betty" && (!isSubStr(self.lastActiveWeapon, "zombie_item")) )
 	{
 		self SwitchToWeapon( self.lastActiveWeapon );
 	}
@@ -609,7 +618,7 @@ revive_give_back_weapons( gun )
 	self EnableWeaponCycling();
 	self EnableOffhandWeapons();
 	
-	if( gun != "none" && gun != "mine_bouncing_betty" )
+	if( gun != "none" && gun != "mine_bouncing_betty" && (!isSubStr(gun, "zombie_item")) )
 	{
 		self SwitchToWeapon( gun );
 	}
@@ -650,6 +659,9 @@ can_revive( revivee )
 	if( !SightTracePassed( self.origin + ( 0, 0, 50 ), revivee.origin + ( 0, 0, 30 ), false, undefined ) )				
 		return false;
 	
+	if(level.falling_down == true)
+		return false;
+	
 	//chrisp - fix issue where guys can sometimes revive thru a wall	
 	if(!bullettracepassed(self.origin + (0,0,50), revivee.origin + ( 0, 0, 30 ), false, undefined) )
 	{
@@ -665,11 +677,7 @@ can_revive( revivee )
 		}
 	}
 
-	//if the level is nazi_zombie_asylum and playeris drinking, disable the trigger
-	if(level.script == "nazi_zombie_asylum" && isdefined(self.is_drinking))
-		return false;
-
-	if(level.script == "nazi_zombie_sumpf" && isdefined(self.is_drinking))
+	if(isdefined(self.is_drinking))
 		return false;
 
 	return true;
@@ -726,7 +734,7 @@ revive_do_revive( playerBeingRevived, reviverGun, solo_revive )
 	playerBeingRevived startrevive( self );
 
 	if( !isdefined(self.reviveProgressBar) )
-		self.reviveProgressBar = self createPrimaryProgressBar();
+		self.reviveProgressBar = self createPrimaryProgressBar(true);
 
 	if( !isdefined(self.reviveTextHud) )
 		self.reviveTextHud = newclientHudElem( self );	

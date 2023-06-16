@@ -47,8 +47,8 @@ moveLeverUp()
 	
 	self.lever rotatepitch(-180,.5);
 	
-	soundent_left playsound("switch");
-	soundent_right playsound("switch");
+	soundent_left playsound("switch_up");
+	soundent_right playsound("switch_up");
 	
 	self.lever waittill ("rotatedone");
 	
@@ -150,6 +150,8 @@ penThink()
 			else
 			{
 				play_sound_on_ent( "no_purchase" );
+				who thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
+
 			}
 		}
 	}
@@ -252,7 +254,7 @@ blade_sounds()
 }
 trap_sounds(motor_left, motor_right, wheel_left, wheel_right)
 {
-	wait(11);
+	wait(20);
 	motor_left stoploopsound(2);
 	motor_left playsound("motor_stop_left");
 	motor_right stoploopsound(2);

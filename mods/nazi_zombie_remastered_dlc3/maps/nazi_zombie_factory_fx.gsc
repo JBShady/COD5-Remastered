@@ -61,6 +61,7 @@ precache_scripted_fx()
 	level._effect["zapper_wall"] 			= loadfx("misc/fx_zombie_zapper_wall_control_on");
 	level._effect["zapper_light_ready"]		= loadfx("maps/zombie/fx_zombie_light_glow_green");
 	level._effect["zapper_light_notready"]	= loadfx("maps/zombie/fx_zombie_light_glow_red");
+	level._effect["zapper_light_waiting"]	= loadfx("maps/zombie/fx_zombie_light_glow_orange");
 	level._effect["elec_room_on"] 			= loadfx("fx_zombie_light_elec_room_on");
 	level._effect["elec_md"] 				= loadfx("env/electrical/fx_elec_player_md");
 	level._effect["elec_sm"] 				= loadfx("env/electrical/fx_elec_player_sm");
@@ -146,6 +147,12 @@ precache_createfx_fx()
 	
 	//ESM - added for perk machines
 	level._effect["electric_short_oneshot"] = loadfx("env/electrical/fx_elec_short_oneshot");
+	// JB added for egg
+	level._effect["electric_fuse_spark"] = loadfx("env/electrical/fx_elec_sparking");
+	level._effect["electric_fuse_spark_placed"] = loadfx("env/electrical/fx_elec_sparking_oneshot");
+	level._effect["electric_fuse_spark_smoking"] = loadfx("env/smoke/fx_pipe_steam_sm_onesht");
+	level._effect["teleporter_smoke_fail"] = loadfx("weapon/grenade/fx_smoke_grenade_11sec_mp");
+
 }
 
 spawnFX()

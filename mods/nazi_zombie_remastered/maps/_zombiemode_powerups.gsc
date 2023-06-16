@@ -725,6 +725,10 @@ powerup_vo(type)
 				sound_to_play = "vox_powerup_insta_" + rand;
 				break;
 		case "full_ammo":
+				if(index == 3)
+				{
+					rand = randomintrange(0,5);
+				}
 				sound_to_play = "vox_powerup_ammo_" + rand;
 				break;
 		case "double_points":

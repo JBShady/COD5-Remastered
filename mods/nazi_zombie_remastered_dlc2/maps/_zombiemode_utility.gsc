@@ -156,6 +156,8 @@ check_point_in_active_zone( origin )
 		}
 	}
 	
+	scr_org delete();
+
 	return one_valid_zone;
 }
 

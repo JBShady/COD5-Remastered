@@ -3902,6 +3902,12 @@ trigger_fog( trigger )
 {
 	trigger endon( "death" );
 
+	if(trigger.script_vision == "zombie_asylum" || trigger.script_vision == "zombie_asylum2")
+	{
+		trigger delete();
+		return;
+	}
+
 	dofog = true; 
 	if( !IsDefined( trigger.script_start_dist ) )
 	{

@@ -126,6 +126,12 @@ powerup_hud_overlay()
 
 	while(true)
 	{
+		if(level.can_do_quest == true)
+		{
+			level.powerup_hud[0].y = -50;
+			level.powerup_hud[1].y = -50;
+		}
+
 		if(level.zombie_vars["zombie_powerup_insta_kill_time"] < 5)
 		{
 			wait(0.1);		
@@ -492,6 +498,11 @@ powerup_drop(drop_point)
 		{
 			valid_drop = true;
 		}
+	}
+	
+	if(flag( "dog_round" )) // forces a dog max ammo, sometimes dogs can be register as outside of the map but because they always spawn inside the map its ok we dont need to check this
+	{
+		valid_drop = true;
 	}
 	
 	if(!valid_drop)
@@ -890,7 +901,7 @@ powerup_vo(type)
 	index = maps\_zombiemode_weapons::get_player_index(self);
 	sound_to_play = undefined;
 	rand = randomintrange(0,3);
-	carp_rand = randomintrange(0,7);
+	carp_rand = randomintrange(0,6);
 
 	vox_rand = randomintrange(1,101);  //RARE: This is to setup the Rare devil response lines
 	percentage = 3;  //What percent chance the rare devil response line has to play

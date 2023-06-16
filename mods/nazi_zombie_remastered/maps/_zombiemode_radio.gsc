@@ -17,6 +17,8 @@ init()
 	}
 	
 	array_thread(radios, ::zombie_radio_play );
+
+	level thread stop_the_radio();
 }
 
 
@@ -27,14 +29,49 @@ zombie_radio_play()
 
 	self setcandamage(true);
 	
+	if(!IsDefined (level.eggs))
+	{
+		level.eggs = 0;
+	}
+
 	while (1)
 	{
 		self waittill ("damage");
 
 		println("changing radio stations");
-
-		SetClientSysState("levelNotify","kzmb_next_song");
+		if(level.eggs != 1)
+		{
+			SetClientSysState("levelNotify","kzmb_next_song");			
+		}
 
 		wait(1.0);
 	}
+}
+
+stop_the_radio()
+{
+	if(!IsDefined (level.eggs))
+	{
+		level.eggs = 0;
+	}
+	while(1)
+	{
+			if (level.eggs == 0)
+			{
+				wait(0.5);
+			}
+			else
+			{
+				level clientNotify ("ktr");  //Kill the Radio
+				//iprintlnbold ("stopping_radio_from_GSC");
+				while ( level.eggs == 1)
+				{
+					wait(0.5);
+				}
+				level clientNotify ("rrd"); //Resume the radio
+				//iprintlnbold ("resuming_radio_from_GSC");
+				
+			}
+			wait(0.5);
+	}	
 }

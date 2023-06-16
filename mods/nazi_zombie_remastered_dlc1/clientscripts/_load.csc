@@ -152,7 +152,7 @@ main()
 	// Setup global listen threads
 
 	// rfo = red flashing overlay from _gameskill.gsc
-	add_listen_thread( "rfo1", clientscripts\_utility::loop_sound_on_client, "breathing_hurt", 0.39, 0.42, "rfo2" );
+	add_listen_thread( "rfo1", clientscripts\_utility::loop_sound_on_client, "breathing_hurt", 0.884, 0.6, "rfo2" ); // Changed min/max timing to fit closer to MP rhythm (min 0.784 + 0.1, max 0.8), but slightly rounded down for more intensity in zombies
 	add_listen_thread( "rfo3", clientscripts\_utility::play_sound_on_client, "breathing_better" );
 	add_listen_thread( "zi", ::zombie_intermission );
 

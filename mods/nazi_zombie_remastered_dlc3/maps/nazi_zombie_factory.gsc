@@ -4,6 +4,7 @@
 #include maps\_zombiemode_zone_manager; 
 #include maps\nazi_zombie_factory_teleporter;
 #include maps\_music;
+#include maps\_hud_util;
 
 
 main()
@@ -67,10 +68,20 @@ main()
 	precachemodel("collision_geo_32x32x128");
 	precacheModel("collision_wall_64x64x10"); // new
 
-	precacheModel("static_berlin_ger_radio");
+	precacheModel("zombie_handheld_radio"); // cut radio
 	precacheModel("zombie_books_open");
+	precacheModel("panel_fuse"); // new
+	precacheModel("static_global_electric_wire"); // new
+	precacheModel("zombie_teleporter_button"); // new
+	precacheModel("static_seelow_toolbox"); // new
+	precacheModel("zombie_sumpf_zipcage_switch"); //new
 
+	PrecacheShader("hud_fuse"); // new
+	PrecacheShader("hud_fuse_wire"); // new
+	PrecacheShader("hud_tools"); // new
 
+	PrecacheItem( "zombie_item_journal" ); // new
+	PrecacheItem( "zombie_item_beaker" ); // new
 
 	precachestring(&"ZOMBIE_BETTY_ALREADY_PURCHASED");
 	precachestring(&"REMASTERED_ZOMBIE_BETTY_HOWTO");
@@ -162,8 +173,6 @@ main()
 	level thread play_level_easteregg_vox( "vox_illumi_1" );
 	level thread play_level_easteregg_vox( "vox_illumi_2" );
 
-	level thread teddy_easteregg_vox();
-
 	// Special level specific settings
 	set_zombie_var( "zombie_powerup_drop_max_per_round", 3 );	// lower this to make drop happen more often
 
@@ -188,9 +197,11 @@ main()
 	level thread hanging_dead_guy( "hanging_dead_guy" );
 
 	spawncollision("collision_geo_32x32x128","collider",(-5, 543, 112), (0, 348.6, 0));
-	spawncollision("collision_wall_64x64x10","collider",(606.1, -2225, 286.5), (0, -90, 0)); // new
+	spawncollision("collision_wall_64x64x10","collider",(606.1, -2225, 286.5), (0, -90, 0)); // new, fixes collision at cat walk barrier
 
-	thread maps\nazi_zombie_factory_new_eggs::init();
+	level thread fix_bad_spots();
+	level thread sumpf_check();
+	level thread maps\nazi_zombie_factory_new_eggs::init();
 }
 
 init_achievement()
@@ -287,7 +298,7 @@ intro_screen()
 	for(i = 0;  i < 3; i++)
 	{
 		level.intro_hud[i] = newHudElem();
-		level.intro_hud[i].x = 3;
+		level.intro_hud[i].x = 4;
 		level.intro_hud[i].y = 0;
 		level.intro_hud[i].alignX = "left";
 		level.intro_hud[i].alignY = "bottom";
@@ -569,7 +580,6 @@ include_weapons()
 	include_weapon( "zombie_ppsh_upgraded", false );
 	include_weapon( "zombie_type99_lmg" );
 	include_weapon( "zombie_type99_lmg_upgraded", false );
-	// DP-28 DISABLED FOR NOW
 	include_weapon( "zombie_dp28" );
 	include_weapon( "zombie_dp28_upgraded", false );
 
@@ -600,25 +610,25 @@ factory_tesla_weighting_func()
 	num_to_add = 1;
 	if( isDefined( level.pulls_since_last_tesla_gun ) )
 	{
-		// player has dropped the tesla for another weapon, so we set all future polls to 20%
+		// player has dropped the tesla for another weapon, so we set all future polls to 20% nerfed to 15
 		if( isDefined(level.player_drops_tesla_gun) && level.player_drops_tesla_gun == true )
 		{						
-			num_to_add += int(.2 * level.zombie_include_weapons.size);		
+			num_to_add += int(.15 * level.zombie_include_weapons.size);		
 		}
 		
 		// player has not seen tesla gun in late rounds
 		if( !isDefined(level.player_seen_tesla_gun) || level.player_seen_tesla_gun == false )
 		{
-			// after round 10 the Tesla gun percentage increases to 20%
+			// after round 10 the Tesla gun percentage increases to 20% nerfed to 15
 			if( level.round_number > 10 )
 			{
-				num_to_add += int(.2 * level.zombie_include_weapons.size);
+				num_to_add += int(.15 * level.zombie_include_weapons.size);
 			}		
-			// after round 5 the Tesla gun percentage increases to 15%
+			// after round 5 the Tesla gun percentage increases to 15% nerfed to 10
 			else if( level.round_number > 5 )
 			{
 				// calculate the number of times we have to add it to the array to get the desired percent
-				num_to_add += int(.15 * level.zombie_include_weapons.size);
+				num_to_add += int(.10 * level.zombie_include_weapons.size);
 			}						
 		}
 	}
@@ -1070,6 +1080,8 @@ electric_trap_think( enable_flag )
 										
 					//turn the damage detection trigger off until the flames are used again
 			 		self.zombie_dmg_trig trigger_off();
+					self notify("trap_over");
+
 					wait(30);
 
 					array_thread (triggers, ::trigger_on);
@@ -1085,6 +1097,7 @@ electric_trap_think( enable_flag )
 			else
 			{
 				play_sound_on_ent( "no_purchase" );
+				who thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
 			}
 		}
 	}
@@ -1115,16 +1128,23 @@ electric_trap_move_switch(parent)
 		break;
 	}
 	
-	//turn the light above the door red
+	//turn the light above the door red, rotate lever down, and play sound
 	zapper_light_red( light_name );
 	tswitch rotatepitch(180,.5);
 	tswitch playsound("amb_sparks_l_b");
 	tswitch waittill("rotatedone");
 
+	//when lever is down, activate
 	self notify("switch_activated");
-	self waittill("available");
-	tswitch rotatepitch(-180,.5);
 
+	//wait until trap is done and then rotate back up
+	self waittill("trap_over");
+	tswitch rotatepitch(-180,.5);
+	tswitch playsound("switch_up");
+
+	//wait until trap is ready to turn green
+	self waittill("available");
+	
 	//turn the light back green once the trap is available again
 	zapper_light_green( light_name );
 }
@@ -1294,38 +1314,45 @@ zombie_elec_death(flame_chance)
 	
 	//10% chance the zombie will burn, a max of 6 burning zombs can be goign at once
 	//otherwise the zombie just gibs and dies
-	if(flame_chance > 90 && level.burning_zombies.size < 6)
+	if(!self enemy_is_dog())
 	{
-		level.burning_zombies[level.burning_zombies.size] = self;
-		self thread zombie_flame_watch();
-		self playsound("ignite");
-		self thread animscripts\death::flame_death_fx();
-		wait(randomfloat(1.25));		
-	}
-	else
-	{
-		
-		refs[0] = "guts";
-		refs[1] = "right_arm"; 
-		refs[2] = "left_arm"; 
-		refs[3] = "right_leg"; 
-		refs[4] = "left_leg"; 
-		refs[5] = "no_legs";
-		refs[6] = "head";
-		self.a.gib_ref = refs[randomint(refs.size)];
-
-		playsoundatposition("zombie_arc", self.origin);
-		if( !self enemy_is_dog() && randomint(100) > 50 )
+		if(flame_chance > 90 && level.burning_zombies.size < 6)
 		{
-			self thread electroctute_death_fx();
-			self thread play_elec_vocals();
+			level.burning_zombies[level.burning_zombies.size] = self;
+			self thread zombie_flame_watch();
+			self playsound("ignite");
+			self thread animscripts\death::flame_death_fx();
+			wait(randomfloat(1.25));		
 		}
-		wait(randomfloat(1.25));
-		self playsound("zombie_arc");
+		else
+		{
+			
+			refs[0] = "guts";
+			refs[1] = "right_arm"; 
+			refs[2] = "left_arm"; 
+			refs[3] = "right_leg"; 
+			refs[4] = "left_leg"; 
+			refs[5] = "no_legs";
+			refs[6] = "head";
+			self.a.gib_ref = refs[randomint(refs.size)];
+
+			playsoundatposition("zombie_arc", self.origin);
+			if( randomint(100) > 50 )
+			{
+				self thread electroctute_death_fx();
+				self thread play_elec_vocals();
+			}
+			wait(randomfloat(1.25));
+			self playsound("zombie_arc");
+		}
+	}
+	else // if dog
+	{
+		wait(randomfloat(0.5));
 	}
 
 	self dodamage(self.health + 666, self.origin);
-	iprintlnbold("should be damaged");
+	//iprintlnbold("should be damaged");
 }
 
 zombie_flame_watch()
@@ -1549,50 +1576,20 @@ player_zombie_awareness()
 	}
 }		
 
-/*
-play_oh_shit_dialog()
-{
-	//player = getplayers();	
-	index = maps\_zombiemode_weapons::get_player_index(self);
-	
-	player_index = "plr_" + index + "_";
-	if(!IsDefined (self.vox_oh_shit))
-	{
-		num_variants = maps\_zombiemode_spawner::get_number_variants(player_index + "vox_oh_shit");
-		self.vox_oh_shit = [];
-		for(i=0;i<num_variants;i++)
-		{
-			self.vox_oh_shit[self.vox_oh_shit.size] = "vox_oh_shit_" + i;	
-		}
-		self.vox_oh_shit_available = self.vox_oh_shit;		
-	}	
-	sound_to_play = random(self.vox_oh_shit_available);
-	
-	self.vox_oh_shit_available = array_remove(self.vox_oh_shit_available,sound_to_play);
-	
-	if (self.vox_oh_shit_available.size < 1 )
-	{
-		self.vox_oh_shit_available = self.vox_oh_shit;
-	}
-	
-	self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.25);
-}
-*/
-
 level_start_vox()
 {
 	wait( 6 );//moved here
+	
 	index = maps\_zombiemode_weapons::get_player_index( self );
 	plr = "plr_" + index + "_";
 	// wait( 6 );//commented out
 	self thread create_and_play_dialog( plr, "vox_level_start", 0.25 );
-	// Do easter egg vox on solo
-	wait( 4 );
-	//self thread create_and_play_dialog( plr, "vox_gen_giant", 0.25 );
 
+	// Do easter egg vox on solo
 	players = get_players();
 	if( players.size == 1 )
 	{
+		wait( 4 );
 		while(1)
 			{
 				vox_rand = randomintrange(1,101);
@@ -1600,7 +1597,9 @@ level_start_vox()
 				{
 					if( vox_rand <= 5 /*3*/ )
 					{
-					rando_easter_egg_mythos(plr);
+						index = maps\_zombiemode_weapons::get_player_index(self);
+						plr = "plr_" + index + "_";
+						self thread create_and_play_dialog( plr, "vox_gen_giant", 0.25 );
 					}
 				}
 				else if (level.round_number > 5 )
@@ -1703,6 +1702,7 @@ flytrap()
 	wait(6.0);
 	
 	thread play_sound_2d( "sam_fly_act_1" );
+	wait(3.0);
 	//iprintlnbold( "Samantha Sez: Let's play Hide and Seek!" );
 
 	//	Now find them!
@@ -1712,12 +1712,12 @@ flytrap()
 	flag_wait( "ee_bowie_bear" );
 	flag_wait( "ee_perk_bear" );
 
-	level.teleporter_powerups_reward = true;
+/*	level.teleporter_powerups_reward = true;
 	wait( 4.0 );
 
 	ss = getstruct( "teleporter_powerup", "targetname" );
 	ss thread maps\_zombiemode_powerups::special_powerup_drop(ss.origin, true, true);
-
+*/
 	// Colin, play music here.
 //	println( "Still Alive" );
 }
@@ -1832,33 +1832,6 @@ radio_egg_init( trigger_name, origin_name )
 	}	
 }
 
-/*
-radio_egg_hanging_init( trigger_name, origin_name )
-{
-	radio_trig = getent( trigger_name, "targetname");
-	radio_origin = getent( origin_name, "targetname");
-
-	if( ( !isdefined( radio_trig ) ) || ( !isdefined( radio_origin ) ) )
-	{
-		return;
-	}
-	
-	while(1)
-	{
-		radio_trig waittill( "trigger", player);
-		dist = distancesquared(player.origin, radio_trig.origin);
-		if( dist < 900 * 900)
-		{
-			radio_origin playsound( trigger_name );
-			return;
-		}
-		else
-		{
-			wait(.05);
-		}
-	}	
-}
-*/
 
 //Hanging dead guy
 hanging_dead_guy( name )
@@ -1964,10 +1937,14 @@ play_giant_mythos_lines()
 			players = get_players();
 				if( players.size != 1 )
 				{
-				p = randomint(players.size);
-				index = maps\_zombiemode_weapons::get_player_index(players[p]);
-				plr = "plr_" + index + "_";
-				players[p] thread create_and_play_dialog( plr, "vox_gen_giant", .25 );
+					p = randomint(players.size);
+					index = maps\_zombiemode_weapons::get_player_index(players[p]);
+					plr = "plr_" + index + "_";
+
+					if(players[p].sessionstate != "spectator" )
+					{
+						players[p] thread create_and_play_dialog( plr, "vox_gen_giant", .25 );
+					}
 				}
 				//iprintlnbold( "Just played Gen Giant line off of player " + p );
 			}
@@ -1978,36 +1955,6 @@ play_giant_mythos_lines()
 		}
 		wait(randomintrange(60,240));
 	}
-}
-			
-
-rando_easter_egg_mythos()
-{
-	
-	index = maps\_zombiemode_weapons::get_player_index(self);
-	
-	player_index = "plr_" + index + "_";
-	if(!IsDefined (self.vox_gen_giant))
-	{
-		num_variants = maps\_zombiemode_spawner::get_number_variants(player_index + "vox_gen_giant");
-		self.vox_gen_giant = [];
-		for(i=0;i<num_variants;i++)
-		{
-			self.vox_gen_giant[self.vox_gen_giant.size] = "vox_gen_giant_" + i;	
-		}
-		self.vox_gen_giant_available = self.vox_gen_giant;		
-	}	
-	sound_to_play = random(self.vox_gen_giant_available);
-	
-	self.vox_gen_giant_available = array_remove(self.vox_gen_giant_available,sound_to_play);
-	
-	if (self.vox_gen_giant_available.size < 1 )
-	{
-		self.vox_gen_giant_available = self.vox_gen_giant;
-	}
-			
-	self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.25);
-	
 }
 
 
@@ -2025,6 +1972,9 @@ play_level_easteregg_vox( object )
 	trig UseTriggerRequireLookAt();
 	trig SetCursorHint( "HINT_NOICON" ); 
 	
+	only_count_once = true;
+	level.successful_corks = 0;
+
 	while(1)
 	{
 		trig waittill( "trigger", who );
@@ -2039,14 +1989,29 @@ play_level_easteregg_vox( object )
 			switch( object )
 			{
 				case "vox_corkboard_1":
+					if(	(index != 3 || getplayers().size == 1) && isDefined(only_count_once) && only_count_once && level.can_do_quest == true)
+					{
+						only_count_once = undefined;
+						level.successful_corks += 1;
+					}
 					//iprintlnbold( "Inside trigger " + object );
 					who thread create_and_play_dialog( plr, "vox_resp_corkmap", .25 );
 					break;
 				case "vox_corkboard_2":
+					if(	(index != 3 || getplayers().size == 1) && isDefined(only_count_once) && only_count_once && level.can_do_quest == true)
+					{
+						only_count_once = undefined;
+						level.successful_corks += 1;
+					}
 					//iprintlnbold( "Inside trigger " + object );
 					who thread create_and_play_dialog( plr, "vox_resp_corkmap", .25 );
 					break;
 				case "vox_corkboard_3":
+					if(	(index != 3 || getplayers().size == 1) && isDefined(only_count_once) && only_count_once && level.can_do_quest == true)
+					{
+						only_count_once = undefined;
+						level.successful_corks += 1;
+					}
 					//iprintlnbold( "Inside trigger " + object );
 					who thread create_and_play_dialog( plr, "vox_resp_corkmap", .25 );
 					break;
@@ -2105,37 +2070,1969 @@ play_level_easteregg_vox( object )
 	}
 }
 
-teddy_easteregg_vox()
+
+fix_bad_spots()
 {
+	//this bad spot is a  radius right at the spot where you can stand and all the zombies wont go for you
+	bad_spot = spawn( "trigger_radius",( 793.5, 666, 53 ), 0, 125, 50 ); // radius, height
+	good_spot = (759.5, 589.5, 54); // this is the closest i can get zombies to walk to towards that radius, if i tell them to go to the player or coords directly inside the radius they'll just fail
 
-	teddy_trig = spawn( "trigger_radius",( -660, -1440, 199), 0, 70, 50 );
-	players = getplayers();
-
-	for(i=0;i<players.size;i++)
-	{	
+	while(1)
+	{
+		bad_spot waittill( "trigger", player );
+		player.has_rope = 0;
 		while(1)
 		{
-			teddy_trig waittill( "trigger", player );
-			if(!isdefined (level.player_is_speaking))
+			if( !player IsTouching( bad_spot ) ) // if player leaves we stop checking zombies
 			{
-				level.player_is_speaking = 0;
+				break;
+			}
+			if( !is_player_valid( player ) )
+			{
+				break; 
 			}
 
-			weapon = player getCurrentWeapon();
-			aiming = isADS( player );
-			if( aiming && ( isSubStr(weapon, "ptrs41") || isSubStr(weapon, "scoped") ) && level.player_is_speaking == 0 )
+			zombies = GetAiSpeciesArray( "axis", "all" );
+			for(i = 0; i < zombies.size; i++)
 			{
-				if( randomintrange(0,100) < 35 )
+				if(IsDefined(zombies[i].recalculating) && zombies[i].recalculating)
 				{
-					wait(0.5);
-					index = maps\_zombiemode_weapons::get_player_index(player);
-					plr = "plr_" + index + "_";
-					player thread create_and_play_dialog( plr, "vox_resp_teddy", 0.25 );
-					break; 
+					continue;
 				}
-				wait(1);
+				if(int(DistanceSquared(bad_spot.origin, zombies[i].origin)) < 800*800 && zombies[i] in_playable_area())
+				{
+					zombies[i].recalculating = true;
+					zombies[i] thread recalculate_pathing(good_spot, bad_spot);
+				}
 			}
-			wait(0.5);
+			wait(0.05);
 		}
 	}
-}	
+}
+
+recalculate_pathing(good_spot, bad_spot)
+{
+	self SetGoalPos(good_spot);
+	while(1)
+	{
+		bad_spot waittill("trigger_radius", who);
+/*		if( isplayer(who) ) // if a new player enters the trig we force a re-calculation
+		{				// this is for cases where a player leaves then re-enters the trigger, which would result in zombies being stuck on this waittill and set to "true", and unable to recalculate a 2nd time
+			break;
+		}*/
+		if( self != who ) // if the zombie going to this spot is not the one who triggers the radius (other zombies)
+		{
+			continue; // keep checking
+		}
+		else
+		{
+			break; // if our correct zombie trigs, then break and we have succeeded no more re-calculating
+		}
+	}
+	self.recalculating = false;
+}
+
+// only concerns
+// how does it work in co-op (when other players are far away?, when other players are near but not in, or when multiple in trig)
+//what if a player enters and then leaves trig, zombies will get stuck on recalculating true status because of our waittill (its not based on time)
+	//do it time based, say like 5 sec
+	//only grab close zombs?
+
+/*
+
+// FACTORY EGG STEPS
+// Industrial Extraordinaire -- Restore facility operations after starting the plan
+
+// -- SHARED -- //
+1. “Prescribed Adherence” - In order to proceed the host must have previously completed the sumpf quest. Richtofen must be in the lobby if in 4-player or solo.
+2. “Electricians” - Turn on the power and link all three teleporters to the mainframe.
+3. “Elevate Your Senses" - Activate the Fly Trap with a Pack-a-Punched weapon and complete Samantha’s game.
+4. “Forensic Investigation” - At any point, interact with all three corkboards throughout the map. If in 4-player, this step must be done by anyone except Richtofen.
+
+// -- SOLO OR FOUR-PLAYER COOP -- //
+5. “Secret Preparations” - Richtofen must prepare his plan to override the teleporter functionality by studying with his journal at each of the three chalkboards by Teleporter A. 
+
+// -- SHARED -- //
+6. “Craft the Fuse” - Players must find and pick up a fuse hidden in one of three spots at Teleporter C. The player with the fuse must then cut off a piece of wire found in one of three spots near Teleporter B using the Bowie Knife.
+7. “Modify the Mainframe” - With the parts and plan formulated, the player must head back to the mainframe panel and insert the fuse modification. An orange light will appear as the system prepares. Complete the round to move on.
+8. “Sync Up” - The orange light will disappear, and a player can interact with the mainframe panel now to synchronize each teleporter with the new modification. Upon interacting, a timer will begin where all three teleporters have to be synced before time runs out, with the time depending on how many players are in the game. To sync the teleporters, shoot the red button inside each with a Pack-a-Punched weapon. If the timer runs out, the mainframe panel will turn red. If successful, the panel will turn orange. In both cases, you must finish the round before re-attempting or moving on.
+9. “Unlimited Power” - The mainframe panel will now allow a player to interact with it and disable an “electrical limit,” allowing more power to flow through the teleporters as per Richtofen’s plan. With the limit disabled, players should now attempt to teleport. Unfortunately, upon attempting to use any of the 3 teleporters the system will fail and the teleporters will say that the link has been interrupted. At the mainframe, the panel will have a red light and say “safety failsafe engaged” due to the players forcing in too much power. Finish the round before moving on.
+10. “Please Undo?” - players will see that they can now interact with the panel to “recycle the power” in the hopes of establishing the teleporter links. However, they will learn that “additional maintenance” is required as each teleporter is fried.
+11. “Unroutinely Maintenance” - Players must now go through each teleporter area, in any order, to make the necessary repairs. Each teleporter area will have sparks on three broken parts, with red warning lights indicating a problem. The sparks and lights will all disappear as each repair is made and the teleporter hintstring will update.
+12. “We Can Fix It” - Locate and pick up the toolbox located near Teleporter A in one of three random locations before being able to make any repairs. This player will now have the “tools.”
+13. “Teleporter A” - The player with the tool must interact with the three sparking areas. Without the tool, the player will be damaged. This teleporter is straightforward and demonstrates the general concept of fixing a teleporter--as we are right by where we picked up the tools. 
+14. “Teleporter B” - Players must align the lever at the correct angle matching the seconds-hand on the clock while holding a beaker of red chemicals near the boiler, which can be picked up on the nearby shelves. Upon doing so, smoke will rise up and the player with the tool must interact with the three sparks. Without the tool, the player will be damaged. Eventually, the lever will reset back to its starting position. If at any point sparks are repaired without the lever at the correct angle, the step is failed and will have to be restarted.
+15. “Teleporter C” - The player with the tool must interact with the three sparking areas. Without the tool, the player will be damaged. However, there is a lever connected to a pipe that must be aligned correctly which can be found in the tunnel by the grenade wall chalk. The lever must be set in a position corresponding to the position of each spark in order for the spark to be repaired (left, middle, right). In co-op, the lever will reset if a player is not standing at the lever “holding” it in place.
+16. “Gen Resurrection” - The telemap will still show a red light at the mainframe even after fixing all three teleporters, indicating the location of the last problem. To fix the insufficient power, players will have to shock the spawn room generator back on by zapping 10 close zombies with one tesla gun shot.
+17. “Manual Overload” - After restoring facility operations back to normal, the only way forward is to skip the official procedures. All must be in a teleporter together, and a player must fire the upgraded Wunderwaffe DG-while initiating the teleport. Upon coming out of the mainframe, a “nuke” effect will shock surrounding zombies and all players will receive a reward. This is the moment our characters would be leaving Der Riese…only time will tell what new discoveries await them.
+
+// - Lights at the mainframe panel indicate the round must be completed before moving on. Red means something is wrong, orange means all is fine.
+
+*/
+
+item_hud_create(item)
+{
+	shader = item;
+	self.item_hud = create_simple_hud( self );
+	self.item_hud.foreground = true; 
+	self.item_hud.sort = 2; 
+	self.item_hud.hidewheninmenu = false; 
+	self.item_hud.alignX = "center"; 
+	self.item_hud.alignY = "bottom";
+	self.item_hud.horzAlign = "right"; 
+	self.item_hud.vertAlign = "bottom";
+	self.item_hud.x = -230;
+	self.item_hud.y = -1; 
+	self.item_hud.alpha = 1;
+	self.item_hud SetShader( shader, 32, 32 );
+
+	self thread item_hud_remove();
+}
+
+item_hud_remove()
+{
+	level waittill_any( "end_game", "fuse_wire_placed", "tools_used_up" );
+	
+	self.item_hud destroy_hud();
+	self.item_hud = undefined;
+
+}
+
+sumpf_check()
+{
+	wait(0.1);
+	
+	level.can_do_quest = false;
+
+	if(GetDvarInt("sumpf_quest") != 1 ) // moved giving journal over to loadout gsc because it kept getting wiped/not set on co-op due to latency
+	{
+		return; // first we make sure our host has done the quest before even moving on
+	}
+
+	players = getplayers();
+	index = maps\_zombiemode_weapons::get_player_index( players[0] );
+
+	if( players.size > 1 || (players.size == 1 && index == 3) ) // if so, then we check to proceed ONLY if we are in co-op or if we are Richtofen in solo
+	{
+		level.can_do_quest = true;
+		level thread phase_one_quest();
+	}
+}
+
+phase_one_quest()
+{
+
+	while(1) // first we just make sure to wait until we have explored the map enough
+	{
+		if(level.flytrap_counter >= 3 && level.successful_corks >= 3 )
+		{
+			break;
+		}
+		wait(0.05);
+	}
+
+	level.chalks_studied = 0;
+
+	players = getplayers();
+	if(players.size == 1 || players.size == 4 ) // if 2 or 3 we skip this because we dont have richtofen
+	{
+		players[(players.size - 1)] giveweapon("zombie_item_journal"); 
+
+		intel1 = spawn( "trigger_radius",( 628.125, -450, 64.125), 0, 12, 25 );	
+		level thread teleporter_a_eddy(intel1);
+
+		wait_network_frame();
+		intel2 = spawn( "trigger_radius",( 852.875, -508.751, 64.125), 0, 12, 25 );	
+		level thread teleporter_a_eddy(intel2);
+
+		wait_network_frame();
+		intel3 = spawn( "trigger_radius",( 867.177, -871.282, 64.125), 0, 12, 25 );	
+		level thread teleporter_a_eddy(intel3);
+
+		level waittill("studying_completed");	
+	}
+
+
+	level.fuse_holder = 0;
+	level.partspot = randomintrange(0,3); // determines where pick-up items will be
+	big = false; //by default we just use normal sized radius unless exception
+
+	fuse = undefined;
+	wire = undefined;
+
+
+	switch(level.partspot) // Fuse locations, three possible spots. Might need to change fx to play on tag so we can delete it
+	{
+	case 0: // Left shelf
+		fuse = spawn( "script_model",( 584.56, -2880, 110.7 ) );
+		fuse setmodel("panel_fuse");
+		fuse.angles = ( 0, -45, 0 );
+		playfxontag(level._effect["electric_fuse_spark"], fuse, "tag_origin");
+		fuse thread random_spark_sounds();
+		break;
+	case 1: // Right shelf
+		fuse = spawn( "script_model",( -4.9, -2922.04, 112.1 ) );
+		fuse setmodel("panel_fuse");
+		fuse.angles = ( 0, 45, 0 );
+		playfxontag(level._effect["electric_fuse_spark"], fuse, "tag_origin");
+		fuse thread random_spark_sounds();
+		break;
+	case 2: // Door shelf
+		fuse = spawn( "script_model",( -4, -2456.95, 139.91 ) );
+		fuse setmodel("panel_fuse");
+		fuse.angles = ( 0, -30, 0 );
+		playfxontag(level._effect["electric_fuse_spark"], fuse, "tag_origin");
+		fuse thread random_spark_sounds();
+		break;
+	}
+
+	level thread part_pickup(fuse, "fuse", big); 
+
+	wait_network_frame();
+
+	switch(level.partspot) // Wire locations, three possible spots
+	{
+	case 0: // by furnace
+		wire = spawn( "script_model",( -480.7, -1045.6, 67.125 ) );
+		wire setmodel("static_global_electric_wire");
+		wire.angles = ( 0, -130, 0 );
+		break;
+	case 1: // by trap
+		wire = spawn( "script_model",( -560, -383, 67.125 ) );
+		wire setmodel("static_global_electric_wire");
+		wire.angles = ( 0, 130, 0 );
+		break;
+	case 2: // in middle chunk
+		wire = spawn( "script_model",( -737, -721.1, 67.25 ) );
+		wire setmodel("static_global_electric_wire");
+		wire.angles = ( 0, -170, 0 );
+		big = true; // needed bigger radius
+		break;
+	}
+
+	level thread part_pickup(wire, "wire", big); 
+
+}
+
+teleporter_a_eddy(intel) // don't need to check for index, only richtofen can have journal
+{
+	intel SetCursorHint("HINT_ACTIVATE");
+
+    while ( true )
+    {
+	    intel waittill( "trigger", DiaryHolder ); // wait for player to enter trigger
+
+	    // Gather player info for weapons & VOX
+		index = maps\_zombiemode_weapons::get_player_index( DiaryHolder );
+		plr = "plr_" + index + "_";	
+		current_weapon = DiaryHolder GetCurrentWeapon();
+
+		if( /*!diaryholder UseButtonPressed() ||*/ !DiaryHolder IsTouching(intel) ) // From here on, player must be holding F and touching trig, otherwise we just go back to the start
+		{
+			continue;
+		}
+
+	    if ( isSubStr(current_weapon, "zombie_item_journal" ) && is_player_valid(DiaryHolder) && !DiaryHolder isThrowingGrenade() )
+	    {
+	        wait(0.05); // test without ? 
+	
+	        //Wait for a certain amount of time before success
+	        intel thread WaitForStudyingCompletion( DiaryHolder );
+
+	        //Wait for if we cancel writing by either leaving trig or letting go of F
+	        intel WaitForStudyingCancellation( DiaryHolder, intel );
+	    }
+	    else // if Richtofen attempts to write without proper requirements met (not holding journal)
+	    {
+			DiaryHolder thread create_and_play_dialog( "plr_3_", "vox_gen_sigh", 0.05 );
+			wait(10); // delay if we try to do it without journal
+			continue;
+	    }
+    }
+}
+
+WaitForStudyingCancellation( DiaryHolder, intel )
+{
+    // Wait for if player stops holding the use button
+    self endon("chalk_done");
+
+    while(  DiaryHolder isTouching(intel) && (!DiaryHolder maps\_laststand::player_is_in_laststand()) )
+    {
+	    if ( !isSubStr( DiaryHolder GetCurrentWeapon(), "zombie_item_journal" ) ) // if we at any point start holding another weapon (betty), we cancel
+        {
+        	break;
+        }
+        wait(0.05);
+    }
+
+	wait(3);
+}
+
+WaitForStudyingCompletion( DiaryHolder )
+{
+	timer = 5;
+
+    while( DiaryHolder IsTouching(self) && (!DiaryHolder maps\_laststand::player_is_in_laststand()) && timer > 0 ) // we stay here while succesfully taking notes until 30 sec has passed
+    {
+	    if ( !isSubStr( (DiaryHolder GetCurrentWeapon()), "zombie_item_journal" ) ) // if at any point we start holding another weapon (betty), we cancel
+        {
+        	break;
+        }
+
+        timer -= 0.05;
+        wait(0.05);
+    }
+
+    if(timer <= 0)
+    {
+        self delete();
+
+        self notify("chalk_done");
+
+        level.chalks_studied++;
+
+		if(level.chalks_studied == 3)
+		{
+			DiaryHolder thread create_and_play_dialog( "plr_3_", "vox_resp_illumi", 0.1 );
+			level notify("studying_completed");
+		}
+		else
+		{
+			DiaryHolder thread create_and_play_dialog( "plr_3_", "vox_resp_corkmap", 0.1 );
+		}
+    }
+}
+
+part_pickup(part, type, big)
+{
+	wait_network_frame();
+
+	radius = 30;
+	
+	if( big == true )
+	{
+		radius = 45;
+	}
+	
+	part_trigger = spawn( "trigger_radius",( part.origin ), 0, radius, 20 );
+
+	while(1)
+	{
+		part_trigger waittill( "trigger", player );
+		while(1)
+		{
+			if( !player IsTouching( part_trigger ) )
+			{
+				break;
+			}
+			if( !is_player_valid( player ) )
+			{
+				break; 
+			}
+			if( player in_revive_trigger() )
+			{
+				break;
+			}
+			if( type == "wire" && !player meleeButtonPressed() && isDefined(player.has_fuse) && player.has_fuse == true ) // For WIRE only, and for players WITH FUSE, we have to knife
+			{
+				break; 
+			}
+			if( type == "wire" && !player UseButtonPressed() && !isDefined(player.has_fuse) ) // For WIRE only, and for PLAYERS WITHOUT FUSE
+			{
+				break; 
+			}
+			if( type != "wire" && !player UseButtonPressed() )
+			{
+				break; 
+			}
+
+			index = maps\_zombiemode_weapons::get_player_index(player);
+			plr = "plr_" + index + "_";
+
+			if( type == "fuse" ) // For fuse part, anyone can grab
+			{
+				player playlocalsound("gren_pickup_plr"); // Generic pickup sound
+
+				if(!player hasperk("specialty_armorvest") || player.health - 100 < 1)
+				{
+					radiusdamage(player.origin,10,5,5);
+				}
+				else
+				{
+					player dodamage(5, player.origin);
+				}
+
+				player.has_fuse = true;
+				player item_hud_create("hud_fuse");
+				player playlocalsound("light_start");   // Special pickup sound
+
+				player set_fuse_holder_name();
+
+				part_trigger delete();
+				part delete();
+				break;
+			}
+
+			if( type == "tools" )
+			{
+				player playlocalsound("gren_pickup_plr"); // Generic pickup sound
+				player.has_tools = true;
+				player item_hud_create("hud_tools"); // need hud
+				part_trigger delete();
+				part delete();
+				break;
+			}
+
+			if(	type == "wire" && IsDefined(player.has_fuse) && player.has_fuse && player hasperk( "specialty_altmelee" ) ) // For wire part, only fuse player can pick up
+			{
+				player playlocalsound("sack_drop"); 
+
+				player.item_hud destroy_hud(); // We fix up hud and fix up current player variable to adjust for new part picked up
+				player.item_hud = undefined;
+				player.has_fuse = undefined;
+				player.has_fuse_wire = true;
+				player item_hud_create("hud_fuse_wire");
+
+				player thread create_and_play_dialog( plr, "vox_gen_ask_yes", 0.1 );
+				level thread phase_two_quest();
+				part_trigger delete();
+				part delete();
+				break;
+			}
+			else if(type == "wire" && isDefined(level.fuse_holder) && level.fuse_holder != 0 && player.has_fuse != true ) // If no one has found the fuse, we don't do this yet, but if a player has fuse we shout for them to come over
+			{
+				player thread create_and_play_dialog( plr, "vox_name_"+level.fuse_holder, 0.1 ); 
+				wait(3);
+				break;
+			}
+			else if( type == "wire" && IsDefined(player.has_fuse) && player.has_fuse && !player hasperk( "specialty_altmelee" ) ) // no bowie yet
+			{
+				player thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
+				break;
+			}
+
+			if( type == "juice" )
+			{
+				player playlocalsound("gren_pickup_plr"); // Generic pickup sound
+
+				player giveweapon("zombie_item_beaker"); 
+				player setactionslot(1,"weapon","zombie_item_beaker"); 
+				player.has_special_weap = "zombie_item_beaker";
+				if(self hasweapon("zombie_item_journal") )
+				{
+					if(self GetCurrentWeapon() == "zombie_item_journal" )
+					{
+						primaryWeapons = self GetWeaponsListPrimaries();
+						if( IsDefined( primaryWeapons ) && primaryWeapons.size > 0 )
+						{
+							self SwitchToWeapon( primaryWeapons[0] );
+						}	
+					}
+					self takeweapon("zombie_item_journal"); 
+				}
+				player thread juicer_timer();
+
+				part_trigger delete();
+				part delete();
+				break;
+			}
+			break;
+		}
+		if(!isDefined(part_trigger) )
+		{
+			break;
+		}
+	}
+}
+
+set_fuse_holder_name()
+{
+	index = maps\_zombiemode_weapons::get_player_index(self);
+	switch(index)
+	{
+	case 0:
+		level.fuse_holder = "dempsey";
+		break;
+	case 1:
+		level.fuse_holder = "nikolai";
+		break;
+	case 2: 
+		level.fuse_holder = "takeo";
+		break;
+	case 3: 
+		level.fuse_holder = "richtofen";
+		break;
+	}
+}
+
+random_spark_sounds()
+{
+	while(1)
+	{
+		if(!IsDefined(self) )
+		{
+			break;
+		}
+		playsoundatposition("fuse_sparks", self.origin);
+		wait(randomfloatrange(0.5, 2));
+	}
+}
+
+phase_two_quest() // Mainframe control panel
+{
+	level thread mainframe_panel_a();
+
+	level waittill("phase_two_complete");
+
+	level thread phase_three_quest();
+
+}
+
+mainframe_panel_a() // May need a check in co-op for hintstring showing properly
+{
+	wait_network_frame();
+
+	panel_trigger = spawn( "trigger_radius",( -150.875, 300, 93.125 ), 0, 10, 20 );
+	panel_origin = (-186, 301, 140);
+
+	while(1)
+	{
+		panel_trigger waittill( "trigger", player );
+		index = maps\_zombiemode_weapons::get_player_index(player);
+		plr = "plr_" + index + "_";
+		while(1)
+		{
+			if( !player maps\nazi_zombie_factory_new_eggs::islookingatorigin( panel_origin ) )
+			{
+				panel_trigger SetCursorHint("HINT_NOICON");
+				break;
+			}
+			if( !player IsTouching( panel_trigger ) )
+			{
+				break;
+			}
+			if( !is_player_valid( player ) )
+			{
+				break; 
+			}
+			if( player in_revive_trigger() )
+			{
+				break;
+			}
+			if(	IsDefined(player.has_fuse_wire) && player.has_fuse ) // For wire part, only fuse player can pick up
+			{
+				panel_trigger SetCursorHint("HINT_ACTIVATE");
+				panel_trigger SetVisibleToPlayer(player);	
+			}
+			else if( !IsDefined(player.has_fuse_wire) )
+			{
+				panel_trigger SetCursorHint("HINT_NOICON");
+				player thread create_and_play_dialog( plr, "vox_name_"+level.fuse_holder, 0.1 ); 
+				wait(3);
+				break;
+			}
+			if( !player UseButtonPressed() )
+			{
+				break; 
+			}
+
+			if(	IsDefined(player.has_fuse_wire) && player.has_fuse ) // For wire part, only fuse player can pick up
+			{
+				player playlocalsound("switch_progress");
+				index = maps\_zombiemode_weapons::get_player_index(player);
+				plr = "plr_" + index + "_";
+				player thread create_and_play_dialog( plr, "vox_gen_stayback", 0.25 );
+
+				player.item_hud destroy_hud(); // Clean up hud
+				player.item_hud = undefined;
+				player.has_fuse_wire = undefined;
+
+				panel_trigger delete();
+				break;
+			}
+			else
+			{
+				break;
+			}
+		}
+		if(!isDefined(panel_trigger) )
+		{
+			break;
+		}
+	}
+
+	// Scripted event, fuse inserted into mainframe panel
+	level.panel_s_o = spawn( "script_origin", ( -186, 301, 154.5) );
+	
+	fuse = spawn( "script_model", ( -186, 301, 154.5) );
+	fuse setmodel("panel_fuse");
+	fuse.angles = ( 0, 90, 49 );
+
+	playsoundatposition("switch_progress", fuse.origin);
+	level.panel_s_o PlayLoopSound("tele_spark_loop");
+	playfx(level._effect["electric_fuse_spark_placed"], ( -181, 301, 150.5));
+
+	time = 1.75;
+	new_pos = ( -186, 301, 154.5) + (8,0,-10);
+	fuse NotSolid(); // test without
+	fuse MoveTo( new_pos, time, 0.1, 0.05 );
+
+	wait(1.1);
+	playfx(level._effect["electric_fuse_spark_placed"], ( -178, 301, 147.5));
+
+	playfxontag(level._effect["electric_fuse_spark_smoking"], fuse, "tag_origin");
+
+	wait(0.1);
+	level.panel_s_o stoploopsound();
+	playsoundatposition("tele_spark_hit", fuse.origin);
+	fx_light = spawn("script_model", (-177, 295.1, 144));
+	fx_light setModel("tag_origin");
+	playFxOnTag(level._effect["zapper_light_waiting"], fx_light, "tag_origin");
+
+	wait(0.55);
+	//level.panel_s_o delete();
+	fuse delete();
+
+	index = maps\_zombiemode_weapons::get_player_index(player);
+	plr = "plr_" + index + "_";
+	player thread create_and_play_dialog( plr, "vox_gen_respond_pos", 0.1 );
+	
+	level waittill ( "between_round_over" ); // wait till we get to the next round over
+	fx_light delete();
+
+	level thread damage_trig_checker();
+	
+
+}
+
+damage_trig_checker()
+{
+	while(1)
+	{
+		level.syncs_completed = 0; // always start at 0 progress, whether for first time or for if we fail
+
+		level thread mainframe_panel_b(); // threads mainframe trigger. this gets disabled during countdown, and then always gets deleted after a fail/success 
+
+		level waittill("begin_sync"); // we wait for a user to notify from the trigger
+	
+		level.panel_s_o playloopsound( "ticktock_loop" ); // plays loop sound on script origin @ mainframe panel
+		level.sync_timer_active = "counting"; // set up timer
+		level thread sync_timer(); // set up timer
+
+		level.a = (1264, 1206, 279); // these following lines all set up dmg trigs
+		level thread damage_trig_teleporter(level.a, (0,0,0) );
+		
+		level.b = (-1715, -1107.75, 310.5);
+		level thread damage_trig_teleporter(level.b, (0,90,0) );
+		
+		level.c = (296.75, -3126, 266);
+		level thread damage_trig_teleporter(level.c, (0, -180, 0) );
+
+		while(level.sync_timer_active == "counting") // pause here will counting down
+		{
+			//iprintln("counting");
+			wait( .05 );
+		}		
+		level.panel_s_o stoploopsound(.05); // we always stop loop sound, either if we fail or suceed
+
+		level.panel_trigger_sync delete(); // we delete the trigger because we're going to thread again and spawn another if we loop
+		
+		level notify("finish_sync"); // ends all loops because we will be threading them again, need to be careful tho because we want to make sure the dmg trigs get deleted if we failed as we will spawn them again
+
+		if(level.sync_timer_active == "success")
+		{
+			playsoundatposition( "pa_buzz",  (-186, 301, 140) ); // plays good sound on panel
+			break;
+		}
+		else if(level.sync_timer_active == "off") // ran out of time
+		{
+			playsoundatposition( "packa_deny",  (-186, 301, 140) ); // plays bad sound on panel
+
+			fx_light = spawn("script_model", (-177, 295.1, 144));
+			fx_light setModel("tag_origin");
+			playFxOnTag(level._effect["zapper_light_notready"], fx_light, "tag_origin");
+
+			level waittill ( "between_round_over" ); // if we fail, we wait till we get to the next round over
+			
+			fx_light delete();
+
+		}
+	}
+	level.panel_s_o delete();
+
+	fx_light = spawn("script_model", (-177, 295.1, 144));
+	fx_light setModel("tag_origin");
+	playFxOnTag(level._effect["zapper_light_waiting"], fx_light, "tag_origin");
+
+	level waittill ( "between_round_over" ); // if we fail, we wait till we get to the next round over
+	
+	fx_light delete();
+
+	level thread mainframe_panel_c();
+}
+
+sync_timer() // balanced for co-op and solo
+{
+	players = getplayers();
+	time = 60;
+	time /= players.size;
+	wait(time);
+	level.sync_timer_active = "off";
+}
+
+damage_trig_teleporter(location, angles)
+{
+	level endon("finish_sync");
+
+	wait_network_frame();
+
+	teleporter_dmg_trig = spawn("script_model", location ); 
+	teleporter_dmg_trig setmodel("zombie_teleporter_button");
+	teleporter_dmg_trig.angles = angles;
+	teleporter_dmg_trig hide();
+	teleporter_dmg_trig setcanDamage(true);
+	teleporter_dmg_trig.maxhealth = 100000;
+	teleporter_dmg_trig.health = self.maxhealth;
+	damaged = false;
+	while( damaged == false && level.sync_timer_active == "counting") // if it gets changed to off then we auto stop checking for damage so that we can delete the trig to clean up
+	{
+		teleporter_dmg_trig waittill( "damage", amount, inflictor, direction, point, type );
+		weapon = inflictor getcurrentweapon();
+		if ( maps\_zombiemode_weapons::is_weapon_upgraded( weapon ) ) // if we have an upgraded weapon
+		{
+			if(damaged == false && teleporter_dmg_trig.health < 100000 && Distance(self.origin, point) < 100 )
+			{
+				damaged = true;
+				level.syncs_completed += 1;
+				playsoundatposition( "linkall_2d", location ); 	// NEED BETTER SOUND TO TELL PLAYER THEY DID IT
+				break;	
+			}
+		}
+		else
+		{
+			self.maxhealth = 100000;
+			self.health = self.maxhealth;
+			continue;
+		}
+	}
+	
+	teleporter_dmg_trig delete();
+	
+	if(level.syncs_completed >= 3)
+	{
+		level.sync_timer_active = "success";
+		players = getplayers();
+
+		if(players.size != 4 ) // if we have 4 players they will all be spread out doing step at the same time so no need for extra reminder of success
+		{
+			playsoundatposition( "pa_buzz",  location ); // plays good sound on panel
+		}
+
+		rando = players[randomint(players.size)];
+		index = maps\_zombiemode_weapons::get_player_index( rando );
+		plr = "plr_" + index + "_";
+		rando create_and_play_dialog( plr, "vox_gen_compliment", 0.1 );
+	}
+}
+
+mainframe_panel_b()
+{
+	level endon("finish_sync");
+
+	wait_network_frame();
+
+	countdown_on = false;
+
+	level.panel_trigger_sync = spawn( "trigger_radius",( -150.875, 300, 93.125 ), 0, 10, 20 );
+	
+	panel_origin = (-186, 301, 140);
+	
+	level.panel_trigger_sync setHintString(&"REMASTERED_ZOMBIE_MAINFRAME_PANEL_OVERRIDE");
+	level.panel_trigger_sync SetCursorHint("HINT_NOICON");
+
+	while(1)
+	{
+		level.panel_trigger_sync waittill( "trigger", player );
+
+		while(1)
+		{
+			if( !player maps\nazi_zombie_factory_new_eggs::islookingatorigin( panel_origin ) ) // if we look away
+			{
+				level.panel_trigger_sync setHintString("");
+				break;
+			}
+			if( !player IsTouching( level.panel_trigger_sync ) )
+			{
+				break;
+			}
+			if( !is_player_valid( player ) )
+			{
+				break; 
+			}
+			if( player in_revive_trigger() )
+			{
+				break;
+			}
+			if(countdown_on == true)
+			{
+				level.panel_trigger_sync setHintString(&"REMASTERED_ZOMBIE_MAINFRAME_PANEL_SYNC");
+				level.panel_trigger_sync SetCursorHint("HINT_NOICON");
+			}
+			else
+			{
+				level.panel_trigger_sync setHintString(&"REMASTERED_ZOMBIE_MAINFRAME_PANEL_OVERRIDE");
+				level.panel_trigger_sync SetCursorHint("HINT_NOICON");
+			}
+			if( !player UseButtonPressed() )
+			{
+				break; 
+			}
+			if(	countdown_on == false )
+			{
+				countdown_on = true;
+
+				level notify("begin_sync");
+
+				player playlocalsound("switch_progress"); // this will be spot for generic pressing button sound, might want to change?
+
+				index = maps\_zombiemode_weapons::get_player_index(player);
+				plr = "plr_" + index + "_";
+				player thread create_and_play_dialog( plr, "vox_gen_move", 0.25 );
+				break;
+			}
+			else
+			{
+				break;
+			}
+		}
+		if(!isDefined(level.panel_trigger_sync) )
+		{
+			break;
+		}
+	}
+
+}
+
+mainframe_panel_c()
+{
+	wait_network_frame();
+
+	level.current_limit = true;
+
+	level.panel_trigger_sync = spawn( "trigger_radius",( -150.875, 300, 93.125 ), 0, 10, 20 );
+	
+	panel_origin = (-186, 301, 140);
+	
+	level.panel_trigger_sync setHintString(&"REMASTERED_ZOMBIE_MAINFRAME_PANEL_LIMIT");
+	level.panel_trigger_sync SetCursorHint("HINT_NOICON");
+
+	while(1)
+	{
+		level.panel_trigger_sync waittill( "trigger", player );
+
+		while(1)
+		{
+			if( !player maps\nazi_zombie_factory_new_eggs::islookingatorigin( panel_origin ) ) // if we look away
+			{
+				level.panel_trigger_sync setHintString("");
+				break;
+			}
+			if( !player IsTouching( level.panel_trigger_sync ) )
+			{
+				break;
+			}
+			if( !is_player_valid( player ) )
+			{
+				break; 
+			}
+			if( player in_revive_trigger() )
+			{
+				break;
+			}
+			if(level.current_limit == false)
+			{
+				level.panel_trigger_sync setHintString(&"REMASTERED_ZOMBIE_MAINFRAME_PANEL_LIMIT_DISABLED");
+				level.panel_trigger_sync SetCursorHint("HINT_NOICON");
+			}
+			else
+			{
+				level.panel_trigger_sync setHintString(&"REMASTERED_ZOMBIE_MAINFRAME_PANEL_LIMIT");
+				level.panel_trigger_sync SetCursorHint("HINT_NOICON");
+			}
+			if( !player UseButtonPressed() )
+			{
+				break; 
+			}
+			if(	level.current_limit == true ) // if the limit is on (default)
+			{
+				level.current_limit = false;
+
+				player playlocalsound("switch_progress"); // this will be spot for generic pressing button sound, might want to change?
+			
+				playsoundatposition( "pa_buzz", panel_origin ); // plays good sound on panel
+				
+				index = maps\_zombiemode_weapons::get_player_index(player);
+				
+				if(index == 3)
+				{
+					player thread create_and_play_dialog( "plr_3_", "vox_gen_laugh", 0.05 );
+				}
+				else
+				{
+					plr = "plr_" + index + "_";
+					player thread create_and_play_dialog( plr, "vox_gen_respond_pos", 0.05 );
+
+				}
+				break;
+			}
+			else
+			{
+				break;
+			}
+		}
+		if(!isDefined(level.panel_trigger_sync) )
+		{
+			break;
+		}
+	}
+
+}
+
+mainframe_panel_d()
+{
+	wait_network_frame();
+
+	level.panel_trigger_failsafe = spawn( "trigger_radius",( -150.875, 300, 93.125 ), 0, 10, 20 );
+	
+	panel_origin = (-186, 301, 140);
+	
+	level.panel_trigger_failsafe setHintString(&"REMASTERED_ZOMBIE_MAINFRAME_PANEL_FAILSAFE");
+	level.panel_trigger_failsafe SetCursorHint("HINT_NOICON");
+
+	while(1)
+	{
+		level.panel_trigger_failsafe waittill( "trigger", player );
+
+		while(1)
+		{
+			if( !player maps\nazi_zombie_factory_new_eggs::islookingatorigin( panel_origin ) ) // if we look away
+			{
+				level.panel_trigger_failsafe setHintString("");
+				break;
+			}
+			if( !player IsTouching( level.panel_trigger_failsafe ) )
+			{
+				break;
+			}
+			if( !is_player_valid( player ) )
+			{
+				break; 
+			}
+			if( player in_revive_trigger() )
+			{
+				break;
+			}
+			level.panel_trigger_failsafe setHintString(&"REMASTERED_ZOMBIE_MAINFRAME_PANEL_FAILSAFE");
+			level.panel_trigger_failsafe SetCursorHint("HINT_NOICON");
+			if( !player UseButtonPressed() )
+			{
+				break; 
+			}
+			player thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog(); // MAKE SURE THIS WORKS
+			break;
+		}
+		if(!isDefined(level.panel_trigger_failsafe) )
+		{
+			break;
+		}
+	}
+
+}
+
+mainframe_panel_e()
+{
+	wait_network_frame();
+
+	has_pressed = false;
+
+	level.panel_trigger_recycle = spawn( "trigger_radius",( -150.875, 300, 93.125 ), 0, 10, 20 );
+	
+	panel_origin = (-186, 301, 140);
+	
+	level.panel_trigger_recycle setHintString(&"REMASTERED_ZOMBIE_MAINFRAME_PANEL_RECYCLE");
+	level.panel_trigger_recycle SetCursorHint("HINT_NOICON");
+
+	while(1)
+	{
+		level.panel_trigger_recycle waittill( "trigger", player );
+
+		while(1)
+		{
+			if( !player maps\nazi_zombie_factory_new_eggs::islookingatorigin( panel_origin ) ) // if we look away
+			{
+				level.panel_trigger_recycle setHintString("");
+				break;
+			}
+			if( !player IsTouching( level.panel_trigger_recycle ) )
+			{
+				break;
+			}
+			if( !is_player_valid( player ) )
+			{
+				break; 
+			}
+			if( player in_revive_trigger() )
+			{
+				break;
+			}
+			if(has_pressed == false)
+			{
+				level.panel_trigger_recycle setHintString(&"REMASTERED_ZOMBIE_MAINFRAME_PANEL_RECYCLE");
+				level.panel_trigger_recycle SetCursorHint("HINT_NOICON");		
+			}
+			else
+			{
+				level.panel_trigger_recycle setHintString(&"REMASTERED_ZOMBIE_MAINFRAME_PANEL_MAINT");
+				level.panel_trigger_recycle SetCursorHint("HINT_NOICON");
+			}
+			if( !player UseButtonPressed() )
+			{
+				break; 
+			}
+			if(	has_pressed == false ) 
+			{
+				index = maps\_zombiemode_weapons::get_player_index(player);
+				plr = "plr_" + index + "_";
+				player thread create_and_play_dialog( plr, "vox_gen_ask_yes", 0.05 );
+
+				has_pressed = true;
+
+				level notify("phase_two_complete");
+
+				player playlocalsound("switch_progress"); // this will be spot for generic pressing button sound, might want to change?
+			
+				playsoundatposition( "pa_buzz", panel_origin ); // plays good sound on panel
+				
+				level.panel_trigger_recycle setHintString("");
+
+				wait(2);
+				player thread create_and_play_dialog( plr, "vox_gen_damn", 0.1 );	
+				break;
+			}
+			else
+			{
+				break;
+			}
+		}
+		if(!isDefined(level.panel_trigger_recycle) )
+		{
+			break;
+		}
+	}
+
+}
+
+phase_three_quest()
+{
+	level.repairs_made = 0;
+	level.teleporter_a_sparks = 0;
+	level.teleporter_b_sparks = 0;
+	level.teleporter_c_sparks = 0;
+
+	level thread teleporter_a_fix(); // This one is easy, it's where we get toolbox and learn how to fix a TP
+	level thread teleporter_b_fix();
+	level thread teleporter_c_fix();
+
+	level waittill("all_teleporters_fixed"); 
+	level.panel_trigger_recycle delete();
+	level thread generator_checker(); // start checking for generator to be powered
+	level notify("tools_used_up"); // cleans up hud, we no longer need tools
+	
+	level.can_do_quest = false; // we set this to false so powerup hud heights go back to normal
+
+	wait(5); // wait a few seconds and clean up the models, shows player we are done fixing individual teles
+	level.lever delete(); 
+	level.lever_pipe delete();
+}
+
+generator_checker()
+{
+	gen_trig = spawn("trigger_radius", (-411, 342.8, -2.9), 0, 125, 250); //radius, height
+	gen_zombies = 0;
+
+	while(1)
+	{
+		level waittill("tesla_damage", player, zombie);  // we ONLY notify when 1) a zombie is shocked and 2) 10 zombies total are zapped
+		//iprintlnbold("10 zombies shocked, checking if first zombie touched radius");
+		if(zombie isTouching(gen_trig) )// then we check if the first zombie was touching our radius
+		{
+			break;
+		}
+		else
+		{
+			continue;
+		}
+	}
+
+	gen_trig delete();
+
+	wait(0.15);
+
+	level.teleporters_are_broken = undefined; // this should let us teleport again
+	level.current_limit = undefined;
+	for ( i = 0; i < level.teleporter_pad_trig.size; i++ )
+	{
+		level.teleporter_pad_trig[i] sethintstring( &"ZOMBIE_TELEPORT_TO_CORE" );
+	}
+
+	ClientNotify( "pap1_resume" ); // turns back on sounds
+	exploder( 101 ); // turns back on spawn gen
+
+	level thread teleport_out_checker();
+
+	wait(2);
+	index = maps\_zombiemode_weapons::get_player_index(player);
+	plr = "plr_" + index + "_";
+	player thread create_and_play_dialog( plr, "vox_gen_respond_pos", 0.1 );
+
+	// thread last step, tele waffe checker
+	// additional sounds? smoke/explosion to help show we shocked on generator
+}
+
+teleport_out_checker()
+{
+	level.teleporting_out_ready = true; // so that teleporter gsc knows it can start sending the notify and checking for players
+	level.all_players_teleported = false; // set up, only gets changed to true when all players teleport in teleporter gsc
+	timer = level.teleport_delay + 0.5;
+	waffe_shot = false;
+	waffle_shooter = undefined;
+
+	while(1)
+	{
+		level waittill("teleporting_out"); //  everytime we teleport, we check to see if a player shoots waffe correctly
+		players = getplayers();
+
+		while(timer > 0)
+		{
+			for ( i = 0; i < players.size; i++ )
+			{
+				if(players[i] isFiring() && !players[i] isMeleeing() && players[i] getCurrentWeapon() == "tesla_gun_upgraded" )
+				{
+					waffe_shot = true;
+					waffle_shooter = players[i];
+				}
+			}
+			timer -= 0.05;
+			wait(0.05);
+		}
+
+		if(waffe_shot == true && level.all_players_teleported == true )
+		{
+			break;
+		}
+		else
+		{
+			waffe_shot = false; // reset
+			level.all_players_teleported = false; // reset
+			timer = level.teleport_delay + 0.5; // reset
+		}
+
+	}
+	level.all_players_teleported = undefined;
+	level.teleporting_out_ready = undefined;
+
+	players = getplayers();
+	for (i = 0; i < players.size; i++)
+	{
+		players[i] play_sound_2d("bowl_sting_ending");
+	}
+
+	level thread end_flash();
+
+	wait(9);
+
+	index = maps\_zombiemode_weapons::get_player_index(waffle_shooter);
+	plr = "plr_" + index + "_";
+	waffle_shooter thread create_and_play_dialog( plr, "vox_achievment", 0.05 );
+	for(i = 0; i < players.size; i++)
+	{	
+		players[i] thread give_all_perks_forever();
+		if(players.size >= 4) 
+		{
+			players[i] setclientdvar("factory_quest", 1 ); // for menu achievement
+			players[i] maps\_zombiemode_achievement::giveachievement_wrapper_new( "DLC3_ZOMBIE_EE_FACTORY" ); 
+		}	
+	}
+
+	if(players.size > 1) // some extra rando vox if we have more players
+	{
+		wait(4);
+		rando = players[randomint(players.size)];
+		index = maps\_zombiemode_weapons::get_player_index( rando );
+		plr = "plr_" + index + "_";
+		rando create_and_play_dialog( plr, "vox_gen_compliment", 0.1 );
+	}
+
+	wait(6);
+	for (i = 0; i < players.size; i++)
+	{
+		players[i] play_sound_2d("zombie_theater");
+	}
+}
+
+end_flash()
+{
+	wait(1.5);
+	players = getplayers();	
+	for(i=0; i<players.size; i ++)
+	{
+		players[i] play_sound_2d("nuke_flash");
+	}
+	level thread kill_shock_trigger();
+	
+	fadetowhite = newhudelem();
+
+	fadetowhite.x = 0; 
+	fadetowhite.y = 0; 
+	fadetowhite.alpha = 0; 
+
+	fadetowhite.horzAlign = "fullscreen"; 
+	fadetowhite.vertAlign = "fullscreen"; 
+	fadetowhite.foreground = true; 
+	fadetowhite SetShader( "white", 640, 480 ); 
+
+	// Fade into white
+	fadetowhite FadeOverTime( 0.2 ); 
+	fadetowhite.alpha = 0.8; 
+
+	wait 0.5;
+	fadetowhite FadeOverTime( 1.0 ); 
+	fadetowhite.alpha = 0; 
+
+	wait 1.1;
+	fadetowhite destroy();
+}
+
+kill_shock_trigger()
+{
+	mainframe = getent( "trigger_teleport_core", "targetname" );
+
+	zombies = getaispeciesarray("axis");
+	zombies = get_array_of_closest( mainframe.origin, zombies );
+	for (i = 0; i < zombies.size; i++)
+	{
+		wait(randomfloatrange(0.05, 0.1));
+		if( !IsDefined( zombies[i] ) )
+		{
+			continue;
+		}
+
+		if( is_magic_bullet_shield_enabled( zombies[i] ) )
+		{
+			continue;
+		}
+
+		if( i < 13 && !( zombies[i] enemy_is_dog() ) )
+		{
+			zombies[i] maps\_zombiemode_tesla::tesla_play_death_fx(1);
+		}
+
+		if( !( zombies[i] enemy_is_dog() ) )
+		{
+			zombies[i] maps\_zombiemode_spawner::zombie_head_gib();
+		}
+
+		zombies[i] dodamage( zombies[i].health + 666, zombies[i].origin );
+		playsoundatposition( "elec_vocals_tesla", zombies[i].origin );
+	}
+
+}
+
+teleporter_a_fix()
+{
+	// SPAWN TOOLBOX //
+	tools = undefined;
+	big = false;
+
+	switch(level.partspot) // Tool locations, three possible spots
+	{
+	case 0: // by cages
+		tools = spawn( "script_model",( 1579.4, 365, 78 ) );
+		tools setmodel("static_seelow_toolbox");
+		tools.angles = ( -5, -30, 0 );
+		big = true;
+		break;
+	case 1: // by barrels
+		tools = spawn( "script_model",( 1027.2, 329, 64.125 ) );
+		tools setmodel("static_seelow_toolbox");
+		tools.angles = ( 0, 170, 0 );
+		break;
+	case 2: // under shelf
+		tools = spawn( "script_model",( 1028, 6, 69 ) );
+		tools setmodel("static_seelow_toolbox");
+		tools.angles = ( -10, 20, 0 );
+		break;
+	}
+	level thread part_pickup(tools, "tools", big); 
+	// END SPAWN TOOLBOX //
+
+	// Spawn lights
+	level thread spawn_warning_light( (1585, 1004, 312.4), "teleporter_a" );
+	level thread spawn_warning_light( (983.9, 934.7, 311.4), "teleporter_a" );
+
+	// Spawn sparks
+	wait(0.5);
+	level thread spawn_sparks( (1072.9, 1171, 213), "teleporter_a" ); // left
+	wait(0.5);
+	level thread spawn_sparks( (1453, 1191.4, 189.5), "teleporter_a" ); // right
+	wait(0.5);
+	level thread spawn_sparks( (1550, 1120, 208.3), "teleporter_a" ); // far right
+	
+	level waittill("teleporter_a_fixed"); 
+	level.teleporter_a_sparks = undefined;
+
+	playsoundatposition( "pa_buzz",  level.a ); 
+	exploder( 102 ); // turns back on tele
+
+	ClientNotify( "t01" ); 
+
+	//level.teleporter_pad_trig[0] teleport_trigger_invisible( false );
+	level.teleporter_pad_trig[0] sethintstring( &"REMASTERED_ZOMBIE_TELEPORT_LACKS_POWER" );
+
+	level.repairs_made += 1;
+
+	if(level.repairs_made == 3)
+	{
+		level notify("all_teleporters_fixed");
+	}
+	// Change hintstring of TP?
+}
+
+teleporter_b_fix()
+{
+	level.juicer_failed = 1; // always 1 unless we go out of our way to do the step correctly
+	level.you_failed_juice = 0;
+	level.teleporter_b_fixed = false;
+
+	// Spawn lights
+	level thread spawn_warning_light( (-1543.6, -757.5, 299.6), "teleporter_b" );
+
+	// Red juice
+	juice = spawn( "script_model",(-1372.9, -651.9, 199.125) );
+	juice setmodel("tag_origin");
+	level thread part_pickup(juice, "juice", false); 
+	
+	// Spawn boiler trig
+	level thread spawn_boiler_lever();
+
+	// boiler origin
+	//(-1368.2, -964.27, 215.5)
+
+	while(1)
+	{
+		// Spawn sparks
+		wait( randomint(5) );
+		level thread spawn_sparks( (-1657.1, -1348.9, 230.13), "teleporter_b", 0 ); // right
+		wait( randomint(5) );
+		level thread spawn_sparks( (-1699.1, -1276.2, 215.1), "teleporter_b", 1 ); // left
+		wait( randomint(5) );
+		level thread spawn_sparks( (-1616, -848.2, 218.5), "teleporter_b", 2 ); // lower left 
+
+		level waittill("teleporter_b_fixed_potential"); // we think we might be fixed, we recieve a notify from hitting 0 sparks
+
+		if(level.juicer_failed == 1 || level.you_failed_juice == 1) 
+		{
+			level.teleporter_b_sparks = 0; // reset progress
+			level.you_failed_juice = 0;
+			continue; // we failed, keep trying
+		}
+		else
+		{
+			level.lever_trig delete();
+			level.teleporter_b_fixed = true;
+			break;
+
+		}
+	}
+	
+	level notify("teleporter_b_fixed"); // instead we have an extra condition for this tele to make step harder
+	level.juicer_failed = undefined;
+	level.teleporter_b_sparks = undefined;
+
+	playsoundatposition( "pa_buzz",  level.b ); 
+	exploder( 104 ); // turns back on tele
+
+	ClientNotify( "t21" ); 
+
+	//level.teleporter_pad_trig[2] teleport_trigger_invisible( false );
+	level.teleporter_pad_trig[2] sethintstring( &"REMASTERED_ZOMBIE_TELEPORT_LACKS_POWER" );
+
+	level.repairs_made += 1;
+	if(level.repairs_made == 3)
+	{
+		level notify("all_teleporters_fixed");
+	}
+	// Change hintstring of TP?
+}
+
+
+spawn_boiler_lever()
+{
+	wait_network_frame();
+
+	location = (-1453.5, -944, 225);
+	level.lever = spawn("script_model", location );
+	level.lever setModel("zombie_sumpf_zipcage_switch");
+	level.lever.angles = (0,90,-20); // neutral pos
+	level.lever_trig = spawn( "trigger_radius", location + (-40,0,0) , 0, 20, 20 );
+	level.lever_trig SetCursorHint("HINT_NOICON");
+	resetting = false;
+	
+	while(1)
+	{
+		level.lever_trig waittill( "trigger", player );
+		if( !player UseButtonPressed() || !player IsTouching(level.lever_trig) || resetting == true ) // From here on, player must be holding F and touching trig, otherwise we just go back to the start
+		{
+			continue;
+		}
+
+		if( is_player_valid(player) && !player isThrowingGrenade() )
+		{
+			while( player UseButtonPressed() && player IsTouching(level.lever_trig) && (!player maps\_laststand::player_is_in_laststand()) && level.juicer_failed == 1 ) // only keep moving while juicer_failed is 1, if we suceed it goes to 0
+			{
+				level.lever rotateTo( (level.lever.angles + (-45,0,0) ), 0.5, 0.1, 0.1 );
+				playsoundatposition( "switch_progress", level.lever.origin );
+				//self rotateTo( (180,0,-30), 0.25, 0.1, 0.1); 
+				wait(1.25);	
+			}
+
+		}
+		if(level.lever.angles[0] == 90)
+		{
+			players = get_players();
+			for( i = 0; i < players.size; i++ )
+			{
+				if(distance(players[i].origin, (-1368.2, -964.27, 215.5) ) < 200 )
+				{
+					if(players[i] hasweapon("zombie_item_beaker") )
+					{
+						players[i] thread cleanup_juicer();
+
+						playFx(level._effect["teleporter_smoke_fail"], location + (100,0,-20) );
+						playsoundatposition( "steam_effect", location );
+						wait_network_frame();
+						playsoundatposition( "shoot_off", location ); // need new sound
+						level.juicer_failed = 0;
+						wait(15);
+						level.juicer_failed = 1;
+						if(level.teleporter_b_fixed == false )
+						{
+							juice = spawn( "script_model",(-1372.9, -651.9, 199.125) );
+							juice setmodel("tag_origin");
+							level thread part_pickup(juice, "juice", false); 
+						}
+					}
+				}
+			}
+		}
+		
+		if(level.lever.angles != (0,90,-20) && level.juicer_failed == 1 && level.teleporter_b_fixed == false ) // only reset when we're doing things wrong and not at neutral pos, if we do something right we remain
+		{
+			resetting = true;
+			level.lever rotateTo( (0,90,-20), 0.75, 0.1, 0.1 );
+			playsoundatposition( "switch_progress", level.lever.origin );
+			wait(0.75);
+			resetting = false;
+			
+			if(getplayers().size > 1)
+			{
+				index = maps\_zombiemode_weapons::get_player_index(player);
+				plr = "plr_" + index + "_";
+				player thread create_and_play_dialog( plr, "vox_gen_teamwork", 0.25 );
+			}
+		}
+
+		if(!isDefined(level.lever_trig) )
+		{
+			break;
+		}
+		wait(0.05);
+	}
+}
+
+juicer_timer()
+{
+	duration = 25 / getplayers().size ;
+	//self playloopsound("idk");
+	if(self hasperk("specialty_armorvest") )
+	{
+		self.maxhealth = 350;
+		self.health = 350;
+	}
+	else
+	{
+		self.maxhealth = 200;
+		self.health = 200;	
+	}
+	
+	self setblur( 2, duration / 2 );
+	while(1)
+	{
+		wait(0.05);
+		duration -= 0.05;
+        if ( duration <= 0 )
+        break;
+	}
+	self setblur( 0, 1.5 );
+
+	if(self hasweapon("zombie_item_beaker") ) // if we still have the weapon this means we failed and so we reset, otherwise if we suceed then that step cleans up our weap
+	{
+		self cleanup_juicer();
+
+		if(level.teleporter_b_fixed == false )
+		{
+			juice = spawn( "script_model",(-1372.9, -651.9, 199.125) );
+			juice setmodel("tag_origin");
+			level thread part_pickup(juice, "juice", false); 
+		}
+	}
+
+}
+
+cleanup_juicer()
+{
+	self playlocalsound("bottle_break");
+
+	if(self hasperk("specialty_armorvest") )
+	{
+		self.maxhealth = 250;
+		self.health = 250;
+	}
+	else
+	{
+		self.maxhealth = 100;
+		self.health = 100;	
+	}
+
+	if(self GetCurrentWeapon() == "zombie_item_beaker" )
+	{
+		primaryWeapons = self GetWeaponsListPrimaries();
+		if( IsDefined( primaryWeapons ) && primaryWeapons.size > 0 )
+		{
+			self SwitchToWeapon( primaryWeapons[0] );
+		}	
+	}
+
+	self takeweapon("zombie_item_beaker"); 
+	self setactionslot(1,""); 
+	self.has_special_weap = undefined;
+}
+
+teleporter_c_fix()
+{
+	level.bad_spark_error = 0; // will always be 0 unless we make a mistake while trying to solve
+
+	// Spawn lights
+	level thread spawn_warning_light( (590.2, -3025.15, 324.5), "teleporter_c" );
+	level thread spawn_warning_light( (-17.7, -3027, 324.35), "teleporter_c" );
+
+	level thread spawn_valve_lever();
+
+	while(1)
+	{
+		// Spawn sparks
+		wait( randomint(10) );
+		level thread spawn_sparks( (588.7, -3087, 164), "teleporter_c", 1 ); // left 
+		wait( randomint(10) );
+		level thread spawn_sparks( (432.8, -3138.4, 206.7), "teleporter_c", 0 ); // middle
+		wait( randomint(10) );
+		level thread spawn_sparks( (57.3, -3134.9, 198.7), "teleporter_c", 2 ); // right
+
+		level waittill("teleporter_c_fixed_potential"); // we think we might be fixed, we recieve a notify from hitting 0 sparks
+
+		if(level.bad_spark_error == 1)
+		{
+			level.bad_spark_error = 0; // we reset error potential, clean slate
+			level.teleporter_c_sparks = 0; // reset progress
+			continue; // we failed, keep trying
+		}
+		else
+		{
+			level.lever_trig_pipe delete();
+			break;
+
+		}
+	}
+	
+	level notify("teleporter_c_fixed"); // instead we have an extra condition for this tele to make step harder
+
+	level.where_are_we = undefined;
+	level.bad_spark_error = undefined;
+	level.teleporter_c_sparks = undefined;
+
+	playsoundatposition( "pa_buzz",  level.c ); 
+	exploder( 103 ); // turns back on tele
+
+	ClientNotify( "t11" ); 
+
+	//level.teleporter_pad_trig[1] teleport_trigger_invisible( false );
+	level.teleporter_pad_trig[1] sethintstring( &"REMASTERED_ZOMBIE_TELEPORT_LACKS_POWER" );
+
+	level.repairs_made += 1;
+	if(level.repairs_made == 3)
+	{
+		level notify("all_teleporters_fixed");
+	}
+}
+
+
+spawn_warning_light(location, teleporter)
+{
+	wait_network_frame();
+	fx_light = spawn("script_model", location );
+	fx_light setModel("tag_origin");
+	playFxOnTag(level._effect["zapper_light_notready"], fx_light, "tag_origin");
+
+	level waittill(teleporter + "_fixed");
+	
+	fx_light delete();
+
+}
+
+spawn_sparks(location, teleporter, number) // NEED SPARK LOOP SOUND
+{
+	wait_network_frame();
+
+	// SPARK FX & SOUND
+	fx_spark = spawn("script_model", location );
+	fx_spark setModel("tag_origin");
+	playfxontag(level._effect["switch_sparks"], fx_spark, "tag_origin");
+	fx_spark thread random_spark_sounds();
+
+	// SPARK TRIG
+	trig_spark = spawn( "trigger_radius", location, 0, 45, 20 );
+	trig_spark SetCursorHint("HINT_NOICON");
+
+	while(1)
+	{
+		trig_spark waittill( "trigger", player );
+
+		while(1)
+		{
+			if( !player maps\nazi_zombie_factory_new_eggs::islookingatorigin( location ) ) // if we look away
+			{
+				trig_spark SetCursorHint("HINT_NOICON");
+				break;
+			}
+			if( !player IsTouching( trig_spark ) )
+			{
+				break;
+			}
+			if( !is_player_valid( player ) )
+			{
+				break; 
+			}
+			if( player in_revive_trigger() )
+			{
+				break;
+			}
+			
+			trig_spark SetCursorHint("HINT_ACTIVATE");
+
+			if( !player UseButtonPressed() )
+			{
+				break; 
+			}
+			if(IsDefined(player.has_tools) && player.has_tools)
+			{
+				if(teleporter == "teleporter_c")
+				{
+					if(level.where_are_we != number)
+					{
+						level.bad_spark_error = 1;
+					
+						if(getplayers().size > 1 )
+						{
+							index = maps\_zombiemode_weapons::get_player_index(player);
+							plr = "plr_" + index + "_";
+							player thread create_and_play_dialog( plr, "vox_gen_help", 0.25 );
+						}
+					}
+				}
+				if(teleporter == "teleporter_b")
+				{
+					if(level.juicer_failed == 1) // if we ever tried to fix without correct parameters
+					{
+						level.you_failed_juice = 1;
+
+						if(getplayers().size > 1 )
+						{
+							index = maps\_zombiemode_weapons::get_player_index(player);
+							plr = "plr_" + index + "_";
+							player thread create_and_play_dialog( plr, "vox_gen_help", 0.25 );
+						}
+					}
+				}
+				player playlocalsound("switch_up");
+				trig_spark delete();
+			}
+			else if(!IsDefined(player.has_tools) || player.has_tools == false ) // if we have no tools, do a lil dmg and groan
+			{
+				player playlocalsound("pole_spark"); 
+
+				if(!player hasperk("specialty_armorvest") || player.health - 100 < 1)
+				{
+					radiusdamage(player.origin,10,5,5);
+				}
+				else
+				{
+					player dodamage(5, player.origin);
+				}
+				break;
+			}
+
+			break;
+
+		}
+		if(!isDefined(trig_spark) )
+		{
+			break;
+		}
+	}
+
+	fx_spark delete();
+
+	switch(teleporter)
+	{
+	case "teleporter_a":
+		level.teleporter_a_sparks += 1;
+		if(level.teleporter_a_sparks == 3)
+		{
+			level notify("teleporter_a_fixed");
+		}
+		break;
+	case "teleporter_b":
+		level.teleporter_b_sparks += 1;
+		if(level.teleporter_b_sparks == 3)
+		{
+			level notify("teleporter_b_fixed_potential");
+		}
+		break;
+	case "teleporter_c":
+		level.teleporter_c_sparks += 1;
+		if(level.teleporter_c_sparks == 3)
+		{
+			level notify("teleporter_c_fixed_potential");
+		}
+		break;
+	}
+
+
+}
+
+spawn_valve_lever()
+{
+	wait_network_frame();
+
+	location = (-98.5,-2404.8, 151);
+	level.lever_pipe = spawn("script_model", location );
+	level.lever_pipe setModel("zombie_sumpf_zipcage_switch");
+	level.lever_pipe.angles = (180,0,0); // neutral pos
+	level.lever_trig_pipe = spawn( "trigger_radius", location - (0,0,40), 0, 8, 30 );
+	level.lever_trig_pipe SetCursorHint("HINT_NOICON");
+
+	level.where_are_we = 0; // neutral pos
+	level.thread_only_once = 0;
+
+	while(1)
+	{
+		level.lever_trig_pipe waittill( "trigger", player );
+		while(1)
+		{
+/*			if( !player maps\nazi_zombie_factory_new_eggs::islookingatorigin( location ) ) // if we look away
+			{
+				break;
+			}*/
+			
+			if(getplayers().size != 1 && level.thread_only_once == 0 )
+			{
+				level.thread_only_once = 1;
+				player thread check_touching_trig();
+			}
+			if( !player IsTouching( level.lever_trig_pipe ) )
+			{
+				break;
+			}
+			if( !is_player_valid( player ) )
+			{
+				break; 
+			}
+			if( player in_revive_trigger() )
+			{
+				break;
+			}
+			if( !player UseButtonPressed() )
+			{
+				break; 
+			}
+			if(level.where_are_we == 0) // If neutral, we move left
+			{
+				playsoundatposition( "switch_progress", level.lever_pipe.origin );
+				level.lever_pipe rotateTo( (180,0,-30), 0.25, 0.1, 0.1); // Left
+				level.where_are_we = 1; // Left
+				wait(1.25);
+				break;
+			}
+			else if(level.where_are_we == 1) // if left, we move right (twice as long distance)
+			{
+				playsoundatposition( "switch_progress", level.lever_pipe.origin );
+				level.lever_pipe rotateTo( (180,0,30), 0.25*2, 0.1, 0.1); // Right
+				level.where_are_we = 2; // Right
+				wait(1.25);
+				break;
+			}
+			else if(level.where_are_we == 2) // if right, we move neutral
+			{
+				playsoundatposition( "switch_progress", level.lever_pipe.origin );
+				level.lever_pipe rotateTo( (180,0,0), 0.25, 0.1, 0.1); // Neutral
+				level.where_are_we = 0; // Neutral
+				wait(1.25);
+				break;
+			}
+			break;
+		}
+		if(!isDefined(level.lever_trig_pipe) )
+		{
+			break;
+		}
+	}
+}
+
+give_all_perks_forever()
+{
+	self endon("disconnect");
+	self endon("death");
+
+	if(!IsDefined(level._sq_perk_array))
+	{
+		level._sq_perk_array = [];
+		
+		machines = GetEntArray( "zombie_vending", "targetname" );	
+		
+		for(i = 0; i < machines.size; i ++)
+		{
+			level._sq_perk_array[level._sq_perk_array.size] = machines[i].script_noteworthy;
+		}
+	}
+
+	players = get_players(); // First time we give perks 0.5 wait for nice delay effect
+
+	if(!self HasPerk(level._sq_perk_array[2]) && is_player_valid(self))
+	{
+		self thread maps\_zombiemode_perks::give_perk(level._sq_perk_array[2]);
+		wait(0.5);
+	}
+	if(!self HasPerk(level._sq_perk_array[3]) && is_player_valid(self))
+	{
+		self thread maps\_zombiemode_perks::give_perk(level._sq_perk_array[3]);
+		wait(0.5);
+	}
+	if(!self HasPerk(level._sq_perk_array[0]) && is_player_valid(self))
+	{
+		self thread maps\_zombiemode_perks::give_perk(level._sq_perk_array[0]);
+		wait(0.5);
+	}
+	if(!self HasPerk(level._sq_perk_array[1]) && is_player_valid(self) && (players.size != 1) ) // COOP
+	{
+		self thread maps\_zombiemode_perks::give_perk(level._sq_perk_array[1]);
+	}
+	//SOLO
+	if(!self HasPerk(level._sq_perk_array[1]) && is_player_valid(self) && (players.size == 1 && level.solo_second_lives_left > 0) ) // if not solo, or if no lives, we just skip
+	{
+		if(	level.solo_second_lives_left > 0 ) // if still have lives, give quick revive
+		{
+			self thread maps\_zombiemode_perks::give_perk(level._sq_perk_array[1]);
+		}
+
+		level.solo_second_lives_left = level.solo_second_lives_left - 1;
+
+		if( level.solo_second_lives_left == 0 )
+		{
+			level thread maps\_zombiemode_perks::revive_machine_exit();
+		}
+	}
+
+	while(1)
+	{
+		//for(i = 3; i > level._sq_perk_array.size; i --)
+		//{
+		//no for loop, yes this is more messy but now they're in rainbow perk order :)
+			if ( level.remove_ee_ef == 1)
+			{
+				self.perk_hud[ "specialty_armorvest" ] destroy_hud();
+				self.perk_hud[ "specialty_rof" ] destroy_hud();
+				self.perk_hud[ "specialty_fastreload" ] destroy_hud();
+				self.perk_hud[ "specialty_quickrevive" ] destroy_hud();
+				break;
+			}
+			if(!self HasPerk(level._sq_perk_array[2]) && is_player_valid(self))
+			{
+				self thread maps\_zombiemode_perks::give_perk(level._sq_perk_array[2]);
+			}
+			if(!self HasPerk(level._sq_perk_array[3]) && is_player_valid(self))
+			{
+				self thread maps\_zombiemode_perks::give_perk(level._sq_perk_array[3]);
+			}
+			if(!self HasPerk(level._sq_perk_array[0]) && is_player_valid(self))
+			{
+				self thread maps\_zombiemode_perks::give_perk(level._sq_perk_array[0]);
+			}
+
+			//COOP
+			if(!self HasPerk(level._sq_perk_array[1]) && is_player_valid(self) && (players.size != 1) )
+			{
+				self thread maps\_zombiemode_perks::give_perk(level._sq_perk_array[1]);
+			}
+
+			//SOLO
+			if(!self HasPerk(level._sq_perk_array[1]) && is_player_valid(self) && (players.size == 1 && level.solo_second_lives_left > 0) ) // if not solo, or if no lives, we just skip
+			{
+				if(	level.solo_second_lives_left > 0 ) // if still have lives, give quick revive
+				{
+					self thread maps\_zombiemode_perks::give_perk(level._sq_perk_array[1]);
+				}
+
+				level.solo_second_lives_left = level.solo_second_lives_left - 1;
+
+				if( level.solo_second_lives_left == 0 )
+				{
+					level thread maps\_zombiemode_perks::revive_machine_exit();
+				}
+			}
+
+		//}
+		wait(0.05);
+	}
+}
+
+check_touching_trig()
+{
+	while(self isTouching(level.lever_trig_pipe) )
+	{
+		wait(0.05);
+	}
+
+	if(level.where_are_we != 0 )
+	{	
+		wait(1);
+		playsoundatposition( "switch_progress", level.lever_pipe.origin );
+		level.lever_pipe rotateTo( (180,0,0), 0.25, 0.1, 0.1); // Neutral
+		level.where_are_we = 0; // Neutral		
+
+		index = maps\_zombiemode_weapons::get_player_index(self);
+		plr = "plr_" + index + "_";
+		self thread create_and_play_dialog( plr, "vox_gen_teamwork", 0.25 );
+	}
+	level.thread_only_once = 0;
+}
+
