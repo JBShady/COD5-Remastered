@@ -42,7 +42,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Fall damage occurs after 150 units instead of 200 units, similar to future Call of Duties that all use 128 units as the baseline. 
 * Added weapon bobbing like future Call of Duties, weapons no longer just lower while walking 
 * Players drop their hands onto the ground when dying as the Game Over screen appears, using an animation ported from Black Ops II
-* Fixed clientside sounds and effects from looping at different speeds depending on the client's FPS
+* Fixed clientside sounds and effects from looping or playing at different speeds depending on the client's FPS
 * Fixed player being able to pull out equipment while drinking perks or purchasing the Bowie Knife 
 * Fixed voiceover categories played with a delay having the ability to overlap with other lines
 * Voiceover interactions disabled on a player size of 1 to fix character responses sometimes playing in solo
