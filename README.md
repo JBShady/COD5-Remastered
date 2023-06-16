@@ -51,7 +51,6 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 ### Zombies
 * Zombies have glowing eye effects in all DLCs now.
 * In addition to Round 1, Round 2 will also only be walkers to allow for more gradual pacing.
-* Added various cut animations and a rare percent chance that zombies can spawn with equipment (gear/caps/helmets)
 * All maps use various improvements to zombie logic and pathing 
 * Zombies can now spawn with random combinations of helmets, hats, bandages, or gear based on rare percent chances and the map's setting, with the first two maps using more equipment and the last two having less
 
