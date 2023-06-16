@@ -1,5 +1,3 @@
-THIS GIT PAGE (and the readme) IS STILL WIP, I unfortunately follow my own scripting convetions which includes not actually using git until I finish the whole thing. But if you want to follow or save this page for when everything is ready, feel free.
-
 # Call of Duty: World at War Zombies - Remastered Mod
 This mod contains bug fixes, quality of life tweaks, fixed inconsistencies, and other improvements for each of the four stock zombie maps. To install & play, download the release and follow the [installation instructions](https://youtu.be/YbOq6Nb9xug). This repository contains the source files of the project. If you would like to modify it, see the instructions below. 
 
@@ -16,157 +14,259 @@ This mod contains bug fixes, quality of life tweaks, fixed inconsistencies, and 
 * If you notice any issues with the mod after compiling, please let me know. However, I tested the files on a fresh install and everything appeared to work.
 * Keep in mind that not every script file (.gsc & .csc) in the \mods directory has been modified, but having them all gives you complete control of every aspect of each map
 
+-> nazi_zombie_remastered (Nacht Der Untoten)
+-> nazi_zombie_remastered_dlc1 (Verrückt)
+-> nazi_zombie_remastered_dlc2 (Shi No Numa)
+-> nazi_zombie_remastered_dlc3 (Der Riese)
+
 ## Change Notes
-To be written. notes wip
 
 ### General
+* Added all zombiemode achievements that were on the console version: tracked through player stats, available on the main menu, display a completion notification with sound, an image, and text 
+* All maps now use the same (more optimized) zombie spawning formula as Der Riese, fixing the unbalanced 24-limit on solo. Togglable with the new "Gametype" setting in Game Options.
+* All maps now make use of improved scripting and bug fixes that were only added into the later DLCs. 
+* AI no longer pushes, creating a "grabbing" effect where touching zombies slowed the player down. Togglable with the new "Enemy Pushing" setting in Game Options.
+* Spectate can switch to 1st person by holding down the melee button, similar to the console version.
+* Upscaled wood board texture by 2x to appear slightly less blurry.
 
 ### Player
-* new walking anim
-* Added Bo2 death anim
-* fixed clientside heartbeat timing
-* fixed delays in voiceover to prevent overlapping lines (powerups)
-* can no longer pull out equipment while drinking perks/bowie knife
+* Player now spawns as a random character in solo
+* All characters now use historically accurate starting pistols and hand viewmodels that match their corresponding player model, all using assets from elsewhere in the game
+* FOV does not reset upon map restart, map reload, teleporting, or respawning.
+* Increased backwards and sideways movement speed to match closer to the console version.
+* Splash damage has been rebalanced and is equal on all maps. Explosives damage deals differing radius damage depending on impact type and proximity.
+* Fall damage no longer gives shellshock effect unless fall damage takes more than 30% of your health
+* Fall damage occurs after 150 units instead of 200 units, similar to future Call of Duties that all use 128 units as the baseline. 
+* Added weapon bobbing like future Call of Duties, weapons no longer just lower while walking 
+* Players drop their hands onto the ground when dying as the Game Over screen appears, using an animation ported from Black Ops II
+* Fixed clientside sounds and effects from looping at different speeds depending on the client's FPS
+* Fixed player being able to pull out equipment while drinking perks or purchasing the Bowie Knife 
+* Fixed voiceover categories played with a delay having the ability to overlap with other lines
+* Voiceover interactions disabled on a player size of 1 to fix character responses sometimes playing in solo
 
 ### Zombies
-* added cut walking animation that was later used in BO1 to all maps
+* Zombies have glowing eye effects in all DLCs now.
+* In addition to Round 1, Round 2 will also only be walkers to allow for more gradual pacing.
+* Added various cut animations and a rare percent chance that zombies can spawn with equipment (gear/caps/helmets)
+* All maps use various improvements to zombie logic and pathing 
+* Zombies can now spawn with random combinations of helmets, hats, bandages, or gear based on rare percent chances and the map's setting, with the first two maps using more equipment and the last two having less
 
 ### HUD
-* HUD elements, including ammo, round counter, and perks no longer touch very edge of the screen
-* removed objective info screen when pressing tab
-* updated HD font
-* updated HD HINT_ACTIVATE hand icon
-* updated grenade icon and grenade pickup icon to accurately represent the frag grenade type on the map
-* updated HD flamethrower icon
-* updated HD wood board texture for barriers
-* updated perk and powerup HD icons
+* HUD elements no longer touch the very edge of the screen, including the ammo counter, round counter, and perk shaders.
+* Added a game option that allows for the D-pad equipment and action hintstrings to actually reflect using a controller.
+* Removed objective info screen when pressing tab in solo.
+* Updated the World at War font with an upscale to look better on HD displays, fixing the pixelated round counter
+* Updated crosshair texture with custom made HD version
+* Updated the activation hand logo on hintstrings with a custom made HD version
+* Updated grenade icon and grenade pickup icon to accurately represent the frag grenade in the player's inventory
+* Updated flamethrower icon with custom HD version still in the correct art style
+* Updated perk and powerup shaders with custom made HD versions still in the correct art style
+* Created new better looking icons for Sticky Grenades and Type 97 frags still using the correct art style.
+* Changed the Monkey bomb icon to look more recognizable while still in the greyscale WaW icon art style.
+* Removed grenade indicators from special grenades because these grenades cannot be picked up and display the incorrect icon
+* Fixed the round counter not changing white when going to round 6.
+* When no interact button is mapped, it will switch to the controller blue "X" so that players can enjoy a more immersive controller experience.
+* (T4M) Pressing tab in solo now shows the zombie scoreboard.
+
 ### Menu
-* Improved spacing between any strings that used the HINT_ACTIVATE hand logo
-* Capitiization is more consistent in hintstrings
-* Added custom co-op loading screen hint message
-* Added T4M installation reminder when selecting co-op
-* removed intel sponsorship advertisement from loading screen
+* Start game button added for quick solo play
+* Overhauled main menu to remove all non-Zombiemode related pages and buttons. While running this mod, it is purely a Nazi Zombies experience. Added a reminder when heading to co-op for all players to install T4M.
+* Co-op menus auto load the selected map and the co-op host settings page now includes new the settings in Game Options.
+* Added a Map Intel page with an image/description of the map as well as any available achievements
+* Added a Character Bios page, ported from console but with slight grammatical and layout fixes for the best PC experience.
+* Many new options seamlessly integrated into the existing menus with settings for FOV, the HUD, controller support, gametype/AI, fog, LOD, dialogue, and more all detailed in the table below.
+* Improved spacing between hintstrings and the activation hand logo
+* Capitlization is more consistent in hintstrings
+* Added custom co-op loading screen hint messages relating to the mod
+* Removed intel sponsorship advertisements from all loading screens
 
 ### Settings
-
-### Perks
-
-### Powerups
-
-### Traps
-* All electric traps last for 30 seconds with a 30 second cooldown, except for Shi No Numa which is 60 for balance reasons
-* All levers return to upward posistion when not in use to prevent glitches, however, will not be usable until cooldown completes and lights turn green
-* Fixed bug where traps would not slow down player. However, players with Jug that do not stand still in traps can now avoid the slow down
-* Fixed traps sometimes displaying yellow lights on Der Riese 
-* Decreased Hellhound death delay in traps
-* Fixed Hellhounds playing normal zombie death sounds on Shi No Numa
-
-### Blockers
-
-### Last Stand
-
-
-
-
-
-
-
-* Added achievements, stats remembered, like console
-* Fixed sound issues m1 launcher, rocket launchers
-* Lowered volume of wall breaking barrier sounds
-* added character bios
-* Tidied up Character Bio messages without changing the content, including small grammatical fixes 
-* added map intel page including map name, description, image, and achievements if available
-* map is loaded by default with solo button and when going into co-op lobbies 
-* co-op settings page now includes any of my custom settings that are relevant for co-op lobbies
-
-New "fake" DVARs created for cheat protected settings, now labeled with "_settings"--this allow players to edit them in-game and on the menu. 
-| New Settings | DVAR | Default | Alternate | Description | 
+* Both new settings have been created and also useful existing settings have been added to the options pages for easier access
+* New "fake" DVARs created for cheat protected settings, now labeled with "_settings"--this allow players to edit them in-game and on the menu.
+* All settings and stats are saved to the selected profile even if the game is closed, crashes, switches profiles, etc.  
+| New Settings | DVAR | Default | Other Values | Description | 
 | :---: | :--- | :--- | :--- | :--- |
 | **GRAPHICS** |  |  |  |  |
 | Fog | `r_fog_settings` | `1` Yes | `0` No | Enables or disables fog. |
 | Cinematic Mode | `r_filmUseTweaks_settings` | `0` No | `1` Yes | More saturated color grading. |
 | **TEXTURE SETTINGS** |  |  |  |  |
-| LOD Range | `r_lodBiasSkinned_settings / r_lodBiasRigid_settings` | `0` High | `-200` Normal | Changes "r_lodBiasRigid" and "r_lodBiasSkinned" to -200, increasing range of visible detail. Accessible on menu, requires match restart. |
+| LOD Range (Rigid) | `r_lodBiasRigid_settings` | `0` Default | `-200` High | Increases range of visible detail on rigid models. |
+| LOD Range (Skinned) | `r_lodBiasSkinned_settings` | `0` Default | `-200` High | Increases range of visible detail on skinned models. |
 | **SOUND** |  |  |  |  |
-| Character Dialogue | `character_dialog` | `0` Yes | `1` No | Enable or disables character dialogue. Locked in game for co-op. |
+| Character Dialogue | `character_dialog` | `0` Yes | `1` No | Enable or disables character dialogue. Locked in-game on co-op. |
 | **GAME OPTIONS** |  |  |  |  |
 | Gametype | `classic_zombies` | `0` Modified Default | `1` Classic | By default, 24 zombie cap on solo is disabled. Accessible on menu, requires match restart. |
 | Last Stand | `classic_perks` | `0` Modified Default | `1` Classic | By default, solo Quick Revive and 45 second bleedout buffs are enabled. Accessible on menu, requires match restart. |
 | Enemy Pushing | `grabby_zombies` | `0` Modified Default | `1` Classic | By default, "sticky" zombies are disabled with PushPlayer(false). Accessible on menu, requires match restart. |
 | Enemy Intensity | `super_sprinters` | `0` Modified Default | `1` Classic | By default, additional super sprinters are added to prototype and asylum. Accessible on menu, requires match restart. |
+| HUD | `cg_draw2D` `r_flame_allowed` | `1` Yes | `0` No | Enables or disables full heads up display. |
 | Display FPS | `cg_drawFPS` | `Off` No | `Simple` Yes | Enables or disables FPS counter. |
-| Limit FPS | `com_maxfps` | `85` Yes | `0` No | Enables or disables max FPS lock. |
+| Limit FPS | `com_maxfps` | `85` Default | `0` Disabled | Adjusts the max FPS value. |
 | Field of View | `cg_fov` | `65` Default | `90` Maximum | Adjustable FOV with slider. |
 | View Scale | `cg_fovScale` | `1` Normal | `1.1` Medium or `1.2` High | Scales existing FOV higher or lower by multiplier. |
 | Controller Inversion | `input_invertpitch` | `0` Disabled | `1` Enabled | Enables or disables controller inversion. |
-| Controller Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to Medium, High, Very High, Insane | Increases or decreases controller sensitivity using the same scale as console. |
-| Controller Support | `controller_dummy` | `0` Enable | `1` Enabled | Variable that when enabled, automatically executes "default_controller.cfg". |
+| Controller Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to (Medium), (High), (Very High), (Insane) | Increases or decreases controller sensitivity using the same scale as console. |
+| Controller Mode | `cg_drawXboxHUD` | `0` Disabled | `1` Enabled | Switches HUD to use console style D-pad icons. Enabling through the menu also executes "default_controller.cfg". |
+| **CONSOLE / EASTER EGGS** |  |  |  |  |
+| DVAR Initialization | `dvar_init_dummy` | `0` | `1` | Set to 0 in console to reset all new remastered settings back to default, requires mod relaunch. |
+| Character | `character` | `0` Random | `1-4` Player # | Developer command to change character in solo, requires map restart. |
+| Health Counter | `cg_drawHealthCount` | `0` | `1` | Developer command to enable health counter in solo, requires map restart. |
+| Clearance Code | `bio_access` | `[PASSWORD]` | `?` | Grants access to confidential menus. |
+| Sumpf Completion | `sumpf_quest` | `0` | `?` | Indicates completion of new Shi No Numa Easter Egg achievement in 4-player. |
+| Factory Completion | `factory_quest` | `0` | `?` | Indicates completion of new Der Riese Easter Egg achievement in 4-player. |
 
-* new menu
-* cleaned up all setting pages and menus to remove irrelevant non-zombie related content, as with my mod you can only play zombies
-* solo start button
-* cooperative now auto loaded, new coop settings, and T4m warning
-* map intel page
-* character bios
+### Blockers
+* Repairing individual boards gives the player a screenshake like future games
+* Repairing barriers only plays the cha-ching sound while actively earning +10 points
+* Barriers are now effected by two active double points giving +40
 
+### Mystery Box
+* Ray Gun is obtainable from the first Mystery Box location on all maps without having to first get a Teddy Bear 
+* All weapons are now always available in the Mystery Box excluding equipment, frag grenades, and starting pistols
+* All maps have the same glow effect when the box is opened
+* Added "no purchase" sound effect when player does not have enough points
+* Fixed Mystery Box playing the debris sound for other players after every use once moving locations
+* Fixed Wonder Weapon stinger sound effect sometimes not playing 
+* Der Riese & Shi No Numa boxes now share equal weighted odds for Wonder Weapons, which have also been slightly rebalanced
+* Verrückt & Nacht Der Untoten boxes remain a full lottery, except for the Teddy Bear which is still slightly less forgiving than on later maps
 
+### Powerups
+* Carpenter available on all maps, togglable under the "Gametype" setting in Game Options.
+* Max Ammmos now refill equipment on all maps (betties, molotovs, grenades)
+* Fixed Insta-Kill special melee voiceover still being able to play from non-melee kills
+* Increased volume of Insta-Kill active loop sound
+* Double points now effects Carpenters and Nukes giving +800 and +400 respectively
+* Double points stack on all maps like originally scripted. However, it has been capped at only giving up to 4x for balance. 
 
+### Perks
+* Quick Revive now works on solo giving 3 possible extra lives, togglable under the "Laststand" setting in Game Options.
+* Renamed hintstring from saying to buy "Revive" to "Quick Revive"
+* Jugger-nog abilities and health regeneration behaves the same on all maps using improvements from Der Riese
 
+### Traps
+* All electric traps last for 30 seconds with a 30 second cooldown, except for Shi No Numa which is 60 for balance
+* All levers return to upward posistion when not in use to prevent glitches but will not be usable until cooldown completes and the lights turn green
+* Fixed bug where traps would not slow down player, but players with Jug that do not stand still in traps can still avoid the slow down
+* Fixed traps sometimes displaying yellow lights on Der Riese 
+* Decreased Hellhound death delay in traps
+* Fixed Hellhounds playing normal zombie death sounds on Shi No Numa
+* Added "no money" sound effect to all levers when player does not have enough points 
 
-* edited der riese vision
-New Easter Eggs
-* Added Easter Egg quest to Shi No Numa- new achievement 4 players
-* Red barrels
-* Character bios on nacht/verruckt
+### Last Stand
+* Self revives take 10 seconds, zombies will run away from the player, and the player is equipped with an upgraded version of their starting pistol.
+* Player does not talk while in last stand in solo.
+* The co-op bleedout time has been increased from 30 seconds to 45 seconds, togglable under the "Laststand" setting in Game Options. 
+* Players equipped with better pistols than their designated last stand pistol (normal in co-op, upgraded in solo) will now pull them out in last stand based on an a hierarchy: Ray Gun has precident, then explosive pistols, then the .357
+* Player receives 3 magazines for regular pistols and only 1 cartridge for both the un-upgraded and upgraded Ray Gun.
+* If a player has no ammo for a pistol before they down, then that weapon will not be counted in the above hierarchy.
+* If a player recieves a Max Ammo while down, they will not be given grenades.
+* Disabled leaning while in last stand.
+
+### Music & Sounds
+* Slightly increased Easter Egg song volumes and now all songs now play through the music channel
+* All Easter Egg songs will play a 2 second fadeout if the game ends and switches to the intermission music
+* Removed cha-ching sound when activating DLC1 and DLC2 Easter Egg songs
+* All maps now use the same musicstate system from Der Riese for the background ambient music and intermission music, allowing for better audio mixing
+* Waits during all intermission songs have been slightly extended so the music should not cut off as early in co-op 
+* Fixed sound issues with grenade launchers/rocket launchers not playing correctly
+* Lowered volume of wall breaking barrier sounds so they cannot be heard from as far away
 
 ## Nacht Der Untoten
-* Added intro screen text
-* Added new musical Easter Egg to play "Undone" by shooting all 31 red barrels
-
-### Zombies
-* Zombies can now spawn with random combinations of helmets, hats, or gear based on rare % chances.
-* Zombies can now use updated animations from future maps for traversing, crawling, attacking, hitting through barriers, walking, running, etc. The exception remains that Nacht zombies are "slower," they are more likely to stop before hitting than on other maps. Nacht-unique "sprint" crawlers are still present.
-* Reorganized zombie vocals to have more consistency between ambient, attack, and sprint categories. Added new behind vocals category.
+* Added "mission intro" in the bottom left corner to include storyline accurate info.
+* Added new musical Easter Egg that plays "Undone" by shooting all 31 red barrels
+* KZMB radio now pauses when playing the main Easter Egg song
+* Removed Scoped Kar98k from the box so that the cabinet is now actually unique and useful while still being a "troll" that does not tell you what you are purchasing
+* Using audio from campaign, added an entire set of new voicelines based off of the style of the other maps (headshots, kills, power-ups, weapons, surrounded, downed, etc.).
+* 4 characters with around 100 lines each spread out through about 30 categories, including new categories and interactions not seen on other maps.
+* Instead of randomizing the player models for each character, each Player (1, 2, 3, 4) always has a consistent and unique player model/face/gear.
+* Replaced camoflauged Pacific-theater helmets with regular bare metal helmets
+* Zombies can now use updated animations from future maps for traversing, crawling, attacking, hitting through barriers, walking, running, etc. (The Nacht-unique "sprint" crawler is still present)
+* The exception remains that zombies on this map are still "slower," with custom balanced hit animations where they are more likely to stop before hitting.
+* Reorganized zombie vocals to have more consistency between ambient, attack, and sprint categories with less repitition.
+* Added very quiet and rare behind vocals, with instead the more common indicator of being snuck up on is the character begins nervously breathing
 * Added a new type of "super sprinter" that comes after round 10, toggleable in Game Options.
 * Replaced the existing grey uniform zombie variant texture with an SS camouflage texture, which fits better with the battlefield atmosphere of the map.
 
-### Characters
-* Added characters. Instead of randomizing the player models for each character, each Player (1, 2, 3, 4) always has a consistent player model.
-* Added new generic voiceover taken from Campaign assets using factory style code. Includes categories for weapons, low ammo, close kill, damaged close kill, explosion cough, explosion kill, flamethrower kill, headshot kill, killstreak, scared breathing, pain, reload, player surrounded, player responses, powerups, downed/mandown, revived/revived teammate, Insta-Kill melee, and level start.
-
 ## Verrückt
 * Renamed map from Zombie Verrückt to Verrückt, like in future Call of Duty titles
-* Specific box sound
-
-### Zombies
-* Zombies can now spawn with random combinations of helmets, hats, bandages, or gear based on rare % chances.
+* On co-op low rounds, the zombie spawning formula still has a separate calculation that spawns more zombies than normal to account for the players being split up and ensuring both sides of the spawn face enough of a threat
+* On this map, the team of Marines now uses camoflauged raider gear to reference how they were supposed to be a recon team in the storyline. First person viewmodel also reflects this, and this also helps differentiate the two different Marine crews. 
+* Instead of randomizing the player models for each character, each Player (1, 2, 3, 4) always has a consistent and unique player model/face/gear.
 * Added the Nacht "sprint" crawler animation to bridge the consistency between the first two maps.
 * Added a second new type of "super sprinter" that comes after round 10, toggleable in Game Options.
-
-### Characters
-* Added characters. Instead of randomizing the player models for each character, each Player (1, 2, 3, 4) always has a consistent player model.
-* Changed player models and player viewmodel hands to use Marine Raider recon gear. These Marines were supposed to be a "recon team" in the story and it helps differentiate them from the Marines on the previous map. 
-* Rewrote voiceover to use factory style code. 
-* Reorganized voiceover categories to be less repetitive and more consistent. Added new category for powerups, perks, (cut) Teddy Bear, and (cut) downed lines.
+* Added rare co-op voiceover Easter Egg when player 4 turns on the power
+* Removed code that changed the vision file when going under the power room
+* Fixed the Bouncing Betty model sometimes moving in the wrong direction when purchasing off the wall 
+* Rewrote voiceover scripting to use improved code from later DLCs that reduced the repetiveness of how lines are played 
+* Reorganized voiceover categories to be less repetitive and more consistent, and also added new categories for powerups, perks, Teddy Bear (cut), and downed lines (cut).
+* Added generic pain voiceover to allign with the other three modded maps.
 
 ## Shi No Numa
-* Added intro screen text
-* Flogger changes, cooldown, fx light, dmg is the same in solo vs co-op, kills player instantly no jug/does damage with jug, sets player to crouch, JBleezy fix damaging multiple times in one hit
-* Zipline initial cooldown decreased
-
-
-### Zombies
-### Characters
+* Added "mission intro" in the bottom left corner to include storyline accurate info.
+* Added "level start" voiceover using generic character quotes.
+* Added cut jap_walk_v4 animation as another walker variant.
+* Added cut jap_run_v6 animation as another rarely occuring runner variant.
+* Added cut jap_run_v5 animation as another rarely occuring sprinter variant
+* Added unused swamp perk machine textures from the game files.
+* Re-added unique hintstrings for each Perk machine thanks to T4M.
+* Added cut hellhound round begin "howling" sound that was only used on the PS3 version. 
+* Hellhound functionality includes changes made in the next DLC including a health buff, but it is still slightly lower than Der Riese to account for no Pack-a-Punch.
+* Fixed hellhounds playing normal zombie death sounds in electric traps.
+* Carpenter voiceover uses additional repurposed lines that were originally made for general barrier repairing.
+* When picking up a powerup, characters choose from three lines instead of one. 
+* When opening the second or third hut, there is a 50% chance of the closest player commenting on the randomization of perks.
+* When a perk is decided, there is a higher chance of the closest player within a close proximity shouting the perk's name.
+* Fixed perk machines from clipping into the wall in the Dr.'s hut. 
+* Flogger now damages the player only once per rotation and also sets the player into crouch
+* Flogger now damages the player the exact same between solo and co-op, killing instantly without Jug 
+* Fixed flogger light fx from spawning clipped into the wall
+* Zipline cooldowns decreased to 15 for the initial cooldown and 30 for the regular cooldowns.
+* Zipline no longer can glitch player maxhealth values to the wrong value. 
+* Added zombie jump down animation from upper zipline station so zombies do not look like they are holding an invisible gun.
 
 ## Der Riese
-* Improved intro screen text with complete date
-### Zombies
+* Updated "mission intro" in the bottom left corner to include the full storyline accurate date.
+* Changed vision file to give the map a bluer and dark tint rather than the original greyish-green look.
+* Added cut German walk_v9 animation that was later used in Black Ops I
+* Added cut 5th Maxis handheld radio from the game files that was also used on the IOS version. 
+* Added cut rare voiceover that can play after teleporting. (5% chance)
+* Added cut rare voiceover that can player after picking up a power up. (3% chance)
+* Added cut Easter Egg voiceover for the "Teddy is a liar" wall writing. (Requires scope)
+* Increased percent chance for voiceover when interacting with Easter Egg items and also added one unused Takeo line to the Corkboard cycle. (50% chance)
+* Increased percent chance for general storyline VOX early game. (5% chance)
+* Increased PaP "waiting" voiceover odds to play 50% of the time rather than 8%, closer to future zombie games.
+* Fixed the loose change Easter Egg so that it actually gives a real 30 points while only showing +25 on the HUD, this is to prevent confusion because the HUD rounds score to the nearest tens.
+* Added extra checks so players will never talk about needing to link the teleporters or open Pack-a-Punch after the task is already completed.
+* Pack-a-Punch hintstring disappears when you are holding an upgraded weapon or when another player's weapon is in the machine.
+* Added several unused voiceover lines when a player picks up the Carpenter power up.
+* Player surrounded voiceover now also plays in solo, but without the responses from other characters and at a lower percent chance.
+* Player no longer receives a free Colt when they have no weapons, instead the screen is just blank like future zombie games.
+* The post-teleporter FOV effect now uses your set FOV when doing the effect instead of zooming out into the default 65.
+* Tweaked teleporter cooldown message to be plural, as all teleporters are set on cooldown after one is used
+* Fixed teleporter cooldown message showing on top of other teleporters that still need to be linked, which do not get effected by the cooldown. 
 * Fixed Der Riese zombies using flesh colored limbs after being gibbed 
+* Added collision to the metal sheet on the catwalk barrier 
 
-### Characters
+## The Four Heroes
+* Added cut sniper pickup voiceover found in the game files.
+* Added cut hellhound kill voiceover found in the game files with a 25% chance of it playing per kill.
+* Added cut voiceover that plays when a player downs.
+* Added cut reload voiceover that only plays when reloading an empty LMG when in close proximity to zombies 
+* Added cut pain voiceover that plays when a player is damaged. 
+* Added cut exert voiceover that plays about 75% of the time a player damages a zombie with melee, and 100% of the time when a player kills a zombie with melee (Unless other dialogue is queued, in which case it over rules the exert sound).
+* Added several cut voiceover lines that play after a player is revived, instead of only alternating between 2 possible lines.
+* Added cut Takeo Panzershrek voiceover
+* Unlocked a few cut unused voiceover lines for weapons that were never called in the scripts but were already included in the soundaliases (MP40, BAR, Shotgun, Wunderwaffe, Monkey Bomb).
+* Reworked "no money" sounds and voiceover for purchasable items when a player does not have enough points:
+* Wall Weapons: Now have a chance of saying a cut voiceover line, the standard groan, or nothing.
+* Mystery Box: Now have a chance of saying two cut voiceover lines, the standard groan, or nothing.
+* Perk/PaP: Now has a chance of playing the groan instead of only playing the voiceover dialogue to make it less repetitive.
 
 ## Weapons
+* All weapons are 100% consistent in stats, behavior, and appearance between each map.
+* All use the best available materials (HD textures from Singleplayer, weathered materials if available, normal/spec maps).
+* Weapons cannot share ammo reserves anymore because it was a glitchy system where players could create ammo out of thin air.
+* All added weapons (and their upgraded variants) use official sounds, stats, names, effects, models, and materials unless non-existent. In such rare cases, they were created from scratch while still matching Treyarch's style.
 * All maps share the same loadout, except for the exceptions described in the table below:
 
 ### Loadout
@@ -182,12 +282,6 @@ New Easter Eggs
 | **Entirely New Weapons** | SVT-40 | SVT-40 | SVT-40, DP-28, Type 99 | SVT-40, DP-28, Type 99 |
 | **Missing Weapons Added** | Type 100 | Type 100 | None | M1 Garand, Sawed-Off Double Barrel |
 | **Wonder Weapons** | Ray Gun | Ray Gun | Ray Gun, Wunderwaffe DG-2 | Ray Gun, Wunderwaffe DG-2 |
-
-### Changes
-* All weapons are consistent in stats and appearance between each map.
-* All use the best available materials (HD textures from Singleplayer, weathered materials if available, normal/spec maps).
-* Certain weapons no longer share ammo reserves because it was a glitchy system where players could create ammo out of thin air.
-* All added weapons (and their upgraded variants) use official sounds, stats, names, effects, models, and materials unless non-existent. In such rare cases, they were created from scratch while still matching Treyarch's style.
 
 #### Starting Pistols
 * Starting pistols are now faction dependent. Americans spawn with the Colt M1911, Russian with the Tokarev T-33, Japanese with Type 14 Nambu, and German with Walther P38
@@ -362,21 +456,15 @@ New Easter Eggs
 * Fixed idle animation to remove blocky left hand
 * (Upgraded) Fixed Ray Gun VOX not playing
 * (Upgraded) Fixed last stand giving you more than one ammo cartridge
+* (Upgraded) Added missing 3rd person weapon model that has the silver etching material
 
 #### Wunderwaffe DG-2
 * Does not permanently reduce max health upon zapping yourself
 * Fixed missing reload clip on Der Riese for both upgraded/un-upgraded versions
 * (Upgraded) Time between arcs is 20% shorter, improving the effectiveness of the weapon
-* (Upgraded) Added 3rd person weapon model that has the silver etching material
+* (Upgraded) Added missing 3rd person weapon model that has the silver etching material
 * (Upgraded) Fixed not playing idle loop sound while holding weapon (electric humming)
 * (Upgraded) Fixed not playing the tesla sound after getting a 4 killstreak
-
-#### Mystery Box
-* Ray Gun is obtainable from the first Mystery Box location on all maps without having to first get a Teddy Bear 
-* All weapons are now always available in the Mystery Box excluding equipment, frag grenades, and starting pistols
-* All maps have the same glow effect when the box is opened
-* Fixed Mystery Box playing the debris sound for other players after every use once moving locations
-* Der Riese & Shi No Numa boxes now share equal weighted odds for Wonder Weapons, which have also been slightly rebalanced
 
 ## Special Thanks
 * Numan, Phil81334, cristian_m, Gympie5, Tristan, NGcaudle, psulions45 - General modding advice
