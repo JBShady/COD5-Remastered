@@ -88,6 +88,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Both new settings have been created and also useful existing settings have been added to the options pages for easier access
 * New "fake" DVARs created for cheat protected settings, now labeled with "_settings"--this allow players to edit them in-game and on the menu.
 * All settings and stats are saved to the selected profile even if the game is closed, crashes, switches profiles, etc.  
+
 | New Settings | DVAR | Default | Other Values | Description | 
 | :---: | :--- | :--- | :--- | :--- |
 | **GRAPHICS** |  |  |  |  |
