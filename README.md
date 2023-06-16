@@ -29,7 +29,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * All maps now use the same (more optimized) zombie spawning formula as Der Riese, fixing the unbalanced 24-limit on solo. Togglable with the new "Gametype" setting in Game Options.
 * All maps now make use of improved scripting and bug fixes that were only added into the later DLCs. 
 * AI no longer pushes, creating a "grabbing" effect where touching zombies slowed the player down. Togglable with the new "Enemy Pushing" setting in Game Options.
-* Spectate can switch to 1st person by holding down the melee button, similar to the console version.
+* Spectators can switch to 1st person by holding down the melee button, similar to the console version.
 * Upscaled wood board texture by 2x to appear slightly less blurry.
 
 ### Player
