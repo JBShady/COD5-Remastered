@@ -68,13 +68,13 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Changed the Monkey bomb icon to look more recognizable while still in the correct  art style.
 * Removed grenade indicators from special grenades because these grenades cannot be picked up and display the incorrect icon
 * Fixed the round counter not changing white when going to round 6.
-* When no interact button is mapped, it will switch to the controller blue "X" so that players can enjoy a more immersive controller experience.
+* When no interact button is mapped, it will switch to the controller blue Xbox "X" so that players can enjoy a more immersive controller experience. Alternate build is available with the PlayStation square symbol.
 * (T4M) Pressing tab in solo now shows the zombie scoreboard.
 
 ### Menu
 * Start game button added for quick solo play
 * Overhauled main menu to remove all non-Zombiemode related pages and buttons. While running this mod, it is purely a Nazi Zombies experience. Added a reminder when heading to co-op for all players to install T4M.
-* Co-op menus auto load the selected map and the co-op host settings page now includes new the settings in Game Options.
+* Co-op menus auto load the selected map and the co-op host settings page now includes the relevant settings added Game Options.
 * Added a Map Intel page with an image/description of the map as well as any available achievements
 * Added a Character Bios page, ported from console but with slight grammatical and layout fixes for the best PC experience.
 * Many new options seamlessly integrated into the existing menus with settings for FOV, the HUD, controller support, gametype/AI, fog, LOD, dialogue, and more all detailed in the table below.
