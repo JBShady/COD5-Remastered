@@ -111,7 +111,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 | Controller Inversion | `input_invertpitch` | `0` Disabled | `1` Enabled | Enables or disables controller inversion. |
 | Controller Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to (Medium), (High), (Very High), (Insane) | Increases or decreases controller sensitivity using the same scale as console. |
 | Controller Mode | `cg_drawXboxHUD` | `0` Disabled | `1` Enabled | Switches HUD to use console style D-pad icons. Enabling through the menu also executes "default_controller.cfg". |
-| **CONSOLE / EASTER EGGS** |  |  |  |  |
+| **CONSOLE** |  |  |  |  |
 | DVAR Initialization | `dvar_init_dummy` | `0` | `1` | Set to 0 in console to reset all new remastered settings back to default, requires mod relaunch. |
 | Character | `character` | `0` Random | `1-4` Player # | Developer command to change character in solo, requires map restart. |
 | Health Counter | `cg_drawHealthCount` | `0` | `1` | Developer command to enable health counter in solo, requires map restart. |
