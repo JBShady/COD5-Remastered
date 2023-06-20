@@ -91,7 +91,7 @@ powerup_hud_overlay()
 		level.powerup_hud[i].horzAlign = "center"; 
 		level.powerup_hud[i].vertAlign = "bottom";
 		level.powerup_hud[i].x = -32 + (i * 15); 
-		level.powerup_hud[i].y = level.powerup_hud[i].y - 35; 
+		level.powerup_hud[i].y = level.powerup_hud[i].y - 50; 
 		level.powerup_hud[i].alpha = 0.8;
 		//hud SetShader( shader_inst, 24, 24 );
 	}
@@ -126,18 +126,11 @@ powerup_hud_overlay()
 
 	while(true)
 	{
-		if(level.can_do_quest == true)
-		{
-			level.powerup_hud[0].y = -50;
-			level.powerup_hud[1].y = -50;
-		}
-
 		if(level.zombie_vars["zombie_powerup_insta_kill_time"] < 5)
 		{
 			wait(0.1);		
 			level.powerup_hud[1].alpha = 0;
 			wait(0.1);
-			
 
 		}
 		else if(level.zombie_vars["zombie_powerup_insta_kill_time"] < 10)

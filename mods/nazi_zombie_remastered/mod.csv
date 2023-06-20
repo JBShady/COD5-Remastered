@@ -124,6 +124,7 @@ localize,remastered_weap
 xanim,viewmodel_ray_gun_idle_new
 menufile,ui/hud.menu
 rawfile,init_remastered.cfg
+rawfile,default_controller_unbind.cfg
 xmodel,viewmodel_usa_double_barrel_2023
 localize,key
 material,char1_bio

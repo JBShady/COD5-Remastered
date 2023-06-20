@@ -149,6 +149,12 @@ LANG_ENGLISH        "Controller Inversion"
 REFERENCE           CTRL_SENSE
 LANG_ENGLISH        "Controller Sensitivity"
 
+REFERENCE           CTRL_FLIP
+LANG_ENGLISH        "Controller Triggers"
+
+REFERENCE           CTRL_FLIPPED
+LANG_ENGLISH        "Flipped"
+
 REFERENCE           MODIFIED_DEFAULT
 LANG_ENGLISH        "Modified Default"
 
@@ -201,13 +207,10 @@ REFERENCE           CONTROLLER_SUPPORT
 LANG_ENGLISH        "Controller Mode"
 
 REFERENCE           CONTROLLER_V1
-LANG_ENGLISH        "Binds controller and switches to console style HUD buttons."
+LANG_ENGLISH        "Gamepad disabled. \nEnable to bind controls and use console style HUD buttons."
 
 REFERENCE           CONTROLLER_V2
-LANG_ENGLISH        "Controller script executed. \nHUD using D-pad arrows and ^4X^7 on hints. \nWarning: Only Xbox controllers have native support."
-
-REFERENCE           CONTROLLER_V2_PS3
-LANG_ENGLISH        "Controller script executed. \nHUD using D-pad arrows and ^1@^7 on hints. \nWarning: PlayStation controllers require external software."
+LANG_ENGLISH        "Gamepad enabled. \nNote: Only Xbox controllers have native support. Active during gameplay."
 
 REFERENCE           HINT_GAMETYPE
 LANG_ENGLISH        "Adjusts the flow of zombie waves. Classic mode reverts back to the 24 per-round limit in solo and removes Carpenter power-ups."

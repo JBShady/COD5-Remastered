@@ -3,7 +3,7 @@
 #define OPTIONS_STYLE			1
 
 #define 	CHOICE_SEP_1		30
-#define 	CHOICE_SEP_2		32
+#define 	CHOICE_SEP_2		34
 
 #include "ui_mp/menustyle.inc"
 #include "ui/choices_setup_common.menu"
@@ -64,16 +64,13 @@
 		
 		CHOICE_BIND( 31, "@MENU_THROW_FRAG_GRENADE", "+frag", ; )
 		CHOICE_BIND( 32, "@MENU_THROW_SPECIAL_GRENADE", "+smoke", ; )
-		
+		CHOICE_BIND_VIS( 33, "@MPUI_RIFLE_GRENADE", "+actionslot 3", ;, when( !dvarbool( ui_multiplayer ) ), !dvarbool( ui_multiplayer ) ) 			//sp
+		CHOICE_BIND_VIS( 34, "@MENU_EQUIPMENT", "+actionslot 4", ;, when( !dvarbool( ui_multiplayer ) ),!dvarbool( ui_multiplayer ) )					//sp
+	
 		CHOICE_SEPARATOR( CHOICE_SEP_2 )
 
-		CHOICE_BIND_VIS( 33, "@MENU_ACTION_INVENTORY", "+actionslot 3", ;, when( dvarbool( ui_multiplayer ) ), dvarbool( ui_mulitplayer ) ) 	//mp
-		CHOICE_BIND_VIS( 33, "@MPUI_RIFLE_GRENADE", "+actionslot 3", ;, when( !dvarbool( ui_multiplayer ) ), !dvarbool( ui_multiplayer ) ) 			//sp
-
-		CHOICE_BIND_VIS( 34, "@MENU_GROUND_SUPPORT", "+actionslot 4", ;, when( dvarbool( ui_multiplayer ) ), dvarbool( ui_multiplayer )  ) 				//mp
-		CHOICE_BIND_VIS( 34, "@MENU_SATCHEL_CHARGE", "+actionslot 2", ;, when( !dvarbool( ui_multiplayer ) ), !dvarbool( ui_multiplayer ) ) 						//sp
-
-		CHOICE_BIND_VIS( 35, "@MENU_EQUIPMENT", "+actionslot 4", ;, when( !dvarbool( ui_multiplayer ) ),!dvarbool( ui_multiplayer ) )					//sp
+		CHOICE_DVARFLOATLIST_VIS( 35, "@REMASTERED_CTRL_FLIP", gpad_flip_triggers, { "@MENU_DEFAULT" 0 "@REMASTERED_CTRL_FLIPPED" 1 }, exec "bind BUTTON_RSHLDR +attack"; exec "bind BUTTON_LSHLDR +speed_throw"; exec "bind BUTTON_RTRIG +frag"; exec "bind BUTTON_LTRIG +smoke"; exec "bind2 BUTTON_RSHLDR +gas"; exec "bind2 BUTTON_LSHLDR +reverse", when( !dvarint(gpad_flip_triggers) ) ) // when 0
+		CHOICE_DVARFLOATLIST_VIS( 35, "@REMASTERED_CTRL_FLIP", gpad_flip_triggers, { "@MENU_DEFAULT" 0 "@REMASTERED_CTRL_FLIPPED" 1 }, exec "bind BUTTON_RSHLDR +frag"; exec "bind BUTTON_LSHLDR +smoke"; exec "bind BUTTON_RTRIG +attack"; exec "bind BUTTON_LTRIG +speed_throw"; exec "bind2 BUTTON_RTRIG +gas"; exec "bind2 BUTTON_LTRIG +reverse", when( dvarint(gpad_flip_triggers) ) ) // when 0
 
 		//CHOICE_BACK( "@MENU_BACK", close self )
 

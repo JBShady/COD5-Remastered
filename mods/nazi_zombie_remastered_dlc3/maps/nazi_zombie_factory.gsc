@@ -3148,8 +3148,6 @@ phase_three_quest()
 	level thread generator_checker(); // start checking for generator to be powered
 	level notify("tools_used_up"); // cleans up hud, we no longer need tools
 	
-	level.can_do_quest = false; // we set this to false so powerup hud heights go back to normal
-
 	wait(5); // wait a few seconds and clean up the models, shows player we are done fixing individual teles
 	level.lever delete(); 
 	level.lever_pipe delete();

@@ -106,8 +106,8 @@
 
 		CHOICE_SEPARATOR( CHOICE_SEP_2 )
 
-		CHOICE_DVARFLOATLIST_FOCUS_VIS( 32, "@REMASTERED_CONTROLLER_SUPPORT", cg_drawXboxHUD, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, exec "unbind f"; exec "exec default_controller.cfg" /*; exec "bind BUTTON_RSHLDR +attack"; exec "bind BUTTON_LSHLDR +speed_throw"; exec "bind BUTTON_RTRIG +frag"; exec "bind BUTTON_LTRIG +smoke"*/, setLocalVarBool controller 1, CLEAR_HINTS , when ( !dvarint(cg_drawXboxHUD) ) )
-		CHOICE_DVARFLOATLIST_FOCUS_VIS( 32, "@REMASTERED_CONTROLLER_SUPPORT", cg_drawXboxHUD, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, exec "bind f +activate" , setLocalVarBool controller 1, CLEAR_HINTS , when ( dvarint(cg_drawXboxHUD) ) )
+		CHOICE_DVARFLOATLIST_FOCUS_VIS( 32, "@REMASTERED_CONTROLLER_SUPPORT", cg_drawXboxHUD, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, exec "unbind f"; exec "exec default_controller.cfg"; setdvar gpad_flip_triggers 0, setLocalVarBool controller 1, CLEAR_HINTS , when ( !dvarint(cg_drawXboxHUD) ) )
+		CHOICE_DVARFLOATLIST_FOCUS_VIS( 32, "@REMASTERED_CONTROLLER_SUPPORT", cg_drawXboxHUD, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, exec "bind f +activate"; exec "exec default_controller_unbind.cfg", setLocalVarBool controller 1, CLEAR_HINTS , when ( dvarint(cg_drawXboxHUD) ) )
 
 		//CHOICE_DVARFLOATLIST_VIS( 31, "@REMASTERED_CONTROLLER_SUPPORT", controller_dummy, { "@REMASTERED_CONTROLLER_ENABLE" 0 "@REMASTERED_CONTROLLER_EXECUTED" 1 }, setLocalVarBool controller_enabled 1; exec "exec default_controller.cfg" , when ( !localVarBool( controller_enabled) ) )
 
@@ -183,7 +183,6 @@
 		{
 			name			controller_help_2
 			text			"@REMASTERED_CONTROLLER_V2"
-//			text			"@REMASTERED_CONTROLLER_V2_PS3"
 			type			1
 			style			WINDOW_STYLE_FILLED
 			textstyle		ITEM_TEXTSTYLE_SHADOWED

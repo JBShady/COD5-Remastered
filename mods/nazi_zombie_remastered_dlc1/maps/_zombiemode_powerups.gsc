@@ -73,7 +73,7 @@ powerup_hud_overlay()
 		level.powerup_hud[i].horzAlign = "center"; 
 		level.powerup_hud[i].vertAlign = "bottom";
 		level.powerup_hud[i].x = -32 + (i * 15); 
-		level.powerup_hud[i].y = level.powerup_hud[i].y - 35; 
+		level.powerup_hud[i].y = level.powerup_hud[i].y - 50; 
 		level.powerup_hud[i].alpha = 0.8;
 		//hud SetShader( shader_inst, 24, 24 );
 	}
@@ -948,11 +948,11 @@ full_ammo_powerup( drop_item )
 	    {
 	        players[i] SetWeaponAmmoClip( "m8_white_smoke", 4 );
 	    }
-	    if( players[i] HasWeapon( "m7_launcher" ) )
+	    if( players[i] HasWeapon( "m7_launcher_zombie" ) )
 	    {
-			players[i] giveweapon("m7_launcher");
+			players[i] giveweapon("m7_launcher_zombie");
 			//players[i] setactionslot(3,"weapon","m7_launcher");
-	        players[i] SetWeaponAmmoClip( "m7_launcher", 1 );
+	        players[i] SetWeaponAmmoClip( "m7_launcher_zombie", 1 );
 	        //for some reason gettin set to 21
 	    }
 

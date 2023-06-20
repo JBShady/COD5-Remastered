@@ -123,6 +123,7 @@ fx,maps/zombie/fx_zombie_light_glow_green
 fx,maps/zombie/fx_zombie_light_glow_red
 fx,impacts/large_woodhit_noshot
 rawfile,init_remastered.cfg
+rawfile,default_controller_unbind.cfg
 xmodel,viewmodel_usa_double_barrel_2023
 localize,key
 material,asylum_bio1

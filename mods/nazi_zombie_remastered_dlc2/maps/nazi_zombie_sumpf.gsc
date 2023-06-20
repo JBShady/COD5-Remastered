@@ -47,7 +47,6 @@ main()
 		
 	level thread maps\_callbacksetup::SetupCallbacks();
 
-	level.egg_begun = 0;
 	level.character_tasks_completed = 0; // for our 4 player tasks, compare to playercount	
 	level.sack_has_been_found = 0; // for flogger step
 	level.meteor_ready = 0; // for our 20 zaps
@@ -721,7 +720,6 @@ book_useage()
 
 		// Quest begins
 		level.first_time = 0; // for our diary vox
-		level.egg_begun = 1;
 		wait(2.5); // we wait so players dont instantly pick up items after quest activates
 		level.handheld_radio_upper thread radio_drop();
 		level thread vodka_pickup();

@@ -14,6 +14,7 @@ This mod contains bug fixes, quality of life tweaks, fixed inconsistencies, and 
 * If you notice any issues with the mod after compiling, please let me know. However, I tested the files on a fresh install and everything appeared to work.
 * Keep in mind that not every script file (.gsc & .csc) in the \mods directory has been modified, but having them all gives you complete control of every aspect of each map
 
+<p align="center">
 nazi_zombie_remastered (Nacht Der Untoten) 
 
 nazi_zombie_remastered_dlc1 (Verrückt)
@@ -21,11 +22,12 @@ nazi_zombie_remastered_dlc1 (Verrückt)
 nazi_zombie_remastered_dlc2 (Shi No Numa)
 
 nazi_zombie_remastered_dlc3 (Der Riese)
+</p>
 
 ## Change Notes
 
 ### General
-* Added all zombiemode achievements that were on the console version: tracked through player stats, available on the main menu, display a completion notification with sound, an image, and text 
+* Added all zombie mode achievements that were on the console version, all tracked through player stats, available on the main menu, and will display a completion notification with sound, an image, and text 
 * All maps now use the same (more optimized) zombie spawning formula as Der Riese, fixing the unbalanced 24-limit on solo. Togglable with the new "Gametype" setting in Game Options.
 * All maps now make use of improved scripting and bug fixes that were only added into the later DLCs. 
 * AI no longer pushes, creating a "grabbing" effect where touching zombies slowed the player down. Togglable with the new "Enemy Pushing" setting in Game Options.

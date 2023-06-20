@@ -207,6 +207,7 @@ xanim,viewmodel_anim_richtofen_diary_closed_pull_out
 xanim,viewmodel_anim_richtofen_diary_closed_idle
 xanim,viewmodel_anim_richtofen_diary_closed_put_away
 rawfile,mp/playeranim.script
+rawfile,default_controller_unbind.cfg
 xmodel,panel_fuse
 xmodel,static_global_electric_wire
 xmodel,static_seelow_toolbox

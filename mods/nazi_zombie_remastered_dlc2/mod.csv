@@ -194,6 +194,7 @@ xanim,ai_zombie_boardtear_crawl_r_4
 xanim,ai_zombie_boardtear_crawl_r_5
 xanim,ai_zombie_boardtear_crawl_r_6
 rawfile,init_remastered.cfg
+rawfile,default_controller_unbind.cfg
 localize,key
 material,hud_arrow_left
 material,hud_arrow_right
