@@ -16,11 +16,11 @@ This mod contains bug fixes, quality of life tweaks, fixed inconsistencies, and 
 
 <p align="center">
 nazi_zombie_remastered (Nacht Der Untoten) 
-
+<br>
 nazi_zombie_remastered_dlc1 (Verrückt)
-
+<br>
 nazi_zombie_remastered_dlc2 (Shi No Numa)
-
+<br>
 nazi_zombie_remastered_dlc3 (Der Riese)
 </p>
 
