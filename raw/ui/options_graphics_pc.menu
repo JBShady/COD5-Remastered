@@ -77,12 +77,11 @@
 		CHOICE_DDVARALTTEXT_VIS( 25, "@MENU_ANTIALIASING", "@MENU_2X", when( dvarint(r_aasamples)==2 && dvarBool( cl_ingame ) ) )
 		CHOICE_DDVARALTTEXT_VIS( 25, "@MENU_ANTIALIASING", "@MENU_4X", when( dvarint(r_aasamples)==4 && dvarBool( cl_ingame ) ) )
 		CHOICE_DDVARALTTEXT_VIS( 25, "@MENU_ANTIALIASING", "@REMASTERED_8X", when( dvarint(r_aasamples)==8 && dvarBool( cl_ingame ) ) )
-		CHOICE_DDVARALTTEXT_VIS( 25, "@MENU_ANTIALIASING", "@REMASTERED_16X", when( dvarint(r_aasamples)==16 && dvarBool( cl_ingame ) ) )
 
 		CHOICE_DVARENUMLIST_VIS( 22, "@MENU_VIDEO_MODE", ui_r_mode, r_mode, setLocalVarBool ui_showApply 1, when( dvarint(sv_running)==0 && !dvarBool( cl_ingame ) ); )
 		CHOICE_DVARENUMLIST_VIS( 23, "@MENU_SCREEN_REFRESH_RATE", ui_r_displayRefresh, r_displayRefresh, setLocalVarBool ui_showApply 1;, when( ( (dvarint(sv_running)==0) || ( localVarInt(ui_allow_graphic_change)==1 ) ) && ( !dvarBool( cl_ingame ) ) ); )
 		CHOICE_DVARSTRINGLIST_VIS( 24, "@MENU_ASPECT_RATIO", ui_r_aspectratio, { "@MENU_AUTO"; "auto"; "@MENU_STANDARD_4_3"; "standard"; "@MENU_WIDE_16_10"; "wide 16:10"; "@MENU_WIDE_16_9"; "wide 16:9" }, setLocalVarBool ui_showApply 1, when( ( (dvarint(sv_running)==0) || ( localVarInt(ui_allow_graphic_change)==1 ) ) && ( !dvarBool( cl_ingame ) ) ); )
-		CHOICE_DVARFLOATLIST_VIS( 25, "@MENU_ANTIALIASING", ui_r_aasamples, { "@MENU_OFF" 1 "@MENU_2X" 2 "@MENU_4X" 4 "@REMASTERED_8X" 8 "@REMASTERED_16X" 16 }, setLocalVarBool ui_showApply 1;, when( ( (dvarint(sv_running)==0) || ( localVarInt(ui_allow_graphic_change)==1 ) ) && ( !dvarBool( cl_ingame ) ) ); )
+		CHOICE_DVARFLOATLIST_VIS( 25, "@MENU_ANTIALIASING", ui_r_aasamples, { "@MENU_OFF" 1 "@MENU_2X" 2 "@MENU_4X" 4 "@REMASTERED_8X" 8 }, setLocalVarBool ui_showApply 1;, when( ( (dvarint(sv_running)==0) || ( localVarInt(ui_allow_graphic_change)==1 ) ) && ( !dvarBool( cl_ingame ) ) ); )
 
 		//CHOICE_DVARYESNO( 23, "@MENU_FULLSCREEN", ui_r_fullscreen, setLocalVarBool ui_showApply 1 )
 		//CHOICE_DVARSTRINGLIST( 26, "@MENU_RENDERING_METHOD_PREFERENCE", ui_r_rendererpreference, { "@MENU_AUTO"; "Default"; "2.0"; "Shader model 2.0"; "3.0"; "Shader Model 3.0"  }, setLocalVarBool ui_showApply 1 )

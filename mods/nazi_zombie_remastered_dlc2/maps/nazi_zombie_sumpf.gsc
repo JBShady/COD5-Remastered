@@ -132,7 +132,6 @@ main()
 	level thread whisper_radio();
 	level thread meteor_trigger();
 
-	level thread ee_models_setup();
 	level thread book_useage();
 	// JMA - make sure tesla gun gets added into magic box after round 5
 //	maps\_zombiemode_weapons::add_limited_weapon( "tesla_gun", 0);
@@ -626,11 +625,6 @@ intro_screen()
 
 ee_models_setup() // Sets up models, no functionality
 {
-	wait(1.5);
-	// Diary is always in same spot
-	level.diary = spawn( "script_model",( 11297 , 3625 , -605.5) );
-	level.diary setmodel("static_berlin_books_diary");
-	
 	// Radio is always in same spot
 	level.handheld_radio_upper = spawn("script_model", (10373, 812.8, -318) ); // Possibly adjust coords/angle but good enough for now
 	level.handheld_radio_upper setmodel("prop_mp_handheld_radio");
@@ -640,7 +634,6 @@ ee_models_setup() // Sets up models, no functionality
 	level.vodka_finder = spawn( "script_model",( 12627, -1167, -603) );
 	level.vodka_finder setmodel("static_berlin_mortarpestle");
 	level.vodka_finder.angles = (0,57,0); // Pointing at spot 1
-	level.vodka_finder hide();
 	//level.vodka_finder.angles = (0,-160,0); // Pointing at spot 2
 	//level.vodka_finder.angles = (0,145,0); // Pointing at spot 3
 
@@ -689,6 +682,10 @@ ee_models_setup() // Sets up models, no functionality
 		break;
 	}
 
+	level.handheld_radio_upper thread radio_drop();
+	level thread vodka_pickup();
+	level thread rope_pickup();
+
 }
 
 book_useage() 
@@ -698,6 +695,10 @@ book_useage()
 	book_trig SetCursorHint( "HINT_NOICON" );
 	book_trig UseTriggerRequireLookAt();
 
+	// Diary is always in same spot
+	level.diary = spawn( "script_model",( 11297 , 3625 , -605.5) );
+	level.diary setmodel("static_berlin_books_diary");
+	
 	if(IsDefined(book_trig) )
 	{
 		maniac_l = getent("maniac_l", "targetname");
@@ -715,15 +716,11 @@ book_useage()
 			maniac_r playsound("maniac_r");
 			
 		}
-	
-		players = get_players();
 
 		// Quest begins
+		level thread ee_models_setup();
 		level.first_time = 0; // for our diary vox
 		wait(2.5); // we wait so players dont instantly pick up items after quest activates
-		level.handheld_radio_upper thread radio_drop();
-		level thread vodka_pickup();
-		level thread rope_pickup();
 		level thread diary_pickup();
 	}
 
@@ -1359,7 +1356,6 @@ vodka_pickup()
 	level.something_is_fishy = 0;
 	level.where_are_we = randomintrange(1,4); // first box to appear is random
 	level.vodka_magic_number = randomintrange(1,4); // will be a random num 1,2,3
-	level.vodka_finder show();
 
 	level.vodka_finder_trig = spawn( "trigger_radius",( 12627, -1167, -603), 0, 30, 25 );
 	wait_network_frame();
@@ -2303,6 +2299,10 @@ sack_spawn()
 
 				player playlocalsound("sack_pickup");
 
+				if(isDefined(level.vodka_finder))
+				{
+					level.vodka_finder delete();
+				}
 
 				sack_trig delete();
 				sack delete();
