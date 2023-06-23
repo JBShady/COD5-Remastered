@@ -67,6 +67,7 @@ main()
 	precacheModel("lights_berlin_subway_hat_100" );
 	precachemodel("collision_geo_32x32x128");
 	precacheModel("collision_wall_64x64x10"); // new
+	precachemodel("char_usa_raider_gear_flametank");
 
 	precacheModel("zombie_handheld_radio"); // cut radio
 	precacheModel("zombie_books_open");

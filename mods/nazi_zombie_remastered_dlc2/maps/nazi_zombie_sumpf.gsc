@@ -69,6 +69,7 @@ main()
 	PrecacheShader( "hud_sack_final" );
 
 	//ESM - red and green lights for the traps
+	precachemodel("char_usa_raider_gear_flametank");
 	precachemodel("zombie_zapper_cagelight_red");
 	precachemodel("zombie_zapper_cagelight_green");
 	precacheshellshock("electrocution");

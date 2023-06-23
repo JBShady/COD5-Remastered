@@ -11,6 +11,7 @@ main()
 
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_PROTO_LEVEL_PLACE");
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_PROTO_LEVEL_TIME");
+	precachemodel("char_usa_raider_gear_flametank");
 
 	include_weapons();
 	include_powerups();
@@ -27,7 +28,7 @@ main()
 	level thread above_couches_death();
 	level thread above_roof_death();
 	level thread below_ground_death();
-
+	
 	maps\_zombiemode_health_help::init();
 
 	maps\walking_anim::main();

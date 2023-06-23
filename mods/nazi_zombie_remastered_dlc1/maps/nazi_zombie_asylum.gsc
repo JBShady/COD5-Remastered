@@ -27,6 +27,7 @@ main()
 	precachemodel("lights_tinhatlamp_on");
 	precachemodel("lights_indlight_on");
 	precachemodel("lights_indlight");
+	precachemodel("char_usa_raider_gear_flametank");
 	
 	level.valve_hint_north = (&"ZOMBIE_BUTTON_NORTH_FLAMES");
 	level.valve_hint_south = (&"ZOMBIE_BUTTON_NORTH_FLAMES");
@@ -2858,14 +2859,14 @@ zombie_mg_watcher()
 	while(1)
 	{
 		level.mg_checker_zone waittill( "trigger", player ); // Waits for player to enter trigger
-		if(isTurretActive(level.mounted_mg) ) // Tests for if player is on the MG
-		{
-		//iprintln("Turret active");
+//		if(isTurretActive(level.mounted_mg) ) // Tests for if player is on the MG
+//		{
+			//iprintln("Turret active, always");
 			zombies = getaispeciesarray("axis");
 			for(i = 0; i < zombies.size; i++) // Checks through each zombie to see if they're touching the MG zone and (again) if turret is active (in case player gets off of MG during this loop)
 			{
 				//iprintln("Checking zombies");
-				if( zombies[i] IsTouching(level.mg_checker_zone) && isTurretActive(level.mounted_mg) )
+				if( zombies[i] IsTouching(level.mg_checker_zone) /*&& isTurretActive(level.mounted_mg)*/ )
 				{
 					//iprintlnbold("Zombie destroying MG");
 					zombies[i] waittill( "meleeanim", note ); // Waits for a melee animation to begin before destroying MG so it looks better
@@ -2880,9 +2881,8 @@ zombie_mg_watcher()
 				}
 				wait(0.25); // longer delay, creates some randomness of when MG gets destroyed
 			}
-		}
-
-		wait(0.05);
+//		}
+//		wait(0.05);
 	}
 }
 

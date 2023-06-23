@@ -50,7 +50,7 @@ SetupCallbacks()
 	level.onPlayerDamage = ::blank; 
 	level.onPlayerKilled = ::blank; 
 	level.onPlayerWeaponSwap = ::blank; 
-	
+
 	level.loadout = ::menuLoadout; 
 }
 
