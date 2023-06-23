@@ -1119,11 +1119,6 @@ treasure_chest_give_weapon( weapon_string )
 	self GiveWeapon( weapon_string, 0 );
 	self GiveMaxAmmo( weapon_string );
 	self SwitchToWeapon( weapon_string );
-	
-    if ( (isSubStr(weapon_string, "flamethrower") ) )
-    {
-		self thread flamethrower_swap();
-    }
 
 	play_weapon_vo(weapon_string);
 
@@ -1855,46 +1850,8 @@ play_VO_forweapon(weapon)
 
 	}
 
+
 }
 
-flamethrower_swap()
-{
-	self endon( "death" ); // if we die we end, because we perma lose the flamethrower
-	self endon( "disconnect" ); 
-	
-	while( 1 ) // once we get flamer, we need to do a loop so that we can easily remove it if we lose the weapon or remove/then re-add it if we are downed/revived
-	{
-		weapons = self GetWeaponsList(); 
-		self.has_flame_thrower = false; 
-		for( i = 0; i < weapons.size; i++ )
-		{
-			if( isSubStr(weapons[i], "flamethrower") )
-			{
-				self.has_flame_thrower = true; 
-			}
-		}
-		
-		if( self.has_flame_thrower )
-		{
-			if( !isdefined( self.flamethrower_attached ) || !self.flamethrower_attached )
-			{
-				self attach( "char_usa_raider_gear_flametank", "j_spine4" ); 
-				self.flamethrower_attached = true; 
-			}
-		}
-		else if( !self.has_flame_thrower ) // this could be either us downing or swapping out the weapon for a new weapon
-		{
-			if( isdefined( self.flamethrower_attached ) && self.flamethrower_attached )
-			{
-				self detach( "char_usa_raider_gear_flametank", "j_spine4" ); 
-				self.flamethrower_attached = false;
-			}
-		}
 
-		if(!self.has_flame_thrower && !self maps\_laststand::player_is_in_laststand()) // last stand becomes TRUE before we remove weapons, so luckily if we die and lose flamer, it will never accidently think we are still alive as FALSE laststand
-		{
-			break;
-		}
-		wait( 0.2 ); 
-	}
-}
+
