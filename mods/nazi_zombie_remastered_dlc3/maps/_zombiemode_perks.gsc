@@ -338,6 +338,12 @@ wait_for_player_to_take( player, weapon, packa_timer )
 				player achievement_notify( "DLC3_ZOMBIE_PAP_ONCE" );
 				player achievement_notify( "DLC3_ZOMBIE_TWO_UPGRADED" );
 				player thread play_packa_get_dialog(plr);
+
+			    if ( (isSubStr(weapon, "flamethrower") ) )
+			    {
+					player thread maps\_zombiemode_weapons::flamethrower_swap();
+			    }
+			    
 				return;
 			}
 		}
