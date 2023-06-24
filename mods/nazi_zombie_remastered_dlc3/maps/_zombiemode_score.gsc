@@ -441,8 +441,18 @@ score_highlight( score, value, is_change )
 	else
 	{
 		players = get_players();
-		num = ( players.size - self GetEntityNumber() ) - 1;
+	//	num = ( players.size - self GetEntityNumber() ) - 1;
+	//	y = ( num * -18 ) + score_y;
+		num = 0;
+		for ( i = 0; i < players.size; i++ )
+		{
+			if ( self == players[i] )
+			{
+				num = players.size - i - 1;
+			}
+		}
 		y = ( num * -18 ) + score_y;
+
 	}
 //	places = places_before_decimal( score ) - 1; 
 
