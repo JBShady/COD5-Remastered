@@ -2044,15 +2044,21 @@ designate_rival_hero(player, hero, rival)
 
 	// By this point, only one can be true, so we play a line
 	if(playHero)
-	{		
-		player_responder = "plr_" + hero +"_";
-		players[hero] play_headshot_response_hero(player_responder);
+	{	
+		if( is_player_valid( players[hero] ) ) // if we are down then we do not respond
+		{	
+			player_responder = "plr_" + hero +"_";
+			players[hero] play_headshot_response_hero(player_responder);
+		}
 	}		
 	
 	if(playRival)
 	{
-		player_responder = "plr_" + rival +"_";
-		players[rival] play_headshot_response_rival(player_responder);
+		if( is_player_valid( players[rival] ) ) // if we are down then we do not respond
+		{
+			player_responder = "plr_" + rival +"_";
+			players[rival] play_headshot_response_rival(player_responder);
+		}
 	}
 }
 

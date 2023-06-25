@@ -1875,14 +1875,20 @@ setup_rival_hero( player, hero, rival, response )
 	// By this point, only one can be true, so we play a line
 	if(playHero && players.size != 1)
 	{		
-		player_responder = "plr_" + hero +"_";
-		players[hero] create_and_play_responses( player_responder, "vox_hr_" + response, 0.25 );
+		if( is_player_valid( players[hero] ) ) // if we are down then we do not respond
+		{
+			player_responder = "plr_" + hero +"_";
+			players[hero] create_and_play_responses( player_responder, "vox_hr_" + response, 0.25 );
+		}
 	}		
 	
 	if(playRival && players.size != 1)
 	{
-		player_responder = "plr_" + rival +"_";
-		players[rival] create_and_play_responses( player_responder, "vox_riv_" + response, 0.25 );
+		if( is_player_valid( players[rival] ) ) // if we are down then we do not respond
+		{
+			player_responder = "plr_" + rival +"_";
+			players[rival] create_and_play_responses( player_responder, "vox_riv_" + response, 0.25 );
+		}
 	}
 }
 

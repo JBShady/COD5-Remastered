@@ -1157,8 +1157,11 @@ setup_responders( player, partner1, partner2, partner3, response )
 	indexPartner = maps\_zombiemode_weapons::get_player_index(players[set_partner]); // we grab the index of the player # who is chosen so we can compare their indext to their player # position, say Player 3
 	if(set_partner == indexPartner ) // if for some reason Player 3 has an index of player 4 (meaning that the original player 3 left, and player 4 has now been demoted to player 3), then we will NOT play a line
 	{
-		plr = "plr_" + set_partner + "_";
-		players[set_partner] create_and_play_responses( plr, "vox_" + response, 0.25 );
+		if( is_player_valid( players[set_partner] ) ) // if we are down then we do not respond
+		{
+			plr = "plr_" + set_partner + "_";
+			players[set_partner] create_and_play_responses( plr, "vox_" + response, 0.25 );
+		}
 	}	
 }
 create_and_play_responses( player_index, dialog_category, waittime )
