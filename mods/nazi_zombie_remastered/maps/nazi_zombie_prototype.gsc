@@ -609,23 +609,23 @@ player_zombie_awareness()
 				dist = 175;				
 				switch(zombs[i].zombie_move_speed)
 				{
-					case "walk": dist = 175;break;
-					case "run": dist = 225; break;
-					case "sprint": dist = 250;break;
+					case "walk": dist = 150;break;
+					case "run": dist = 125; break;
+					case "sprint": dist = 100;break;
 				}				
 				if(distance2d(zombs[i].origin,self.origin) < dist)
 				{				
 					yaw = self animscripts\utility::GetYawToSpot(zombs[i].origin );
 					//check to see if he's actually behind the player
-					if(yaw < -95 || yaw > 95)
+					if(yaw < -100 || yaw > 100)
 					{
-						if(randomintrange(0,10) < 3 )
+						if(randomintrange(0,10) < 2 )
 						{
 							//zombs[i] playsound ("behind_vocals");
 							plr = "plr_" + index + "_";
 							self thread create_and_play_dialog( plr, "vox_near", 0.05 );
 						}
-						else if(level.player_is_speaking != 1) // nacht is scarier: only 70% chance of behind vocals, only when player isnt talking, and they're quieter
+						else if(level.player_is_speaking != 1) // nacht is scarier: only 80% chance of behind vocals, only when player isnt talking, and they're quieter
 						{
 							zombs[i] playsound ("behind_vocals");
 						}
