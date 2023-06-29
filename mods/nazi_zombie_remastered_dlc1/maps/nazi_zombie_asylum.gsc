@@ -2842,11 +2842,12 @@ mount_mg(weapon_to_deploy)
 	
 	level.is_deployed = 1;
 
+	level thread zombie_mg_watcher();
+
 	playfx( level._effect["mg_placed"], level.mounted_mg.origin + (0,0,5), 3 ); // Dust FX
 	
 	play_sound_at_pos("blocker_end_move", level.mounted_mg.origin);
 	
-	level thread zombie_mg_watcher();
 }
 
 // Allows mounted MG to be destroyed to prevent glitching & for balance
@@ -2854,35 +2855,38 @@ zombie_mg_watcher()
 {
 	level endon("mg_destroyed");
 
-	level.mg_checker_zone = spawn( "trigger_radius",( 1250, 610, 65), 0, 50, 50 ); // Radius may need adjusting, origin based on where the player is likely standing when using mounted MG
+	mg_checker_zone = spawn( "trigger_radius",( 1250, 610, 65), 0, 50, 50 ); // Radius may need adjusting, origin based on where the player is likely standing when using mounted MG
 
 	while(1)
 	{
-		level.mg_checker_zone waittill( "trigger", player ); // Waits for player to enter trigger
-//		if(isTurretActive(level.mounted_mg) ) // Tests for if player is on the MG
-//		{
-			//iprintln("Turret active, always");
-			zombies = getaispeciesarray("axis");
-			for(i = 0; i < zombies.size; i++) // Checks through each zombie to see if they're touching the MG zone and (again) if turret is active (in case player gets off of MG during this loop)
+		//level.mg_checker_zone waittill( "trigger", player ); // Waits for player to enter trigger
+		if(isTurretActive(level.mounted_mg) ) // Tests for if player is on the MG
+		{
+			//iprintln("Turret active");
+			zombies = getaiarray("axis");
+			zombies = get_array_of_closest( mg_checker_zone.origin, zombies, undefined, 3 );
+			for(i = 0; i < zombies.size; i++) // Checks through the 3 closest zombie to see if they're touching the MG zone and (again) if turret is active (in case player gets off of MG during this loop)
 			{
-				//iprintln("Checking zombies");
-				if( zombies[i] IsTouching(level.mg_checker_zone) /*&& isTurretActive(level.mounted_mg)*/ )
+				//iprintln("Checking close zombies");
+				if( zombies[i] IsTouching(mg_checker_zone) && isTurretActive(level.mounted_mg) )
 				{
 					//iprintlnbold("Zombie destroying MG");
 					zombies[i] waittill( "meleeanim", note ); // Waits for a melee animation to begin before destroying MG so it looks better
 					if ( note == "sndnt#attack_whoosh" || note == "fire" )
 					{
-						//iprintlnbold("MG destroyed");
-						earthquake( RandomFloatRange( 1, 1.25 ), RandomFloatRange(0.2, 0.4), level.mg_checker_zone.origin, 48 ); 
-						level thread mg_clean_up(player);
-						level.mg_checker_zone delete();
+						user = level.mounted_mg GetTurretOwner(); 
+						level thread mg_clean_up(user);
+
+						earthquake( RandomFloatRange( 1, 1.25 ), RandomFloatRange(0.2, 0.4), mg_checker_zone.origin, 48 ); 
+						mg_checker_zone delete();
+
 						level notify ("mg_destroyed");
 					}
 				}
-				wait(0.25); // longer delay, creates some randomness of when MG gets destroyed
+				wait(randomfloatrange(0.25, 0.5));
 			}
-//		}
-//		wait(0.05);
+		}
+		wait(0.05);
 	}
 }
 
@@ -2912,7 +2916,7 @@ player_mg_watcher()
 }
 
 // Deletes MG with FX & sound before re-activating the trigger to allow for another attempt at mounting
-mg_clean_up(player)
+mg_clean_up(user)
 {
 	level.is_deployed = 0;
 
@@ -2922,9 +2926,9 @@ mg_clean_up(player)
 
 	wait(0.2);
 
-	index = maps\_zombiemode_weapons::get_player_index( player );
+	index = maps\_zombiemode_weapons::get_player_index( user );
 	plr = "plr_" + index + "_";	
-	player thread create_and_play_dialog( plr, "nvox_mg_destroy", 0.25 );
+	user thread create_and_play_dialog( plr, "nvox_mg_destroy", 0.25 );
 
 	wait(2.8); // Cooldown, "let the dust settle" before deploying again
 
