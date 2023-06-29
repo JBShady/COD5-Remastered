@@ -1136,7 +1136,8 @@ spectator_toggle_3rd_person()
 	self endon( "spawned_player" ); // If a player respawns
 	level endon( "intermission" ); // Game over, if all players die
 
-	wait(0.05); // ensure that we save our fov before we mess with it below
+	wait(0.1); // ensure that we save our fov before we mess with it below
+	wait_network_frame();
 	// We start by setting up everything for 3rd person, only below do we start the toggling if a player so chooses
 	third_person = true;
 	self SetClientDvars( "cg_thirdPerson", "1",	"cg_thirdPersonAngle", "354", "cg_fov", "40" );
@@ -1931,13 +1932,13 @@ round_think()
 
 		chalk_one_up();
 //		round_text( &"ZOMBIE_ROUND_BEGIN" );
-		if(!isDefined(level.mg_checker_zone) && level.is_deployed == 1 ) // fail safe
+/*		if(!isDefined(level.mg_checker_zone) && level.is_deployed == 1 ) // fail safe
 		{
 			iprintlnbold("Threading MG zone, failsafe");
 			iprintlnbold("If you see this, tell JB and remember what happened");
 			level thread maps\nazi_zombie_asylum::zombie_mg_watcher();
 		}
-
+*/
 		maps\_zombiemode_powerups::powerup_round_start();
 
 		players = get_players();

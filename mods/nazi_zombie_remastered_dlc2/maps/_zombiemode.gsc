@@ -1272,7 +1272,9 @@ spectator_toggle_3rd_person()
 	self endon( "spawned_player" ); // If a player respawns
 	level endon( "intermission" ); // Game over, if all players die
 
-	wait(0.05); // ensure that we save our fov before we mess with it below
+	wait(0.1); // ensure that we save our fov before we mess with it below
+	wait_network_frame();
+
 	// We start by setting up everything for 3rd person, only below do we start the toggling if a player so chooses
 	third_person = true;
 	self SetClientDvars( "cg_thirdPerson", "1",	"cg_thirdPersonAngle", "354", "cg_fov", "40" );
