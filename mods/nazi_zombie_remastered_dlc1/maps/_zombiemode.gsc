@@ -43,7 +43,6 @@ main()
 
 	level.hudelem_count = 0;
 	level.solo_reviving_failsafe = 0;
-	level.is_deployed = 0;
 
 	// Call the other zombiemode scripts
 	maps\_zombiemode_weapons::init();
@@ -1932,13 +1931,7 @@ round_think()
 
 		chalk_one_up();
 //		round_text( &"ZOMBIE_ROUND_BEGIN" );
-/*		if(!isDefined(level.mg_checker_zone) && level.is_deployed == 1 ) // fail safe
-		{
-			iprintlnbold("Threading MG zone, failsafe");
-			iprintlnbold("If you see this, tell JB and remember what happened");
-			level thread maps\nazi_zombie_asylum::zombie_mg_watcher();
-		}
-*/
+
 		maps\_zombiemode_powerups::powerup_round_start();
 
 		players = get_players();
