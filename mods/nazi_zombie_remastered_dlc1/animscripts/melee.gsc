@@ -172,6 +172,14 @@ MeleeCombat()
 						self [[ level.melee_miss_func ]]();
 					}
 				}
+
+				if(isDefined(level.mounted_mg) && isTurretActive(level.mounted_mg) && isDefined(level.mg_checker_zone) && self isTouching(level.mg_checker_zone))
+				{
+					if(randomintrange(0,3) == 0 ) // 1/3 in odds
+					{
+						level notify("mg_destroyed"); // sends notify only when MG trigger and turret are both defined/active
+					}
+				}
 			}
 			else if ( note == "stop" )
 			{
