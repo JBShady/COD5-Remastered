@@ -2541,7 +2541,7 @@ mount_mg_trigger()
 {
 	// Set up trigger & variables
 	mg_zone = spawn( "trigger_radius",( 1231.1, 616.9, 70), 0, 5, 10 );	// For volume area (first, must be in area)
-	mg_look_zone = spawn( "trigger_radius",( 1200, 619, 70), 0, 3, 10 ); // For what player must look at (then, must be looking at this)
+	mg_look_zone = spawn( "trigger_radius",( 1200, 619, 70), 0, 3, 10 ); // For what player must look at (then, must be looking at the front)
 
 	mg_zone waittill( "trigger", player ); 
 
@@ -2550,12 +2550,11 @@ mount_mg_trigger()
 	countdown_time = initial_hold_time;
 	actual_weapon = 0;
 	animation = 0;
-	level.is_deployed = 0;
 
-	for(;;) // While a player is in the trigger, this runs forever
+	for(;;) // Runs forever to track players entering the trigger
 	{
 	    wait(0.05);	
-		if( level.intermission == true || level.falling_down == true )
+		if( level.intermission == true || level.falling_down == true ) // if we start to game over while trying to plant MG
 		{
 			if( isdefined( player.deployProgressBar ) )
 			{
@@ -2811,7 +2810,6 @@ is_leaving_trigger(condition) // false == entering trigger so disable everything
 // Spawns turret and sets appropriate model
 mount_mg(weapon_to_deploy)
 {
-
 	switch(weapon_to_deploy)
 	{
 		case "bar_bipod":
@@ -2840,60 +2838,47 @@ mount_mg(weapon_to_deploy)
 			return;
 	}
 	
-	level.is_deployed = 1;
-
 	level thread zombie_mg_watcher();
 
+	earthquake( RandomFloatRange( 0.4, 0.5 ), RandomFloatRange(0.2, 0.4), ( 1250, 610, 65) , 100 ); 
 	playfx( level._effect["mg_placed"], level.mounted_mg.origin + (0,0,5), 3 ); // Dust FX
-	
 	play_sound_at_pos("blocker_end_move", level.mounted_mg.origin);
-	
 }
 
-// Allows mounted MG to be destroyed to prevent glitching & for balance
+// Allows mounted MG to be destroyed to prevent glitching & for balance (recieves notify from melee.gsc animscript when a zombie attacks while touching an MG that has a player on it)
 zombie_mg_watcher()
 {
-	level endon("mg_destroyed");
+	level.mg_checker_zone = spawn( "trigger_radius",( 1250, 610, 65), 0, 50, 50 ); // Spawns trigger on the area where a player would be standing when using the MG
 
-	mg_checker_zone = spawn( "trigger_radius",( 1250, 610, 65), 0, 50, 50 ); // Radius may need adjusting, origin based on where the player is likely standing when using mounted MG
+	level waittill("mg_destroyed");
 
-	while(1)
+	user = level.mounted_mg GetTurretOwner(); // save owner for vox
+
+	level.mg_checker_zone delete(); // delete trig
+	level.mounted_mg delete(); // delete turret
+
+	// Screen shake, fx, and sound
+	earthquake( RandomFloatRange( 1, 1.25 ), RandomFloatRange(0.2, 0.4), ( 1250, 610, 65) , 100 ); 
+	playfx( level._effect["large_ceiling_dust"], (1204, 616.9, 97.9) +( randomint( 5 ), randomint( 5 ), 6 ) ); // Large dust FX
+	play_sound_at_pos("mg_destroyed",(1204, 616.9, 97.9) );
+
+	wait(0.2); // Delay then some VOX
+
+	if(isDefined(user))
 	{
-		//level.mg_checker_zone waittill( "trigger", player ); // Waits for player to enter trigger
-		if(isTurretActive(level.mounted_mg) ) // Tests for if player is on the MG
-		{
-			//iprintln("Turret active");
-			zombies = getaiarray("axis");
-			zombies = get_array_of_closest( mg_checker_zone.origin, zombies, undefined, 3 );
-			for(i = 0; i < zombies.size; i++) // Checks through the 3 closest zombie to see if they're touching the MG zone and (again) if turret is active (in case player gets off of MG during this loop)
-			{
-				//iprintln("Checking close zombies");
-				if( zombies[i] IsTouching(mg_checker_zone) && isTurretActive(level.mounted_mg) )
-				{
-					//iprintlnbold("Zombie destroying MG");
-					zombies[i] waittill( "meleeanim", note ); // Waits for a melee animation to begin before destroying MG so it looks better
-					if ( note == "sndnt#attack_whoosh" || note == "fire" )
-					{
-						user = level.mounted_mg GetTurretOwner(); 
-						level thread mg_clean_up(user);
-
-						earthquake( RandomFloatRange( 1, 1.25 ), RandomFloatRange(0.2, 0.4), mg_checker_zone.origin, 48 ); 
-						mg_checker_zone delete();
-
-						level notify ("mg_destroyed");
-					}
-				}
-				wait(randomfloatrange(0.25, 0.5));
-			}
-		}
-		wait(0.05);
+		index = maps\_zombiemode_weapons::get_player_index( user );
+		plr = "plr_" + index + "_";	
+		user thread create_and_play_dialog( plr, "nvox_mg_destroy", 0.25 );
 	}
+
+	wait(2.8); // Cooldown "let the dust settle" then can deploy again
+
+	level thread mount_mg_trigger();
 }
 
+// Removes current primary weapon name while using MG so the HUD looks more clean because that weapon is put away while using the MG
 player_mg_watcher()
 {
-//	level endon("mg_destroyed");
-
 	while(1)
 	{
 		players = getplayers();
@@ -2913,26 +2898,6 @@ player_mg_watcher()
 		}
 		wait(0.05);
 	}
-}
-
-// Deletes MG with FX & sound before re-activating the trigger to allow for another attempt at mounting
-mg_clean_up(user)
-{
-	level.is_deployed = 0;
-
-	level.mounted_mg delete();
-	playfx( level._effect["large_ceiling_dust"], (1204, 616.9, 97.9) +( randomint( 5 ), randomint( 5 ), 6 ) ); 
-	play_sound_at_pos("mg_destroyed",(1204, 616.9, 97.9) );
-
-	wait(0.2);
-
-	index = maps\_zombiemode_weapons::get_player_index( user );
-	plr = "plr_" + index + "_";	
-	user thread create_and_play_dialog( plr, "nvox_mg_destroy", 0.25 );
-
-	wait(2.8); // Cooldown, "let the dust settle" before deploying again
-
-	level thread mount_mg_trigger();
 }
 
 isLookingAtMe(trig)
