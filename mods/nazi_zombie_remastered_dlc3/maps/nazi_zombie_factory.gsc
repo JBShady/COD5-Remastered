@@ -2821,9 +2821,7 @@ damage_trig_teleporter(location, angles)
 	
 	if(level.syncs_completed >= 3)
 	{
-		level.sync_timer_active = "success";
 		players = getplayers();
-
 		if(players.size != 4 ) // if we have 4 players they will all be spread out doing step at the same time so no need for extra reminder of success
 		{
 			playsoundatposition( "pa_buzz",  location ); // plays good sound on panel
@@ -2832,7 +2830,9 @@ damage_trig_teleporter(location, angles)
 		rando = players[randomint(players.size)];
 		index = maps\_zombiemode_weapons::get_player_index( rando );
 		plr = "plr_" + index + "_";
-		rando create_and_play_dialog( plr, "vox_gen_compliment", 0.1 );
+		rando thread create_and_play_dialog( plr, "vox_gen_compliment", 0.1 );
+
+		level.sync_timer_active = "success";
 	}
 }
 
@@ -2898,7 +2898,7 @@ mainframe_panel_b()
 
 				index = maps\_zombiemode_weapons::get_player_index(player);
 				plr = "plr_" + index + "_";
-				player thread create_and_play_dialog( plr, "vox_gen_move", 0.25 );
+				player thread create_and_play_dialog( plr, "vox_gen_move", 0.05 );
 				break;
 			}
 			else
