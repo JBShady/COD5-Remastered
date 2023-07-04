@@ -85,7 +85,6 @@ maps\nazi_zombie_asylum.gsc
 maps\nazi_zombie_asylum_fx.gsc
 maps\walking_anim.gsc
 mod.csv
-shock\electrocution.shock
 sound\voiceovers\zombie\dlc1\Player0\feedback_ammo_low_00.wav
 sound\voiceovers\zombie\dlc1\Player0\feedback_ammo_low_01.wav
 sound\voiceovers\zombie\dlc1\Player0\feedback_ammo_low_02.wav
@@ -463,7 +462,6 @@ sound\voiceovers\zombie\dlc1\Player3\weappick_sniper_01.wav
 sound\voiceovers\zombie\dlc1\Player3\weappick_sniper_02.wav
 sound\voiceovers\zombie\dlc1\Player3\weappick_sniper_03.wav
 sound\voiceovers\zombie\dlc1\Player3\weappick_sniper_04.wav
-vision\zombie_asylum.vision
 weapons\sp\30cal_bipod
 weapons\sp\30cal_bipod_crouch
 weapons\sp\30cal_bipod_deploying

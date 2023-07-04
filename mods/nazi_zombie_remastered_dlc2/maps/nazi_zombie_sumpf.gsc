@@ -1512,8 +1512,6 @@ vodka_pickup()
 			break;
 		}
 	}
-
-
 }
 
 rope_pickup() // Change to rope
