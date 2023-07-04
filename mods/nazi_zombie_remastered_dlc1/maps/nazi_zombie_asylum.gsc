@@ -997,7 +997,7 @@ toilet_useage()
 				//playsoundatposition ("cha_ching", toilet_trig.origin);
 				level.eggs = 1;
 				setmusicstate("eggs");
-				wait(245);	
+				wait(240);	
 				setmusicstate("WAVE_1");
 				level.eggs = 0;
 				

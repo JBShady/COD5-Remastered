@@ -2653,7 +2653,7 @@ toilet_useage()
 	self.vox_audio_secret_available = array_remove(self.vox_audio_secret_available,sound_to_play);	
 	player maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 2.75);
 	
-	wait(293);	
+	wait(291);	
 	setmusicstate("WAVE_1");
 	level.eggs = 0;				
 }
