@@ -120,9 +120,9 @@ maps\nazi_zombie_factory_fx.gsc
 maps\nazi_zombie_factory_new_eggs.gsc
 maps\nazi_zombie_factory_teleporter.gsc
 maps\nazi_zombie_sumpf_blockers.gsc
-maps\ugx_modder_help.gsc
 maps\walking_anim.gsc
 mod.csv
+sound\Stream\Music\Mission\zombie\mx_beauty.wav
 weapons\sp\falling_hands
 weapons\sp\m1garand_gl_zombie
 weapons\sp\m1garand_gl_zombie_upgraded

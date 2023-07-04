@@ -85,6 +85,7 @@ maps\nazi_zombie_asylum.gsc
 maps\nazi_zombie_asylum_fx.gsc
 maps\walking_anim.gsc
 mod.csv
+sound\Stream\Music\Mission\zombie\mx_lullaby.wav
 sound\voiceovers\zombie\dlc1\Player0\feedback_ammo_low_00.wav
 sound\voiceovers\zombie\dlc1\Player0\feedback_ammo_low_01.wav
 sound\voiceovers\zombie\dlc1\Player0\feedback_ammo_low_02.wav

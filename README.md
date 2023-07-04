@@ -194,9 +194,9 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Replaced the existing grey uniform zombie variant texture with an SS camouflage texture, which fits better with the battlefield atmosphere of the map.
 
 ## Verrückt
-* Renamed map from Zombie Verrückt to Verrückt, like in future Call of Duty titles
+* Renamed map from Zombie Verrückt to just Verrückt, also similar to how it was named in future Call of Duty titles
 * On co-op low rounds, the zombie spawning formula still has a separate calculation that spawns more zombies than normal to account for the players being split up and ensuring both sides of the spawn face enough of a threat
-* On this map, the team of Marines now uses camoflauged raider gear to reference how they were supposed to be a recon team in the storyline. First person viewmodel also reflects this, and this also helps differentiate the two different Marine crews. 
+* On this map, the team of Marines now uses camouflage raider gear to reference how they were supposed to be a recon team in the storyline. First person viewmodel also reflects this, and this also helps differentiate the two different Marine crews. 
 * Instead of randomizing the player models for each character, each Player (1, 2, 3, 4) always has a consistent and unique player model/face/gear.
 * Added the Nacht "sprint" crawler animation to bridge the consistency between the first two maps.
 * Added a second new type of "super sprinter" that comes after round 10, toggleable in Game Options.
@@ -206,6 +206,8 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Rewrote voiceover scripting to use improved code from later DLCs that reduced the repetiveness of how lines are played 
 * Reorganized voiceover categories to be less repetitive and more consistent, and also added new categories for powerups, perks, Teddy Bear (cut), and downed lines (cut).
 * Added generic pain voiceover to allign with the other three modded maps.
+* Fixed vision file changing when going downstairs in the power room
+* Fixed music audio dropping too much when in shower room zone
 
 ## Shi No Numa
 * Added "mission intro" in the bottom left corner to include storyline accurate info.

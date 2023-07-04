@@ -155,6 +155,7 @@ maps\nazi_zombie_sumpf_zipline.gsc
 maps\nazi_zombie_sumpf_zone_management.gsc
 maps\walking_anim.gsc
 mod.csv
+sound\Stream\Music\Mission\zombie\mx_the_one.wav
 weapons\sp\bazooka_zombie
 weapons\sp\falling_hands
 weapons\sp\m1garand_gl_zombie
