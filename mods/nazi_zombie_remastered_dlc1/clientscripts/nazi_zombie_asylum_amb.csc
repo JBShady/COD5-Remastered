@@ -69,7 +69,7 @@ main()
 	
   declareMusicState("eggs"); 
 	musicAlias("mx_eggs", 2);
-
+	
   declareMusicState("mx_dog_round");
 	musicAliasloop("mx_dog_wave", 2, 0.5);
 
