@@ -968,7 +968,7 @@ wait_for_sticky_fired()
 		self waittill( "grenade_fire", sticky, weap );
 		if( weap == "st_grenade" )
 		{
-			self thread zomb_stick(sticky);
+			self thread stick_grenade(sticky);
 		}
 
 	}
@@ -3775,7 +3775,7 @@ silent_while_down()
 }
 
 
-zomb_stick(sticky)
+stick_grenade(sticky)
 {
 	velocitySq = 10000 * 10000;
 	oldPos = sticky.origin;
@@ -3789,63 +3789,66 @@ zomb_stick(sticky)
 		sticky_pos = array_add(sticky_pos, sticky.origin);
 	}
 	
-	zom = GetAiSpeciesArray( "axis", "all" );
-	index = -1;
-	
-	for(i=0;i<zom.size;i++)
+	index = -1; // init variable, if it stays -1 that means we have not touched a zombie or player
+
+	sticked = GetAiSpeciesArray( "axis", "all" );	
+	for(i=0;i<sticked.size;i++) // first we check all zombies
 	{
-		ri_arm = zom[i] gettagorigin("j_elbow_ri");
-		le_arm = zom[i] gettagorigin("j_elbow_le");
-		if(distance2d(sticky.origin, zom[i].origin) < 20 || distance(sticky.origin, ri_arm) < 15 || distance(sticky.origin, le_arm) < 15)
+		ri_arm = sticked[i] gettagorigin("j_elbow_ri");
+		le_arm = sticked[i] gettagorigin("j_elbow_le");
+		if(distance2d(sticky.origin, sticked[i].origin) < 20 || distance(sticky.origin, ri_arm) < 15 || distance(sticky.origin, le_arm) < 15)
 		{
 			index = i;
 			break;
 		}
 	}
+
+	if( index == -1 ) // if index has not been saved and we are still at -1, that means we have not stuck to a zombie so now we check if we stick to a player
+	{
+		sticked = getplayers();
+		for(i=0;i<sticked.size;i++)
+		{
+			ri_arm = sticked[i] gettagorigin("j_elbow_ri");
+			le_arm = sticked[i] gettagorigin("j_elbow_le");
+			if(distance2d(sticky.origin, sticked[i].origin) < 20 || distance(sticky.origin, ri_arm) < 15 || distance(sticky.origin, le_arm) < 15)
+			{
+				index = i;
+				break;
+			}
+		}
+		if(index == self.entity_num) // we skip faking the nade if we sticky ourselves because you can't do this normally
+		{
+			return;
+		}
+	}
+
 	d = sticky depthinwater();
-	//NEW
-	if (index == -1 && d < 0 ) // if we touch the environemnt (excluding water)
-	  return;
-	//END NEW
-	//makes it weird in water
-	//but when i disable it, no weathering damage to grass/wood etc
+	if (index == -1 && d < 0 ) // if still -1, it is sticking to environment so we skip faking the nade as there is no need (unless we have a positive water depth, we fake in water so the grenade doesn't spam-sink weirdly)
+	{
+		return;
+	}
+
+	// Hide and delete actual grenade, spawn new fake grenade that actually sticks to AI/players
 	sticky hide();
 	spawnorig = sticky_pos[sticky_pos.size - 1];
 	sticky_model = Spawn("script_model", spawnorig);
 	sticky_model.angles = sticky.angles;
 	sticky_model setModel("weapon_mp_sticky_grenade");
-	sticky Delete();
-	
-	if(index != -1)
-	{
-		sticky_model EnableLinkTo();
-		sticky_model LinkTo(zom[index], "J_MainRoot");
-	}
-	
-	sticky_hud = undefined;
+	sticky delete();
+	sticky_model EnableLinkTo();
+	sticky_model LinkTo(sticked[index], "J_MainRoot");
+
 	count = 0;
-	
-	max_dist = 200;
-	
-	while(count < 1.75)
+	while(count < 1.75) // explode timer
 	{
-		dist = Distance( self.origin, sticky_model.origin );
 		count = count + 0.05;
 		wait(0.05);
 	}
-	
-	sticky_model.owner = self;
-	//layfx(level._effect["sticky_explode"], sticky_model.origin);
-	//radiusdamage(sticky_model.origin,180,1000,300,sticky_model.owner, "MOD_GRENADE_SPLASH");
-								//RANGE, MAX , MIN
-	//playsoundatposition("grenade_explode_dirt", sticky_model.origin);
-	//PhysicsExplosionSphere(sticky_model.origin, 300, 150, 0.4);
+
+	// Fake grenade explosion using engine function and then delete fake model
 	self MagicGrenadeType( "st_grenade", sticky_model.origin, ( 0, 0, 0 ), 0 ); 
-	//new grenade
 	wait(.05);
-	
 	sticky_model delete();
-	
 }
 
 disable_character_dialog()
