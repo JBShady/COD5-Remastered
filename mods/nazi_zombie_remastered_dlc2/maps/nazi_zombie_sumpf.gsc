@@ -1167,6 +1167,10 @@ pickup_radio_again()
 				player.has_special_weap = "zombie_item_radio";
 				break;
 			}
+			else
+			{
+				break;
+			}
 		}
 		if (!IsDefined(placed_radio_trig) )
 		{
@@ -1617,6 +1621,10 @@ katana_raise()
 				level.fishing_pole delete();
 				break;
 			}
+			else
+			{
+				break;
+			}
 		}
 		if (!IsDefined(level.fishing_pole) )
 		{
@@ -1683,6 +1691,10 @@ katana_raise()
 				level.fishing_pole_two delete();
 				break;
 			}
+			else
+			{
+				break;
+			}
 		}
 		if (!IsDefined(level.fishing_pole_two) )
 		{
@@ -1720,6 +1732,10 @@ katana_raise()
 			{
 				player thread create_and_play_dialog( "plr_2_", "vox_katana_wait", 0.25 );
 				wait(1);
+				break;
+			}
+			else
+			{
 				break;
 			}
 		}
@@ -1826,7 +1842,10 @@ give_katana()
 				level.sword_on_rope delete();
 				level.fishing_pole_three delete();
 				break;
-
+			}
+			else
+			{
+				break;
 			}
 		}
 		if (!IsDefined(level.fishing_pole_three) )
@@ -1902,7 +1921,6 @@ diary_pickup()
 
 				player thread diary_drop();
 				break;
-
 			}
 			else
 			{
