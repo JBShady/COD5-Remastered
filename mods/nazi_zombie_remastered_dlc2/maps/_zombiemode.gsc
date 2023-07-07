@@ -3813,17 +3813,17 @@ stick_grenade(sticky)
 			if(distance2d(sticky.origin, sticked[i].origin) < 20 || distance(sticky.origin, ri_arm) < 15 || distance(sticky.origin, le_arm) < 15)
 			{
 				index = i;
+				if(self == sticked[index]) // we skip faking the nade if we sticky ourselves because you can't do this normally
+				{
+					return;
+				}
 				break;
 			}
-		}
-		if(index == self.entity_num) // we skip faking the nade if we sticky ourselves because you can't do this normally
-		{
-			return;
 		}
 	}
 
 	d = sticky depthinwater();
-	if (index == -1 && d < 0 ) // if still -1, it is sticking to environment so we skip faking the nade as there is no need (unless we have a positive water depth, we fake in water so the grenade doesn't spam-sink weirdly)
+	if(index == -1 && d <= 0 ) // if still -1, it is sticking to environment so we skip faking the nade as there is no need (unless we have a positive water depth, we fake in water so the grenade doesn't spam-sink weirdly)
 	{
 		return;
 	}
