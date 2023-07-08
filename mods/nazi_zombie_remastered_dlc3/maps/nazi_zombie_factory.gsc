@@ -3543,7 +3543,7 @@ spawn_boiler_lever()
 			wait(0.75);
 			resetting = false;
 			
-			if(getplayers().size > 1)
+			if(getplayers().size > 1 && randomintrange(0,4) == 0)
 			{
 				index = maps\_zombiemode_weapons::get_player_index(player);
 				plr = "plr_" + index + "_";
@@ -3750,7 +3750,7 @@ spawn_sparks(location, teleporter, number) // NEED SPARK LOOP SOUND
 					{
 						level.bad_spark_error = 1;
 					
-						if(getplayers().size > 1 )
+						if(getplayers().size > 1 && randomintrange(0,4) == 0 )
 						{
 							index = maps\_zombiemode_weapons::get_player_index(player);
 							plr = "plr_" + index + "_";
@@ -3764,7 +3764,7 @@ spawn_sparks(location, teleporter, number) // NEED SPARK LOOP SOUND
 					{
 						level.you_failed_juice = 1;
 
-						if(getplayers().size > 1 )
+						if(getplayers().size > 1 && randomintrange(0,4) == 0 )
 						{
 							index = maps\_zombiemode_weapons::get_player_index(player);
 							plr = "plr_" + index + "_";
@@ -4028,9 +4028,12 @@ check_touching_trig()
 		level.lever_pipe rotateTo( (180,0,0), 0.25, 0.1, 0.1); // Neutral
 		level.where_are_we = 0; // Neutral		
 
-		index = maps\_zombiemode_weapons::get_player_index(self);
-		plr = "plr_" + index + "_";
-		self thread create_and_play_dialog( plr, "vox_gen_teamwork", 0.25 );
+		if(randomintrange(0,4) == 0 )
+		{
+			index = maps\_zombiemode_weapons::get_player_index(self);
+			plr = "plr_" + index + "_";
+			self thread create_and_play_dialog( plr, "vox_gen_teamwork", 0.25 );			
+		}
 	}
 	level.thread_only_once = 0;
 }
