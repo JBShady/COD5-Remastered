@@ -4,9 +4,9 @@
 
 #using_animtree( "generic_human" );
 
-// Uses new variable set in anim script on zombies called "current_speed", which stores the name of a zombie's current movement anim. Can then use it to test if the string contains walk, run, or sprint.
+// Uses new variable set in anim script on zombies (a "self" variable) called "current_speed", which stores the name of a zombie's current movement anim. Can then use it to test if the string contains walk, run, or sprint.
 
-// issues: sometimes last zomb is weird, super sprinter last zombie got stuck idling too much, last walker zombies sometimes dont go idle at all
+// issues: hard coded to not work on the last zombie to account for  how another loop is setting him to run, however maybe this could count as a feature 
 
 init()
 {
@@ -58,10 +58,10 @@ watchSmokeDetonation()
 {
 	self waittill( "explode", position ); // we wait for 1.5 seconds before grenade explodes after being thrown and then we start here, first delay is set in wep file
 
-	wait(1.5); // another delay of 1.5 seconds here so we let the smoke start expanding
+	wait(1.35); // another delay so we let the smoke start expanding
 
 	gasEffectArea = spawn("trigger_radius", position, 0, 120, 150); 
-	durationOfSmoke = 15;  // smoke only exists for a set amount of time
+	durationOfSmoke = 16;  // smoke only exists for a set amount of time
 
 	for(;;)
 	{
@@ -89,8 +89,8 @@ watchSmokeDetonation()
 					}
 				}   
 
-				rando = randomintrange(1,49);
-				if(rando <= 12 ) // 25% chance we do an additional taunt or idle even after being slowed. This is the only thing that effects walkers and crawlers--so they pretty much get stunned a lot more which makes sense, theyre more likely to be confused by smoke
+				rando = randomintrange(1,101);
+				if(rando <= 50 ) // 50% chance we do an additional taunt or idle even after being slowed. This is the only thing that effects walkers--so they pretty much get stunned a lot more which makes sense, theyre more likely to be confused by smoke
 				{
 					zombies[i] thread setSmokeStun(rando);
 				}    
@@ -112,7 +112,7 @@ watchSmokeDetonation()
 
 	gasEffectArea delete();
 	// smoke ends and we wait for it to fully clear
-	wait(1);
+	wait(0.8);
 
 	// fail safe to reset zombies back to og speed
 	zombies = getaiarray("axis");
@@ -150,7 +150,7 @@ setSmokeStun(rando)
 
 	if( self.has_legs )
 	{
-		if(rando == 1) // 1/12 chance we do a special taunt, otherwise just go idle
+		if(rando <= 5 ) // 10% chance we do a special taunt, otherwise just go idle
 		{
 			self do_a_taunt_smoke();
 		}
