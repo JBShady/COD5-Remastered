@@ -2115,7 +2115,8 @@ intel_spawn(intel, button_sound)
 
 WaitForWriteDownCompletion( DiaryHolder, button_sound )
 {
-	timer = 30;
+	timer = 15 + ((getplayers().size - 1) * 5); // 15, 20, 25, 30
+	iprintlnbold(timer);
 	if( !isdefined(DiaryHolder.intelProgressBar) ) // Set up progress bar
 	{
 		DiaryHolder thread create_and_play_dialog( "plr_3_", "vox_gen_cover", 0.25 );	// Only shout for help once per interaction, once we start doing progress bar
