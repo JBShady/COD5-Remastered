@@ -2115,7 +2115,7 @@ intel_spawn(intel, button_sound)
 
 WaitForWriteDownCompletion( DiaryHolder, button_sound )
 {
-	timer = 15 + ((getplayers().size - 1) * 5); // 15, 20, 25, 30
+	timer = 16 + ((getplayers().size - 1) * 4.67); // about 15, 20, 25, 30, tweaked for anim to end on cue
 
 	if( !isdefined(DiaryHolder.intelProgressBar) ) // Set up progress bar
 	{
