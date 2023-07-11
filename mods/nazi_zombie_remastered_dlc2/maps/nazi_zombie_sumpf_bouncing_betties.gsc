@@ -21,6 +21,7 @@ purchase_bouncing_betties()
 
 	level thread give_betties_after_rounds();
 	level thread update_betty_fires();
+	level thread set_betty_visible();
 
 }
 
@@ -31,7 +32,6 @@ buy_bouncing_betties()
 	self sethintstring( &"REMASTERED_ZOMBIE_BETTY_PURCHASE" );	
 	self setCursorHint( "HINT_NOICON" );
 
-	level thread set_betty_visible();
 	self.betties_triggered = false;
 
 	while(1)
@@ -44,6 +44,11 @@ buy_bouncing_betties()
 
 		if( is_player_valid( who ) )
 		{
+			if( !who maps\_zombiemode_weapons_sumpf::can_buy_weapon() )
+			{
+				wait( 0.1 );
+				continue;
+			}
 
 			if( who.score >= self.zombie_cost )
 			{				
