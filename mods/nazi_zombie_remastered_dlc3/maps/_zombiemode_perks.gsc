@@ -332,6 +332,10 @@ wait_for_player_to_take( player, weapon, packa_timer )
 				{
 					player GiveWeapon( weapon+"_upgraded" );
 					player GiveMaxAmmo( weapon+"_upgraded" );
+					if(weapon == "m1garand_gl_zombie")
+					{
+						player setactionslot(3,"altMode","m7_launcher_zombie_upgraded");
+					}
 				}
 				
 				player SwitchToWeapon( weapon+"_upgraded" );
