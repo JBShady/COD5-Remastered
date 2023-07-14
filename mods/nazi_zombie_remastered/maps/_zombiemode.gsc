@@ -393,8 +393,11 @@ init_anims()
 	level.scr_anim["zombie"]["sprint8"] = %ai_zombie_sprint_v2; 	
 	level.scr_anim["zombie"]["sprint9"] = %ai_zombie_sprint_v1; 
 	level.scr_anim["zombie"]["sprint10"] = %ai_zombie_sprint_v2; 	
-	level.scr_anim["zombie"]["sprint11"] = %ai_zombie_sprint_w_object_5; //super sprinters
-	level.scr_anim["zombie"]["sprint12"] = %ai_zombie_sprint_w_object_5; //super sprinters, 1/6  chance (ai_zombie_sprint_v4 is for Verruckt, which is a 1/3 chance)
+	level.scr_anim["zombie"]["sprint11"] = %ai_zombie_sprint_v1; 
+	level.scr_anim["zombie"]["sprint12"] = %ai_zombie_sprint_v2; 	
+	level.scr_anim["zombie"]["sprint13"] = %ai_zombie_sprint_v1; 
+	level.scr_anim["zombie"]["sprint14"] = %ai_zombie_sprint_v2; 	
+	level.scr_anim["zombie"]["sprint15"] = %ai_zombie_sprint_w_object_5; //super sprinters, 1/15  chance (ai_zombie_sprint_v4 is for Verruckt, which is a 1/3 chance)
 
 	// run cycles in prone
 	level.scr_anim["zombie"]["crawl1"] 	= %ai_zombie_crawl; 
@@ -425,19 +428,24 @@ init_anims()
 	level._zombie_walk_melee["zombie"] = [];
 	level._zombie_run_melee["zombie"] = [];
 
-	level._zombie_melee["zombie"][0] 				= %ai_zombie_attack_forward_v1; 
-	level._zombie_melee["zombie"][1] 				= %ai_zombie_attack_forward_v2; 
-	level._zombie_melee["zombie"][2] 				= %ai_zombie_attack_v1; 
-	level._zombie_melee["zombie"][3] 				= %ai_zombie_attack_v2;	
-	level._zombie_melee["zombie"][4]				= %ai_zombie_attack_v1;
-	level._zombie_melee["zombie"][5] 				= %ai_zombie_attack_v2; // Slow anim, increase odds of stopping to hit
-	level._zombie_melee["zombie"][6] 				= %ai_zombie_attack_forward_v1;  // Slow anim, increase odds of stopping to hit
-	level._zombie_melee["zombie"][7] 				= %ai_zombie_attack_forward_v2; // Slow anim, increase odds of stopping to hit
-	level._zombie_melee["zombie"][8]				= %ai_zombie_attack_v4; //New, from Verruckt/Riese
-	level._zombie_melee["zombie"][9]				= %ai_zombie_attack_v6;	 //New, from Verruckt/Riese
-	level._zombie_run_melee["zombie"][0]				=	%ai_zombie_run_attack_v1; //New, from Verruckt/Riese
-	level._zombie_run_melee["zombie"][1]				=	%ai_zombie_run_attack_v2; //New, from Verruckt/Riese
-	level._zombie_run_melee["zombie"][2]				=	%ai_zombie_run_attack_v3; //New, from Verruckt/Riese
+	level._zombie_melee["zombie"][0] 				= %ai_zombie_attack_forward_v1; // Slow anim
+	level._zombie_melee["zombie"][1] 				= %ai_zombie_attack_forward_v2; // Slow anim
+	level._zombie_melee["zombie"][2] 				= %ai_zombie_attack_forward_v1;  // Slow anim, repeated for higher odds to stop and hit
+	level._zombie_melee["zombie"][3] 				= %ai_zombie_attack_forward_v2;	 // Slow anim, repeated for higher odds to stop and hit
+	level._zombie_melee["zombie"][4]				= %ai_zombie_attack_v1; // Slow anim
+	level._zombie_melee["zombie"][5] 				= %ai_zombie_attack_v2; // Slow anim
+	level._zombie_melee["zombie"][6] 				= %ai_zombie_attack_v1;  // Slow anim, repeated for higher odds to stop and hit
+	level._zombie_melee["zombie"][7] 				= %ai_zombie_attack_v2; // Slow anim, repeated for higher odds to stop and hit
+	level._zombie_melee["zombie"][8]				= %ai_zombie_attack_v4; //New faster hit, from Verruckt/Riese, kept more rare  10% in this pool
+	level._zombie_melee["zombie"][9]				= %ai_zombie_attack_v6;	 //New faster hit, from Verruckt/Riese, kept more rare  10% in this pool
+
+	level._zombie_run_melee["zombie"][0]				=	%ai_zombie_run_attack_v1; //New fast hit, from Verruckt/Riese, when running, less than 50% we do one of these new hits otherwise we do classic old slow hits
+	level._zombie_run_melee["zombie"][1]				=	%ai_zombie_run_attack_v2; //New fast hit, from Verruckt/Riese
+	level._zombie_run_melee["zombie"][2]				=	%ai_zombie_run_attack_v3; //New fast hit, from Verruckt/Riese
+	level._zombie_run_melee["zombie"][3]				=	%ai_zombie_attack_forward_v1; // Slow anim, repeated for higher odds to stop and hit
+	level._zombie_run_melee["zombie"][4]				=	%ai_zombie_attack_forward_v2; // Slow anim, repeated for higher odds to stop and hit
+	level._zombie_run_melee["zombie"][5]				=	%ai_zombie_attack_v1; // Slow anim, repeated for higher odds to stop and hit
+	level._zombie_run_melee["zombie"][6]				=	%ai_zombie_attack_v2; // Slow anim, repeated for higher odds to stop and hit
 
 	if( isDefined( level.zombie_anim_override ) )
 	{
@@ -507,6 +515,18 @@ zombie_intro_screen( string1, string2, string3, string4, string5 )
 	wait (0.2);
 	//TUEY Set music state to WAVE_1
 	//setmusicstate("WAVE_1");
+
+	players = get_players(); // co-op failsafe because some stupid engine thing is resetting our cheat protected dvars right when we load in, so we wait a second and then change them again here
+	for( i = 0; i < players.size; i++ )
+	{
+		players[i] SetClientDvars(
+		"player_backSpeedScale", "0.9",
+		"player_strafeSpeedScale", "0.9",
+		"player_sprintStrafeSpeedScale", "0.8",
+		"aim_automelee_range", "96",
+        "aim_automelee_lerp", "50",
+        "player_meleechargefriction", "2500" );	
+	}
 }
 
 players_playing()
@@ -514,11 +534,21 @@ players_playing()
 	// initialize level.players_playing
 	players = get_players();
 	level.players_playing = players.size;
-	
+
 	wait( 20 );
 	
 	players = get_players();
 	level.players_playing = players.size;
+	for( i = 0; i < players.size; i++ )
+	{
+		players[i] SetClientDvars(
+		"player_backSpeedScale", "0.9",
+		"player_strafeSpeedScale", "0.9",
+		"player_sprintStrafeSpeedScale", "0.8",
+		"aim_automelee_range", "96",
+        "aim_automelee_lerp", "50",
+        "player_meleechargefriction", "2500" );	
+	}
 }
 
 //
@@ -578,28 +608,25 @@ onPlayerConnect()
 onPlayerConnect_clientDvars()
 {
 	self SetClientDvars( "cg_deadChatWithDead", "1",
-						   "cg_deadChatWithTeam", "1",
-						   "cg_deadHearTeamLiving", "1",
-						   "cg_deadHearAllLiving", "1",
-						   "cg_everyoneHearsEveryone", "1",
-						   "compass", "0",
-						   "hud_showStance", "0",
-						   "cg_thirdPerson", "0",
-						   //"cg_fov", "65",
-						   "cg_thirdPersonAngle", "0",
-						   "ammoCounterHide", "0",
-						   "miniscoreboardhide", "0",
-						   "ui_hud_hardcore", "0",
+		"cg_deadChatWithTeam", "1",
+		"cg_deadHearTeamLiving", "1",
+		"cg_deadHearAllLiving", "1",
+		"cg_everyoneHearsEveryone", "1",
+		"compass", "0",
+		"hud_showStance", "0",
+		"cg_thirdPerson", "0",
+		"cg_thirdPersonAngle", "0",
+		"ammoCounterHide", "0",
+		"miniscoreboardhide", "0",
+		"ui_hud_hardcore", "0" );
 
-							"player_backSpeedScale", "0.9",
-							"player_strafeSpeedScale", "0.9",
-							"player_sprintStrafeSpeedScale", "0.8" );
 	self SetClientDvars(
-							"aim_automelee_range", "96",
-							"aim_automelee_lerp", "50",
-							"aim_automelee_region_height", "240",
-							"aim_automelee_region_width", "320",
-							"player_meleechargefriction", "2500"); //"stickiness " when knifing
+		"aim_automelee_range", "96", // less likely to lunge
+        "aim_automelee_lerp", "50",  // lunge is quicker
+        "player_meleechargefriction", "2500", //"stickiness " when knifing
+		"player_backSpeedScale", "0.9", // back speed faster, similar to console
+		"player_strafeSpeedScale", "0.9", // buffed strafe
+		"player_sprintStrafeSpeedScale", "0.8" );  // buffed strafe
 
 	self SetClientDvars(
 		"cg_overheadIconsize", "0",
@@ -652,6 +679,24 @@ onPlayerSpawned()
 
 		self add_to_spectate_list();
 
+		self SetClientDvars(
+		"player_backSpeedScale", "0.9",
+		"player_strafeSpeedScale", "0.9",
+		"player_sprintStrafeSpeedScale", "0.8",
+		
+		"aim_automelee_range", "96",
+        "aim_automelee_lerp", "50",
+        "player_meleechargefriction", "2500" );
+
+		if( getDvar( "classic_perks" ) == "" || getDvar("classic_perks") == "0" ) // if dvar doesn't exist or is disabled, we stay default
+		{
+			self setclientdvar("player_lastStandBleedoutTime", 45);
+		}
+		else if( getDvar( "classic_perks" ) == "1" )
+		{
+			self setclientdvar("player_lastStandBleedoutTime", 30);
+		}
+
 		if( isdefined( self.initialized ) )
 		{
 			if( self.initialized == false )
@@ -663,26 +708,6 @@ onPlayerSpawned()
 				self maps\_zombiemode_score::set_player_score_hud( true ); 
 				self thread player_zombie_breadcrumb();
 				self thread player_reload();
-
-				self SetClientDvars(
-				"player_backSpeedScale", "0.9",
-				"player_strafeSpeedScale", "0.9",
-				"player_sprintStrafeSpeedScale", "0.8",
-				
-				"aim_automelee_range", "96",
-		        "aim_automelee_lerp", "50",
-		        "aim_automelee_region_height", "240",
-		        "aim_automelee_region_width", "320",
-		        "player_meleechargefriction", "2500" );
-				
-				if( getDvar( "classic_perks" ) == "" || getDvar("classic_perks") == "0" ) // if dvar doesn't exist or is disabled, we stay default
-				{
-					self setclientdvar("player_lastStandBleedoutTime", 45);
-				}
-				else if( getDvar( "classic_perks" ) == "1" )
-				{
-					self setclientdvar("player_lastStandBleedoutTime", 30);
-				}
 
 				//Init stat tracking variables
 				self.stats["kills"] = 0;

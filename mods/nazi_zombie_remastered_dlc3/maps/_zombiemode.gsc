@@ -986,6 +986,18 @@ zombie_intro_screen( string1, string2, string3, string4, string5 )
 	//TUEY Set music state to Splash Screencompass
 	setmusicstate( "SPLASH_SCREEN" );
 	wait (0.2);
+
+	players = get_players(); // failsafe because some stupid engine thing is resetting our cheat protected dvars right when we load in, so we wait a second and then change them again here
+	for( i = 0; i < players.size; i++ )
+	{
+		players[i] SetClientDvars(
+		"player_backSpeedScale", "0.9",
+		"player_strafeSpeedScale", "0.9",
+		"player_sprintStrafeSpeedScale", "0.8",
+		"aim_automelee_range", "96",
+        "aim_automelee_lerp", "50",
+        "player_meleechargefriction", "2500" );	
+	}
 	//TUEY Set music state to WAVE_1
 	//	setmusicstate("WAVE_1");
 }
@@ -1000,6 +1012,16 @@ players_playing()
 
 	players = get_players();
 	level.players_playing = players.size;
+	for( i = 0; i < players.size; i++ )
+	{
+		players[i] SetClientDvars(
+		"player_backSpeedScale", "0.9",
+		"player_strafeSpeedScale", "0.9",
+		"player_sprintStrafeSpeedScale", "0.8",
+		"aim_automelee_range", "96",
+        "aim_automelee_lerp", "50",
+        "player_meleechargefriction", "2500" );	
+	}
 }
 
 //
@@ -1061,21 +1083,18 @@ onPlayerConnect_clientDvars()
 		"compass", "0",
 		"hud_showStance", "0",
 		"cg_thirdPerson", "0",
-		//"cg_fov", "80",
 		"cg_thirdPersonAngle", "0",
 		"ammoCounterHide", "0",
 		"miniscoreboardhide", "0",
-		"ui_hud_hardcore", "0",
-		"player_backSpeedScale", "0.9",
-		"player_strafeSpeedScale", "0.9",
-		"player_sprintStrafeSpeedScale", "0.8" );
+		"ui_hud_hardcore", "0" );
 
 	self SetClientDvars(
-		"aim_automelee_range", "96",
-        "aim_automelee_lerp", "50",
-        "aim_automelee_region_height", "240",
-        "aim_automelee_region_width", "320",
-        "player_meleechargefriction", "2500"); //"stickiness " when knifing
+		"aim_automelee_range", "96", // less likely to lunge
+        "aim_automelee_lerp", "50",  // lunge is quicker
+        "player_meleechargefriction", "2500", //"stickiness " when knifing
+		"player_backSpeedScale", "0.9", // back speed faster, similar to console
+		"player_strafeSpeedScale", "0.9", // buffed strafe
+		"player_sprintStrafeSpeedScale", "0.8" );  // buffed strafe
 
 	self SetClientDvars(
 		"cg_overheadIconsize", "0",
@@ -1133,6 +1152,24 @@ onPlayerSpawned()
 
 		self add_to_spectate_list();
 
+		self SetClientDvars(
+		"player_backSpeedScale", "0.9",
+		"player_strafeSpeedScale", "0.9",
+		"player_sprintStrafeSpeedScale", "0.8",
+		
+		"aim_automelee_range", "96",
+        "aim_automelee_lerp", "50",
+        "player_meleechargefriction", "2500" );
+        
+		if( getDvar( "classic_perks" ) == "" || getDvar("classic_perks") == "0" ) // if dvar doesn't exist or is disabled, we stay default
+		{
+			self setclientdvar("player_lastStandBleedoutTime", 45);
+		}
+		else if( getDvar( "classic_perks" ) == "1" )
+		{
+			self setclientdvar("player_lastStandBleedoutTime", 30);
+		}
+
 		if( isdefined( self.initialized ) )
 		{
 			if( self.initialized == false )
@@ -1144,25 +1181,6 @@ onPlayerSpawned()
 				self maps\_zombiemode_score::set_player_score_hud( false, true ); // false is_change, true init (dont show+ on hud)
 				self thread player_zombie_breadcrumb();
 				self thread player_reload();
-				self SetClientDvars(
-				"player_backSpeedScale", "0.9",
-				"player_strafeSpeedScale", "0.9",
-				"player_sprintStrafeSpeedScale", "0.8",
-				
-				"aim_automelee_range", "96",
-		        "aim_automelee_lerp", "50",
-		        "aim_automelee_region_height", "240",
-		        "aim_automelee_region_width", "320",
-		        "player_meleechargefriction", "2500" );
-		        
-				if( getDvar( "classic_perks" ) == "" || getDvar("classic_perks") == "0" ) // if dvar doesn't exist or is disabled, we stay default
-				{
-					self setclientdvar("player_lastStandBleedoutTime", 45);
-				}
-				else if( getDvar( "classic_perks" ) == "1" )
-				{
-					self setclientdvar("player_lastStandBleedoutTime", 30);
-				}
 
 				//Init stat tracking variables
 				self.stats["kills"] = 0;
