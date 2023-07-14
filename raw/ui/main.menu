@@ -499,7 +499,7 @@
 			//CHOICE_HIGHLIGHT( 1, 1 )
 			//CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@MENU_NEWGAME", exec DEVMAP_LEVEL_TRAINING; LOCAL_ZOMBIE_RESET, ;, ;, when( !localvarBool( ui_hideBack ) );, name newgame )
 			//CHOICE_BUTTON_FOCUS_VIS_NOHI_EX( 1, "@MENU_RESUMEGAME", open resume_popmenu; LOCAL_ZOMBIE_RESET, ;, ;, when( !localvarBool( ui_hideBack ) );, name resume )*/
-			CHOICE_BUTTON_VIS( 1, "@REMASTERED_START_MATCH", exec "devmap nazi_zombie_factory";, when( !localvarBool( ui_hideBack ) ); )
+			CHOICE_BUTTON_VIS( 1, "@REMASTERED_START_MATCH", exec "map nazi_zombie_factory";, when( !localvarBool( ui_hideBack ) ); )
 			CHOICE_BUTTON_VIS( 2, "@REMASTERED_COOPERATIVE", open main_online; LOCAL_ZOMBIE_RESET, when( !localvarBool( ui_hideBack ) ); )
 			CHOICE_BUTTON_VIS( 3, "@REMASTERED_MAP_INTEL", open menu_collectibles;, when( !localvarBool( ui_hideBack ) ); )
 			CHOICE_SEPARATOR_VIS( CHOICE_SEP_1, when( !localvarBool( ui_hideBack ) ); )
