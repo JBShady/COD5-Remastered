@@ -7,7 +7,7 @@ main()
  
 	// *Fog section* 
 
-	setdvar("scr_fog_exp_halfplane", "418"); // OG 835
+	setdvar("scr_fog_exp_halfplane", "550"); // OG 835
 	setdvar("scr_fog_exp_halfheight", "200");
 	setdvar("scr_fog_nearplane", "165");
 	setdvar("scr_fog_red", "0.5");
@@ -42,13 +42,13 @@ main()
 
 	level thread fog_settings();
  
-	level thread maps\_utility::set_all_players_visionset( "oki2", 0.1 );
+	level thread maps\_utility::set_all_players_visionset( "zombie", 0.1 );
 }
 
 fog_settings()
 {
 	start_dist 			= 165;
-	halfway_dist 		= 418; //originally 835
+	halfway_dist 		= 550; //originally 835
 	halfway_height 		= 200;
 	base_height 		= 75;
 	red 				= 0.5;
