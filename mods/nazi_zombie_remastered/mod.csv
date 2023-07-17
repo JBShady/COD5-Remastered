@@ -61,7 +61,7 @@ fx,misc/fx_zombie_mini_nuke
 sound,weapons,,all_sp
 fx,weapon/muzzleflashes/fx_30cal_bulletweap_view
 fx,weapon/muzzleflashes/fx_30cal_bulletweap
-rawfile,vision/oki2.vision
+rawfile,vision/zombie.vision
 xanim,ai_zombie_walk_v6
 xanim,ai_zombie_walk_v7
 xanim,ai_zombie_walk_v8
@@ -100,6 +100,7 @@ xanim,ai_zombie_door_tear_low
 // hop
 xanim,ai_zombie_traverse_v1
 xanim,ai_zombie_traverse_v2
+xanim,ai_zombie_traverse_v4
 xanim,ai_zombie_traverse_v5
 xanim,ai_zombie_traverse_v6
 xanim,ai_zombie_traverse_v7
