@@ -53,6 +53,7 @@ maps\_utility.gsc
 maps\_zombiemode.gsc
 maps\_zombiemode_blockers.gsc
 maps\_zombiemode_health_help.gsc
+maps\_zombiemode_molotov.gsc
 maps\_zombiemode_net.gsc
 maps\_zombiemode_powerups.gsc
 maps\_zombiemode_radio.gsc

@@ -280,14 +280,14 @@ include_weapons()
 	include_weapon( "m1carbine" );
 	include_weapon( "m1garand" );
 	include_weapon( "gewehr43" );
-	include_weapon( "svt40" );
+	include_weapon( "svt40" ); // new
 
 	// Full Auto
 	include_weapon( "stg44" );
 	include_weapon( "thompson" );
 	include_weapon( "mp40" );
-	include_weapon( "ppsh" );
-	include_weapon( "type100_smg" ); 
+	include_weapon( "ppsh" ); // new
+	include_weapon( "type100_smg" );  // new
 
 	// Bolt Action
 
