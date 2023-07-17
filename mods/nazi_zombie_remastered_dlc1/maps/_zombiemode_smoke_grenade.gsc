@@ -67,6 +67,8 @@ watchSmokeDetonation()
 	{
 		wait(0.05);
 		zombies = getaiarray("axis");
+		zombies = get_array_of_closest( gasEffectArea.origin, zombies );
+
 		for(i=0;i<zombies.size;i++)
 		{
 			if( zombies[i] istouching(gasEffectArea) && zombies[i] in_playable_area() ) // first we check zombies in the radius and are in playable area
