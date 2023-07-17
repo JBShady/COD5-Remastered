@@ -2034,7 +2034,7 @@ do_gib()
 
 	if ( IsDefined(self.damageWeapon) )
 	{
-		if (isSubStr( self.damageWeapon, "flame" ) || isSubStr( self.damageWeapon, "molotov" ) || isSubStr( self.damageWeapon, "napalmblob" ) )
+		if (isSubStr( self.damageWeapon, "flame" ) /*|| isSubStr( self.damageWeapon, "molotov" )*/ || isSubStr( self.damageWeapon, "napalmblob" ) )
 		{
 			return;
 		}
