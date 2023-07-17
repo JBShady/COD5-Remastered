@@ -1063,6 +1063,8 @@ onPlayerConnect()
 		player thread maps\_zombiemode_betty::bouncing_betty_watch(); 
 		player thread maps\_zombiemode_betty::betty_no_weapons(); 
 
+		player thread maps\_zombiemode_molotov::trackMolotov(); 
+
 		player.score = level.zombie_vars["zombie_score_start"]; 
 		player.score_total = player.score; 
 		player.old_score = player.score; 
