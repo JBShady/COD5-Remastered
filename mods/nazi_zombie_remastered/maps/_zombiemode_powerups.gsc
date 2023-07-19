@@ -956,6 +956,12 @@ full_ammo_powerup( drop_item )
 	        players[i] SetWeaponAmmoClip( "m7_launcher", 1 );
 	        //for some reason gettin set to 21
 	    }
+	    if( isDefined(players[i].has_satchel) && !players[i] maps\_laststand::player_is_in_laststand() )
+	    {
+			players[i] giveweapon("satchel_charge");
+			players[i] setactionslot(4,"weapon","satchel_charge");
+	        players[i] SetWeaponAmmoClip( "satchel_charge", 2 );
+	    }
 	}
 //	array_thread (players, ::full_ammo_on_hud, drop_item);
 	level thread full_ammo_on_hud( drop_item );

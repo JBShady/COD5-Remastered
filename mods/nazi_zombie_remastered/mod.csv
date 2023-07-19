@@ -14,8 +14,7 @@ sound,nazi_zombie_prototype
 weapon,sp/svt40
 weapon,sp/ppsh
 weapon,sp/type100_smg
-weapon,sp/type99_lmg
-weapon,sp/dp28
+weapon,sp/satchel_charge
 // test
 xmodel,viewmodel_zombie_30cal_lmg_new
 xmodel,weapon_mp_30cal_bipod_lmg
@@ -136,3 +135,7 @@ material,hud_arrow_left
 material,hud_arrow_right
 material,hud_arrow_up
 xmodel,char_usa_raider_gear_flametank
+xmodel,satchel_crate
+xmodel,satchel_crate_lid
+xmodel,collision_geo_64x64x64
+xmodel,satchel_crate_lid_question

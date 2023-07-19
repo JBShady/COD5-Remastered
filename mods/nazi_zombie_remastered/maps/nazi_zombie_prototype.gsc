@@ -12,6 +12,10 @@ main()
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_PROTO_LEVEL_PLACE");
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_PROTO_LEVEL_TIME");
 	precachemodel("char_usa_raider_gear_flametank");
+	precachemodel("satchel_crate");
+	precachemodel("satchel_crate_lid");
+	precachemodel("satchel_crate_lid_question");
+	precachemodel("collision_geo_64x64x64");
 
 	include_weapons();
 	include_powerups();
@@ -30,6 +34,7 @@ main()
 	level thread below_ground_death();
 	
 	maps\_zombiemode_health_help::init();
+	//maps\_zombiemode_coord_help::init();
 
 	maps\walking_anim::main();
 
@@ -46,7 +51,7 @@ main()
 	
 	if(players.size == 4)
 	{
-	players[3] thread level_pre_start_vox();
+		players[3] thread level_pre_start_vox();
 	}
 
 	//players[randomint(players.size)] thread level_start_vox();
@@ -54,6 +59,9 @@ main()
 
 	level thread prototype_eggs();
 	level thread play_music_easter_egg();
+
+	spawncollision("collision_geo_64x64x64","collider",(level.satchel_crate_lid.origin + (8,0,5)), (level.satchel_crate_lid.angles) + (0,23,0));
+
 	// If you want to modify/add to the weapons table, please copy over the _zombiemode_weapons init_weapons() and paste it here.
 	// I recommend putting it in it's own function...
 	// If not a MOD, you may need to provide new localized strings to reflect the proper cost.
@@ -327,6 +335,8 @@ include_weapons()
 
 	// Special
 	include_weapon( "ray_gun" );
+
+	include_weapon( "satchel_charge", false );
 	//include_weapon( "falling_hands", false ); // Death anim
 
 	maps\_zombiemode_weapons::add_limited_weapon( "zombie_colt", 0 );
@@ -545,7 +555,6 @@ level_start_vox()
 	for( i = 0; i < players.size; i++ )
 	{
 		players[i].has_talked = 0;
-		
 		for(;;)
 		{
 			zombies = getaiarray("axis" );

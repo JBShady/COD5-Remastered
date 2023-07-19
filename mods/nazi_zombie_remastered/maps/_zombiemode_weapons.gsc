@@ -8,6 +8,8 @@ init()
 	init_weapon_upgrade();
 	init_weapon_cabinet();
 	treasure_chest_init();
+
+	level thread init_weapon_crate(); // new
 }
 
 add_zombie_weapon( weapon_name, hint, cost, weaponVO, variation_count, ammo_cost  )
@@ -122,8 +124,8 @@ init_weapons()
 	add_zombie_weapon( "bar", 								&"REMASTERED_ZOMBIE_WEAPON_BAR_1800", 				1800,	"vox_mg",		5);
 	add_zombie_weapon( "fg42_bipod", 						&"ZOMBIE_WEAPON_FG42_1200", 							1500,	"vox_mg",		5);
 	add_zombie_weapon( "mg42_bipod", 						&"ZOMBIE_WEAPON_MG42_1200", 							3000,	"vox_mg",		5);
-	add_zombie_weapon( "dp28", 								&"ZOMBIE_WEAPON_DP28_2250", 									2250,	"vox_mg",		5);
-	add_zombie_weapon( "type99_lmg", 						&"ZOMBIE_WEAPON_TYPE99_LMG_1750", 								1750,	"vox_mg",		5);
+	//add_zombie_weapon( "dp28", 								&"ZOMBIE_WEAPON_DP28_2250", 									2250,	"vox_mg",		5);
+	//add_zombie_weapon( "type99_lmg", 						&"ZOMBIE_WEAPON_TYPE99_LMG_1750", 								1750,	"vox_mg",		5);
                                                         	
 	// Grenade Launcher                                 	
 	add_zombie_weapon( "m1garand_gl", 						&"ZOMBIE_WEAPON_M1GARAND_GL_1200", 								1200,	"",				0);
@@ -136,7 +138,7 @@ init_weapons()
                                                         	
 	// Special                                          	
 	add_zombie_weapon( "mortar_round", 						&"ZOMBIE_WEAPON_MORTARROUND_2000", 								2000,	"",				0);
-	add_zombie_weapon( "satchel_charge", 					&"ZOMBIE_WEAPON_SATCHEL_2000", 									2000,	"",				0);
+	add_zombie_weapon( "satchel_charge", 					&"ZOMBIE_WEAPON_SATCHEL_2000", 									2000,	"vox_shotgun",				3);
 	add_zombie_weapon( "ray_gun", 							&"ZOMBIE_WEAPON_RAYGUN_10000", 									10000,	"vox_raygun",	3); // 66% chance for all characters except Sarge because he has 3 unique lines, so 100% for him
 	// ONLY 1 OF THE BELOW SHOULD BE ALLOWED
 	add_limited_weapon( "m2_flamethrower_zombie", 1 );
@@ -187,6 +189,32 @@ init_weapon_cabinet()
 	}
 
 	array_thread( weapon_cabs, ::weapon_cabinet_think ); 
+}
+
+// weapon crate which opens on use
+init_weapon_crate()
+{
+	// spawn crate model and crate lid, not originally in the map so these extra bits are needed
+	satchel_crate = spawn("script_model", (1020.5, 927.1, 146.2) );
+	satchel_crate setmodel("satchel_crate");
+	satchel_crate.angles = (1,20,1);
+	wait_network_frame();
+	level.satchel_crate_lid = spawn("script_model", (satchel_crate.origin + (10.5,3.62,12.2)) );
+	level.satchel_crate_lid setmodel("satchel_crate_lid");
+	level.satchel_crate_lid.angles = satchel_crate.angles;
+	level.satchel_crate_lid notSolid();
+	wait_network_frame();
+	level.question_mark = spawn("script_model", (satchel_crate.origin + (10.5,3.62,12.2)) );
+	level.question_mark setmodel("satchel_crate_lid_question");
+	level.question_mark.angles = satchel_crate.angles;
+	level.question_mark notSolid();
+	
+	// create trigger
+	satchel_crate_trigger = spawn( "trigger_radius",satchel_crate.origin, 0, 75, 25 );
+	satchel_crate_trigger SetHintString( &"REMASTERED_ZOMBIE_CRATE_OPEN_2000" ); 
+	satchel_crate_trigger setCursorHint( "HINT_NOICON" ); 
+
+	satchel_crate_trigger thread weapon_crate_think();
 }
 
 // returns the trigger hint string for the given weapon
@@ -309,7 +337,7 @@ treasure_chest_think()
 		
 		if( grabber == user || grabber == level )
 		{
-			if( grabber == user && is_player_valid( user ) )
+			if( grabber == user && is_player_valid( user ) && user GetCurrentWeapon() != "satchel_charge" )
 			{
 				self notify( "user_grabbed_weapon" );
 				user thread treasure_chest_give_weapon( weapon_spawn_org.weapon_string );
@@ -429,7 +457,10 @@ decide_hide_show_hint( endon_notify )
 
 can_buy_weapon()
 {
-
+	if( self GetCurrentWeapon() == "satchel_charge" )
+	{
+		return false;
+	}
 	if( self in_revive_trigger() )
 	{
 		return false;
@@ -610,6 +641,11 @@ treasure_chest_give_weapon( weapon_string )
 	{
 		current_weapon = self getCurrentWeapon(); // get hiss current weapon
 
+		if ( current_weapon == "satchel_charge" )
+		{
+			current_weapon = undefined;
+		}
+
 		if( isdefined( current_weapon ) )
 		{
 			if( !( weapon_string == "fraggrenade" || weapon_string == "stielhandgranate" || weapon_string == "molotov" ) )
@@ -717,7 +753,6 @@ weapon_cabinet_think()
 			{
 				if( player.score >= cost )
 				{
-					self play_sound_on_ent( "purchase" );
 					player maps\_zombiemode_score::minus_to_player_score( cost ); 
 					player weapon_give( self.zombie_weapon_upgrade ); 
 				}
@@ -731,7 +766,6 @@ weapon_cabinet_think()
 				ammo_given = player ammo_give( self.zombie_weapon_upgrade ); 
 				if( ammo_given )
 				{
-					self play_sound_on_ent( "purchase" );
 					player maps\_zombiemode_score::minus_to_player_score( ammo_cost ); // this give him ammo to early
 				}
 			}
@@ -743,8 +777,6 @@ weapon_cabinet_think()
 		else if( player.score >= cost ) // First time the player opens the cabinet
 		{
 			self.has_been_used_once = true;
-
-			self play_sound_on_ent( "purchase" ); 
 
 			self SetHintString( &"ZOMBIE_WEAPONCOSTAMMO", 750, ammo_cost ); 
 	//		self SetHintString( get_weapon_hint( self.zombie_weapon_upgrade ) );
@@ -804,6 +836,139 @@ weapon_cabinet_door_open( left_or_right )
 	{
 		self rotateyaw( -120, 0.3, 0.2, 0.1 ); 	
 	}	
+}
+
+weapon_crate_think()
+{
+	crate_sound = spawn( "script_origin", ( level.satchel_crate_lid.origin ) );
+	cost = 2000;
+	has_been_used_once = false; 
+	lookat = level.satchel_crate_lid.origin;
+
+	while( 1 )
+	{
+		self waittill( "trigger", player );
+		if(isDefined(player.has_satchel) && player.has_satchel) // once we buy betties, trig is null
+		{
+			continue;
+		}
+		if( !player islookingatorigin( lookat ) ) // new check, because we're using trigger radius that doesnt have capability to support UseTriggerRequireLookAt()
+		{
+			self SetInvisibleToPlayer( player, true );
+			continue;
+		}
+		if( !player IsTouching( self ) ) // new check, just to be safe so that if player leaves trig it resets for another player to use
+		{
+			continue;
+		}
+
+		self SetInvisibleToPlayer( player, false );
+
+		if( !player can_buy_weapon() )
+		{
+			wait( 0.1 );
+			continue;
+		}
+		if( !is_player_valid( player ) )
+		{
+			player thread ignore_triggers( 0.5 );
+			continue;
+		}
+
+		if( !player UseButtonPressed() ) // new check, because we're using trigger radius that triggers when we enter zone and not press F
+		{
+			continue; 
+		}
+		if(player.score < cost && (!IsDefined(player.has_satchel) || (player.has_satchel == false) ) ) // only if we DONT have points and we DONT have satchel
+		{
+			crate_sound play_sound_on_ent( "no_purchase" );
+			wait(0.5);
+			continue;
+		}
+
+		self SetInvisibleToPlayer( player, true );
+
+		// passing here means we HAVE points and we DONT have satchels yet
+		if( has_been_used_once == false ) // open only on the first use
+		{
+			has_been_used_once = true;
+			play_sound_at_pos( "open_chest", crate_sound.origin );
+			level.satchel_crate_lid RotateTo( level.satchel_crate_lid.angles + (92,0,0), 0.4, 0.1, 0.1);
+			level.question_mark RotateTo( level.question_mark.angles + (92,0,0), 0.4, 0.1, 0.1);
+			level thread give_satchel_after_rounds();
+			self SetHintString( &"REMASTERED_ZOMBIE_SATCHEL_PURCHASE" ); 
+		}
+		
+		player.has_satchel = true;
+		crate_sound play_sound_on_ent( "purchase" ); 
+
+		player maps\_zombiemode_score::minus_to_player_score( 2000 ); 
+				
+		player thread show_satchel_hint();
+
+		player giveweapon("satchel_charge"); 
+		player setactionslot(4,"weapon","satchel_charge");
+	    player SetWeaponAmmoClip( "satchel_charge", 2 );
+
+	    continue;
+	}
+}
+
+show_satchel_hint()
+{
+	self endon("death");
+	self endon("disconnect");
+
+	self setup_client_hintelem();
+	self.hintelem setText(&"REMASTERED_ZOMBIE_SATCHEL_HOWTO");
+	wait(4);
+	self.hintelem settext("");	
+	self.hintelem delete();
+}
+
+setup_client_hintelem()
+{
+	self endon("death");
+	self endon("disconnect");
+
+	if(!isDefined(self.hintelem))
+	{
+		self.hintelem = newclienthudelem(self);
+	}
+	self.hintelem init_hint_hudelem(320, 220, "center", "bottom", 1.6, 1.0);
+}
+
+//satchel hint stuff
+init_hint_hudelem(x, y, alignX, alignY, fontscale, alpha)
+{
+	self.x = x;
+	self.y = y;
+	self.alignX = alignX;
+	self.alignY = alignY;
+	self.fontScale = fontScale;
+	self.alpha = alpha;
+	self.sort = 20;
+	//self.font = "objective";
+}
+
+give_satchel_after_rounds()
+{
+	while(1)
+	{
+		level waittill( "between_round_over" );
+		{
+			players = get_players();
+			for(i=0;i<players.size;i++)
+			{
+				if(isDefined(players[i].has_satchel) && !players[i] maps\_laststand::player_is_in_laststand() )
+				{
+					players[i] giveweapon("satchel_charge"); 
+					players[i] setactionslot(4,"weapon","satchel_charge");
+				    players[i] SetWeaponAmmoClip( "satchel_charge", 2 );
+				}
+			}
+		}
+	}
 }
 
 weapon_spawn_think()
@@ -965,6 +1130,11 @@ weapon_give( weapon )
 	if( primaryWeapons.size >= 2 ) // he has two weapons
 	{
 		current_weapon = self getCurrentWeapon(); // get his current weapon
+
+		if ( current_weapon == "satchel_charge" )
+		{
+			current_weapon = undefined;
+		}
 
 		if( isdefined( current_weapon ) )
 		{
@@ -1315,4 +1485,30 @@ flamethrower_swap()
 		}
 		wait( 0.2 ); 
 	}
+}
+
+/*
+
+satchel crate
+
+-texture: add question mark, make texture look better?
+-add some type of glow
+-add collission
+-add trigger
+	wait(2);
+	level.satchel_crate_lid RotateTo( level.satchel_crate_lid.angles + (92,0,0), 0.3, 0.1, 0.1);
+
+*/
+islookingatorigin( origin )
+{
+	normalvec = vectorNormalize( origin-self getShootAtPos() );
+	veccomp = vectorNormalize(( origin-( 0, 0, 24 ) )-self getShootAtPos() );
+	insidedot = vectordot( normalvec, veccomp );
+	
+	anglevec = anglestoforward( self getplayerangles() );
+	vectordot = vectordot( anglevec, normalvec );
+	if( vectordot > insidedot )
+		return true;
+	else
+		return false;
 }

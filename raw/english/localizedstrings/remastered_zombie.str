@@ -61,6 +61,15 @@ LANG_ENGLISH        "Teleporters are cooling down"
 REFERENCE           ELECTRIC_SWITCH
 LANG_ENGLISH        "Press & hold &&1 to turn on the electricity "
 
+REFERENCE           CRATE_OPEN_2000
+LANG_ENGLISH        "Press & hold &&1 to Search Crate [Cost: 2000 - one time only]"
+
+REFERENCE           SATCHEL_PURCHASE
+LANG_ENGLISH        "Press & hold &&1 to buy Satchel Charges [Cost: 2000 - one time only]"
+
+REFERENCE           SATCHEL_HOWTO
+LANG_ENGLISH        "Press [{+actionslot 4}] to equip and throw then [{+attack}] to detonate a Satchel Charge"
+
 REFERENCE           BETTY_PURCHASE
 LANG_ENGLISH        "Press & hold &&1 to buy Bouncing Betties [Cost: 1000 - one time only]"
 

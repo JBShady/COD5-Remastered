@@ -257,7 +257,7 @@ laststand_giveback_player_weapons()
 
 	// if we can't figure out what the last active weapon was, try to switch a primary weapon
 	//CHRIS_P: - don't try to give the player back the mortar_round weapon ( this is if the player killed himself with a mortar round)
-	if( self.lastActiveWeapon != "none" && self.lastActiveWeapon != "mortar_round")
+	if( self.lastActiveWeapon != "none" && self.lastActiveWeapon != "mortar_round" && self.lastActiveWeapon != "satchel_charge" )
 	{
 		self SwitchToWeapon( self.lastActiveWeapon );
 	}
@@ -523,7 +523,7 @@ revive_give_back_weapons( gun )
 	self EnableWeaponCycling();
 	self EnableOffhandWeapons();
 	
-	if ( gun != "none" )
+	if( gun != "none" && gun != "satchel_charge" )
 	{
 		self SwitchToWeapon( gun );
 	}

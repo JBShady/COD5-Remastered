@@ -92,7 +92,7 @@ damage_on_fire_molotov( player ) // same damage as flamethrower, but we only do 
 		}
 		else
 		{
-			dmg = level.zombie_health * RandomFloatRange( 0.1, 0.15 );
+			dmg = level.zombie_health * RandomFloatRange( 0.1, 0.15 ); // when high rounding, molotov can do 20%-60% of a zombie's health depending on this and the amount of ticks + the weapon file damage which is going to be very insigificant
 		}
 
 		if ( Isdefined( player ) && Isalive( player ) )

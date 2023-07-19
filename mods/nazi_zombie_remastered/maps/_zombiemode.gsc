@@ -563,7 +563,6 @@ watchGrenadeThrow()
 	while(1)
 	{
 		self waittill("grenade_fire", grenade, type);
-
 		if ( type == "Stielhandgranate" ) // skip special grenades like molotovs
 		{
 			if( randomIntRange( 0, 4 ) == 0 ) // 1 in 4 chances of grenade out vox
@@ -998,6 +997,8 @@ spectator_respawn()
 
 		share_screen( last_alive, false );
 	}
+
+	self.has_satchel = undefined;
 
 	// The check_for_level_end looks for this
 	self.is_zombie = false;
@@ -2062,6 +2063,10 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 			{
 				finalDamage = radiusDamage(eInflictor.origin, 200,125,50, eAttacker);
 			}
+			else if(isSubStr(sWeapon, "satchel_charge") ) // Radius 320, damage very high (1250-200)
+			{
+				finalDamage = radiusDamage(eInflictor.origin, 300,125,50, eAttacker);
+			}
 			else // For frags (and all other cases), Radius 256, damage low (300-75)
 			{
 				finalDamage = radiusDamage(eInflictor.origin, 256,120,50, eAttacker);
@@ -2299,6 +2304,8 @@ player_fake_death()
 
 	self.ignoreme = true;
 	self EnableInvulnerability();
+
+	self setactionslot(4,""); 
 
 	self giveweapon("falling_hands");
 	self SwitchToWeapon("falling_hands");
@@ -2854,7 +2861,7 @@ track_players_ammo_count()
 	
 			weap = players[i] getcurrentweapon();
 			//Excludes all Perk based 'weapons' so that you don't get low ammo spam.
-			if(!isDefined(weap) || weap == "none" || weap == "syrette" || weap == "m2_flamethrower_zombie" || weap == "m7_launcher" || weap == "zombie_melee" || weap == "falling_hands" )
+			if(!isDefined(weap) || weap == "none" || weap == "syrette" || weap == "m2_flamethrower_zombie" || weap == "m7_launcher" || weap == "satchel_charge" || weap == "zombie_melee" || weap == "falling_hands" )
 			{
 				continue;
 			}
