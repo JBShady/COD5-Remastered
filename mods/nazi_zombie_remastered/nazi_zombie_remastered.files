@@ -22,6 +22,7 @@ clientscripts\createfx\nazi_zombie_prototype_fx.csc
 clientscripts\nazi_zombie_prototype.csc
 clientscripts\nazi_zombie_prototype_amb.csc
 clientscripts\nazi_zombie_prototype_fx.csc
+images\anygun_chalk_c.iwi
 images\char_ger_honorguard_body2_c.iwi
 images\char1_image.iwi
 images\char2_image.iwi
@@ -46,6 +47,7 @@ maps\_busing.gsc
 maps\_callbackglobal.gsc
 maps\_callbacksetup.gsc
 maps\_destructible_opel_blitz.gsc
+maps\_detonategrenades.gsc
 maps\_gameskill.gsc
 maps\_laststand.gsc
 maps\_loadout.gsc
@@ -615,7 +617,6 @@ weapons\sp\30cal_bipod
 weapons\sp\bar
 weapons\sp\doublebarrel
 weapons\sp\doublebarrel_sawed_grip
-weapons\sp\dp28
 weapons\sp\falling_hands
 weapons\sp\fg42_bipod
 weapons\sp\gewehr43
@@ -633,6 +634,7 @@ weapons\sp\panzerschrek
 weapons\sp\ppsh
 weapons\sp\ptrs41_zombie
 weapons\sp\ray_gun
+weapons\sp\satchel_charge
 weapons\sp\shotgun
 weapons\sp\springfield
 weapons\sp\stg44
@@ -642,7 +644,6 @@ weapons\sp\sw_357
 weapons\sp\syrette
 weapons\sp\thompson
 weapons\sp\type100_smg
-weapons\sp\type99_lmg
 weapons\sp\zombie_colt
 xmodelalias\char_ger_hnrgrd_body1_2_g_larmoffalias.gsc
 xmodelalias\char_ger_hnrgrd_body1_2_g_legsoffalias.gsc

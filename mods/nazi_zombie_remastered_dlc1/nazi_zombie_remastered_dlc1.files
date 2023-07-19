@@ -67,7 +67,6 @@ maps\_zombie_poi.gsc
 maps\_zombiemode.gsc
 maps\_zombiemode_betty.gsc
 maps\_zombiemode_blockers.gsc
-maps\_zombiemode_coord_help.gsc
 maps\_zombiemode_devgui.gsc
 maps\_zombiemode_health_help.gsc
 maps\_zombiemode_molotov.gsc
@@ -473,7 +472,6 @@ weapons\sp\bar_bipod_deploying
 weapons\sp\bipod_deploying
 weapons\sp\doublebarrel
 weapons\sp\doublebarrel_sawed_grip
-weapons\sp\dp28
 weapons\sp\falling_hands
 weapons\sp\fg42_bipod
 weapons\sp\fg42_bipod_crouch
@@ -506,7 +504,6 @@ weapons\sp\sw_357
 weapons\sp\syrette
 weapons\sp\thompson
 weapons\sp\type100_smg
-weapons\sp\type99_lmg
 weapons\sp\zombie_colt
 weapons\sp\zombie_perk_bottle_doubletap
 weapons\sp\zombie_perk_bottle_jugg

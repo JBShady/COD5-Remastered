@@ -124,7 +124,6 @@ maps\_zombie_poi.gsc
 maps\_zombiemode.gsc
 maps\_zombiemode_achievement.gsc
 maps\_zombiemode_blockers.gsc
-maps\_zombiemode_coord_help.gsc
 maps\_zombiemode_devgui.gsc
 maps\_zombiemode_dogs.gsc
 maps\_zombiemode_health_help.gsc
