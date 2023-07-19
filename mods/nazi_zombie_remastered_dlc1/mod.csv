@@ -10,9 +10,7 @@ xmodel,char_usa_raider_head4_3
 xmodel,char_usa_raider_head4_4
 weapon,sp/springfield_scoped_zombie
 weapon,sp/type100_smg
-weapon,sp/dp28
 weapon,sp/svt40
-weapon,sp/type99_lmg
 xanim,ai_zombie_attack_v4
 xanim,ai_zombie_attack_v6
 xanim,ai_zombie_run_attack_v1

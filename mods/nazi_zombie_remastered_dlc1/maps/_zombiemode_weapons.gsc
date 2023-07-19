@@ -150,11 +150,11 @@ init_weapons()
 	// Heavy Machineguns                                	
 	//add_zombie_weapon( "30cal", 							&"ZOMBIE_WEAPON_30CAL_3000", 				3000,	"vox_mg", 5 );
 	//add_zombie_weapon( "bar", 								&"REMASTERED_ZOMBIE_WEAPON_BAR_1800", 					1800,	"nvox_mg", 5 );
-	add_zombie_weapon( "dp28", 								&"ZOMBIE_WEAPON_DP28_2250", 				2250,	"nvox_mg" , 5 );
+	//add_zombie_weapon( "dp28", 								&"ZOMBIE_WEAPON_DP28_2250", 				2250,	"nvox_mg" , 5 );
 	//add_zombie_weapon( "fg42", 								&"ZOMBIE_WEAPON_FG42_1200", 				1500,	"vox_mg" , 5 ); 
 	//add_zombie_weapon( "fg42_scoped", 						&"ZOMBIE_WEAPON_FG42_S_1200", 				1500,	"vox_mg" , 5 ); 
 	//add_zombie_weapon( "mg42", 								&"ZOMBIE_WEAPON_MG42_1200", 				3000,	"vox_mg" , 5 ); 
-	add_zombie_weapon( "type99_lmg", 						&"ZOMBIE_WEAPON_TYPE99_LMG_1750", 			1750,	"nvox_mg" , 5 ); 
+	//add_zombie_weapon( "type99_lmg", 						&"ZOMBIE_WEAPON_TYPE99_LMG_1750", 			1750,	"nvox_mg" , 5 ); 
 
 	// Grenade Launcher                                 	
 	add_zombie_weapon( "m1garand_gl_zombie", 						&"ZOMBIE_WEAPON_M1GARAND_GL_1200", 	1200,	"", 0 );
