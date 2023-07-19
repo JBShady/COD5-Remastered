@@ -352,6 +352,7 @@ show_betty_hint(string)
 	self.hintelem setText(text);
 	wait(3.5);
 	self.hintelem settext("");
+	self.hintelem delete();
 }
 
 update_betty_fires()
