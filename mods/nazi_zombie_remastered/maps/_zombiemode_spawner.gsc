@@ -1843,6 +1843,17 @@ zombie_damage( mod, hit_location, hit_origin, player )
 			self DoDamage( level.round_number * randomintrange( 0, 100 ), self.origin, undefined );
 		}
 	}
+	else if( mod == "MOD_ZOMBIE_SATCHEL" )
+	{
+		if ( isdefined( player ) && isalive( player ) )
+		{
+			self DoDamage( level.round_number * randomintrange( 100, 200 ), self.origin, player);
+		}
+		else
+		{
+			self DoDamage( level.round_number * randomintrange( 100, 200 ), self.origin, undefined );
+		}
+	}
 	
 	self thread maps\_zombiemode_powerups::check_for_instakill( player );
 }
