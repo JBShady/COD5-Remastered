@@ -49,6 +49,7 @@ maps\_callbacksetup.gsc
 maps\_destructible_opel_blitz.gsc
 maps\_detonategrenades.gsc
 maps\_gameskill.gsc
+maps\_interactive_objects.gsc
 maps\_laststand.gsc
 maps\_loadout.gsc
 maps\_utility.gsc
