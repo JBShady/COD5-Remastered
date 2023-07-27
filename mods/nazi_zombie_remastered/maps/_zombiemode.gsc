@@ -2063,9 +2063,9 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 			{
 				finalDamage = radiusDamage(eInflictor.origin, 200,125,50, eAttacker);
 			}
-			else if(isSubStr(sWeapon, "satchel_charge") ) // Radius 320, damage very high (1250-200)
+			else if(isSubStr(sWeapon, "satchel_charge") ) // Radius 256, damage very high
 			{
-				finalDamage = radiusDamage(eInflictor.origin, 300,125,50, eAttacker);
+				finalDamage = radiusDamage(eInflictor.origin, 256,130,45, eAttacker);
 			}
 			else // For frags (and all other cases), Radius 256, damage low (300-75)
 			{
