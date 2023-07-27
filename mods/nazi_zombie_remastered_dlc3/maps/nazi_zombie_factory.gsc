@@ -67,6 +67,8 @@ main()
 	precacheModel("lights_berlin_subway_hat_100" );
 	precachemodel("collision_geo_32x32x128");
 	precacheModel("collision_wall_64x64x10"); // new
+	//precacheModel("collision_geo_128x128x128"); // new
+	//precacheModel("collision_geo_512x512x512"); // new
 	precachemodel("char_usa_raider_gear_flametank");
 
 	precacheModel("zombie_handheld_radio"); // cut radio
@@ -197,9 +199,16 @@ main()
 	level thread flytrap();
 	level thread hanging_dead_guy( "hanging_dead_guy" );
 
-	spawncollision("collision_geo_32x32x128","collider",(-5, 543, 112), (0, 348.6, 0));
-	spawncollision("collision_wall_64x64x10","collider",(606.1, -2225, 286.5), (0, -90, 0)); // new, fixes collision at cat walk barrier
-
+	spawncollision("collision_geo_32x32x128","collider", (-5, 543, 112), (0, 348.6, 0));
+	spawncollision("collision_wall_64x64x10","collider", (606.1, -2225, 286.5), (0, -90, 0)); // new, fixes collision at cat walk barrier
+/*
+	spawncollision("collision_geo_512x512x512","collider", (-65.359, -1215.74, -192.5), (0, 0, 0));
+	spawncollision("collision_geo_512x512x512","collider", (393.273, -2099.36, -192.5) , (0, 0, 0));
+	spawncollision("collision_geo_512x512x512","collider", (-120, -1129.359, -192.5) , (0, 0, 0));
+	spawncollision("collision_geo_128x128x128","collider",  (117.604, -1588.69, -1.5) , (0, 46.5, 0));
+	spawncollision("collision_geo_128x128x128","collider", (435.5, -1502.5, -0.25) , (0, 0, 0));
+	spawncollision("collision_geo_512x512x512","collider", (627.5, -1184.359, -192.5) , (0, 0, 0));
+*/
 	level thread fix_bad_spots();
 	level thread sumpf_check();
 	level thread maps\nazi_zombie_factory_new_eggs::init();
