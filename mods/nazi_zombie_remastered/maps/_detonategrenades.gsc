@@ -120,6 +120,8 @@ watchSatchel()
 				self thread watchsatchelAltDetonate();
 			}
 
+			satchel.owner = self;
+
 			if(self.satchelarray.size > 20 )
 			{
 				satchel waitTillNotMoving();
@@ -128,7 +130,6 @@ watchSatchel()
 			}
 
 			self.satchelarray[self.satchelarray.size] = satchel;
-			satchel.owner = self;
 			satchel thread satchelDamage();
 		}
 	}
@@ -170,6 +171,9 @@ watchSatchelAltDetonate()
 
 			if ( self.sessionstate == "spectator" || self maps\_laststand::player_is_in_laststand() )
 			continue;
+
+			//if ( Isdefined(self.potentially_spamming) && self.potentially_spamming == true )
+			//continue;
 
 			self notify ( "alt_detonate" );
 		}
@@ -341,6 +345,16 @@ waitAndDetonate( delay )
 	wait delay;
 
 	earthquake(.3 ,3,self.origin,1000);
+
+	zombs = getaispeciesarray("axis");
+	for(i=0;i<zombs.size;i++)
+	{
+		if(zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80 && DistanceSquared(zombs[i].origin, self.origin) < 300 * 300)
+		{
+			zombs[i] thread maps\_zombiemode_spawner::zombie_damage( "MOD_ZOMBIE_SATCHEL", "none", zombs[i].origin, self.owner );
+		}
+	}
+
 	self detonate();
 }
 
@@ -361,9 +375,26 @@ satchelDamage()
 		self waittill("damage", amount, attacker);
 		if ( !isplayer(attacker) )
 			continue;
+		
+		owner_is_on = undefined;
+		players = get_players();
+		for( i = 0; i < players.size; i++ )
+		{
+			if(players[i] == self.owner) // if any of the available players are the same as the owner, owner is still online
+			{
+				owner_is_on = true;
+			}
+		}
 
-		if ( attacker != self.owner && isDefined(self.owner) )
+		if ( attacker != self.owner && isDefined(owner_is_on) && owner_is_on )
+		{
+			iprintlnbold("Friendly fire detected, owner online");
 			continue;
+		}
+		else if( attacker != self.owner )
+		{
+			iprintlnbold("Friendly fire detected, owner offline");
+		}
 	
 		break;
 	}
@@ -383,6 +414,16 @@ satchelDamage()
 	self.owner.satchelarray = array_remove(self.owner.satchelarray, self);
 
 	earthquake(.3 ,3,self.origin,1000);
+
+	zombs = getaispeciesarray("axis");
+	for(i=0;i<zombs.size;i++)
+	{
+		if(zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80 && DistanceSquared(zombs[i].origin, self.origin) < 300 * 300)
+		{
+			zombs[i] thread maps\_zombiemode_spawner::zombie_damage( "MOD_ZOMBIE_SATCHEL", "none", zombs[i].origin, self.owner );
+		}
+	}
+
 	self detonate( attacker );
 
 	// won't get here; got death notify.
