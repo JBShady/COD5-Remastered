@@ -138,7 +138,7 @@ init_weapons()
                                                         	
 	// Special                                          	
 	add_zombie_weapon( "mortar_round", 						&"ZOMBIE_WEAPON_MORTARROUND_2000", 								2000,	"",				0);
-	add_zombie_weapon( "satchel_charge", 					&"ZOMBIE_WEAPON_SATCHEL_2000", 									2000,	"vox_shotgun",				3);
+	add_zombie_weapon( "satchel_charge", 					&"ZOMBIE_WEAPON_SATCHEL_2000", 									2000,	"",				0);
 	add_zombie_weapon( "ray_gun", 							&"ZOMBIE_WEAPON_RAYGUN_10000", 									10000,	"vox_raygun",	3); // 66% chance for all characters except Sarge because he has 3 unique lines, so 100% for him
 	// ONLY 1 OF THE BELOW SHOULD BE ALLOWED
 	add_limited_weapon( "m2_flamethrower_zombie", 1 );
@@ -341,6 +341,7 @@ treasure_chest_think()
 			{
 				self notify( "user_grabbed_weapon" );
 				user thread treasure_chest_give_weapon( weapon_spawn_org.weapon_string );
+				//grabber.potentially_spamming = true;
 				break; 
 			}
 			else if( grabber == level )
@@ -364,6 +365,10 @@ treasure_chest_think()
 	lid thread treasure_chest_lid_close( self.timedOut ); 
 	
 	wait 3; 
+	//if(isdefined(grabber.potentially_spamming))
+	//{
+		//grabber.potentially_spamming = undefined;
+	//}
 	self enable_trigger(); 	
 	self setvisibletoall();
 
@@ -886,8 +891,6 @@ weapon_crate_think()
 			continue;
 		}
 
-		self SetInvisibleToPlayer( player, true );
-
 		// passing here means we HAVE points and we DONT have satchels yet
 		if( has_been_used_once == false ) // open only on the first use
 		{
@@ -904,7 +907,7 @@ weapon_crate_think()
 
 		player maps\_zombiemode_score::minus_to_player_score( 2000 ); 
 				
-		player thread show_satchel_hint();
+		player thread show_satchel_hint(self);
 
 		player giveweapon("satchel_charge"); 
 		player setactionslot(4,"weapon","satchel_charge");
@@ -914,14 +917,16 @@ weapon_crate_think()
 	}
 }
 
-show_satchel_hint()
+show_satchel_hint(satchel)
 {
 	self endon("death");
 	self endon("disconnect");
 
 	self setup_client_hintelem();
 	self.hintelem setText(&"REMASTERED_ZOMBIE_SATCHEL_HOWTO");
-	wait(4);
+	wait(0.25);
+	satchel SetInvisibleToPlayer( self, true ); // moved to here so we have a little delay if we instantly buy
+	wait(3.75);
 	self.hintelem settext("");	
 	self.hintelem delete();
 }
