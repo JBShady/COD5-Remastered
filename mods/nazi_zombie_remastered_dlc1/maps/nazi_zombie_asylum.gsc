@@ -158,7 +158,7 @@ player_zombie_awareness()
 					case "run": dist = 250; break;
 					case "sprint": dist = 275;break;
 				}				
-				if(distance2d(zombs[i].origin,self.origin) < dist)
+				if(distance2d(zombs[i].origin,self.origin) < dist && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
 				{				
 					yaw = self animscripts\utility::GetYawToSpot(zombs[i].origin );
 					//check to see if he's actually behind the player

@@ -619,16 +619,16 @@ player_zombie_awareness()
 				switch(zombs[i].zombie_move_speed)
 				{
 					case "walk": dist = 150;break;
-					case "run": dist = 125; break;
-					case "sprint": dist = 100;break;
+					case "run": dist = 130; break;
+					case "sprint": dist = 110;break;
 				}				
-				if(distance2d(zombs[i].origin,self.origin) < dist)
+				if(distance2d(zombs[i].origin,self.origin) < dist && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
 				{				
 					yaw = self animscripts\utility::GetYawToSpot(zombs[i].origin );
 					//check to see if he's actually behind the player
 					if(yaw < -100 || yaw > 100)
 					{
-						if(randomintrange(0,10) < 2 )
+						if(randomintrange(0,10) < 3 )
 						{
 							//zombs[i] playsound ("behind_vocals");
 							plr = "plr_" + index + "_";
