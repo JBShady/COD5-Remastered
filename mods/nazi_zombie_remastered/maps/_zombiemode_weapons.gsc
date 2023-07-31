@@ -337,7 +337,7 @@ treasure_chest_think()
 		
 		if( grabber == user || grabber == level )
 		{
-			if( grabber == user && is_player_valid( user ) && user GetCurrentWeapon() != "satchel_charge" )
+			if( grabber == user && is_player_valid( user ) && user GetCurrentWeapon() != "satchel_charge" && level.falling_down == false )
 			{
 				self notify( "user_grabbed_weapon" );
 				user thread treasure_chest_give_weapon( weapon_spawn_org.weapon_string );
@@ -447,7 +447,7 @@ decide_hide_show_hint( endon_notify )
 		players = get_players();
 		for( i = 0; i < players.size; i++ )
 		{
-			if( players[i] can_buy_weapon() )
+			if( players[i] can_buy_weapon() && level.falling_down == false )
 			{
 				self SetInvisibleToPlayer( players[i], false );
 			}
@@ -857,7 +857,7 @@ weapon_crate_think()
 		{
 			continue;
 		}
-		if( !player islookingatorigin( lookat ) ) // new check, because we're using trigger radius that doesnt have capability to support UseTriggerRequireLookAt()
+		if( !player islookingatorigin( lookat ) || level.falling_down == true ) // new check, because we're using trigger radius that doesnt have capability to support UseTriggerRequireLookAt()
 		{
 			self SetInvisibleToPlayer( player, true );
 			continue;
