@@ -41,7 +41,7 @@ bowie_think()
 			continue;
 		}
 
-		if( player in_revive_trigger() )
+		if( player in_revive_trigger() || level.falling_down == true )
 		{
 			wait( 0.1 );
 			continue;
