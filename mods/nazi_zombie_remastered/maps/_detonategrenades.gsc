@@ -386,14 +386,9 @@ satchelDamage()
 			}
 		}
 
-		if ( attacker != self.owner && isDefined(owner_is_on) && owner_is_on )
+		if ( attacker != self.owner && isDefined(owner_is_on) && owner_is_on ) // if we are not the owner and the owner is online, we skip (prevent friendly fire)
 		{
-			iprintlnbold("Friendly fire detected, owner online");
 			continue;
-		}
-		else if( attacker != self.owner )
-		{
-			iprintlnbold("Friendly fire detected, owner offline");
 		}
 	
 		break;
@@ -411,7 +406,10 @@ satchelDamage()
 	
 	thread resetSatchelExplodeThisFrame();
 	
-	self.owner.satchelarray = array_remove(self.owner.satchelarray, self);
+	if(isdefined(owner_is_on) && owner_is_on)
+	{
+		self.owner.satchelarray = array_remove(self.owner.satchelarray, self);
+	}
 
 	earthquake(.3 ,3,self.origin,1000);
 
