@@ -37,7 +37,7 @@ buy_bouncing_betties()
 	while(1)
 	{
 		self waittill("trigger",who);
-		if( who in_revive_trigger() )
+		if( who in_revive_trigger() || level.falling_down == true )
 		{
 			continue;
 		}
