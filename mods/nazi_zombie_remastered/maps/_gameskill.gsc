@@ -1644,7 +1644,7 @@ playerBreathingSound( healthcap )
 healthOverlay()
 {
 	self endon( "disconnect" );
-	self endon( "noHealthOverlay" );
+	//self endon( "noHealthOverlay" );
 	
 	// CODER_MOD
 	// Austin (5/29/07): restore these they were clobbered during the integrate
