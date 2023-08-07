@@ -7,7 +7,7 @@ This mod contains bug fixes, quality of life tweaks, fixed inconsistencies, and 
 
 [Twitter](https://twitter.com/jb_shady_)
 
-[Donate](paypal.me/alexmintz01)
+[Donate](https://paypal.me/alexmintz01)
 
 ## Build Instructions
 * If you are downloading the source code and wish to build it, you will need the latest version of the official [Call of Duty: World at War Mod Tools](https://mega.nz/#!5kwyCYYQ!Onn3s3SfJjrombt7b1lUOcFYAtzhg9T_X7c4SvJljbs) installed before continuing. I also recommend installing the community made [V1.1 Launcher patch](https://www.ugx-mods.com/forum/3rd-party-applications-and-tools/48/world-at-war-mod-tools-v1-1-pwned-w-linkerpc-fix/10245/).
