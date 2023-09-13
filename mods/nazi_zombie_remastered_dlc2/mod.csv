@@ -113,6 +113,7 @@ weapon,sp/falling_hands
 xanim,viewmodel_bare_hands_z_death_idle
 xanim,viewmodel_bare_hands_death_by_zomb
 xmodel,char_jap_impinf_body4_helm2
+xmodel,char_jap_impinfwet_body4_hband
 localize,remastered
 localize,remastered_zombie
 localize,remastered_weap

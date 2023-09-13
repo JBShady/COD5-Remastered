@@ -11,6 +11,12 @@ main()
 		self.hatModel = "char_jap_impinf_body4_helm2";
 		self attach(self.hatModel, "", true);
 	}
+	else if(random == 6) // 1% chance of special head band
+	{
+		self.hatModel = "char_jap_impinfwet_body4_hband";
+		self attach(self.hatModel, "", true);	
+	}
+
 	self.voice = "japanese";
 	self.torsoDmg1 = "char_jap_impinf_body5z_g_upclean";
 	self.torsoDmg2 = codescripts\character::randomElement(xmodelalias\char_jap_impinf_mk_b5z_g_rarmoffalias::main());
@@ -36,6 +42,7 @@ precache()
 	codescripts\character::precacheModelArray(xmodelalias\char_jap_impinf_zombiebody5alias::main());
 	codescripts\character::precacheModelArray(xmodelalias\char_jap_impinf2_zombieheadalias::main());
 	precacheModel("char_jap_impinf_body4_helm2");
+	precacheModel("char_jap_impinfwet_body4_hband");
 	precacheModel("char_jap_impinf_body5z_g_upclean");
 	codescripts\character::precacheModelArray(xmodelalias\char_jap_impinf_mk_b5z_g_rarmoffalias::main());
 	codescripts\character::precacheModelArray(xmodelalias\char_jap_impinf_mk_b5z_g_larmoffalias::main());
