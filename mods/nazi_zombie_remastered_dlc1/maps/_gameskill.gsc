@@ -2898,19 +2898,19 @@ aa_player_attacks_enemy_with_ads( player, amount, type, point )
 	if ( !isADS(player) )
 	{
 		// defaults to empty_kill_func, for arcademode
-		[[ level.global_damage_func ]]( type, self.damagelocation, point, player );
+		[[ level.global_damage_func ]]( type, self.damagelocation, point, player, amount );
 		return false;
 	}
 		
 	if ( !bullet_attack( type ) )
 	{
 		// defaults to empty_kill_func, for arcademode
-		[[ level.global_damage_func ]]( type, self.damagelocation, point, player );
+		[[ level.global_damage_func ]]( type, self.damagelocation, point, player, amount );
 		return false;
 	}
 
 	// defaults to empty_kill_func, for arcademode
-	[[ level.global_damage_func_ads ]]( type, self.damagelocation, point, player );
+	[[ level.global_damage_func_ads ]]( type, self.damagelocation, point, player, amount );
 		
 	// ads only matters for bullet attacks. Otherwise you could throw a grenade then go ads and get a bunch of ads damage
 	aa_add_event( "aa_ads_damage_dealt", amount );

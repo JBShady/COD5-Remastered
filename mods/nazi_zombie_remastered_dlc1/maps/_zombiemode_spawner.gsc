@@ -1974,7 +1974,21 @@ damage_on_fire( player )
 	}
 }
 
-zombie_damage( mod, hit_location, hit_origin, player, is_dog )
+check_for_perk_damage( mod, player, amount )
+{
+	if( mod == "MOD_RIFLE_BULLET" || mod == "MOD_PISTOL_BULLET" )
+	{
+		if( Isdefined( player ) && Isalive( player ) && player HasPerk( "specialty_rof" ) )
+		{			
+			extra_damage = (amount / 3); // 33% extra damage, same increase as firerate buff
+			if(extra_damage < self.health) // we dont do extra damage if a zombie would actually die as a result of the extra damage, this fixes because DoDamage wont gib/give proper score if it kills a zombie 
+			{
+				self DoDamage( extra_damage, self.origin, player );
+			} 
+		}
+	}
+}
+zombie_damage( mod, hit_location, hit_origin, player, amount )
 {
 	players = get_players();
 
@@ -1990,16 +2004,21 @@ zombie_damage( mod, hit_location, hit_origin, player, is_dog )
 		return; 
 	}
 
+	if(getdvarint("classic_perks") == 0)
+	{
+		self check_for_perk_damage( mod, player, amount );
+	}
+
 	if( self zombie_flame_damage( mod, player ) )
 	{
 		if( self zombie_give_flame_damage_points() )
 		{
-			player maps\_zombiemode_score::player_add_points( "damage", mod, hit_location,is_dog );
+			player maps\_zombiemode_score::player_add_points( "damage", mod, hit_location, false );
 		}
 	}
 	else
 	{
-		player maps\_zombiemode_score::player_add_points( "damage", mod, hit_location,is_dog );
+		player maps\_zombiemode_score::player_add_points( "damage", mod, hit_location, false );
 	}
 
 	if ( mod == "MOD_GRENADE" || mod == "MOD_GRENADE_SPLASH" )
@@ -2039,12 +2058,17 @@ zombie_damage( mod, hit_location, hit_origin, player, is_dog )
 	self thread maps\_zombiemode_powerups::check_for_instakill( player );
 }
 
-zombie_damage_ads( mod, hit_location, hit_origin, player )
+zombie_damage_ads( mod, hit_location, hit_origin, player, amount )
 {
 	player.use_weapon_type = mod;
 	if( !IsDefined( player ) )
 	{
 		return; 
+	}
+
+	if(getdvarint("classic_perks") == 0)
+	{
+		self check_for_perk_damage( mod, player, amount );
 	}
 
 	if( self zombie_flame_damage( mod, player ) )
@@ -2546,7 +2570,16 @@ zombie_rise()
 		wait_network_frame();
 	}
 
+	self thread fixRiserEntLeak();
 	self do_zombie_rise();
+}
+
+fixRiserEntLeak()
+{
+	self waittill( "death" );
+
+	if ( isDefined( self.anchor ) )
+		self.anchor delete ();
 }
 
 /*

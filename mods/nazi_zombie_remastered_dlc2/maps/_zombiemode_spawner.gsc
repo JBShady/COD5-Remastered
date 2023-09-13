@@ -1274,7 +1274,7 @@ zombie_head_gib( attacker )
 		{
 			// SRS 9/2/2008: wet em up
 			self thread headshot_blood_fx();
-			if(isdefined(self.hatmodel) && (self.hatmodel == "char_jap_impinf2_cap1") ) // if a cap, don't shoot it off
+			if(isdefined(self.hatmodel) && (self.hatmodel == "char_jap_impinf2_cap1" || self.hatmodel == "char_jap_impinfwet_body4_hband") ) // if a cap, don't shoot it off
 			{
 				self detach( self.hatModel, "" ); 
 			}
@@ -2607,7 +2607,22 @@ damage_on_fire( player )
 	}
 }
 
-zombie_damage( mod, hit_location, hit_origin, player )
+check_for_perk_damage( mod, player, amount )
+{
+	if( mod == "MOD_RIFLE_BULLET" || mod == "MOD_PISTOL_BULLET" )
+	{
+		if( Isdefined( player ) && Isalive( player ) && player HasPerk( "specialty_rof" ) )
+		{			
+			extra_damage = (amount / 3); // 33% extra damage, same increase as firerate buff
+			if(extra_damage < self.health) // we dont do extra damage if a zombie would actually die as a result of the extra damage, this fixes because DoDamage wont gib/give proper score if it kills a zombie 
+			{
+				self DoDamage( extra_damage, self.origin, player );
+			} 
+		}
+	}
+}
+
+zombie_damage( mod, hit_location, hit_origin, player, amount )
 {
 	if( is_magic_bullet_shield_enabled( self ) )
 	{
@@ -2624,6 +2639,11 @@ zombie_damage( mod, hit_location, hit_origin, player )
 	if( !IsDefined( player ) )
 	{
 		return; 
+	}
+
+	if(getdvarint("classic_perks") == 0)
+	{
+		self check_for_perk_damage( mod, player, amount );
 	}
 
 	if( self zombie_flame_damage( mod, player ) )
@@ -2692,7 +2712,7 @@ zombie_damage( mod, hit_location, hit_origin, player )
 	self thread maps\_zombiemode_powerups::check_for_instakill( player );
 }
 
-zombie_damage_ads( mod, hit_location, hit_origin, player )
+zombie_damage_ads( mod, hit_location, hit_origin, player, amount )
 {
 	if( is_magic_bullet_shield_enabled( self ) )
 	{
@@ -2703,6 +2723,11 @@ zombie_damage_ads( mod, hit_location, hit_origin, player )
 	if( !IsDefined( player ) )
 	{
 		return; 
+	}
+
+	if(getdvarint("classic_perks") == 0)
+	{
+		self check_for_perk_damage( mod, player, amount );
 	}
 
 	if( self zombie_flame_damage( mod, player ) )
@@ -3257,8 +3282,18 @@ zombie_rise()
 		wait_network_frame();
 	}
 
+	self thread fixRiserEntLeak();
 	self do_zombie_rise();
 }
+
+fixRiserEntLeak()
+{
+	self waittill( "death" );
+
+	if ( isDefined( self.anchor ) )
+		self.anchor delete ();
+}
+
 
 /*
 zombie_rise:
