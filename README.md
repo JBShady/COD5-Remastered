@@ -298,7 +298,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 | **Speical Grenades** | Molotov | Molotov, Smoke Grenade | Molotov, Sticky Grenade | Molotov, Monkey Bomb |
 | **Equipment** | Satchel Charges | Bouncing Betties | Bouncing Betties | Bouncing Betties, Bowie Knife |
 | **Entirely New Weapons** | SVT-40 | SVT-40 | SVT-40, DP-28, Type 99 | SVT-40, DP-28, Type 99 |
-| **Missing Weapons Added** | Type 100 | Type 100 | None | M1 Garand, Sawed-Off Double Barrel |
+| **Missing Weapons Added** | Type 100, PPSh-41 | Type 100 | None | M1 Garand, Sawed-Off Double Barrel |
 | **Wonder Weapons** | Ray Gun | Ray Gun | Ray Gun, Wunderwaffe DG-2 | Ray Gun, Wunderwaffe DG-2 |
 
 #### Starting Pistols
