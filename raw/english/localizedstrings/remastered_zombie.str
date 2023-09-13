@@ -103,6 +103,12 @@ LANG_ENGLISH        "Near Breslau, Germany"
 REFERENCE           INTRO_FACTORY_LEVEL_TIME
 LANG_ENGLISH        "October 28th, 1945"
 
+REFERENCE           INTRO_THEATER_LEVEL_PLACE
+LANG_ENGLISH        "Berlin, Germany"
+
+REFERENCE           INTRO_THEATER_LEVEL_TIME
+LANG_ENGLISH        "October 28th, 1946"
+
 REFERENCE           ACHIEVEMENT
 LANG_ENGLISH        "Achievement Unlocked!"
 

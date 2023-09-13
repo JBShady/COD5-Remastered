@@ -104,6 +104,15 @@ LANG_ENGLISH        "NAZI ZOMBIES - COOPERATIVE"
 REFERENCE           T4M_WARNING
 LANG_ENGLISH        "All players require T4M to play together."
 
+REFERENCE           LEVEL_ZOMBIE_THEATER
+LANG_ENGLISH        "Kino der Toten"
+
+REFERENCE           LEVEL_DESC_ZOM_THEATER
+LANG_ENGLISH        "Theater of the damned. An abandoned cinema swarming with crawler zombies and hordes of the undead. New twists and clues await your discovery to uncover the final plan. It’s showtime!"
+
+REFERENCE           THEATER_TITLE
+LANG_ENGLISH        "NAZI ZOMBIES - KINO DER TOTEN"
+
 REFERENCE           DER_RIESE_TITLE
 LANG_ENGLISH        "NAZI ZOMBIES - DER RIESE"
 
@@ -123,7 +132,7 @@ REFERENCE           ENEMY_PUSH
 LANG_ENGLISH        "Enemy Pushing"
 
 REFERENCE           LAST_STAND
-LANG_ENGLISH        "Last Stand"
+LANG_ENGLISH        "Player Balance"
 
 REFERENCE           HUD
 LANG_ENGLISH        "HUD"
@@ -213,22 +222,22 @@ REFERENCE           CONTROLLER_V2
 LANG_ENGLISH        "Gamepad enabled. \nNote: Only Xbox controllers have native support. Active during gameplay."
 
 REFERENCE           HINT_GAMETYPE
-LANG_ENGLISH        "Adjusts the flow of zombie waves. Classic mode reverts back to the 24 per-round limit in solo and removes Carpenter power-ups."
+LANG_ENGLISH        "Adjusts the flow of zombie waves. Classic mode reverts to the 24 per-round limit in solo and removes Carpenter power-ups."
 
 REFERENCE           HINT_GAMETYPE_ALT
 LANG_ENGLISH        "Adjusts the flow of zombie waves. Classic mode removes Carpenter power-ups."
 
 REFERENCE           HINT_LASTSTAND
-LANG_ENGLISH        "Adjusts the balance of last stand. Classic mode reverts back to 30-second bleedouts and disables solo Quick Revive lives for a more challenging experience."
+LANG_ENGLISH        "Adjusts the balance of players and perks. Classic mode reverts to 30-second bleedouts, disables solo Quick Revive lives, and disables the Double-Tap buff like the original release."
 
 REFERENCE           HINT_LASTSTAND_ALT
-LANG_ENGLISH        "Adjusts the balance of last stand. Classic mode reverts back to 30-second bleedouts for a more challenging experience."
+LANG_ENGLISH        "Adjusts the balance of players and perks. Classic mode reverts to 30-second bleedouts, disables solo Quick Revive lives, and disables the Double-Tap buff like the original release."
 
 REFERENCE           HINT_PUSHING
-LANG_ENGLISH        "Adjusts the zombie "grabbing" effect. Classic mode makes zombies more dangerous as they can stick to you like the original release."
+LANG_ENGLISH        "Adjusts the zombie "grabbing" effect. Classic mode makes zombies more dangerous because they can stick to you like the original release."
 
 REFERENCE           HINT_SPRINTERS
-LANG_ENGLISH        "Adjusts the intensity of zombie waves. Classic mode removes any newly added super-sprinter variations for an experience closer to the original release."
+LANG_ENGLISH        "Adjusts the intensity of zombie waves. Classic mode removes newly added super-sprinter variations for an experience closer to the original release."
 
 REFERENCE           CLEARANCE
 LANG_ENGLISH        "Clearance Code:"
