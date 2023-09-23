@@ -255,6 +255,11 @@ laststand_giveback_player_weapons()
 			self SetWeaponAmmoStock( weapon, self.weaponAmmo[weapon]["stock"] );
 	}
 
+	if( self HasWeapon("m1garand_gl") ) // Failsafe to fix ammo because game gives m7 after m1 which will give a default m1 that has full ammo with it, over writing custom ammo 
+	{
+		self SetWeaponAmmoStock( "m1garand_gl", self.weaponAmmo["m1garand_gl"]["stock"] );
+	}
+
 	// if we can't figure out what the last active weapon was, try to switch a primary weapon
 	//CHRIS_P: - don't try to give the player back the mortar_round weapon ( this is if the player killed himself with a mortar round)
 	if( self.lastActiveWeapon != "none" && self.lastActiveWeapon != "mortar_round" && self.lastActiveWeapon != "satchel_charge" )

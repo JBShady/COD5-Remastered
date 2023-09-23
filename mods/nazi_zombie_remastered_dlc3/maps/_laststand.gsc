@@ -313,13 +313,15 @@ laststand_giveback_player_weapons()
 			self SetWeaponAmmoStock( weapon, self.weaponAmmo[weapon]["stock"] );
 	}
 
-	if( self HasWeapon("m1garand_gl_zombie") ) // Failsafe for if we have M1 launcher and we down while drinking a perk, makes sure the action slot gets set
+	if( self HasWeapon("m1garand_gl_zombie") ) 
 	{
-		self setactionslot(3,"altMode","m7_launcher_zombie");
+		self setactionslot(3,"altMode","m7_launcher_zombie"); // Failsafe for if we have M1 launcher and we down while drinking a perk, makes sure the action slot gets set
+		self SetWeaponAmmoStock( "m1garand_gl_zombie", self.weaponAmmo["m1garand_gl_zombie"]["stock"] ); // failsafe to fix ammo
 	}
-	else if( self HasWeapon("m1garand_gl_zombie_upgraded") ) // Failsafe for if we have M1 launcher and we down while drinking a perk, makes sure the action slot gets set
+	else if( self HasWeapon("m1garand_gl_zombie_upgraded") ) // for pap
 	{
 		self setactionslot(3,"altMode","m7_launcher_zombie_upgraded");
+		self SetWeaponAmmoStock( "m1garand_gl_zombie_upgraded", self.weaponAmmo["m1garand_gl_zombie_upgraded"]["stock"] ); 
 	}
 
 	// if we can't figure out what the last active weapon was, try to switch a primary weapon
