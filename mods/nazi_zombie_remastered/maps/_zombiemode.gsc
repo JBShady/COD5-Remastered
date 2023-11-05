@@ -255,6 +255,8 @@ init_sounds()
 	add_sound( "open_chest", "lid_open" );
 	add_sound( "music_chest", "music_box" );
 	add_sound( "close_chest", "lid_close" );
+	add_sound( "cabinet_open", "cabinet_open" );
+	add_sound( "crate_open", "crate_open" );
 
 	// Weapons on walls
 	add_sound( "weapon_show", "weap_wall" );

@@ -72,6 +72,8 @@ music_box,,SFX\Levels\zombie\music_box\music_box.wav,,1,1,500,2500,1,oldest,,,fu
 lid_open,,SFX\Levels\zombie\music_box\lid_open.wav,,1,1,250,2500,1,oldest,,,full_vol,,,,4000,,curve2,1,1,,3d,,,,,,,,,,,,,,,,,,,,,,,20,30,0.25,1,,
 lid_close,,SFX\Levels\zombie\music_box\lid_close.wav,,1,1,250,2500,1,oldest,,,full_vol,,,,4000,,curve2,1,1,,3d,,,,,,,,,,,,,,,,,,,,,,,20,30,0.25,1,,
 door_slide_open,,SFX\Levels\zombie\doors\door_slide_open.wav,,1,1,250,2500,,,,,full_vol,,,,4000,,curve2,1,1,,3d,,,,,,,,,,,,,,,,,,,,,,,20,30,0.25,1,,
+cabinet_open,,SFX\Levels\sniper\bar\bar_slam.wav,,1,1,250,2500,1,oldest,,,full_vol,,,,4000,,curve2,1,1,,3d,,,,,,,,,,,,,,,,,,,,,,,20,30,0.25,1,,
+crate_open,,SFX\Levels\sniper\bar\bar_hinge.wav,,1,1,250,2500,1,oldest,,,full_vol,,,,4000,,curve2,1,1,,3d,,,,,,,,,,,,,,,,,,,,,,,20,30,0.25,1,,
 
 light,,SFX\Amb\lightbulbs\light_humming_00.wav,,0.65,0.85,100,800,,,,,ambience,,curve2,,1000,,curve2,0.85,1.05,pitch,3d,,,looping,,,,,,,,,,,,,,0.25,,no,no,,,5,10,0.1,1,,
 fire_med,,SFX/Destruction/fires/bldg_fire/med_##,,1,1,50,500,,,,,ambience,,curve2,,,,,1,1,,3d,,,looping,,,,,,,,,,,,,,,,,,,,5,10,0.15,0.85,,

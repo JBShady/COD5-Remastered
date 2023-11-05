@@ -783,6 +783,8 @@ weapon_cabinet_think()
 		{
 			self.has_been_used_once = true;
 
+			play_sound_at_pos( "cabinet_open", doors[0].origin );
+
 			self SetHintString( &"ZOMBIE_WEAPONCOSTAMMO", 750, ammo_cost ); 
 	//		self SetHintString( get_weapon_hint( self.zombie_weapon_upgrade ) );
 			self setCursorHint( "HINT_NOICON" ); 
@@ -895,7 +897,7 @@ weapon_crate_think()
 		if( has_been_used_once == false ) // open only on the first use
 		{
 			has_been_used_once = true;
-			play_sound_at_pos( "open_chest", crate_sound.origin );
+			play_sound_at_pos( "crate_open", crate_sound.origin );
 			level.satchel_crate_lid RotateTo( level.satchel_crate_lid.angles + (92,0,0), 0.4, 0.1, 0.1);
 			level.question_mark RotateTo( level.question_mark.angles + (92,0,0), 0.4, 0.1, 0.1);
 			level thread give_satchel_after_rounds();
