@@ -525,7 +525,9 @@ zombie_intro_screen( string1, string2, string3, string4, string5 )
 		"player_sprintStrafeSpeedScale", "0.8",
 		"aim_automelee_range", "96",
         "aim_automelee_lerp", "50",
-        "player_meleechargefriction", "2500" );	
+        "player_meleechargefriction", "2500",
+		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
+
 	}
 }
 
@@ -547,7 +549,9 @@ players_playing()
 		"player_sprintStrafeSpeedScale", "0.8",
 		"aim_automelee_range", "96",
         "aim_automelee_lerp", "50",
-        "player_meleechargefriction", "2500" );	
+        "player_meleechargefriction", "2500",
+		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
+
 	}
 }
 
@@ -627,7 +631,8 @@ onPlayerConnect_clientDvars()
         "player_meleechargefriction", "2500", //"stickiness " when knifing
 		"player_backSpeedScale", "0.9", // back speed faster, similar to console
 		"player_strafeSpeedScale", "0.9", // buffed strafe
-		"player_sprintStrafeSpeedScale", "0.8" );  // buffed strafe
+		"player_sprintStrafeSpeedScale", "0.8",  // buffed strafe
+		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
 
 	self SetClientDvars(
 		"cg_overheadIconsize", "0",
@@ -687,7 +692,9 @@ onPlayerSpawned()
 		
 		"aim_automelee_range", "96",
         "aim_automelee_lerp", "50",
-        "player_meleechargefriction", "2500" );
+        "player_meleechargefriction", "2500",
+		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
+
 
 		if( getDvar( "classic_perks" ) == "" || getDvar("classic_perks") == "0" ) // if dvar doesn't exist or is disabled, we stay default
 		{

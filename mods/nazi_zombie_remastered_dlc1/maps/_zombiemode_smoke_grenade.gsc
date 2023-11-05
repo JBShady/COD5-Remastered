@@ -75,6 +75,8 @@ watchSmokeDetonation()
 			{
 				if(!isSubStr(zombies[i].current_speed, "confused") && !isSubStr(zombies[i].current_speed, "walk") && self.has_legs ) // then we make sure they are not already confused or walkers or crawlers
 				{
+					zombies[i].moveplaybackrate = 0.85;
+
 					zombies[i].stored_speed = zombies[i].current_speed; // then we store their OG speed, this should NEVER have "confused" in it
 
 					if(isSubStr(zombies[i].current_speed, "run")  && zombies.size > 1 ) // if its run, we go down to walk
@@ -101,6 +103,7 @@ watchSmokeDetonation()
 			{
 				if(isSubStr(zombies[i].current_speed, "confused") && isDefined(zombies[i].stored_speed) ) // if they happen to be previously confused, now we reset them back to their OG anim because they left the smoke, otherwise we do nothing
 				{
+					zombies[i].moveplaybackrate = 1.0;
 					zombies[i] thread set_run_anim( zombies[i].stored_speed ); 
 					zombies[i].run_combatanim = level.scr_anim[zombies[i].animname][zombies[i].stored_speed];
 
@@ -122,6 +125,7 @@ watchSmokeDetonation()
 	{
 		if(isSubStr(zombies[i].current_speed, "confused") && isDefined(zombies[i].stored_speed) ) // if they happen to be previously confused even if they never left the radius, we force them all back to their OG anim because now the smoke has faded away
 		{
+			zombies[i].moveplaybackrate = 1.0;
 			zombies[i] thread set_run_anim( zombies[i].stored_speed ); 
 			zombies[i].run_combatanim = level.scr_anim[zombies[i].animname][zombies[i].stored_speed];
 		}
