@@ -693,7 +693,6 @@ blocker_trigger_think()
 			return;
 		}
 
-	
 		while( 1 )
 		{
 			if( !player IsTouching( trigger ) )
@@ -716,6 +715,8 @@ blocker_trigger_think()
 			{
 				break; 
 			}
+
+			player.potentially_spamming = true;
 
 			if( doubler_status != level.zombie_vars["zombie_powerup_point_doubler_on"] )
 			{
@@ -775,10 +776,14 @@ blocker_trigger_think()
 			if( all_chunks_intact( self.barrier_chunks ) )
 			{
 				trigger notify("all_boards_repaired");
+				player.potentially_spamming = undefined;
 				return;
 			}
 			
 		}
+
+		player.potentially_spamming = undefined;
+
 	}
 }
 

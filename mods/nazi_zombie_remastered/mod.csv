@@ -14,6 +14,7 @@ sound,nazi_zombie_prototype
 weapon,sp/svt40
 weapon,sp/ppsh
 weapon,sp/type100_smg
+weapon,sp/mortar_round
 weapon,sp/satchel_charge
 // test
 xmodel,viewmodel_zombie_30cal_lmg_new
@@ -139,3 +140,20 @@ xmodel,satchel_crate
 xmodel,satchel_crate_lid
 xmodel,collision_geo_64x64x64
 xmodel,satchel_crate_lid_question
+xanim,waw_mortar_round_put_away
+xanim,viewmodel_nohands_idle
+material,dlc_zombie_barriers
+material,dlc_zombie_starman
+material,dlc_zombie_lawn
+material,dlc_zombie_upstairs
+material,dlc_zombie_flamethrower
+material,dlc_zombie_barrels
+material,dlc_zombie_mortar
+material,dlc_zombie_magicbox
+material,dlc_zombie_laststand
+material,dlc_zombie_radio
+material,dlc_zombie_locked
+material,line_alt
+stringtable,mp/dlc_achievements.csv
+localize,dlc
+sound,achievement_sound,,all_mp

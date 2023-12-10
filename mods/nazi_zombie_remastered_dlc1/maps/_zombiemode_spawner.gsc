@@ -1806,6 +1806,10 @@ play_death_vo(hit_location, player,mod,zombie)
 	}
 	if(hit_location == "head" && level.zombie_vars["zombie_insta_kill"] == 0   )
 	{
+		if(isDefined(zombie.in_the_ground) && zombie.in_the_ground == true)
+		{
+			player achievement_notify( "DLC1_ZOMBIE_COURT_HEADSHOTS" );
+		}
 		//no VO for non bullet headshot kills
 		if( mod != "MOD_PISTOL_BULLET" &&	mod != "MOD_RIFLE_BULLET" )
 		{

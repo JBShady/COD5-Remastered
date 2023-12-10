@@ -36,9 +36,11 @@ zombie_radio_play()
 
 	while (1)
 	{
-		self waittill ("damage");
+		self waittill ("damage", damage, attacker);
 
-		println("changing radio stations");
+		attacker achievement_notify( "DLC_ZOMBIE_RADIO" );
+
+		//println("changing radio stations");
 		if(level.eggs != 1)
 		{
 			SetClientSysState("levelNotify","kzmb_next_song");			

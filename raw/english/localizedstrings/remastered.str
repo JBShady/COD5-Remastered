@@ -306,7 +306,7 @@ REFERENCE           ZOMBIE_HEADSHOTS_DESC
 LANG_ENGLISH        "Get 150 zombie headshots in a single game."
 
 REFERENCE           ZOMBIE_ALL_TRAPS_DESC
-LANG_ENGLISH        "Kill at least one zombie with three different traps in a single round."
+LANG_ENGLISH        "Kill at least 1 zombie with three different traps in a single round."
 
 REFERENCE           ZOMBIE_ALL_PERKS_DESC
 LANG_ENGLISH        "Have every single perk at the same time."
@@ -380,11 +380,131 @@ LANG_ENGLISH        "Link all the teleport pads before Round 8."
 REFERENCE           ZOMBIE_EE_FACTORY_DESC
 LANG_ENGLISH        "Restore facility operations after starting the plan."
 
+REFERENCE           ZOMBIE_BARRIERS
+LANG_ENGLISH        "Hold the Line"
+
+REFERENCE           ZOMBIE_STARMAN
+LANG_ENGLISH        "Starman Survivor"
+
+REFERENCE           ZOMBIE_LAWN
+LANG_ENGLISH        "Get Off My Lawn"
+
+REFERENCE           ZOMBIE_UPSTAIRS
+LANG_ENGLISH        "Scavenger"
+
+REFERENCE           ZOMBIE_FLAMETHROWER
+LANG_ENGLISH        "Private Pyro"
+
+REFERENCE           ZOMBIE_BARRELS
+LANG_ENGLISH        "Tower Defense"
+
+REFERENCE           ZOMBIE_MORTAR
+LANG_ENGLISH        "Der Bomber"
+
+REFERENCE           ZOMBIE_MAGICBOX
+LANG_ENGLISH        "Luck of the Draw"
+
+REFERENCE           ZOMBIE_LASTSTAND
+LANG_ENGLISH        "The Final Stand"
+
+REFERENCE           ZOMBIE_RADIO
+LANG_ENGLISH        "Sign-On, Sign-Off"
+
+REFERENCE           ZOMBIE_BARRIERS_DESC
+LANG_ENGLISH        "Survive through Round 4 without letting a single zombie enter the bunker."
+
+REFERENCE           ZOMBIE_STARMAN_DESC
+LANG_ENGLISH        "Pick up a Double Points and Insta-Kill powerup at the same time."
+
+REFERENCE           ZOMBIE_LAWN_DESC
+LANG_ENGLISH        "Kill 30 zombies from over 100 feet away in a single game."
+
+REFERENCE           ZOMBIE_UPSTAIRS_DESC
+LANG_ENGLISH        "Open all secrets upstairs before Round 6."
+
+REFERENCE           ZOMBIE_FLAMETHROWER_DESC
+LANG_ENGLISH        "Complete an entire round using only the Flamethrower."
+
+REFERENCE           ZOMBIE_BARRELS_DESC
+LANG_ENGLISH        "Light 10 zombies on fire with explosive red barrels in a single game."
+
+REFERENCE           ZOMBIE_MORTAR_DESC
+LANG_ENGLISH        "Damage a zombie with a Satchel Charge that was detonated by a Mortar."
+
+REFERENCE           ZOMBIE_MAGICBOX_DESC
+LANG_ENGLISH        "Use the Mystery Box 100 times in a single game."
+
+REFERENCE           ZOMBIE_LASTSTAND_DESC
+LANG_ENGLISH        "Survive 20 waves of Nazi Zombies."
+
+REFERENCE           ZOMBIE_RADIO_DESC
+LANG_ENGLISH        "Change the station, please."
+
+REFERENCE           ZOMBIE_DOORS
+LANG_ENGLISH        "Check Every Corner"
+
+REFERENCE           ZOMBIE_COURT_HEADSHOTS
+LANG_ENGLISH        "Acted Alone"
+
+REFERENCE           ZOMBIE_ZAP
+LANG_ENGLISH        "Zap Zap"
+
+REFERENCE           ZOMBIE_POWER
+LANG_ENGLISH        "Lightning Fast"
+
+REFERENCE           ZOMBIE_MG
+LANG_ENGLISH        "Dig In"
+
+REFERENCE           ZOMBIE_DOWNED_KILLS
+LANG_ENGLISH        "Down But Not Out"
+
+REFERENCE           ZOMBIE_BETTY
+LANG_ENGLISH        "Devil's Garden"
+
+REFERENCE           ZOMBIE_SMOKE
+LANG_ENGLISH        "Tossing Gas"
+
+REFERENCE           ZOMBIE_TEDDY
+LANG_ENGLISH        "Can't Quit..."
+
+REFERENCE           ZOMBIE_SONG
+LANG_ENGLISH        "Good Manners"
+
+REFERENCE           ZOMBIE_DOORS_DESC
+LANG_ENGLISH        "Open every door before turning the power on."
+
+REFERENCE           ZOMBIE_COURT_HEADSHOTS_DESC
+LANG_ENGLISH        "Headshot 20 zombies as they rise out of the ground in a single game."
+
+REFERENCE           ZOMBIE_ZAP_DESC
+LANG_ENGLISH        "Activate both Electro-Shock Defenses at the same time."
+
+REFERENCE           ZOMBIE_POWER_DESC
+LANG_ENGLISH        "Turn the power on within the first 3 rounds."
+
+REFERENCE           ZOMBIE_MG_DESC
+LANG_ENGLISH        "Deploy a heavy machine gun."
+
+REFERENCE           ZOMBIE_DOWNED_KILLS_DESC
+LANG_ENGLISH        "Kill 5 zombies while in last stand in a single game."
+
+REFERENCE           ZOMBIE_BETTY_DESC
+LANG_ENGLISH        "Have 10 Bouncing Betties planted at the same time."
+
+REFERENCE           ZOMBIE_SMOKE_DESC
+LANG_ENGLISH        "Confuse zombies with a Smoke Grenade."
+
+REFERENCE           ZOMBIE_TEDDY_DESC
+LANG_ENGLISH        "Find the Mystery Box after it changes locations."
+
+REFERENCE           ZOMBIE_SONG_DESC
+LANG_ENGLISH        "Don't forget to flush."
+
 REFERENCE           DESC
 LANG_ENGLISH        "Achievement Description:"
 
 REFERENCE           ITEM
-LANG_ENGLISH        "Item"
+LANG_ENGLISH        "Special Equipment"
 
 REFERENCE           SCORE
 LANG_ENGLISH        "Scoreboard"

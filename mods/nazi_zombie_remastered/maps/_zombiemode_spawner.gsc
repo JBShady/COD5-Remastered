@@ -384,6 +384,12 @@ zombie_goto_entrance( node, endon_bad_path )
 	// here is where they zombie would play the traversal into the building( if it's a window )
 	// and begin the player seek logic
 	self zombie_setup_attack_properties();
+
+	if(isDefined(level.zombies_not_entered) && level.zombies_not_entered == true)
+	{
+		level.zombies_not_entered = undefined;
+	}
+
 	self thread find_flesh();
 }
 
@@ -1234,7 +1240,7 @@ head_should_gib( attacker, type, point )
 	if( type != "MOD_RIFLE_BULLET" && type != "MOD_PISTOL_BULLET" )
 	{
 		// maybe it's ok, let's see if it's a grenade
-		if( type == "MOD_GRENADE" || type == "MOD_GRENADE_SPLASH" )
+		if( type == "MOD_GRENADE" || type == "MOD_GRENADE_SPLASH" || type == "MOD_EXPLOSIVE" )
 		{
 			if( Distance( point, self GetTagOrigin( "j_head" ) ) > 55 )
 			{
@@ -1417,7 +1423,7 @@ zombie_gib_on_damage()
 				if( self.damageLocation == "none" )
 				{
 					// SRS 9/7/2008: might be a nade or a projectile
-					if( type == "MOD_GRENADE" || type == "MOD_GRENADE_SPLASH" || type == "MOD_PROJECTILE" )
+					if( type == "MOD_GRENADE" || type == "MOD_GRENADE_SPLASH" || type == "MOD_PROJECTILE" || type == "MOD_EXPLOSIVE" )
 					{
 						// ... in which case we have to derive the ref ourselves
 						refs = self derive_damage_refs( point );
@@ -1708,6 +1714,11 @@ zombie_death_points( origin, mod, hit_location, player, zombie )
 
 	level thread play_death_vo(hit_location, player,mod,zombie);
 
+	if( distance(player.origin, zombie.origin) >= 1200 )
+	{
+		player achievement_notify( "DLC_ZOMBIE_LAWN" );
+	}
+
 	player maps\_zombiemode_score::player_add_points( "death", mod, hit_location ); 
 }
 
@@ -1823,6 +1834,7 @@ zombie_damage( mod, hit_location, hit_origin, player )
 
 	if ( mod == "MOD_GRENADE" || mod == "MOD_GRENADE_SPLASH" )
 	{
+
 		if ( isdefined( player ) && isalive( player ) )
 		{
 			self DoDamage( level.round_number + randomintrange( 100, 500 ), self.origin, player);
@@ -1832,8 +1844,9 @@ zombie_damage( mod, hit_location, hit_origin, player )
 			self DoDamage( level.round_number + randomintrange( 100, 500 ), self.origin, undefined );
 		}
 	}
-	else if( mod == "MOD_PROJECTILE" || mod == "MOD_EXPLOSIVE" || mod == "MOD_PROJECTILE_SPLASH" || mod == "MOD_PROJECTILE_SPLASH")
+	else if( mod == "MOD_PROJECTILE" || mod == "MOD_PROJECTILE_SPLASH" )
 	{
+
 		if ( isdefined( player ) && isalive( player ) )
 		{
 			self DoDamage( level.round_number * randomintrange( 0, 100 ), self.origin, player);
@@ -1841,6 +1854,17 @@ zombie_damage( mod, hit_location, hit_origin, player )
 		else
 		{
 			self DoDamage( level.round_number * randomintrange( 0, 100 ), self.origin, undefined );
+		}
+	}
+	else if( mod == "MOD_EXPLOSIVE" )
+	{
+		if ( isdefined( player ) && isalive( player ) )
+		{
+			self DoDamage( level.round_number * randomintrange( 125, 250 ), self.origin, player);
+		}
+		else
+		{
+			self DoDamage( level.round_number * randomintrange( 125, 250 ), self.origin, undefined );
 		}
 	}
 	else if( mod == "MOD_ZOMBIE_SATCHEL" )
@@ -2372,7 +2396,7 @@ play_death_vo(hit_location, player,mod,zombie)
 	}
 
 	//Explosive Kills
-	if((mod == "MOD_GRENADE_SPLASH" || mod == "MOD_GRENADE") && level.zombie_vars["zombie_insta_kill"] == 0 )
+	if((mod == "MOD_GRENADE_SPLASH" || mod == "MOD_GRENADE" ) && level.zombie_vars["zombie_insta_kill"] == 0 )
 	{
 		rand = randomintrange(0, 100);
 		if(rand < 75)
@@ -2383,7 +2407,7 @@ play_death_vo(hit_location, player,mod,zombie)
 		return;
 	}
 	
-	if( mod == "MOD_PROJECTILE")
+	if( mod == "MOD_PROJECTILE" || mod == "MOD_EXPLOSIVE" )
 	{	
 		rand = randomintrange(0, 100);
 		if(rand < 70)

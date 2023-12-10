@@ -915,7 +915,7 @@ dog_clip_monitor()
 
 //
 //	Allows dogs to be spawned independent of the round spawning
-special_dog_spawn( spawners, num_to_spawn )
+special_dog_spawn( spawners, num_to_spawn, sam_attack )
 {
 	dogs = GetAISpeciesArray( "all", "dog" );
 
@@ -985,6 +985,11 @@ special_dog_spawn( spawners, num_to_spawn )
 		}
 
 		waiting_for_next_dog_spawn( count, num_to_spawn );
+	}
+
+	if(isDefined(sam_attack) && sam_attack == true && num_to_spawn == 4 && level.tele_reward != "dog" && level.tele_reward != "nothing" )
+	{
+		thread play_sound_2d( "sam_nospawn" );
 	}
 
 	return true;

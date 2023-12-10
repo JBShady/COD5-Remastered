@@ -198,6 +198,11 @@ betty_think(player)
 
 	if(player.mines.size <= 30)
 	{
+		if(player.mines.size >= 10)
+		{
+			player achievement_notify( "DLC1_ZOMBIE_BETTY" );
+		}
+
 		while(1)
 		{
 			trigger waittill( "trigger", ent );

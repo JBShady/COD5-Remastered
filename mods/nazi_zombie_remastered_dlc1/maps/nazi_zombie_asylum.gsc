@@ -13,6 +13,8 @@ main()
 	// enable for dog rounds
 	level.dogs_enabled = true;
 	
+	level.achievement_notify_func = maps\_zombiemode_utility::achievement_notify;
+
 	maps\_destructible_opel_blitz::init();
 	precacheshellshock("electrocution");
 	
@@ -72,7 +74,8 @@ main()
 	level.electrocuted_zombies = [];
 	
 	init_sounds();
-	
+	init_achievement();
+
 	//the electric switch in the control room
 	level thread master_electric_switch();
 	
@@ -114,6 +117,20 @@ main()
 	// I recommend putting it in it's own function...
 	// If not a MOD, you may need to provide new localized strings to reflect the proper cost.
 	
+}
+
+init_achievement()
+{
+	include_achievement( "achievement_doors" );
+	include_achievement( "achievement_court_headshots" );
+	include_achievement( "achievement_zap" );
+	include_achievement( "achievement_power" );
+	include_achievement( "achievement_mg" );
+	include_achievement( "achievement_downed_kills" );
+	include_achievement( "achievement_betty" );
+	include_achievement( "achievement_smoke" );
+	include_achievement( "achievement_teddy" );
+	include_achievement( "achievement_song" );
 }
 
 level_start_vox()
@@ -995,6 +1012,8 @@ toilet_useage()
 			if(toilet_counter == 3)
 			{
 				//playsoundatposition ("cha_ching", toilet_trig.origin);
+				level achievement_notify("DLC1_ZOMBIE_SONG");
+
 				level.eggs = 1;
 				setmusicstate("eggs");
 				wait(240);	
@@ -1206,6 +1225,7 @@ electric_trap_move_switch(parent)
 
 activate_electric_trap()
 {
+
 	//the trap on the north side is kinda busted, so it has a sparky wire. 
 	if(isDefined(self.script_string) && self.script_string == "north")
 	{
@@ -1213,6 +1233,7 @@ activate_electric_trap()
 		machine = getent("zap_machine_north","targetname");
 		machine setmodel("zombie_zapper_power_box_on");
 		clientnotify("north");
+		level.north_on = true;
 	}
 	else
 	{
@@ -1220,8 +1241,14 @@ activate_electric_trap()
 		machine = getent("zap_machine_south","targetname");
 		machine setmodel("zombie_zapper_power_box_on");
 		clientnotify("south");
+		level.south_on = true;
 	}	
-		
+	
+	if(isDefined(level.north_on) && isDefined(level.south_on) && level.north_on == true && level.south_on == true  )
+	{
+		level achievement_notify("DLC1_ZOMBIE_ZAP");
+	}
+
 	clientnotify(self.target);
 	
 	fire_points = getstructarray(self.target,"targetname");
@@ -1238,6 +1265,15 @@ activate_electric_trap()
 	// reset the zapper model
 	level waittill("arc_done");
 	machine setmodel("zombie_zapper_power_box");
+
+	if(self.script_string == "north")
+	{
+		level.north_on = undefined;
+	}
+	else
+	{
+		level.south_on = undefined;
+	}
 }
 
 
@@ -1625,7 +1661,7 @@ and makes them available to use
 ------------------------------------*/
 master_electric_switch()
 {
-	
+	level.power_off = true;
 	trig = getent("use_master_switch","targetname");
 	master_switch = getent("master_switch","targetname");	
 	master_switch notsolid();
@@ -1658,6 +1694,7 @@ master_electric_switch()
 	if ( cheat != true )
 	{
 		trig waittill("trigger",user);
+		level.power_off = undefined;
 		players = getplayers();
 
 		if(players.size == 4 && randomintrange(0,4) == 0 ) // new vox egg, only if we have 4 players and 25% chances
@@ -1677,6 +1714,10 @@ master_electric_switch()
 	//TO DO (TUEY) - kick off a 'switch' on client script here that operates similiarly to Berlin2 subway.
 	master_switch playsound("switch_flip");
 
+	if(level.round_number <= 3 )
+	{
+		level achievement_notify("DLC1_ZOMBIE_POWER");
+	}
 	//level thread electric_current_open_middle_door();
 	//level thread electric_current_revive_machine();
 	//level thread electric_current_reload_machine();
@@ -2777,6 +2818,8 @@ mount_mg_trigger()
 	player is_leaving_trigger(true);
 
 	level thread mount_mg(actual_weapon); // This places the actual turret & model depending on what weapon was deployed
+
+	player achievement_notify( "DLC1_ZOMBIE_MG" );
 
 	player playlocalsound("weap_pickup_plr");
 

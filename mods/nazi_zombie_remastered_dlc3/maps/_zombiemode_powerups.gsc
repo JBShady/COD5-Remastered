@@ -614,6 +614,9 @@ special_drop_setup()
 			powerup = "nothing";
 		}
 	}
+
+	level.tele_reward = powerup;
+
 	//MM test  Change this if you want the same thing to keep spawning
 //	powerup = "dog";
 	switch ( powerup )
@@ -640,7 +643,7 @@ special_drop_setup()
 		{
 			is_powerup = false;
 			dog_spawners = GetEntArray( "special_dog_spawner", "targetname" );
-			maps\_zombiemode_dogs::special_dog_spawn( dog_spawners, 1 );
+			maps\_zombiemode_dogs::special_dog_spawn( dog_spawners, 1, undefined );
 			//iprintlnbold( "Samantha Sez: No Powerup For You!" );
 			thread play_sound_2d( "sam_nospawn" );
 		}

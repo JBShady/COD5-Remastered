@@ -392,7 +392,7 @@ player_teleporting_fail( index )
 
 	if ( level.is_cooldown == false )
 	{
-		thread pad_manager(); 
+		self thread pad_manager(); 
 	}
 
 	players = get_players(); 
@@ -533,7 +533,7 @@ player_teleporting( index, user )
 	// only need this if it's not cooling down
 	if ( level.is_cooldown == false )
 	{
-		thread pad_manager();
+		self thread pad_manager();
 	}
 
 	// Now spawn a powerup goodie after a few seconds
@@ -547,10 +547,9 @@ player_teleporting( index, user )
 	// Special for teleporting too much.  The Dogs attack!
 	if ( time_since_last_teleport < 60000 && level.active_links == 3 && level.round_number > 20 )
 	{
-		dog_spawners = GetEntArray( "special_dog_spawner", "targetname" );
-		maps\_zombiemode_dogs::special_dog_spawn( undefined, 4 );
+		level thread maps\_zombiemode_dogs::special_dog_spawn( undefined, 4, true );
 		//iprintlnbold( "Samantha Sez: No Powerup For You!" );
-		thread play_sound_2d( "sam_nospawn" );
+		//thread play_sound_2d( "sam_nospawn" );
 	}
 	level.teleport_time = GetTime();
 }

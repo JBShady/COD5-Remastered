@@ -1,5 +1,6 @@
 #include common_scripts\utility;
 #include maps\_utility;
+#include maps\_zombiemode_utility; 
 
 init()
 {
@@ -63,14 +64,71 @@ beginMortarTracking()
 	self waittill ( "grenade_fire", mortar, weaponName );
 	if(weaponName == "mortar_round")
 	{
+		if(self getCurrentWeapon() == "mortar_round")
+		{
+			if( self.current_gun != "none" && self.current_gun != "satchel_charge" && self.current_gun != "mortar_round" )
+			{
+				self SwitchToWeapon( self.current_gun );
+			}
+			else 
+			{
+				// try to switch to first primary weapon
+				primaryWeapons = self GetWeaponsListPrimaries();
+				if( IsDefined( primaryWeapons ) && primaryWeapons.size > 0 )
+				{
+					self SwitchToWeapon( primaryWeapons[0] );
+				}
+			}
+		}
+
+		self thread mortar_check_impact(mortar);
 		mortar thread mortar_death();	
 	}
+}
+
+mortar_check_impact(mortar)
+{
+	velocitySq = 10000 * 10000;
+	oldPos = mortar.origin;
+	
+	mortar_pos = [];
+	while( velocitySq != 0 )
+	{
+		wait( 0.05 );
+		velocitySq = distanceSquared( mortar.origin, oldPos );
+		oldPos = mortar.origin;
+		mortar_pos = array_add(mortar_pos, mortar.origin);
+	}
+	
+	index = -1; // init variable, if it stays -1 that means we have not touched a zombie or player
+
+	sticked = GetAiSpeciesArray( "axis", "all" );	
+	for(i=0;i<sticked.size;i++) // first we check all zombies
+	{
+		ri_arm = sticked[i] gettagorigin("j_elbow_ri");
+		le_arm = sticked[i] gettagorigin("j_elbow_le");
+		if(distance2d(mortar.origin, sticked[i].origin) < 20 || distance(mortar.origin, ri_arm) < 15 || distance(mortar.origin, le_arm) < 15)
+		{
+			index = i;
+			break;
+		}
+	}
+
+	if(index == -1 ) // if still -1, it is sticking to environment so we skip faking the nade as there is no need (unless we have a positive water depth, we fake in water so the grenade doesn't spam-sink weirdly)
+	{
+		return;
+	}
+
+
+	sticked[index] maps\_zombiemode_spawner::zombie_head_gib();
+	sticked[index] dodamage( sticked[index].health + 666, sticked[index].origin );
+	//iprintlnbold("Mortar dud detected--killing zombie on impact");
 }
 
 mortar_death()
 {
 	self waitTillNotMoving();
-	earthquake(.55 ,3,self.origin,1500);
+	earthquake(.42 ,3,self.origin,1000);
 	//add rumble
 	PlayRumbleOnPosition( "explosion_generic",self.origin );
 }
@@ -172,8 +230,8 @@ watchSatchelAltDetonate()
 			if ( self.sessionstate == "spectator" || self maps\_laststand::player_is_in_laststand() )
 			continue;
 
-			//if ( Isdefined(self.potentially_spamming) && self.potentially_spamming == true )
-			//continue;
+			if ( Isdefined(self.potentially_spamming) && self.potentially_spamming == true )
+			continue;
 
 			self notify ( "alt_detonate" );
 		}
@@ -349,7 +407,7 @@ waitAndDetonate( delay )
 	zombs = getaispeciesarray("axis");
 	for(i=0;i<zombs.size;i++)
 	{
-		if(zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80 && DistanceSquared(zombs[i].origin, self.origin) < 300 * 300)
+		if(zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80 && DistanceSquared(zombs[i].origin, self.origin) < 280 * 280)
 		{
 			zombs[i] thread maps\_zombiemode_spawner::zombie_damage( "MOD_ZOMBIE_SATCHEL", "none", zombs[i].origin, self.owner );
 		}
@@ -372,7 +430,10 @@ satchelDamage()
 	
 	while(1)
 	{
-		self waittill("damage", amount, attacker);
+		//self waittill("damage", amount, attacker);
+
+		self waittill( "damage", amount, attacker, direction_vec, point, type );
+
 		if ( !isplayer(attacker) )
 			continue;
 		
@@ -414,14 +475,21 @@ satchelDamage()
 	earthquake(.3 ,3,self.origin,1000);
 
 	zombs = getaispeciesarray("axis");
+	damaged_zombies = 0;
 	for(i=0;i<zombs.size;i++)
 	{
 		if(zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80 && DistanceSquared(zombs[i].origin, self.origin) < 300 * 300)
 		{
 			zombs[i] thread maps\_zombiemode_spawner::zombie_damage( "MOD_ZOMBIE_SATCHEL", "none", zombs[i].origin, self.owner );
+			damaged_zombies += 1;
 		}
 	}
-
+	
+	if(type == "MOD_EXPLOSIVE" && amount >= 300 && damaged_zombies > 0 ) // the only mod explosive that does 300 or more damage, all others either do less or are grenade splash mod
+	{
+		attacker achievement_notify( "DLC_ZOMBIE_MORTAR" );
+	}
+	
 	self detonate( attacker );
 
 	// won't get here; got death notify.

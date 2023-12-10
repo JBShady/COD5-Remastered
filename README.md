@@ -54,16 +54,19 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Player no longer receives a free Colt when they have no weapons, instead the screen is just blank like future zombie games.
 * Voiceover interactions disabled on a player size of 1 to fix character responses sometimes playing in solo
 * Cannot purchase perks/weapons while falling into death before GAME OVER
+* Fixed red screen bug with feature not working after dying and respawning
+* Fixed bug where player could purchase items while going into game over screen resulting in crashes
 
 ### Zombies
 * Zombies have glowing eye effects in all DLCs now.
 * In addition to Round 1, Round 2 will also only be walkers to allow for more gradual pacing.
 * All maps use various improvements to zombie logic and pathing 
-* Zombies can now spawn with random combinations of helmets, hats, bandages, or gear based on rare percent chances and the map's setting, with the first two maps using more equipment and the last two having less
+* Zombies can now spawn with random combinations of helmets, hats, bandages, headbands, or other gear based on rare percent chances and the map's setting, with the first two maps using more equipment and the last two having less
 * Zombies must be on the same floor/actually directly behind players to still play their behind vocals
 * Added missing gore fx when gibbing zombie torsos
 
 ### HUD
+* Damage indicators are only fully faded when player is actually at full health 
 * HUD elements no longer touch the very edge of the screen, including the ammo counter, round counter, and perk shaders.
 * Added a game option that allows for the D-pad equipment and action hintstrings to actually reflect using a controller.
 * Removed objective info screen when pressing tab in solo.
@@ -158,6 +161,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Quick Revive now works on solo giving 3 possible extra lives, togglable under the "Laststand" setting in Game Options.
 * Renamed hintstring from saying to buy "Revive" to "Quick Revive"
 * Jugger-nog abilities and health regeneration behaves the same on all maps using improvements from Der Riese
+* Double Tap Root Beer now gives a 33% damage buff for bullet weapons
 
 ### Traps
 * All electric traps last for 30 seconds with a 30 second cooldown, except for Shi No Numa which is 60 for balance
@@ -191,11 +195,14 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 ## Nacht Der Untoten
 * Added "mission intro" in the bottom left corner to include storyline accurate info.
 * Added new musical Easter Egg that plays "Undone" by shooting all 31 red barrels
+* Red barrels slightly buffed and also do AOE damage
+* Slightly buffed explosive truck values
 * KZMB radio now pauses when playing the main Easter Egg song or game over intermission music 
 * Using audio from campaign, added an entire set of new voicelines based off of the style of the other maps (headshots, kills, power-ups, weapons, surrounded, downed, etc.).
 * 4 characters with around 100 lines each spread out through about 30 categories, including new categories and interactions not seen on other maps.
 * Removed Scoped Kar98k from the box so that the cabinet is actually unique and useful while still being a "troll" that does not tell you what you are purchasing
 * Added Satchel Charges into a "searchable" mysterious crate akin to the Sniper Cabinet with a working trigger, animation, and custom model.
+* Satchel Charge Crate and Sniper Cabinet now both use unique sounds when opened
 * Instead of randomizing the player models for each character, each Player (1, 2, 3, 4) always has a consistent and unique player model/face/gear.
 * Replaced camoflauged Pacific-theater helmets with regular bare metal helmets
 * Zombies can now use updated animations from future maps for traversing, crawling, attacking, hitting through barriers, walking, running, etc. (The Nacht-unique "sprint" crawler is still present)
@@ -296,7 +303,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 | **Rocket Launcher** | Panzerschrek | Panzerschrek | M9A1 Bazooka | Panzerschrek |
 | **Frag Grenades** | Stielhandgranate | Stielhandgranate | Type 97 Grenade | Stielhandgranate |
 | **Speical Grenades** | Molotov | Molotov, Smoke Grenade | Molotov, Sticky Grenade | Molotov, Monkey Bomb |
-| **Equipment** | Satchel Charges | Bouncing Betties | Bouncing Betties | Bouncing Betties, Bowie Knife |
+| **Equipment** | Satchel Charges, Mortar | Bouncing Betties | Bouncing Betties | Bouncing Betties, Bowie Knife |
 | **Entirely New Weapons** | SVT-40 | SVT-40 | SVT-40, DP-28, Type 99 | SVT-40, DP-28, Type 99 |
 | **Missing Weapons Added** | Type 100, PPSh-41 | Type 100 | None | M1 Garand, Sawed-Off Double Barrel |
 | **Wonder Weapons** | Ray Gun | Ray Gun | Ray Gun, Wunderwaffe DG-2 | Ray Gun, Wunderwaffe DG-2 |
@@ -335,12 +342,16 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Has identical damage and ammo stats with the Stielhandgranate, used on non-German maps
 
 #### Sticky Grenade
-* High impact, low radius grenades rebalanced for zombies
+* High damage, low radius grenades rebalanced for zombies
 * Custom code that allows them to stick to zombies and other players even in the Singleplayer engine 
 * Uses cut voicelines
 
+#### Mortar Round
+* Very high damage, very high radius explosive rebalanced for zombies
+* Occupies an action slot like other equipment, allowing the player to choose when they want to pull out a Mortar Round once acquired 
+
 #### Satchel Charges
-* High radius, high damage detonatable explosives rebalanced for zombies that also deals damage to the player
+* High damage, high radius detonatable explosives rebalanced for zombies that also deals damage to the player
 * One-time purcahse that takes up equipment slot, rewarded 2 per round and damage scales with rounds just like Bouncing Betties
 * Added functionality for double-tapping use key to detonate
 * Limit of 20 charges per player
@@ -418,6 +429,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * (Upgraded) Decreased reserve ammo from 700 to 690 so it is actually divisible by the drum mag capacity (115)
 
 #### STG-44
+* Slightly buffed damage to better fit being in the rifle weapon category
 * Fixed capitalization of the "t" to be lowercase for historical accuracy
 * (Upgraded) Updated model to remove metal gaps without silver etching
 
@@ -460,7 +472,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * (Upgraded) Recieves additional small mobility buff
 
 #### Panzerschrek
-* Small damage buff so rockets are actually (logically) deadlier than other explosive weapons/grenades 
+* Small damage buff so rockets are actually (logically) deadlier than grenades 
 * (Upgraded) Recieves small mobility buff
 
 #### Knife

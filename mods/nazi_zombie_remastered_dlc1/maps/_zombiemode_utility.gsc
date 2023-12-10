@@ -1232,3 +1232,12 @@ play_killstreak_dialog()
 		//This ensures that there is at least 3 seconds waittime before playing another VO.
 
 }
+
+include_achievement( achievement, var1, var2, var3, var4 )
+{
+	maps\_zombiemode_achievement::init( achievement, var1, var2, var3, var4 );
+}
+achievement_notify( notify_name )
+{
+	self notify( notify_name );
+}

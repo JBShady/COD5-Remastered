@@ -1,5 +1,7 @@
 #include maps\_utility;
 #include common_scripts\utility;
+#include maps\_zombiemode_utility;
+
 main()
 {
 	//------------------
@@ -812,8 +814,8 @@ explodable_barrel_explode()
 		self.remove delete();
 	}
 
-	minDamage = 100;
-	maxDamage = 350;
+	minDamage = 25;
+	maxDamage = 250;
 	if( IsDefined( self.script_damage ) )
 	{
 		maxDamage = self.script_damage;
@@ -824,11 +826,6 @@ explodable_barrel_explode()
 	if( IsDefined( self.radius ) )
 	{
 		blastRadius = self.radius;
-	}
-	if( self.origin[0] == -363.6 ) // barrel to left of Kar98k doesn't do as much damage to prevent insta killing player
-	{
-		minDamage = 40;
-		blastRadius = 210;
 	}
 
 	//radiusDamage(self.origin + (0,0,56), blastRadius, maxDamage, minDamage);
@@ -876,7 +873,7 @@ explodable_barrel_explode()
 
 fire_radius_burn_section(attacker)
 {
-	fireEffectArea = spawn("trigger_radius", self.origin, 0, 125, 20); 
+	fireEffectArea = spawn("trigger_radius", self.origin, 0, 100, 20); 
 	durationOfFire = 10;  // fire only exists for a set amount of time
 
 	for(;;)
@@ -889,6 +886,8 @@ fire_radius_burn_section(attacker)
 			if(zombies[i] isTouching(fireEffectArea) && (!isDefined(zombies[i].molotov_flamed) || zombies[i].molotov_flamed == false) )
 			{
 				zombies[i].molotov_flamed = true;
+
+				attacker achievement_notify( "DLC_ZOMBIE_BARRELS" );
 
 				if( i < 4 ) // don't spam flame FX, just char zombies after a few
 				{

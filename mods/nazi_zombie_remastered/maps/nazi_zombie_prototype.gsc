@@ -9,6 +9,8 @@ main()
 	maps\_destructible_opel_blitz::init();
 	level.startInvulnerableTime = 1000;
 
+	level.achievement_notify_func = maps\_zombiemode_utility::achievement_notify;
+
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_PROTO_LEVEL_PLACE");
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_PROTO_LEVEL_TIME");
 	precachemodel("char_usa_raider_gear_flametank");
@@ -27,6 +29,7 @@ main()
 	maps\_zombiemode::main();
 
 	init_sounds();
+	init_achievement();
 
 	level thread bad_area_fixes();
 	level thread above_couches_death();
@@ -67,6 +70,19 @@ main()
 	// If not a MOD, you may need to provide new localized strings to reflect the proper cost.
 }
 
+init_achievement()
+{
+	include_achievement( "achievement_barriers" );
+	include_achievement( "achievement_starman" );
+	include_achievement( "achievement_lawn" );
+	include_achievement( "achievement_upstairs" );
+	include_achievement( "achievement_flamethrower" );
+	include_achievement( "achievement_barrels" );
+	include_achievement( "achievement_mortar" );
+	include_achievement( "achievement_magicbox" );
+	include_achievement( "achievement_laststand" );
+	include_achievement( "achievement_radio" );
+}
 
 bad_area_fixes()
 {
@@ -335,8 +351,8 @@ include_weapons()
 
 	// Special
 	include_weapon( "ray_gun" );
-
-	include_weapon( "satchel_charge", false );
+	include_weapon( "mortar_round" );
+	include_weapon( "satchel_charge", false ); // Only in crate
 	//include_weapon( "falling_hands", false ); // Death anim
 
 	maps\_zombiemode_weapons::add_limited_weapon( "zombie_colt", 0 );

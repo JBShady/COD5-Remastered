@@ -154,9 +154,9 @@ door_think()
 				{
 					// set the score
 					who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost ); 
-					if( isDefined( level.achievement_notify_func ) )
+					if( isDefined( level.achievement_notify_func ) && isDefined(level.power_off) && level.power_off == true )
 					{
-						level [[ level.achievement_notify_func ]]( "DLC3_ZOMBIE_ALL_DOORS" );
+						level [[ level.achievement_notify_func ]]( "DLC1_ZOMBIE_DOORS" );
 					}
 					bbPrint( "zombie_uses: playername %s playerscore %d round %d cost %d name %s x %f y %f z %f type door", who.playername, who.score, level.round_number, self.zombie_cost, self.target, self.origin );
 				}
@@ -403,9 +403,9 @@ debris_think()
 			{
 				// set the score
 				who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost ); 
-				if( isDefined( level.achievement_notify_func ) )
+				if( isDefined( level.achievement_notify_func ) && isDefined(level.power_off) && level.power_off == true )
 				{
-					level [[ level.achievement_notify_func ]]( "DLC3_ZOMBIE_ALL_DOORS" );
+					level [[ level.achievement_notify_func ]]( "DLC1_ZOMBIE_DOORS" );
 				}
 				bbPrint( "zombie_uses: playername %s playerscore %d round %d cost %d name %s x %f y %f z %f type debris", who.playername, who.score, level.round_number, self.zombie_cost, self.target, self.origin );
 				

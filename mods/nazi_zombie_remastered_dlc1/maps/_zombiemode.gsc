@@ -303,6 +303,17 @@ precache_shaders()
 	PrecacheShader( "hud_chalk_3" );
 	PrecacheShader( "hud_chalk_4" );
 	PrecacheShader( "hud_chalk_5" );
+
+	PrecacheShader("dlc1_zombie_doors");
+	PrecacheShader("dlc1_zombie_court_headshots");
+	PrecacheShader("dlc1_zombie_zap");
+	PrecacheShader("dlc1_zombie_power");
+	PrecacheShader("dlc1_zombie_mg");
+	PrecacheShader("dlc1_zombie_downed_kills");
+	PrecacheShader("dlc1_zombie_betty");
+	PrecacheShader("dlc1_zombie_smoke");
+	PrecacheShader("dlc1_zombie_teddy");
+	PrecacheShader("dlc1_zombie_song");
 }
 
 precache_models()

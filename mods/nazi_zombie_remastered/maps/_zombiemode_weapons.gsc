@@ -263,6 +263,8 @@ set_treasure_chest_cost( cost )
 
 treasure_chest_think()
 {
+	level thread disable_satchel(self);
+
 	cost = 950;
 	if( IsDefined( level.zombie_treasure_chest_cost ) )
 	{
@@ -298,7 +300,9 @@ treasure_chest_think()
 		
 		wait 0.05; 
 	}
-	
+
+	user achievement_notify( "DLC_ZOMBIE_MAGICBOX" );
+
 	// trigger_use->script_brushmodel lid->script_origin in radiant
 	lid = getent( self.target, "targetname" ); 
 	weapon_spawn_org = getent( lid.target, "targetname" ); 
@@ -337,11 +341,10 @@ treasure_chest_think()
 		
 		if( grabber == user || grabber == level )
 		{
-			if( grabber == user && is_player_valid( user ) && user GetCurrentWeapon() != "satchel_charge" && level.falling_down == false )
+			if( grabber == user && is_player_valid( user ) && user GetCurrentWeapon() != "satchel_charge" && user GetCurrentWeapon() != "mortar_round" && level.falling_down == false )
 			{
 				self notify( "user_grabbed_weapon" );
 				user thread treasure_chest_give_weapon( weapon_spawn_org.weapon_string );
-				//grabber.potentially_spamming = true;
 				break; 
 			}
 			else if( grabber == level )
@@ -365,14 +368,35 @@ treasure_chest_think()
 	lid thread treasure_chest_lid_close( self.timedOut ); 
 	
 	wait 3; 
-	//if(isdefined(grabber.potentially_spamming))
-	//{
-		//grabber.potentially_spamming = undefined;
-	//}
+
 	self enable_trigger(); 	
 	self setvisibletoall();
 
 	self thread treasure_chest_think(); 
+}
+
+disable_satchel(trigger)
+{
+	box = spawn( "trigger_radius",trigger.origin + (0, 0, 0.1), 0, 55, 10 );
+
+	while(1)
+	{
+		box waittill("trigger", player);
+
+		while(1)
+		{
+			if(!player isTouching(box) )
+			{
+				break;
+			}
+
+			player.potentially_spamming = true;
+			wait(0.05);
+		}
+		
+		player.potentially_spamming = undefined;
+	}
+
 }
 
 treasure_chest_user_hint( trigger, user )
@@ -462,7 +486,7 @@ decide_hide_show_hint( endon_notify )
 
 can_buy_weapon()
 {
-	if( self GetCurrentWeapon() == "satchel_charge" )
+	if( self GetCurrentWeapon() == "satchel_charge" || self GetCurrentWeapon() == "mortar_round" )
 	{
 		return false;
 	}
@@ -524,6 +548,10 @@ treasure_chest_ChooseRandomWeapon( player )
 		{
 			continue;
 		}
+		if( keys[i] == "mortar_round" && isDefined(self.has_mortar) && self.has_mortar == true )
+		{
+			continue;
+		}
 
 		filtered[filtered.size] = keys[i];
 	}
@@ -561,10 +589,17 @@ treasure_chest_weapon_spawn( chest, player )
 	model = spawn( "script_model", self.origin ); 
 	model.angles = self.angles +( 0, 90, 0 );
 	
+	model_mortar = spawn( "script_model", self.origin - ( 0, 0, -0.01 ) ); 
+	model_mortar.angles = self.angles +( 0, 90, -90 );
+	model_mortar setmodel( "mortar_shell" ); 
+	model_mortar hide();
+
 	floatHeight = 40;
 	
 	//move it up
 	model moveto( model.origin +( 0, 0, floatHeight ), 3, 2, 0.9 ); 
+
+	model_mortar moveto( model.origin +( 0, 0, floatHeight ), 3, 2, 0.9 ); 
 
 	// rotation would go here
 
@@ -573,7 +608,6 @@ treasure_chest_weapon_spawn( chest, player )
 	rand = undefined; 
 	for( i = 0; i < 40; i++ )
 	{
-		
 		if( i < 20 )
 		{
 			wait( 0.05 ); 
@@ -593,19 +627,33 @@ treasure_chest_weapon_spawn( chest, player )
 
 		rand = treasure_chest_ChooseRandomWeapon( player );
 		modelname = GetWeaponModel( rand );
-		model setmodel( modelname ); 
+
+		if(rand == "mortar_round")
+		{
+			model hide();
+			model_mortar show();
+		}
+		else
+		{
+			model setmodel( modelname ); 
+			model_mortar hide();
+			model show();
+		}
 	}
+
 
 	self notify( "randomization_done" ); 
 	self.weapon_string = rand; // here's where the org get it's weapon type for the give function
 	
 	model thread timer_til_despawn(floatHeight);
+	model_mortar thread timer_til_despawn(floatHeight);
 
 	self waittill( "weapon_grabbed" );
 	
 	if( !chest.timedOut )
 	{
 		model Delete();
+		model_mortar Delete();
 	}
 }
 
@@ -646,14 +694,14 @@ treasure_chest_give_weapon( weapon_string )
 	{
 		current_weapon = self getCurrentWeapon(); // get hiss current weapon
 
-		if ( current_weapon == "satchel_charge" )
+		if ( current_weapon == "satchel_charge" || current_weapon == "mortar_round" )
 		{
 			current_weapon = undefined;
 		}
 
 		if( isdefined( current_weapon ) )
 		{
-			if( !( weapon_string == "fraggrenade" || weapon_string == "stielhandgranate" || weapon_string == "molotov" ) )
+			if( !( weapon_string == "fraggrenade" || weapon_string == "stielhandgranate" || weapon_string == "molotov" || weapon_string == "mortar_round" ) )
 			self TakeWeapon( current_weapon ); 
 		} 
 	} 
@@ -667,7 +715,7 @@ treasure_chest_give_weapon( weapon_string )
 				continue; 
 			}
 
-			if( weapon_string != "fraggrenade" && weapon_string != "stielhandgranate" && weapon_string != "molotov" )
+			if( weapon_string != "fraggrenade" && weapon_string != "stielhandgranate" && weapon_string != "molotov" || weapon_string == "mortar_round" )
 			{
 				self TakeWeapon( primaryWeapons[i] ); 
 			}
@@ -683,7 +731,19 @@ treasure_chest_give_weapon( weapon_string )
 
 	self GiveWeapon( weapon_string, 0 );
 	self GiveMaxAmmo( weapon_string );
-	self SwitchToWeapon( weapon_string ); 
+
+	if( weapon_string == "mortar_round" )
+	{
+		self.has_mortar = true;
+		self setactionslot(1,"weapon","mortar_round");
+	    self SetWeaponAmmoClip( "mortar_round", 3 );
+
+	    self thread mortar_checker();
+	}
+	else
+	{
+		self SwitchToWeapon( weapon_string ); 
+	}
 
     if ( (isSubStr(weapon_string, "flamethrower") ) )
     {
@@ -705,6 +765,7 @@ weapon_cabinet_think()
 	}
 		
 	self.has_been_used_once = false; 
+	level.cabinet_open = false;
 
 	self thread decide_hide_show_hint();
 
@@ -782,6 +843,7 @@ weapon_cabinet_think()
 		else if( player.score >= cost ) // First time the player opens the cabinet
 		{
 			self.has_been_used_once = true;
+			level.cabinet_open = true;
 
 			play_sound_at_pos( "cabinet_open", doors[0].origin );
 
@@ -825,6 +887,14 @@ weapon_cabinet_think()
 			{
 				player ammo_give( self.zombie_weapon_upgrade ); 
 			}	
+
+			if(	isDefined(level.satchels_open) && level.satchels_open == true && level.round_number < 6 )
+			{
+				level achievement_notify("DLC_ZOMBIE_UPSTAIRS");
+				level.cabinet_open = undefined;
+				level.satchels_open = undefined;
+			}
+
 		}
 		else // not enough money
 		{
@@ -851,6 +921,8 @@ weapon_crate_think()
 	cost = 2000;
 	has_been_used_once = false; 
 	lookat = level.satchel_crate_lid.origin;
+
+	level.satchels_open = false;
 
 	while( 1 )
 	{
@@ -897,11 +969,20 @@ weapon_crate_think()
 		if( has_been_used_once == false ) // open only on the first use
 		{
 			has_been_used_once = true;
+			level.satchels_open = true;
+
 			play_sound_at_pos( "crate_open", crate_sound.origin );
 			level.satchel_crate_lid RotateTo( level.satchel_crate_lid.angles + (92,0,0), 0.4, 0.1, 0.1);
 			level.question_mark RotateTo( level.question_mark.angles + (92,0,0), 0.4, 0.1, 0.1);
 			level thread give_satchel_after_rounds();
 			self SetHintString( &"REMASTERED_ZOMBIE_SATCHEL_PURCHASE" ); 
+		}
+
+		if(	isDefined(level.cabinet_open) && level.cabinet_open == true && level.round_number < 6 )
+		{
+			level achievement_notify("DLC_ZOMBIE_UPSTAIRS");
+			level.cabinet_open = undefined;
+			level.satchels_open = undefined;
 		}
 		
 		player.has_satchel = true;
@@ -1138,7 +1219,7 @@ weapon_give( weapon )
 	{
 		current_weapon = self getCurrentWeapon(); // get his current weapon
 
-		if ( current_weapon == "satchel_charge" )
+		if ( current_weapon == "satchel_charge" || current_weapon == "mortar_round" )
 		{
 			current_weapon = undefined;
 		}
@@ -1494,18 +1575,6 @@ flamethrower_swap()
 	}
 }
 
-/*
-
-satchel crate
-
--texture: add question mark, make texture look better?
--add some type of glow
--add collission
--add trigger
-	wait(2);
-	level.satchel_crate_lid RotateTo( level.satchel_crate_lid.angles + (92,0,0), 0.3, 0.1, 0.1);
-
-*/
 islookingatorigin( origin )
 {
 	normalvec = vectorNormalize( origin-self getShootAtPos() );
@@ -1518,4 +1587,25 @@ islookingatorigin( origin )
 		return true;
 	else
 		return false;
+}
+
+mortar_checker()
+{
+	self endon("death");
+	self endon("disconnect");
+
+	self.current_gun = self getCurrentWeapon();
+
+	while(isDefined(self.has_mortar) && self.has_mortar == true) // this makes the game remember the weapon we were holding before we switch to mortars, so that we can switch back to it after using a mortar (we are missing a lastshot anim so this is our work around)
+	{
+		self waittill( "weapon_change", newWeapon );
+	
+		gun = self getCurrentWeapon();
+
+		if(gun != "mortar_round")
+		{
+			self.current_gun = gun;
+		}
+	}	
+
 }

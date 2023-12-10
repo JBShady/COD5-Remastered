@@ -158,6 +158,8 @@ powerup_hud_overlay()
 			level.powerup_hud[1].alpha = 1;
 			level.powerup_hud[0] setshader(shader_2x, 32, 32);
 			level.powerup_hud[1] setshader(shader_insta, 32, 32);
+
+			level achievement_notify("DLC_ZOMBIE_STARMAN");
 			/*level.powerup_hud_cover[0].x = -36;
 			level.powerup_hud_cover[1].x = 36;
 			level.powerup_hud_cover[0] setshader(shader_white, 32, i);
@@ -961,6 +963,12 @@ full_ammo_powerup( drop_item )
 			players[i] giveweapon("satchel_charge");
 			players[i] setactionslot(4,"weapon","satchel_charge");
 	        players[i] SetWeaponAmmoClip( "satchel_charge", 2 );
+	    }
+	    if( isDefined(players[i].has_mortar) && !players[i] maps\_laststand::player_is_in_laststand() )
+	    {
+			players[i] giveweapon("mortar_round");
+			players[i] setactionslot(1,"weapon","mortar_round");
+	        players[i] SetWeaponAmmoClip( "mortar_round", 3 );
 	    }
 	}
 //	array_thread (players, ::full_ammo_on_hud, drop_item);

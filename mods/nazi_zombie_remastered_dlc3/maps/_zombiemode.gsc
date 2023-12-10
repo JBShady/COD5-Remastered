@@ -1794,7 +1794,7 @@ round_spawning()
 								 !level.zones[ akeys[k] ].is_occupied &&
 								 level.zones[ akeys[k] ].dog_locations.size > 0 )
 							{
-								maps\_zombiemode_dogs::special_dog_spawn( undefined, 1 );
+								maps\_zombiemode_dogs::special_dog_spawn( undefined, 1, undefined );
 								level.zombie_total--;
 								wait_network_frame();
 							}
@@ -2442,6 +2442,7 @@ round_wait()
 	{
 		while( get_enemy_count() > 0 || level.zombie_total > 0 || level.intermission)
 		{
+			//iprintln(get_enemy_count());
 			wait( 0.5 );
 		}
 	}

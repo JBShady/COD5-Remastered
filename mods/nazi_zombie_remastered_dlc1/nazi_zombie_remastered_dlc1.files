@@ -27,6 +27,17 @@ images\asylum_image3.iwi
 images\asylum_image4.iwi
 images\bgate_decal_flag_german_dirty_c.iwi
 images\decal_flag_nazi_burn_gs_c.iwi
+images\dlc_zombie_locked.iwi
+images\dlc1_zombie_betty.iwi
+images\dlc1_zombie_court_headshots.iwi
+images\dlc1_zombie_doors.iwi
+images\dlc1_zombie_downed_kills.iwi
+images\dlc1_zombie_mg.iwi
+images\dlc1_zombie_power.iwi
+images\dlc1_zombie_smoke.iwi
+images\dlc1_zombie_song.iwi
+images\dlc1_zombie_teddy.iwi
+images\dlc1_zombie_zap.iwi
 images\gamefonts_pc.iwi
 images\grenadeicon.iwi
 images\hint_usable.iwi
@@ -38,6 +49,7 @@ images\hud_bar_overheat.iwi
 images\hud_fg42_overheat.iwi
 images\hud_m2_flamethrower.iwi
 images\hud_us_grenade.iwi
+images\line_alt.iwi
 images\line_bio.iwi
 images\makin_door_wood2_c.iwi
 images\makin_door_wood2_n.iwi
@@ -57,6 +69,7 @@ maps\_collectibles_game.gsc
 maps\_destructible_opel_blitz.gsc
 maps\_friendlyfire.gsc
 maps\_gameskill.gsc
+maps\_hud_achievement.gsc
 maps\_hud_util.gsc
 maps\_laststand.gsc
 maps\_load.gsc
@@ -65,6 +78,7 @@ maps\_mgturret.gsc
 maps\_utility.gsc
 maps\_zombie_poi.gsc
 maps\_zombiemode.gsc
+maps\_zombiemode_achievement.gsc
 maps\_zombiemode_betty.gsc
 maps\_zombiemode_blockers.gsc
 maps\_zombiemode_devgui.gsc

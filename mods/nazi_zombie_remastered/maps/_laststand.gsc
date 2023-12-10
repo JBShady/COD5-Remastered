@@ -528,7 +528,7 @@ revive_give_back_weapons( gun )
 	self EnableWeaponCycling();
 	self EnableOffhandWeapons();
 	
-	if( gun != "none" && gun != "satchel_charge" )
+	if( gun != "none" && gun != "satchel_charge" && gun != "mortar_round" )
 	{
 		self SwitchToWeapon( gun );
 	}

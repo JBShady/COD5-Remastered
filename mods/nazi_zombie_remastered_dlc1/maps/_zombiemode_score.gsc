@@ -14,6 +14,11 @@ player_add_points( event, mod, hit_location ,is_dog)
 		return;
 	}
 
+	if(event == "death" && self maps\_laststand::player_is_in_laststand())
+	{
+		self achievement_notify( "DLC1_ZOMBIE_DOWNED_KILLS" );
+	}
+
 	if( !is_player_valid( self ) )
 	{
 		return;
@@ -34,6 +39,7 @@ player_add_points( event, mod, hit_location ,is_dog)
 			{
 				self.kill_tracker = 1;
 			}
+
 			//stats tracking
 			self.stats["kills"] = self.kill_tracker;
 			

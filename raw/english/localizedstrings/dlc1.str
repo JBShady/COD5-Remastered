@@ -1,0 +1,49 @@
+// Note to translators:
+// If a sentence is the same in your language then please change it to "#same"
+//
+// eg:
+// LANG_ENGLISH  "HALT"
+// LANG_GERMAN   "#same"
+//
+// (This is so we can tell which strings have been signed-off as ok to be the same words for QA
+//  and because we do not store duplicate strings, which will then get exported again next time
+//  as being untranslated.)
+//
+VERSION             "1"
+CONFIG              "C:\cod5\cod\cod5\bin\StringEd.cfg"
+FILENOTES           ""
+
+REFERENCE           ZOMBIE_DOORS
+LANG_ENGLISH        ""Check Every Corner""
+
+REFERENCE           ZOMBIE_COURT_HEADSHOTS
+LANG_ENGLISH        ""Acted Alone""
+
+REFERENCE           ZOMBIE_ZAP
+LANG_ENGLISH        ""Zap Zap""
+
+REFERENCE           ZOMBIE_POWER
+LANG_ENGLISH        ""Lightning Fast""
+
+REFERENCE           ZOMBIE_MG
+LANG_ENGLISH        ""Dig In""
+
+REFERENCE           ZOMBIE_DOWNED_KILLS
+LANG_ENGLISH        ""Down But Not Out""
+
+REFERENCE           ZOMBIE_BETTY
+LANG_ENGLISH        ""Devil's Garden""
+
+REFERENCE           ZOMBIE_SMOKE
+LANG_ENGLISH        ""Tossing Gas""
+
+REFERENCE           ZOMBIE_TEDDY
+LANG_ENGLISH        ""Can't Quit...""
+
+REFERENCE           ZOMBIE_SONG
+LANG_ENGLISH        ""Good Manners""
+
+
+ENDMARKER
+
+

@@ -439,6 +439,12 @@ treasure_chest_think()
 		wait 0.05; 
 	}
 
+	if(isDefined(level.first_use_after_teddy) && level.first_use_after_teddy == true)
+	{
+		user achievement_notify( "DLC1_ZOMBIE_TEDDY" );
+		level.first_use_after_teddy = undefined;
+	}
+
 	// trigger_use->script_brushmodel lid->script_origin in radiant
 	lid = getent( self.target, "targetname" ); 
 	weapon_spawn_org = getent( lid.target, "targetname" ); 
@@ -976,7 +982,9 @@ treasure_chest_weapon_spawn( chest, player )
 			model SetModel("zombie_teddybear");
 		//	model rotateto(level.chests[level.chest_index].angles, 0.01);
 			//wait(1);
-			model.angles = level.chests[level.chest_index].angles;		
+			model.angles = level.chests[level.chest_index].angles;	
+
+			level.first_use_after_teddy = true;	
 			wait 1;
 			flag_set("moving_chest_now");
 			level.chest_accessed = 0;

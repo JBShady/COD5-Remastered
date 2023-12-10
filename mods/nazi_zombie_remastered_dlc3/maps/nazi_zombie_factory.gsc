@@ -85,6 +85,7 @@ main()
 
 	PrecacheItem( "zombie_item_journal" ); // new
 	PrecacheItem( "zombie_item_beaker" ); // new
+	PrecacheItem( "zombie_svt40_upgraded" ); // fix 3 round burst
 
 	precachestring(&"ZOMBIE_BETTY_ALREADY_PURCHASED");
 	precachestring(&"REMASTERED_ZOMBIE_BETTY_HOWTO");
@@ -212,6 +213,9 @@ main()
 	level thread fix_bad_spots();
 	level thread sumpf_check();
 	level thread maps\nazi_zombie_factory_new_eggs::init();
+
+	//level thread teleport_out_checker();
+
 }
 
 init_achievement()
@@ -1857,7 +1861,6 @@ hanging_dead_guy( name )
 
 setup_meteor_audio()
 {
-    wait(1);
     level.meteor_counter = 0;
 	level thread meteor_egg( "meteor_one", (901.5, -557.5, 163) ); // High
 	level thread meteor_egg( "meteor_two", (990, -900.5, 118) ); // Low
@@ -3249,11 +3252,12 @@ teleport_out_checker()
 	level.all_players_teleported = undefined;
 	level.teleporting_out_ready = undefined;
 
-	players = getplayers();
+/*	players = getplayers();
 	for (i = 0; i < players.size; i++)
 	{
 		players[i] play_sound_2d("bowl_sting_ending");
-	}
+	}*/
+	thread play_sound_2d("bowl_sting_ending");
 
 	level thread end_flash();
 
@@ -3280,12 +3284,11 @@ teleport_out_checker()
 		plr = "plr_" + index + "_";
 		rando create_and_play_dialog( plr, "vox_gen_compliment", 0.1 );
 	}
-
+/*
 	wait(6);
-	for (i = 0; i < players.size; i++)
-	{
-		players[i] play_sound_2d("zombie_theater");
-	}
+	thread play_sound_2d("zombie_theater");
+*/
+
 }
 
 end_flash()

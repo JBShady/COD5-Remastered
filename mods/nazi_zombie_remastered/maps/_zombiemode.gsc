@@ -136,6 +136,17 @@ precache_shaders()
 	PrecacheShader( "hud_chalk_3" );
 	PrecacheShader( "hud_chalk_4" );
 	PrecacheShader( "hud_chalk_5" );
+
+	PrecacheShader("dlc_zombie_barriers");
+	PrecacheShader("dlc_zombie_starman");
+	PrecacheShader("dlc_zombie_lawn");
+	PrecacheShader("dlc_zombie_upstairs");
+	PrecacheShader("dlc_zombie_flamethrower");
+	PrecacheShader("dlc_zombie_barrels");
+	PrecacheShader("dlc_zombie_mortar");
+	PrecacheShader("dlc_zombie_magicbox");
+	PrecacheShader("dlc_zombie_laststand");
+	PrecacheShader("dlc_zombie_radio");
 }
 
 precache_models()
@@ -1008,6 +1019,7 @@ spectator_respawn()
 	}
 
 	self.has_satchel = undefined;
+	self.has_mortar = undefined;
 
 	// The check_for_level_end looks for this
 	self.is_zombie = false;
@@ -1547,6 +1559,11 @@ round_think()
 //		round_text( &"ZOMBIE_ROUND_END" );
 		level thread chalk_round_hint();
 
+		if(level.round_number == 20) // we just beat rnd 20, moving to 21
+		{
+			level achievement_notify("DLC_ZOMBIE_LASTSTAND");
+		}
+
 		wait( level.zombie_vars["zombie_between_round_time"] ); 
 
 		// here's the difficulty increase over time area
@@ -1563,6 +1580,12 @@ round_think()
 		level.zombie_move_speed = level.round_number * 8;
 		
 		level.round_number++; 
+
+		players = get_players();
+		for (i = 0; i < players.size; i++)
+		{
+			players[i] notify("check_for_flamer_ach");
+		}
 
 		level notify( "between_round_over" );
 	}
@@ -2013,7 +2036,6 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 			iDamage = iDamage * 0.75;
 			iprintlnbold(idamage);
 	}*/
-	
 	if( sMeansOfDeath == "MOD_FALLING" && (iDamage > self.maxhealth * 0.30) ) // only do shellshock on fall damage if damage is greater than 30% of health (if we have jug then basically we never get that then)
 	{
 		self stopShellshock();
@@ -2046,7 +2068,7 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 		if( level.player_is_speaking != 1 /*&& self.health > 50*/ )
 		{
 			rand = randomintrange(0, 100);
-			if( (rand < 60) && (sMeansOfDeath == "MOD_PROJECTILE" || sMeansOfDeath == "MOD_PROJECTILE_SPLASH" || sMeansOfDeath == "MOD_GRENADE" || sMeansOfDeath == "MOD_GRENADE_SPLASH") )
+			if( (rand < 60) && (sMeansOfDeath == "MOD_PROJECTILE" || sMeansOfDeath == "MOD_PROJECTILE_SPLASH" || sMeansOfDeath == "MOD_GRENADE" || sMeansOfDeath == "MOD_GRENADE_SPLASH" || sMeansOfDeath == "MOD_EXPLOSIVE" ) )
 			{
 				self thread add_cough_vox();
 			}
@@ -2108,6 +2130,17 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 			{
 				finalDamage = 75; 	
 			}
+
+			self maps\_callbackglobal::finishPlayerDamageWrapper( eInflictor, eAttacker, finalDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, modelIndex, psOffsetTime ); 
+			return;
+		}
+	}
+
+	if( sMeansOfDeath == "MOD_EXPLOSIVE" && isSubStr(sWeapon, "mortar_round"))
+	{
+		if( self.health > 75 )
+		{
+			finalDamage = radiusDamage(eInflictor.origin, 272,135,50, eAttacker);
 
 			self maps\_callbackglobal::finishPlayerDamageWrapper( eInflictor, eAttacker, finalDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, modelIndex, psOffsetTime ); 
 			return;
@@ -2314,6 +2347,7 @@ player_fake_death()
 	self.ignoreme = true;
 	self EnableInvulnerability();
 
+	self setactionslot(1,""); 
 	self setactionslot(4,""); 
 
 	self giveweapon("falling_hands");
@@ -2870,7 +2904,7 @@ track_players_ammo_count()
 	
 			weap = players[i] getcurrentweapon();
 			//Excludes all Perk based 'weapons' so that you don't get low ammo spam.
-			if(!isDefined(weap) || weap == "none" || weap == "syrette" || weap == "m2_flamethrower_zombie" || weap == "m7_launcher" || weap == "satchel_charge" || weap == "zombie_melee" || weap == "falling_hands" )
+			if(!isDefined(weap) || weap == "none" || weap == "syrette" || weap == "m2_flamethrower_zombie" || weap == "m7_launcher" || weap == "satchel_charge" || weap == "mortar_round" || weap == "zombie_melee" || weap == "falling_hands" )
 			{
 				continue;
 			}

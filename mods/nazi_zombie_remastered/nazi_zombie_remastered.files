@@ -28,6 +28,17 @@ images\char1_image.iwi
 images\char2_image.iwi
 images\char3_image.iwi
 images\char4_image.iwi
+images\dlc_zombie_barrels.iwi
+images\dlc_zombie_barriers.iwi
+images\dlc_zombie_flamethrower.iwi
+images\dlc_zombie_laststand.iwi
+images\dlc_zombie_lawn.iwi
+images\dlc_zombie_locked.iwi
+images\dlc_zombie_magicbox.iwi
+images\dlc_zombie_mortar.iwi
+images\dlc_zombie_radio.iwi
+images\dlc_zombie_starman.iwi
+images\dlc_zombie_upstairs.iwi
 images\gamefonts_pc.iwi
 images\grenadeicon.iwi
 images\hint_usable.iwi
@@ -36,6 +47,7 @@ images\hud_arrow_right.iwi
 images\hud_arrow_up.iwi
 images\hud_m2_flamethrower.iwi
 images\hud_us_grenade.iwi
+images\line_alt.iwi
 images\line_bio.iwi
 images\makin_door_wood2_c.iwi
 images\makin_door_wood2_n.iwi
@@ -49,11 +61,13 @@ maps\_callbacksetup.gsc
 maps\_destructible_opel_blitz.gsc
 maps\_detonategrenades.gsc
 maps\_gameskill.gsc
+maps\_hud_achievement.gsc
 maps\_interactive_objects.gsc
 maps\_laststand.gsc
 maps\_loadout.gsc
 maps\_utility.gsc
 maps\_zombiemode.gsc
+maps\_zombiemode_achievement.gsc
 maps\_zombiemode_blockers.gsc
 maps\_zombiemode_health_help.gsc
 maps\_zombiemode_molotov.gsc
@@ -630,6 +644,7 @@ weapons\sp\m2_flamethrower_zombie
 weapons\sp\m7_launcher
 weapons\sp\mg42_bipod
 weapons\sp\molotov
+weapons\sp\mortar_round
 weapons\sp\mp40
 weapons\sp\panzerschrek
 weapons\sp\ppsh
