@@ -1106,7 +1106,7 @@ menuDef
 		itemDef
 		{
 			name			"xbox_up"
-			rect			-12 -5 24 24
+			rect			-12 -6 24 24
 			forecolor		1 1 1 0.65
 			ownerdraw		CG_PLAYER_ACTIONSLOT_DPAD // this bit is weird
 			background		"hud_arrow_up"
@@ -1156,7 +1156,7 @@ menuDef
 		itemDef
 		{
 			name			"xbox_left"
-			rect			(-DPAD_ICON_SPACING - DPAD_BASE_SIZE_HALF + 10) DPAD_ICON_Y  24 24
+			rect			(-DPAD_ICON_SPACING - DPAD_BASE_SIZE_HALF + 13) DPAD_ICON_Y 24 24
 			forecolor		1 1 1 0.65
 			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND // this bit is weird
 			background		"hud_arrow_left"
@@ -1207,7 +1207,7 @@ menuDef
 		itemDef
 		{
 			name			"xbox_right"
-			rect			(DPAD_ICON_SPACING + DPAD_BASE_SIZE_HALF - 33) DPAD_ICON_Y  24 24
+			rect			(DPAD_ICON_SPACING + DPAD_BASE_SIZE_HALF - 38) DPAD_ICON_Y  24 24
 			forecolor		1 1 1 0.65
 			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND // this bit is weird
 			background		"hud_arrow_right"
