@@ -1517,8 +1517,9 @@ player_zombie_awareness()
 {
 	self endon("disconnect");
 	self endon("death");
-	players = getplayers();
+
 	wait(6);
+	players = getplayers();
 	index = maps\_zombiemode_weapons::get_player_index(self);
 	while(1)
 	{
@@ -1565,7 +1566,7 @@ player_zombie_awareness()
 			close_zombs = 0;
 			for(i=0;i<zombs.size;i++)
 			{
-				if(DistanceSquared(zombs[i].origin, self.origin) < 250 * 250)
+				if(DistanceSquared(zombs[i].origin, self.origin) < 250 * 250 && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
 				{
 					close_zombs ++;
 				}
@@ -1578,9 +1579,9 @@ player_zombie_awareness()
 					self thread create_and_play_dialog( plr, "vox_oh_shit", .25, "resp_ohshit" );	
 				}
 			}
-			else if(close_zombs > 8 && players.size == 1)
+			else if(close_zombs > 7 && players.size == 1) // requires 1/3 of a horde on solo (8 out of 24)
 			{
-				if(randomintrange(0,20) < 2)
+				if(randomintrange(0,20) < 3)
 				{
 					plr = "plr_" + index + "_";
 					self thread create_and_play_dialog( plr, "vox_oh_shit", .25 );	

@@ -608,8 +608,8 @@ player_zombie_awareness()
 	self endon("death");
 	self endon("end_game_quiet");
 
-	players = getplayers();
 	wait(6);
+	players = getplayers();
 	index = maps\_zombiemode_weapons::get_player_index(self);
 	while(1)
 	{
@@ -664,22 +664,22 @@ player_zombie_awareness()
 			close_zombs = 0;
 			for(i=0;i<zombs.size;i++)
 			{
-				if(DistanceSquared(zombs[i].origin, self.origin) < 250 * 250)
+				if(DistanceSquared(zombs[i].origin, self.origin) < 250 * 250 && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
 				{
 					close_zombs ++;
 				}
 			}
 			if(close_zombs > 4 && players.size > 1)
 			{
-				if(randomintrange(0,20) <= 5) // slightly hider odds than dlc2/dlc3, players less likely to be surviving while surrounded since no jug
+				if(randomintrange(0,20) <= 5) // slightly hider odds than dlc2/dlc3, players less likely to be surviving while surrounded since no jug and tighter map plus we have behind vocals that can get in the way
 				{
 					plr = "plr_" + index + "_";
 					self thread create_and_play_dialog( plr, "vox_oh_shit", .25, "resp_ohshit" );	
 				}
 			}
-			else if(close_zombs > 6 && players.size == 1)
+			else if(close_zombs > 7 && players.size == 1) // requires 1/3 of a horde on solo (8 out of 24)
 			{
-				if(randomintrange(0,20) < 3)
+				if(randomintrange(0,20) <= 3) // slightly hider odds than dlc2/dlc3, players less likely to be surviving while surrounded since no jug and tighter map plus we have behind vocals that can get in the way
 				{
 					plr = "plr_" + index + "_";
 					self thread create_and_play_dialog( plr, "vox_oh_shit", .25 );	

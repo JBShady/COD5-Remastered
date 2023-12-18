@@ -427,6 +427,8 @@ player_zombie_awareness()
 {
 	self endon("disconnect");
 	self endon("death");
+
+	wait(6);
 	players = getplayers();
 	while(1)
 	{
@@ -468,42 +470,55 @@ player_zombie_awareness()
 			}
 
 		}
-		if(players.size > 1)
+		if(players.size > 0)
 		{
 			//Plays 'teamwork' style dialog if there are more than 1 player...
 			close_zombs = 0;
 			for(i=0;i<zombs.size;i++)
 			{
-				if(DistanceSquared(zombs[i].origin, self.origin) < 250 * 250)
+				if(DistanceSquared(zombs[i].origin, self.origin) < 250 * 250 && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
 				{
 					close_zombs ++;
 					
 				}
 			}
-			if(close_zombs > 4)
+			if(close_zombs > 4 && players.size > 1)
 			{
 				if(randomintrange(0,20) < 5)
 				{
-					self thread play_oh_shit_dialog();	
+					self thread play_oh_shit_dialog(false);	
+				}
+			}
+			else if(close_zombs > 7 && players.size == 1) // requires 1/3 of a horde on solo (8 out of 24)
+			{
+				if(randomintrange(0,20) < 3)
+				{
+					self thread play_oh_shit_dialog(true);	
 				}
 			}
 		}
 		
 	}
 }		
-play_oh_shit_dialog()
+play_oh_shit_dialog(solo)
 {
+	vox_name = "vox_oh_shit";
+
+	if(solo == true)
+	{
+		vox_name = "vox_oh_shit_solo";
+	}
 	//player = getplayers();	
 	index = maps\_zombiemode_weapons::get_player_index(self);
 	
 	player_index = "plr_" + index + "_";
 	if(!IsDefined (self.vox_oh_shit))
 	{
-		num_variants = maps\_zombiemode_spawner::get_number_variants(player_index + "vox_oh_shit");
+		num_variants = maps\_zombiemode_spawner::get_number_variants(player_index + vox_name);
 		self.vox_oh_shit = [];
 		for(i=0;i<num_variants;i++)
 		{
-			self.vox_oh_shit[self.vox_oh_shit.size] = "vox_oh_shit_" + i;	
+			self.vox_oh_shit[self.vox_oh_shit.size] = vox_name + "_" + i;	
 		}
 		self.vox_oh_shit_available = self.vox_oh_shit;		
 	}	
