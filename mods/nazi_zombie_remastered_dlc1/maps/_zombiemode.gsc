@@ -626,9 +626,11 @@ init_anims()
 	level.scr_anim["zombie"]["sprint9"] = %ai_zombie_sprint_v4;
 
 	level.scr_anim["zombie"]["sprint10"] = %ai_zombie_sprint_w_object_4; // when this is added, we now have 4 super sprinter variants on the table, 1 of which is this extra-super (4/12)
-	level.scr_anim["zombie"]["sprint11"] = %ai_zombie_sprint_v1; // and we add these two to keep the 1/3 ratio
-	level.scr_anim["zombie"]["sprint12"] = %ai_zombie_sprint_v2; // 8/12 normal sprinters
-
+	level.scr_anim["zombie"]["sprint11"] = %ai_zombie_sprint_v4; // super sprint
+	level.scr_anim["zombie"]["sprint12"] = %ai_zombie_sprint_v1; 
+	level.scr_anim["zombie"]["sprint13"] = %ai_zombie_sprint_v2; 
+	level.scr_anim["zombie"]["sprint14"] = %ai_zombie_sprint_v1; 
+	level.scr_anim["zombie"]["sprint15"] = %ai_zombie_sprint_v2; 
 	// run cycles in prone
 	level.scr_anim["zombie"]["crawl1"] 	= %ai_zombie_crawl; 
 	level.scr_anim["zombie"]["crawl2"] 	= %ai_zombie_crawl_v1; 
