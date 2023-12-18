@@ -385,11 +385,6 @@ zombie_goto_entrance( node, endon_bad_path )
 	// and begin the player seek logic
 	self zombie_setup_attack_properties();
 
-	if(isDefined(level.zombies_not_entered) && level.zombies_not_entered == true)
-	{
-		level.zombies_not_entered = undefined;
-	}
-
 	self thread find_flesh();
 }
 
@@ -2058,6 +2053,11 @@ find_flesh()
 		while( GetTime() < self.zombie_path_timer )
 		{
 			wait( 0.1 );
+		}
+
+		if(isDefined(level.zombies_not_entered) && level.zombies_not_entered == true)
+		{
+			level.zombies_not_entered = undefined;
 		}
 
 		self zombie_history( "find flesh -> bottom of loop" );
