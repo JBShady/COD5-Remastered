@@ -91,7 +91,7 @@ powerup_hud_overlay()
 		level.powerup_hud[i].horzAlign = "center"; 
 		level.powerup_hud[i].vertAlign = "bottom";
 		level.powerup_hud[i].x = -32 + (i * 15); 
-		level.powerup_hud[i].y = level.powerup_hud[i].y - 50; 
+		level.powerup_hud[i].y = level.powerup_hud[i].y - 53; 
 		level.powerup_hud[i].alpha = 0.8;
 		//hud SetShader( shader_inst, 24, 24 );
 	}
