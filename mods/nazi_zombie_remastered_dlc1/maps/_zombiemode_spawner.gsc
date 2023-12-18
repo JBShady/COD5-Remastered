@@ -222,7 +222,7 @@ set_zombie_run_cycle()
 		self.run_combatanim = level.scr_anim[self.animname]["run" + var];
 		break;
 	case "sprint":                 
-		var = randomintrange(1, 13); // For rest of the game
+		var = randomintrange(1, 16); // For rest of the game
 
 		if(level.round_number < 11 || getDvarInt( "super_sprinters") == 1 ) // For early game to prevent random extra-super sprinters
 		{
