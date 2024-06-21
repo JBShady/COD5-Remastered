@@ -129,10 +129,10 @@ REFERENCE           GAMETYPE
 LANG_ENGLISH        "Gametype"
 
 REFERENCE           ENEMY_PUSH
-LANG_ENGLISH        "Enemy Pushing"
+LANG_ENGLISH        "Enemy Grabbing"
 
 REFERENCE           LAST_STAND
-LANG_ENGLISH        "Player Balance"
+LANG_ENGLISH        "Difficulty"
 
 REFERENCE           HUD
 LANG_ENGLISH        "HUD"
@@ -165,7 +165,7 @@ REFERENCE           CTRL_FLIPPED
 LANG_ENGLISH        "Flipped"
 
 REFERENCE           MODIFIED_DEFAULT
-LANG_ENGLISH        "Modified Default"
+LANG_ENGLISH        "Modified (Default)"
 
 REFERENCE           CLASSIC
 LANG_ENGLISH        "Classic"
@@ -228,13 +228,13 @@ REFERENCE           HINT_GAMETYPE_ALT
 LANG_ENGLISH        "Adjusts the flow of zombie waves. Classic mode removes Carpenter power-ups."
 
 REFERENCE           HINT_LASTSTAND
-LANG_ENGLISH        "Adjusts the balance of players and perks. Classic mode reverts to 30-second bleedouts, disables solo Quick Revive lives, and disables the Double-Tap buff like the original release."
+LANG_ENGLISH        "Adjusts the balance of players and perks. Classic mode reverts to 30-second bleed-outs, no solo Quick Revive lives, and no Double-Tap damage buff."
 
 REFERENCE           HINT_LASTSTAND_ALT
-LANG_ENGLISH        "Adjusts the balance of players and perks. Classic mode reverts to 30-second bleedouts, disables solo Quick Revive lives, and disables the Double-Tap buff like the original release."
+LANG_ENGLISH        "Adjusts the balance of players and perks. Classic mode reverts to 30-second bleed-outs, no solo Quick Revive lives, and no Double-Tap damage buff."
 
 REFERENCE           HINT_PUSHING
-LANG_ENGLISH        "Adjusts the zombie "grabbing" effect. Classic mode makes zombies more dangerous because they can stick to you like the original release."
+LANG_ENGLISH        "Adjusts the zombie grabbing effect. Classic mode reverts to "sticky" zombies by enabling the push player setting as in the original game."
 
 REFERENCE           HINT_SPRINTERS
 LANG_ENGLISH        "Adjusts the intensity of zombie waves. Classic mode removes newly added super-sprinter variations for an experience closer to the original release."
@@ -411,7 +411,7 @@ REFERENCE           ZOMBIE_RADIO
 LANG_ENGLISH        "Sign-On, Sign-Off"
 
 REFERENCE           ZOMBIE_BARRIERS_DESC
-LANG_ENGLISH        "Survive through Round 4 without letting a single zombie enter the bunker."
+LANG_ENGLISH        "Survive through Round 4 without letting a single zombie set foot in the bunker."
 
 REFERENCE           ZOMBIE_STARMAN_DESC
 LANG_ENGLISH        "Pick up a Double Points and Insta-Kill powerup at the same time."
