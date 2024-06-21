@@ -433,7 +433,7 @@ thread_enter_exit_sound(trig)
 
 thread_step_trigger()
 {
-	iprintlnbold("found_a_step_trig");
+	//iprintlnbold("found_a_step_trig");
 //self thread bump_trigger_listener();
 //TO DO Make script_activated be a value you can set in radiant.
 	if(!IsDefined(self.script_activated)) //Sets a flag to turn the trigger on or off
