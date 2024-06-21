@@ -51,11 +51,9 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Fixed player being able to pull out equipment while drinking perks or purchasing the Bowie Knife 
 * Fixed voiceover categories played with a delay having the ability to overlap with other lines
 * Fixed redscreen breaking after bleeding out & respawning
+* Fixed crashes from being able to purchase things while falling down when dying
 * Player no longer receives a free Colt when they have no weapons, instead the screen is just blank like future zombie games.
 * Voiceover interactions disabled on a player size of 1 to fix character responses sometimes playing in solo
-* Cannot purchase perks/weapons while falling into death before GAME OVER
-* Fixed red screen bug with feature not working after dying and respawning
-* Fixed bug where player could purchase items while going into game over screen resulting in crashes
 
 ### Zombies
 * Zombies have glowing eye effects in all DLCs now.
