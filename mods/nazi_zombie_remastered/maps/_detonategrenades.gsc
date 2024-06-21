@@ -407,7 +407,7 @@ waitAndDetonate( delay )
 	zombs = getaispeciesarray("axis");
 	for(i=0;i<zombs.size;i++)
 	{
-		if(zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80 && DistanceSquared(zombs[i].origin, self.origin) < 280 * 280)
+		if(zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80 && DistanceSquared(zombs[i].origin, self.origin) < 275 * 275)
 		{
 			zombs[i] thread maps\_zombiemode_spawner::zombie_damage( "MOD_ZOMBIE_SATCHEL", "none", zombs[i].origin, self.owner );
 		}
@@ -478,7 +478,7 @@ satchelDamage()
 	damaged_zombies = 0;
 	for(i=0;i<zombs.size;i++)
 	{
-		if(zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80 && DistanceSquared(zombs[i].origin, self.origin) < 300 * 300)
+		if(zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80 && DistanceSquared(zombs[i].origin, self.origin) < 290 * 290)
 		{
 			zombs[i] thread maps\_zombiemode_spawner::zombie_damage( "MOD_ZOMBIE_SATCHEL", "none", zombs[i].origin, self.owner );
 			damaged_zombies += 1;
