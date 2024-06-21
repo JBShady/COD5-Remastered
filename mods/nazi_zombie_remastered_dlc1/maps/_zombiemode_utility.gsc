@@ -1206,11 +1206,11 @@ play_killstreak_dialog()
 		waittime = 0.25;
 		if(!IsDefined (self.vox_killstreak))
 		{
-			num_variants = maps\_zombiemode_spawner::get_number_variants(player_index + "vox_killstreak");
+			num_variants = maps\_zombiemode_spawner::get_number_variants(player_index + "nvox_killstreak");
 			self.vox_killstreak = [];
 			for(i=0;i<num_variants;i++)
 			{
-				self.vox_killstreak[self.vox_killstreak.size] = "vox_killstreak_" + i;	
+				self.vox_killstreak[self.vox_killstreak.size] = "nvox_killstreak_" + i;	
 			}
 			self.vox_killstreak_available = self.vox_killstreak;
 		}
