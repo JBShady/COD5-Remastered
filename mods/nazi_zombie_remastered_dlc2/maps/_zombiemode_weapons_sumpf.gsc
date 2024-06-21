@@ -1686,7 +1686,7 @@ weapon_spawn_think()
 				{
 					model = getent( self.target, "targetname" ); 
 					//					model show(); 
-					model thread weapon_show( player ); 
+					model thread weapon_show( player, self.zombie_weapon_upgrade ); 
 					self.first_time_triggered = true; 
 
 					if(!is_grenade)
@@ -1764,7 +1764,7 @@ weapon_spawn_think()
 	}
 }
 
-weapon_show( player )
+weapon_show( player, weapon )
 {
 	player_angles = VectorToAngles( player.origin - self.origin ); 
 
@@ -1782,7 +1782,13 @@ weapon_show( player )
 		yaw = weapon_yaw + 90; 
 	}
 
-	self.og_origin = self.origin; 
+	self.og_origin = self.origin;
+
+	if(weapon == "zombie_type99_rifle")
+	{
+		self.origin = (self.origin + (0, 0.5, 0));
+		self.og_origin = self.origin;
+	}
 	self.origin = self.origin +( AnglesToForward( ( 0, yaw, 0 ) ) * 8 ); 
 
 	wait( 0.05 ); 
