@@ -3267,14 +3267,19 @@ teleport_out_checker()
 	index = maps\_zombiemode_weapons::get_player_index(waffle_shooter);
 	plr = "plr_" + index + "_";
 	waffle_shooter thread create_and_play_dialog( plr, "vox_achievment", 0.05 );
-	for(i = 0; i < players.size; i++)
+	for(i = 0; i < players.size; i++) // award player(s) no matter what 
 	{	
 		players[i] thread give_all_perks_forever();
-		if(players.size >= 4) 
-		{
-			players[i] setclientdvar("factory_quest", 1 ); // for menu achievement
-			players[i] maps\_zombiemode_achievement::giveachievement_wrapper_new( "DLC3_ZOMBIE_EE_FACTORY" ); 
-		}	
+		//if(players.size >= 4) 
+		//{
+		//	players[i] setclientdvar("factory_quest", 1 ); // for menu achievement
+		//	players[i] maps\_zombiemode_achievement::giveachievement_wrapper_new( "DLC3_ZOMBIE_EE_FACTORY" ); 
+		//}	
+		//else if(players.size == 1)
+		//{
+		players[i] setclientdvar("factory_quest", 1 );
+		players[i] maps\_zombiemode_achievement::giveachievement_wrapper_new( "DLC3_ZOMBIE_EE_FACTORY" ); 
+		//}	
 	}
 
 	if(players.size > 1) // some extra rando vox if we have more players
