@@ -2976,8 +2976,17 @@ phase_three_complete()
 		players[i] thread give_all_perks_forever();
 		if(players.size >= 4) // must have 4 players to actually get achievement, "canon"
 		{
-			players[i] setclientdvar("sumpf_quest", 1 ); // all players can now complete der riese quest (if they load in as richtofen on der riese)
+			players[i] setclientdvar("sumpf_quest", 1 ); // all players can now complete der riese quest (only host must have achievement on der riese, and must be Richtofen only if in solo)
 			players[i] maps\_zombiemode_achievement::giveachievement_wrapper_new( "DLC2_ZOMBIE_EE" ); 
+		}
+		else if(players.size == 1)
+		{
+			index = maps\_zombiemode_weapons::get_player_index( players[i] );
+			if(index == 3)
+			{
+				players[i] setclientdvar("sumpf_quest", 1 );  // also let player get achievement if Richtofen in solo	
+				players[i] maps\_zombiemode_achievement::giveachievement_wrapper_new( "DLC2_ZOMBIE_EE" ); 
+			}
 		}	
 	}
 
