@@ -64,7 +64,21 @@ main()
 	level thread play_music_easter_egg();
 
 	spawncollision("collision_geo_64x64x64","collider",(level.satchel_crate_lid.origin + (8,0,5)), (level.satchel_crate_lid.angles) + (0,23,0));
-
+	
+/*	pillar_coords = ( 360, 357, 40 );
+	pillar_angles = (0,-5,0);
+	pillar = Spawn( "script_model", pillar_coords ); 
+	pillar setmodel("collision_geo_64x64x64");
+	pillar.angles = pillar_angles;
+	spawncollision("collision_geo_64x64x64","collider", pillar_coords, pillar_angles );
+*/
+/*	barrier_coords = ( -237.5, 430, 40 );
+	barrier_angles = (0,-7.5,0);
+	barrier = Spawn( "script_model", barrier_coords ); 
+	barrier setmodel("collision_geo_64x64x64");
+	barrier.angles = barrier_angles;
+	spawncollision("collision_geo_64x64x64","collider", barrier_coords, barrier_angles );
+*/
 	// If you want to modify/add to the weapons table, please copy over the _zombiemode_weapons init_weapons() and paste it here.
 	// I recommend putting it in it's own function...
 	// If not a MOD, you may need to provide new localized strings to reflect the proper cost.
