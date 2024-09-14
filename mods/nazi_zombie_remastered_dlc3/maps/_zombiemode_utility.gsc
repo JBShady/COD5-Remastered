@@ -1189,7 +1189,7 @@ play_sound_at_pos( ref, pos, ent )
 	PlaySoundAtPosition( level.zombie_sounds[ref], pos ); 
 }
 
-play_sound_on_ent( ref )
+play_sound_on_ent( ref, position )
 {
 	if( IsDefined( self.script_soundalias ) )
 	{
@@ -1213,7 +1213,18 @@ play_sound_on_ent( ref )
 		return; 
 	}
 
-	self PlaySound( level.zombie_sounds[ref] ); 
+	if(isDefined(position))
+	{
+		//iprintlnbold("playing on position");
+		sound_location = position;
+	}
+	else
+	{
+		//iprintlnbold("playing on self");
+		sound_location = self;
+	}
+
+	sound_location PlaySound( level.zombie_sounds[ref] ); 
 }
 
 play_loopsound_on_ent( ref )
@@ -1829,7 +1840,7 @@ setup_rival_hero( player, hero, rival, response )
 	playRival = isdefined(players[rival]); // if player exists in lobby, set their status to true otherwise false
 	
 	// then we check range
-	if( playHero && distance (player.origin, players[hero].origin) < 500 ) // if hero is available, now lets check their distance
+	if( playHero && distancesquared(player.origin, players[hero].origin) < 500*500 ) // if hero is available, now lets check their distance
 	{
 		playHero = true; // we are in range
 	}
@@ -1838,7 +1849,7 @@ setup_rival_hero( player, hero, rival, response )
 		playHero = false; // we are out of range
 	}
 	
-	if( playRival && distance (player.origin, players[rival].origin) < 500 ) // if rival is available, now lets check their distance
+	if( playRival && distancesquared(player.origin, players[rival].origin) < 500*500 ) // if rival is available, now lets check their distance
 	{
 		playRival = true; // we are in range
 	}

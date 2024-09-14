@@ -1099,7 +1099,7 @@ play_explosion_death()
 // MikeD( 9/30/2007 ): New on-fire death animations.
 play_flame_death_anim() 
 {
-	if(self.damagemod =="MOD_MELEE" )
+	if( self.damagemod =="MOD_MELEE" || self.damagemod =="MOD_BAYONET" )
 		return false;
 
 	if( is_german_build() )	// these are too violent for those . .
@@ -1329,7 +1329,7 @@ play_bulletgibbed_death_anim()
 {
 	maxDist = 300; 
 	
-	if( self.damagemod == "MOD_MELEE" )
+	if( self.damagemod == "MOD_MELEE" || self.damagemod == "MOD_BAYONET" )
 	{
 		return false; 
 	}

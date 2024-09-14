@@ -2829,6 +2829,7 @@ auto_adjust_enemy_died( ai, amount, attacker, type, point )
 		if( damage_location == "head" || damage_location == "helmet" )
 		{
 			attacker.headshots++;
+			attacker.stats["headshots"]++;
 		}	
 	}
 		

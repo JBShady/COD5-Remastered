@@ -521,6 +521,13 @@ tear_into_building()
 	
 			if( !IsDefined( chunk ) )
 			{
+		        // Fix for zombies sometimes going through windows that still have boards on - Feli
+		        if(!all_chunks_destroyed(self.first_node.barrier_chunks))
+		        {
+		            wait(0.05);
+		            continue;
+		        }
+		        
 				for( i = 0; i < self.first_node.attack_spots_taken.size; i++ )
 				{
 					self.first_node.attack_spots_taken[i] = false;
@@ -1102,17 +1109,24 @@ zombie_head_gib( attacker )
 			if(isdefined(self.hatmodel) && (self.hatmodel == "char_ger_wermachtwet_cap1") ) // if a cap, don't shoot it off, it just disappears in the gib
 			{
 				self detach( self.hatModel, "" ); 
+				self play_sound_on_ent( "zombie_head_gib" );
 			}
 			else if(isdefined(self.hatmodel) )
 			{
+				self thread HelmetPopNew();
 				if( IsDefined( attacker ) )
 				{
 					self play_sound_on_ent("zombie_impact_helmet");
 				}
-				
-				self HelmetPopNew();
+				else
+				{
+					self play_sound_on_ent( "zombie_head_gib" ); // for insta kills or other non-player kills
+				}
 			}
-			self play_sound_on_ent( "zombie_head_gib" );
+			else
+			{
+				self play_sound_on_ent( "zombie_head_gib" );
+			}
 
 			self Detach( model, "", true ); 
 			self Attach( "char_ger_honorgd_zomb_behead", "", true ); 
@@ -1169,7 +1183,7 @@ NewHelmetLaunch( model, origin, angles, damageDir )
 
 	contactPoint = self.origin +( randomfloatrange( -1, 1 ), randomfloatrange( -1, 1 ), randomfloatrange( -1, 1 ) ) * 5; 
 
-	CreateDynEntAndLaunch( model, origin, angles, contactPoint, ( forcex, forcey, forcez ) ); 
+	CreateDynEntAndLaunch( model, origin, angles, contactPoint, ( forcex, forcey, forcez ) );
 }
 
 damage_over_time( dmg, delay, attacker )
@@ -1265,6 +1279,16 @@ head_should_gib( attacker, type, point )
 		}
 	}
 
+	//dt2.0 damage location variable is not resetting properly, so we force a head gib if the saved variable checks out, fixes no headshot gib on dt2.0 DoDamage kills
+	if(isDefined(self.saved_damagelocation) && (self.saved_damagelocation == "head" || self.saved_damagelocation == "helmet" || self.saved_damagelocation == "neck") )
+	{
+	    if( weapon == "none" || (WeaponClass( weapon ) == "pistol" && !isSubStr(weapon, "357") ) || WeaponIsGasWeapon( self.weapon ) )
+		{
+			return false; 
+		}
+		return true;
+	}
+
 	// check location now that we've checked for grenade damage (which reports "none" as a location)
 	if( !self animscripts\utility::damageLocationIsAny( "head", "helmet", "neck" ) )
 	{
@@ -1324,6 +1348,12 @@ zombie_gib_on_damage()
 			return;
 		}
 
+		//dt2.0 fixes body gibbing if on killshot using Dt2.0
+		if(isDefined(self.saved_damagemod) && isDefined(self.saved_damagelocation))
+		{
+			type = self.saved_damagemod;
+		}
+
 		if( !self zombie_should_gib( amount, attacker, type ) )
 		{
 			continue; 
@@ -1332,16 +1362,7 @@ zombie_gib_on_damage()
 		if( self head_should_gib( attacker, type, point ) && type != "MOD_BURNED" )
 		{
 			self zombie_head_gib( attacker );
-			if(IsDefined(attacker.headshot_count))
-			{
-				attacker.headshot_count++;
-			}
-			else
-			{
-				attacker.headshot_count = 1;
-			}
-			//stats tracking
-			attacker.stats["headshots"] = attacker.headshot_count;
+
 			attacker.stats["zombie_gibs"]++;
 
 			continue;
@@ -1418,7 +1439,7 @@ zombie_gib_on_damage()
 				if( self.damageLocation == "none" )
 				{
 					// SRS 9/7/2008: might be a nade or a projectile
-					if( type == "MOD_GRENADE" || type == "MOD_GRENADE_SPLASH" || type == "MOD_PROJECTILE" || type == "MOD_EXPLOSIVE" )
+					if( type == "MOD_GRENADE" || type == "MOD_GRENADE_SPLASH" || type == "MOD_PROJECTILE" || type == "MOD_EXPLOSIVE" || type == "MOD_ZOMBIE_SATCHEL" )
 					{
 						// ... in which case we have to derive the ref ourselves
 						refs = self derive_damage_refs( point );
@@ -1720,6 +1741,18 @@ zombie_death_points( origin, mod, hit_location, player, zombie )
 // Called from animscripts\death.gsc
 zombie_death_animscript()
 {
+	//dt2.0, forces saved MOD/location allowing us to get correct points on doDamage killshots
+	if(isDefined(self.saved_damagemod) && isDefined(self.saved_damagelocation))
+	{
+		mod = self.saved_damagemod;
+		hit_location = self.saved_damagelocation;
+	}
+	else
+	{
+		mod = self.damagemod;
+		hit_location = self.damagelocation;	
+	}
+
 	self reset_attack_spot();
 
 	// If no_legs, then use the AI no-legs death
@@ -1731,7 +1764,7 @@ zombie_death_animscript()
 	self.grenadeAmmo = 0;
 
 	// Give attacker points
-	level zombie_death_points( self.origin, self.damagemod, self.damagelocation, self.attacker, self );
+	level zombie_death_points( self.origin, mod, hit_location, self.attacker,self );
 
 	if( self.damagemod == "MOD_BURNED" || (self.damageWeapon == "molotov" && (self.damagemod == "MOD_GRENADE" || self.damagemod == "MOD_GRENADE_SPLASH")) )
 	{
@@ -1798,7 +1831,7 @@ damage_on_fire( player )
 	}
 }
 
-zombie_damage( mod, hit_location, hit_origin, player )
+zombie_damage( mod, hit_location, hit_origin, player, amount )
 {
 	players = get_players();
 
@@ -1851,26 +1884,22 @@ zombie_damage( mod, hit_location, hit_origin, player )
 			self DoDamage( level.round_number * randomintrange( 0, 100 ), self.origin, undefined );
 		}
 	}
-	else if( mod == "MOD_EXPLOSIVE" )
+	else if( mod == "MOD_ZOMBIE_SATCHEL" || mod == "MOD_EXPLOSIVE" ) // satchels, red barrels, mortars
 	{
+		damage = level.round_number * randomintrange( 100, 200 );
+		if(damage > self.health)
+		{
+			self.saved_damagemod = mod;
+			self.saved_damagelocation = hit_location;
+		}
+
 		if ( isdefined( player ) && isalive( player ) )
 		{
-			self DoDamage( level.round_number * randomintrange( 125, 250 ), self.origin, player);
+			self DoDamage( damage, self.origin, player);
 		}
 		else
 		{
-			self DoDamage( level.round_number * randomintrange( 125, 250 ), self.origin, undefined );
-		}
-	}
-	else if( mod == "MOD_ZOMBIE_SATCHEL" )
-	{
-		if ( isdefined( player ) && isalive( player ) )
-		{
-			self DoDamage( level.round_number * randomintrange( 100, 200 ), self.origin, player);
-		}
-		else
-		{
-			self DoDamage( level.round_number * randomintrange( 100, 200 ), self.origin, undefined );
+			self DoDamage( damage, self.origin, undefined );
 		}
 	}
 	
@@ -2283,6 +2312,7 @@ do_player_playdialog(player_index, sound_to_play, waittime, response)
 	{
 		level.player_is_speaking = 0;	
 	}
+
 	if(level.player_is_speaking != 1)
 	{
 		level.player_is_speaking = 1;
@@ -2312,7 +2342,10 @@ get_number_variants(aliasPrefix)
 
 play_death_vo(hit_location, player,mod,zombie)
 {
-
+	if (player maps\_laststand::player_is_in_laststand() )
+	{
+		return;
+	}
 	
 	if( getdvar("zombie_death_vo_freq") == "" )
 	{
@@ -2351,11 +2384,11 @@ play_death_vo(hit_location, player,mod,zombie)
 		}					
 		//chrisp - far headshot sounds
 		rand = randomintrange(0, 100);
-		if( (distance(player.origin,zombie.origin) > 400) && rand < 90 ) //10% chance of no headshot vox, we dont want Nacht guys to seem spammy-they're here to do a job 
+		if( (distance(player.origin,zombie.origin) > 400) && rand < 80 ) //20% chance of no headshot vox, we dont want Nacht guys to seem spammy-they're here to do a job 
 		{
 			//sound = "plr_" + index + "_vox_kill_headdist" + "_" + randomintrange(0, 11);
 			plr = "plr_" + index + "_";
-			player thread play_headshot_dialog (plr);
+			player play_headshot_dialog (plr);
 			return;
 
 		}	
@@ -2390,16 +2423,16 @@ play_death_vo(hit_location, player,mod,zombie)
 		}
 	}
 
-	if(weapon == "ray_gun" )
+	if(zombie.damageweapon == "molotov" || zombie.damageweapon == "ray_gun" /*|| weapon == "ray_gun"*/ )
 	{
 		return;
 	}
 
 	//Explosive Kills
-	if((mod == "MOD_GRENADE_SPLASH" || mod == "MOD_GRENADE" ) && level.zombie_vars["zombie_insta_kill"] == 0 )
+	if((mod == "MOD_GRENADE_SPLASH" || mod == "MOD_GRENADE" || mod == "MOD_ZOMBIE_SATCHEL" ) && level.zombie_vars["zombie_insta_kill"] == 0 )
 	{
 		rand = randomintrange(0, 100);
-		if(rand < 75)
+		if(rand < 60)
 		{
 			plr = "plr_" + index + "_";
 			player play_explosion_dialog(plr);
@@ -2410,7 +2443,7 @@ play_death_vo(hit_location, player,mod,zombie)
 	if( mod == "MOD_PROJECTILE" || mod == "MOD_EXPLOSIVE" )
 	{	
 		rand = randomintrange(0, 100);
-		if(rand < 70)
+		if(rand < 60)
 		{
 			plr = "plr_" + index + "_";
 			player play_explosion_dialog(plr);

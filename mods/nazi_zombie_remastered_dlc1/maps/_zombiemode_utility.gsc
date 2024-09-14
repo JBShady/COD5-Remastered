@@ -648,7 +648,7 @@ play_sound_at_pos( ref, pos, ent )
 	PlaySoundAtPosition( level.zombie_sounds[ref], pos ); 
 }
 
-play_sound_on_ent( ref )
+play_sound_on_ent( ref, position )
 {
 	if( IsDefined( self.script_soundalias ) )
 	{
@@ -672,7 +672,18 @@ play_sound_on_ent( ref )
 		return; 
 	}
 
-	self PlaySound( level.zombie_sounds[ref] ); 
+	if(isDefined(position))
+	{
+		//iprintlnbold("playing on position");
+		sound_location = position;
+	}
+	else
+	{
+		//iprintlnbold("playing on self");
+		sound_location = self;
+	}
+
+	sound_location PlaySound( level.zombie_sounds[ref] ); 
 }
 
 play_loopsound_on_ent( ref )
@@ -1204,18 +1215,18 @@ play_killstreak_dialog()
 
 		//num_variants = 12;
 		waittime = 0.25;
-		if(!IsDefined (self.vox_killstreak))
+		if(!IsDefined (self.nvox_killstreak))
 		{
 			num_variants = maps\_zombiemode_spawner::get_number_variants(player_index + "nvox_killstreak");
-			self.vox_killstreak = [];
+			self.nvox_killstreak = [];
 			for(i=0;i<num_variants;i++)
 			{
-				self.vox_killstreak[self.vox_killstreak.size] = "nvox_killstreak_" + i;	
+				self.nvox_killstreak[self.nvox_killstreak.size] = "nvox_killstreak_" + i;	
 			}
-			self.vox_killstreak_available = self.vox_killstreak;
+			self.nvox_killstreak_available = self.nvox_killstreak;
 		}
-		sound_to_play = random(self.vox_killstreak_available);
-		self.vox_killstreak_available = array_remove(self.vox_killstreak_available,sound_to_play);
+		sound_to_play = random(self.nvox_killstreak_available);
+		self.nvox_killstreak_available = array_remove(self.nvox_killstreak_available,sound_to_play);
 
 	//	iprintlnbold("LINE:" + player_index + sound_to_play);
 
@@ -1225,9 +1236,9 @@ play_killstreak_dialog()
 		//self waittill("sound_done" + sound_to_play);
 
 		wait(waittime);
-		if (self.vox_killstreak_available.size < 1 )
+		if (self.nvox_killstreak_available.size < 1 )
 		{
-			self.vox_killstreak_available = self.vox_killstreak;
+			self.nvox_killstreak_available = self.nvox_killstreak;
 		}
 		//This ensures that there is at least 3 seconds waittime before playing another VO.
 

@@ -8,7 +8,7 @@ init_elec_trap_trigs()
 	for (i = 0; i < trap_trigs.size; i++)
 	{
 		trap_trigs[i] thread electric_trap_think();
-		trap_trigs[i] thread electric_trap_dialog();
+		//trap_trigs[i] thread electric_trap_dialog();
 		wait_network_frame();
 	}
 	//array_thread (trap_trigs,::electric_trap_think);
@@ -145,7 +145,7 @@ electric_trap_think()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				who play_sound_on_ent( "no_purchase" );
 				who thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
 			}
 		}
@@ -265,10 +265,10 @@ activate_electric_trap(who)
 	}
 	
 	//do the damage
-	self.zombie_dmg_trig thread elec_barrier_damage(who);
+	self.zombie_dmg_trig thread elec_barrier_damage(who, self);
 	
 	// reset the zapper model
-	level waittill("arc_done");
+	//level waittill("arc_done");
 	//machine setmodel("zombie_zapper_power_box");
 }
 
@@ -284,7 +284,7 @@ electric_trap_fx(notify_ent)
 //	{
 		self.tag_origin playsound("elec_start");
 		self.tag_origin playloopsound("elec_loop");
-		self thread play_electrical_sound();
+		self thread play_electrical_sound(notify_ent);
 //	} 
 	wait(30);
 		
@@ -297,9 +297,9 @@ electric_trap_fx(notify_ent)
 	level notify ("arc_done");
 	
 }
-play_electrical_sound()
+play_electrical_sound(notify_ent)
 {
-	level endon ("arc_done");
+	notify_ent endon ("elec_done");
 	while(1)
 	{	
 		wait(randomfloatrange(0.1, 0.5));
@@ -308,9 +308,10 @@ play_electrical_sound()
 	
 
 }
-elec_barrier_damage(who)
+elec_barrier_damage(who, notify_ent)
 {
-	
+	notify_ent endon ("elec_done");
+
 	while(1)
 	{
 		self waittill("trigger",ent);

@@ -431,7 +431,7 @@ updateChallenges()
 				if( !statVal )
 				{
 					statVal = 1;
-					self setStat( int( stat_num ), 1 );
+					//self setStat( int( stat_num ), 1 );
 				}
 				
 				refString = tableLookup( tableName, 0, idx, 7 );

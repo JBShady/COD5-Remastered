@@ -383,7 +383,7 @@ zipThink()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				who play_sound_on_ent( "no_purchase" );
 				who thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
 			}
 		}

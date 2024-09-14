@@ -78,13 +78,34 @@ main()
 	level thread onPlayerConnect(); 
 
 	init_dvars();
+	initZombieLeaderboardData();
 
 	flag_wait( "all_players_connected" ); 
 	
 	//thread zombie_difficulty_ramp_up(); 
 
 	players = get_players();
+	
+	switch(players.size)
+	{	
+		case 1:
+			level.dynEnt_spawnedLimit = 50;
+			break;
+		case 2:
+			level.dynEnt_spawnedLimit = 40;
+			break;
+		case 3:
+			level.dynEnt_spawnedLimit = 30;
+			break;
+		case 4:
+			level.dynEnt_spawnedLimit = 25;
+			break;
+		default:
+			level.dynEnt_spawnedLimit = 50;
+			break;	
+	}
 
+	SetDvar( "dynEnt_spawnedLimit", level.dynEnt_spawnedLimit );
 /*	if(players.size != 1)
 	{
 		setDvar( "classic_zombies", 0);
@@ -170,8 +191,6 @@ init_strings()
 	PrecacheString( &"ZOMBIE_GAME_OVER" );
 	PrecacheString( &"ZOMBIE_SURVIVED_ROUND" );
 	PrecacheString( &"ZOMBIE_SURVIVED_ROUNDS" );
-	PrecacheString( &"REMASTERED_ZOMBIE_ENTER_FIRST_PERSON" );
-	PrecacheString( &"REMASTERED_ZOMBIE_ENTER_THIRD_PERSON" );
 	
 	add_zombie_hint( "undefined", &"ZOMBIE_UNDEFINED" );
 
@@ -215,6 +234,7 @@ init_strings()
 	add_zombie_hint( "default_buy_door_1500", &"ZOMBIE_BUTTON_BUY_OPEN_DOOR_1500" );
 	add_zombie_hint( "default_buy_door_1750", &"ZOMBIE_BUTTON_BUY_OPEN_DOOR_1750" );
 	add_zombie_hint( "default_buy_door_2000", &"ZOMBIE_BUTTON_BUY_OPEN_DOOR_2000" );
+	add_zombie_hint( "default_buy_door_close_1000", &"REMASTERED_ZOMBIE_CLOSE_DOOR_1000" );
 
 	// Areas
 	add_zombie_hint( "default_buy_area_100", &"ZOMBIE_BUTTON_BUY_OPEN_AREA_100" );
@@ -350,6 +370,57 @@ init_dvars()
 	SetDvar( "revive_trigger_radius", "60" );
 
 }
+
+initZombieLeaderboardData()
+{
+	// Initializing Leaderboard Stat Variables
+	level.zombieLeaderboardStatVariable["nazi_zombie_prototype"]["highestwave"] = "nz_prototype_highestwave";
+	level.zombieLeaderboardStatVariable["nazi_zombie_prototype"]["highestwave_two"] = "nz_prototype_highestwave_two";
+	level.zombieLeaderboardStatVariable["nazi_zombie_prototype"]["highestwave_three"] = "nz_prototype_highestwave_three";
+	level.zombieLeaderboardStatVariable["nazi_zombie_prototype"]["highestwave_four"] = "nz_prototype_highestwave_four";
+	
+	level.zombieLeaderboardStatVariable["nazi_zombie_prototype"]["totalpoints"] = "nz_prototype_totalpoints";
+	level.zombieLeaderboardStatVariable["nazi_zombie_prototype"]["totalpoints_two"] = "nz_prototype_totalpoints_two";
+	level.zombieLeaderboardStatVariable["nazi_zombie_prototype"]["totalpoints_three"] = "nz_prototype_totalpoints_three";
+	level.zombieLeaderboardStatVariable["nazi_zombie_prototype"]["totalpoints_four"] = "nz_prototype_totalpoints_four";
+	/*
+	level.zombieLeaderboardStatVariable["nazi_zombie_asylum"]["highestwave"] = "nz_asylum_highestwave";
+	level.zombieLeaderboardStatVariable["nazi_zombie_asylum"]["highestwave_two"] = "nz_asylum_highestwave_two";
+	level.zombieLeaderboardStatVariable["nazi_zombie_asylum"]["highestwave_three"] = "nz_asylum_highestwave_three";
+	level.zombieLeaderboardStatVariable["nazi_zombie_asylum"]["highestwave_four"] = "nz_asylum_highestwave_four";
+	
+	level.zombieLeaderboardStatVariable["nazi_zombie_asylum"]["totalpoints"] = "nz_asylum_totalpoints";
+	level.zombieLeaderboardStatVariable["nazi_zombie_asylum"]["totalpoints_two"] = "nz_asylum_totalpoints_two";
+	level.zombieLeaderboardStatVariable["nazi_zombie_asylum"]["totalpoints_three"] = "nz_asylum_totalpoints_three";
+	level.zombieLeaderboardStatVariable["nazi_zombie_asylum"]["totalpoints_four"] = "nz_asylum_totalpoints_four";
+
+	level.zombieLeaderboardStatVariable["nazi_zombie_sumpf"]["highestwave"] = "nz_sumpf_highestwave";
+	level.zombieLeaderboardStatVariable["nazi_zombie_sumpf"]["highestwave_two"] = "nz_sumpf_highestwave_two";
+	level.zombieLeaderboardStatVariable["nazi_zombie_sumpf"]["highestwave_three"] = "nz_sumpf_highestwave_three";
+	level.zombieLeaderboardStatVariable["nazi_zombie_sumpf"]["highestwave_four"] = "nz_sumpf_highestwave_four";
+	
+	level.zombieLeaderboardStatVariable["nazi_zombie_sumpf"]["totalpoints"] = "nz_sumpf_totalpoints";
+	level.zombieLeaderboardStatVariable["nazi_zombie_sumpf"]["totalpoints_two"] = "nz_sumpf_totalpoints_two";
+	level.zombieLeaderboardStatVariable["nazi_zombie_sumpf"]["totalpoints_three"] = "nz_sumpf_totalpoints_three";
+	level.zombieLeaderboardStatVariable["nazi_zombie_sumpf"]["totalpoints_four"] = "nz_sumpf_totalpoints_four";
+
+	level.zombieLeaderboardStatVariable["nazi_zombie_factory"]["highestwave"] = "nz_factory_highestwave";
+	level.zombieLeaderboardStatVariable["nazi_zombie_factory"]["highestwave_two"] = "nz_factory_highestwave_two";
+	level.zombieLeaderboardStatVariable["nazi_zombie_factory"]["highestwave_three"] = "nz_factory_highestwave_three";
+	level.zombieLeaderboardStatVariable["nazi_zombie_factory"]["highestwave_four"] = "nz_factory_highestwave_four";
+
+	level.zombieLeaderboardStatVariable["nazi_zombie_factory"]["totalpoints"] = "nz_factory_totalpoints";
+	level.zombieLeaderboardStatVariable["nazi_zombie_factory"]["totalpoints_two"] = "nz_factory_totalpoints_two";
+	level.zombieLeaderboardStatVariable["nazi_zombie_factory"]["totalpoints_three"] = "nz_factory_totalpoints_three";
+	level.zombieLeaderboardStatVariable["nazi_zombie_factory"]["totalpoints_four"] = "nz_factory_totalpoints_four";*/
+
+	// Initializing Leaderboard Number
+	level.zombieLeaderboardNumber["nazi_zombie_prototype"]["waves"] = true;
+	level.zombieLeaderboardNumber["nazi_zombie_asylum"]["waves"] = true;
+	level.zombieLeaderboardNumber["nazi_zombie_sumpf"]["waves"] = true;
+	level.zombieLeaderboardNumber["nazi_zombie_factory"]["waves"] = true;
+}
+
 
 init_fx()
 {
@@ -539,9 +610,12 @@ zombie_intro_screen( string1, string2, string3, string4, string5 )
 		"aim_automelee_range", "96",
         "aim_automelee_lerp", "50",
         "player_meleechargefriction", "2500",
-		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
-
+        "dynEnt_spawnedLimit", level.dynEnt_spawnedLimit,
+		"cg_hudDamageIconTime", "2500", // fixed damage marks from disappearing too quick
+		"playerSpectating", "0"
+		 ); 
 	}
+
 }
 
 players_playing()
@@ -563,7 +637,10 @@ players_playing()
 		"aim_automelee_range", "96",
         "aim_automelee_lerp", "50",
         "player_meleechargefriction", "2500",
-		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
+        "dynEnt_spawnedLimit", level.dynEnt_spawnedLimit,
+		"cg_hudDamageIconTime", "2500", // fixed damage marks from disappearing too quick
+		"playerSpectating", "0"
+		); 
 
 	}
 }
@@ -589,7 +666,7 @@ watchGrenadeThrow()
 		}
 		if(isdefined(grenade))
 		{
-			if(self maps\_laststand::player_is_in_laststand()) // or dead delete?
+			if(self maps\_laststand::player_is_in_laststand() || level.falling_down == true )
 			{
 				wait(0.05);
 				grenade delete();
@@ -645,6 +722,7 @@ onPlayerConnect_clientDvars()
 		"player_backSpeedScale", "0.9", // back speed faster, similar to console
 		"player_strafeSpeedScale", "0.9", // buffed strafe
 		"player_sprintStrafeSpeedScale", "0.8",  // buffed strafe
+		"playerSpectating", "0", // spectating hud
 		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
 
 	self SetClientDvars(
@@ -661,6 +739,8 @@ onPlayerConnect_clientDvars()
 		//self SetClientDvars( "classic_perks", 1 );
 		self setclientdvar("player_lastStandBleedoutTime", 30);
 	}
+
+	self FreezeControls( false );
 
 	self SetDepthOfField( 0, 0, 512, 4000, 4, 0 );
 }
@@ -702,12 +782,13 @@ onPlayerSpawned()
 		"player_backSpeedScale", "0.9",
 		"player_strafeSpeedScale", "0.9",
 		"player_sprintStrafeSpeedScale", "0.8",
-		
+		"playerSpectating", "0", // spectating hud
 		"aim_automelee_range", "96",
         "aim_automelee_lerp", "50",
         "player_meleechargefriction", "2500",
 		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
 
+		self FreezeControls( false );
 
 		if( getDvar( "classic_perks" ) == "" || getDvar("classic_perks") == "0" ) // if dvar doesn't exist or is disabled, we stay default
 		{
@@ -858,54 +939,40 @@ spectator_thread()
 spectator_toggle_3rd_person()
 {
 	self endon( "disconnect" ); 
-	
 	self endon( "spawned_player" ); // If a player respawns
 	level endon( "intermission" ); // Game over, if all players die
-
+	
+	self SetClientDvars( "playerSpectating", "1", "cg_thirdPerson", "1", "cg_thirdPersonAngle", "354" );
+	self setDepthOfField( 0, 128, 512, 4000, 6, 1.8 );
 	wait(0.1); // ensure that we save our fov before we mess with it below
 	wait_network_frame();
 	// We start by setting up everything for 3rd person, only below do we start the toggling if a player so chooses
+	self SetClientDvars("cg_fov", "40");
+
 	third_person = true;
-	self SetClientDvars( "cg_thirdPerson", "1",	"cg_thirdPersonAngle", "354", "cg_fov", "40" );
-	self setDepthOfField( 0, 128, 512, 4000, 6, 1.8 );
-
-	self.viewChangeSpec = newClientHudElem( self );
-
-	self.viewChangeSpec.alignX 		= "center";
-	self.viewChangeSpec.alignY 		= "middle";
-	self.viewChangeSpec.horzAlign 	= "center";
-	self.viewChangeSpec.vertAlign 	= "bottom";
-	self.viewChangeSpec.y 	= -100;
-	self.viewChangeSpec.x 	= 6;
-	self.viewChangeSpec.foreground 	= true;
-	self.viewChangeSpec.hideWhenInMenu = true;
-	self.viewChangeSpec.fontScale = 1.2;
-
-	self.viewChangeSpec SetText( &"REMASTERED_ZOMBIE_ENTER_FIRST_PERSON" );
 
 	self thread reset_spec_hud();
 
     while(1)
     {
-		countdown_time = 0.25;
-		for(;;)
-		{
-		    wait(0.05);
-			if ( self meleeButtonPressed() )
-		    {
-		        countdown_time -= 0.05;
-		        if ( countdown_time <= 0 ) break;
-		    }
-		    else if ( countdown_time != 0.25 )  
-		        countdown_time = 0.25;
-		}
+    	for(;;)
+    	{
+    		if(self useButtonPressed ())
+    		{
+    			break;
+    		}
+    		else
+    		{
+    			wait(0.05);
+    			continue;
+    		}
+    	}
 
     	third_person = !third_person;
         self set_third_person(third_person);
 
 		wait(0.5);
     }
-	// destroy hud when respawn and if last person dies
 }
 
 set_third_person( value )
@@ -914,16 +981,12 @@ set_third_person( value )
 	{
 		self SetClientDvars( "cg_thirdPerson", "1", "cg_thirdPersonAngle", "354", "cg_fov", "40" );
 		
-		self.viewChangeSpec SetText( &"REMASTERED_ZOMBIE_ENTER_FIRST_PERSON" );
-
 		self setDepthOfField( 0, 128, 512, 4000, 6, 1.8 );
 	}
 	else
 	{
 		self SetClientDvars( "cg_thirdPerson", "0", "cg_thirdPersonAngle", "0", "cg_fov", "65" );
 		
-		self.viewChangeSpec SetText( &"REMASTERED_ZOMBIE_ENTER_THIRD_PERSON" );
-
 		self setDepthOfField( 0, 0, 512, 4000, 4, 0 );
 	}
 }
@@ -934,8 +997,7 @@ reset_spec_hud()
 	
 	setClientSysState( "levelNotify", "fov_reset", self );
 	
-	self.viewChangeSpec destroy();
-	self.viewChangeSpec = undefined;
+	self SetClientDvar("playerSpectating", "0");
 }
 
 spectators_respawn()
@@ -1030,11 +1092,7 @@ spectator_respawn()
 	
 	self notify( "spawned_player" );
 
-	if(isDefined(self.viewChangeSpec) )
-	{
-		self.viewChangeSpec destroy();
-		self.viewChangeSpec = undefined;
-	}
+	self SetClientDvar("playerSpectating", "0");
 
 	// Penalize the player when we respawn, since he 'died'
 	self maps\_zombiemode_score::player_reduce_points( "died" );
@@ -2096,7 +2154,15 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 			}
 			else if(isSubStr(sWeapon, "satchel_charge") ) // Radius 256, damage very high
 			{
-				finalDamage = radiusDamage(eInflictor.origin, 256,130,45, eAttacker);
+				if(isDefined(self.satchel_invulnerable_delay) && self.satchel_invulnerable_delay == true)
+				{
+					self.satchel_charge = undefined;
+					finalDamage = radiusDamage(eInflictor.origin, 256,98,35, eAttacker);
+				}
+				else
+				{
+					finalDamage = radiusDamage(eInflictor.origin, 256,130,45, eAttacker);
+				}
 			}
 			else // For frags (and all other cases), Radius 256, damage low (300-75)
 			{
@@ -2152,8 +2218,7 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 		if ( IsDefined( eAttacker ) )
 		{
 			eAttacker.sound_damage_player = self;
-		}
-		
+		}	
 		//iprintlnbold(iDamage);
 		self maps\_callbackglobal::finishPlayerDamageWrapper( eInflictor, eAttacker, finalDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, modelIndex, psOffsetTime ); 
 		return;
@@ -2198,6 +2263,10 @@ end_game()
 {
 	level waittill ( "end_game" );
 
+	level.intermission = true;
+
+	update_leaderboards();
+
 	players = get_players();
 	for( i = 0; i < players.size; i++ )
 	{
@@ -2211,12 +2280,9 @@ end_game()
 	setmusicstate("end_of_game");
 	setbusstate("default");
 
-	level.intermission = true;
 	level.zombie_vars["zombie_powerup_insta_kill_time"] = 0;
 	level.zombie_vars["zombie_powerup_point_doubler_time"] = 0;
 	wait 0.1;
-
-	//update_leaderboards();
 	
 	game_over = NewHudElem( self );
 	game_over.alignX = "center";
@@ -2281,6 +2347,8 @@ end_game()
 	level notify( "stop_intermission" );
 	array_thread( get_players(), ::player_exit_level );
 
+	setmusicstate( "SILENT" );
+
 	wait( 1.5 );
 
 /*	for ( j = 0; j < get_players().size; j++ )
@@ -2294,7 +2362,7 @@ end_game()
 
 	if( is_coop() )
 	{
-		wait(7); // extra lil wait because sometimes co-op lobbies the intermission cuts off early since music can start a bit later
+		wait(4); // extra lil wait because sometimes co-op lobbies the intermission cuts off early since music can start a bit later
 		ExitLevel( false );
 	}
 	else
@@ -2322,12 +2390,13 @@ destroy_chalk_hud()
 
 update_leaderboards()
 {
-	if( level.systemLink || IsSplitScreen() )
+/*	if( level.systemLink || IsSplitScreen() )
 	{
 		return; 
-	}
+	}*/
 
 	nazizombies_upload_highscore();	
+	nazizombies_set_new_zombie_stats();
 }
 
 player_fake_death()
@@ -2582,64 +2651,168 @@ store_crumb( origin )
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////LEADERBOARD CODE///////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //CODER MOD: TOMMY K
 nazizombies_upload_highscore()
 {
-	// Nazi Zombie Leaderboards
-	// nazi_zombie_prototype_waves = 13
-	// nazi_zombie_prototype_points = 14
+	if( getDvarInt( "classic_zombies") == 1 || getDvarInt( "super_sprinters") == 1 ) // if playing with 24 limit or with super sprinters disabled, these are considered cheats because they make the game easier. classic perks or grabby zombies is OK, these make the game harder
+	{
+		//iPrintLn("Highscores not saved, current Game Options configuration not allowed");
+		return;
+	}
 	
-	// this has gotta be the dumbest way of doing this, but at 1:33am in the morning my brain is fried!
-	playersRank = 1;
-	if( level.players_playing == 1 )
-		playersRank = 4;
-	else if( level.players_playing == 2 )
-		playersRank = 3;
-	else if( level.players_playing == 3 )
-		playersRank = 2;
+	map_name = GetDvar( "mapname" );
+
+	if ( !isZombieLeaderboardAvailable( map_name, "waves" ) )
+	{
+		return;
+	}
+
+	players = get_players();		
+
+	switch( players.size )
+	{
+	case 1:
+		extra = "";
+		override = false;
+		break; 
+	case 2:
+		extra = "_two";
+		override = true;
+		break;
+	case 3:
+		extra = "_three";
+		override = true;
+		break;
+	case 4:
+		extra = "_four";
+		override = true;
+		break;
+	default:
+		extra = "";
+		override = false;
+		break; 
+	}
+
+	high_wave_string = "highestwave" + extra;
+	total_points_string = "totalpoints" + extra;
+
+	for( i = 0; i < players.size; i++ )
+	{
+		pre_highest_wave = players[i] playerZombieStatGet( map_name, high_wave_string, override ); 
+		new_highest_wave = level.round_number;
+		new_highest_wave = int( new_highest_wave );
+
+		if( new_highest_wave > pre_highest_wave )
+		{
+			players[i] playerZombieStatSet( map_name, high_wave_string, new_highest_wave, override );
+		}
+
+		pre_total_points = players[i] playerZombieStatGet( map_name, total_points_string, override ); 				
+		if( players[i].score_total > pre_total_points )
+		{
+			players[i] playerZombieStatSet( map_name, total_points_string, players[i].score_total, override );	
+		}
+	}
+}
+
+isZombieLeaderboardAvailable( map, type )
+{
+	if ( !isDefined( level.zombieLeaderboardNumber[map] ) )
+		return 0;
+	
+	if ( !isDefined( level.zombieLeaderboardNumber[map][type] ) )
+		return 0;
+
+	return 1;
+}
+
+getZombieStatVariable( map, variable )
+{
+	if ( !isDefined( level.zombieLeaderboardStatVariable[map][variable] ) )
+		assertMsg( "Unknown stat variable " + variable + " for map " + map );
+		
+	return level.zombieLeaderboardStatVariable[map][variable];
+}
+
+playerZombieStatGet( map, variable, override )
+{
+	stat_variable = getZombieStatVariable( map, variable );
+	result = self zombieStatGet( stat_variable, override );
+
+	return result;
+}
+
+playerZombieStatSet( map, variable, value, override )
+{
+	stat_variable = getZombieStatVariable( map, variable );
+	self zombieStatSet( stat_variable, value, override );
+}
+
+nazizombies_set_new_zombie_stats()
+{	
+	level.current_play_time = int( GetTime()/1000 ); 		// gets the time in seconds	
 
 	players = get_players();		
 	for( i = 0; i < players.size; i++ )
 	{
-		pre_highest_wave = players[i] zombieStatGet( "nz_prototype_highestwave" ); 
-		pre_time_in_wave = players[i] zombieStatGet( "nz_prototype_timeinwave" );
-		
-		new_highest_wave = level.round_number + "" + playersRank;
-		new_highest_wave = int( new_highest_wave );
-		
-		if( new_highest_wave >= pre_highest_wave )
+		//grab stat and add final totals
+		total_kills = players[i] zombieStatGet( "zombie_kills" ) + players[i].stats["kills"];
+		total_points = players[i] zombieStatGet( "zombie_points" ) + players[i].stats["score"];
+		total_rounds = players[i] zombieStatGet( "zombie_rounds" ) + (level.round_number - 1); // rounds survived
+		total_downs = players[i] zombieStatGet( "zombie_downs" ) + players[i].stats["downs"];
+		total_revives = players[i] zombieStatGet( "zombie_revives" ) + players[i].stats["revives"];
+		total_perks = players[i] zombieStatGet( "zombie_perks_consumed" ) + players[i].stats["perks"]; // repurposed for mystery box uses on prototype
+		total_headshots = players[i] zombieStatGet( "zombie_heashots" ) + players[i].stats["headshots"];
+		total_zombie_gibs = players[i] zombieStatGet( "zombie_gibs" ) + players[i].stats["zombie_gibs"];
+		previous_play_time = players[i] zombieStatGet( "nz_prototype_timeinwave" );
+
+		//set zombie stats
+		players[i] zombieStatSet( "zombie_kills", total_kills ); // 2100
+		players[i] zombieStatSet( "zombie_points", total_points ); // 2101
+		players[i] zombieStatSet( "zombie_rounds", total_rounds ); // 2102
+		players[i] zombieStatSet( "zombie_downs", total_downs ); // 2103
+		players[i] zombieStatSet( "zombie_revives", total_revives ); // 2104
+		players[i] zombieStatSet( "zombie_perks_consumed", total_perks ); // 2105
+		players[i] zombieStatSet( "zombie_heashots", total_headshots ); // 2106
+		players[i] zombieStatSet( "zombie_gibs", total_zombie_gibs ); // 2107
+		players[i] zombieStatSet( "nz_prototype_timeinwave", int(level.current_play_time + previous_play_time) ); 
+
+		if( getDvarInt( "classic_zombies") == 1 || getDvarInt( "super_sprinters") == 1 ) // if playing with 24 limit or with super sprinters disabled, these are considered cheats because they make the game easier. classic perks or grabby zombies is OK, these make the game harder
 		{
-			if( players[i].zombification_time == 0 )
-			{
-				players[i].zombification_time = getTime();
-			}
-			
-			player_survival_time = players[i].zombification_time - level.round_start_time; 
-			player_survival_time = int( player_survival_time/1000 ); 			
-			
-			if( new_highest_wave > pre_highest_wave || player_survival_time > pre_time_in_wave )
-			{
-				// 13 = nazi_zombie_prototype_waves leaderboard				
-				rankNumber = makeRankNumber( level.round_number, playersRank, player_survival_time );
-								
-				players[i] UploadScore( 13, int(rankNumber), level.round_number, player_survival_time, level.players_playing ); 
-				
-				players[i] zombieStatSet( "nz_prototype_highestwave", new_highest_wave ); 
-				players[i] zombieStatSet( "nz_prototype_timeinwave", player_survival_time ); 			
-			}
-		}		
-		
-		pre_total_points = players[i] zombieStatGet( "nz_prototype_totalpoints" ); 				
-		if( players[i].score_total > pre_total_points )
+			//iPrintLn("Highscores not saved, current Game Options configuration not allowed");
+		}
+		else
 		{
-			// 14 = nazi_zombie_prototype_waves leaderboard
-			//total_spent = players[i].score_total - players[i].score; 
-			
-			players[i] UploadScore( 14, players[i].score_total, players[i].kills, level.players_playing ); 
-			
-			players[i] zombieStatSet( "nz_prototype_totalpoints", players[i].score_total ); 
-		}			
+			players[i].xp = players[i] zombieStatGet( "rankxp" );
+
+			if( players[i].xp <= 160000 ) // once we get 160k XP, then we are at max level so dont need to keep adding
+			{
+				players[i].xp = total_kills * 10; // calculate our new xp,  based on 1 zombie kill = 10 xp, we cannot lose progress because its tied to total kills which gets summed above 
+
+				players[i].rank = players[i] maps\_challenges_coop::getRankForXp( players[i].xp ); 
+				players[i] zombieStatSet( "rankxp", players[i].xp ); 
+			}
+
+			if ( players[i].xp >= 160000 ) // once we have gotten max rank, we can prestige
+			{
+				players[i].prestige = int(total_rounds/total_downs); // round to down ratio, because this ratio is different every game we can lose progress on this stat
+
+				if(players[i].prestige > 10)
+				{
+					players[i].prestige = 10;
+				}
+
+				players[i] zombieStatSet( "plevel", players[i].prestige ); 
+			}
+			else
+			{
+				players[i].prestige = 0;
+			}
+
+			players[i] setRank( players[i].rank, players[i].prestige );
+		}
+		
+		// note: to get stat number, do table lookup without GetStat--GetStat forces the stat value
 	}
 }
 
@@ -2647,7 +2820,7 @@ makeRankNumber( wave, players, time )
 {
 	if( time > 86400 ) 
 		time = 86400; // cap it at like 1 day, need to cap cause you know some muppet is gonna end up trying it
-		
+
 	//pad out time
 	padding = "";
 	if ( 10 > time )
@@ -2658,9 +2831,9 @@ makeRankNumber( wave, players, time )
 		padding += "00";
 	else if( 10000 > time )
 		padding += "0";
-			
+
 	rank = wave + "" + players + padding + time;
-		
+
 	return rank;
 }
 
@@ -2673,14 +2846,21 @@ statGet
 Returns the value of the named stat
 =============
 */
-zombieStatGet( dataName )
+zombieStatGet( dataName, override )
 {
-	if( level.systemLink || true == IsSplitScreen() )
+/*	if( level.systemLink || true == IsSplitScreen() )
 	{
 		return; 
+	}*/
+
+	if(isDefined(override) && override == true)
+	{
+		return self getStat( int(tableLookup( "mp/dlc_achievements.csv", 1, dataName, 0 )) );
 	}
-	
-	return self getStat( int(tableLookup( "mp/playerStatsTable.csv", 1, dataName, 0 )) );
+	else
+	{
+		return self getStat( int(tableLookup( "mp/playerStatsTable.csv", 1, dataName, 0 )) );
+	}
 }
 
 //CODER MOD: TOMMY K
@@ -2691,14 +2871,21 @@ setStat
 Sets the value of the named stat
 =============
 */
-zombieStatSet( dataName, value )
+zombieStatSet( dataName, value, override )
 {
-	if( level.systemLink || true == IsSplitScreen() )
+/*	if( level.systemLink || true == IsSplitScreen() )
 	{
 		return; 
+	}*/
+
+	if(isDefined(override) && override == true)
+	{
+		self setStat( int(tableLookup( "mp/dlc_achievements.csv", 1, dataName, 0 )), value );	
 	}
-	
-	self setStat( int(tableLookup( "mp/playerStatsTable.csv", 1, dataName, 0 )), value );	
+	else
+	{
+		self setStat( int(tableLookup( "mp/playerStatsTable.csv", 1, dataName, 0 )), value );	
+	}
 }
 
 
@@ -2723,11 +2910,7 @@ intermission()
 		players[i] SetClientDvars( "cg_thirdPerson", "0" );
 		players[i] notify("fix_your_fov");
 
-		if(isDefined(players[i].viewChangeSpec) )
-		{
-			players[i].viewChangeSpec destroy();
-			players[i].viewChangeSpec = undefined;
-		}
+		players[i] SetClientDvar("playerSpectating", "0");
 
 		players[i].health = 100; // This is needed so the player view doesn't get stuck
 		players[i] thread player_intermission();
@@ -3083,7 +3266,7 @@ player_revive_monitor()
 	{
 		self waittill( "player_revived", reviver );	
 
-		if ( IsDefined(reviver) && (get_players().size != 1) )
+		if ( IsDefined(reviver) && IsPlayer( self ) && IsPlayer( reviver ) && (get_players().size != 1) )
 		{
 			// Check to see how much money you lost from being down.
 			points = self.score_lost_when_downed;
@@ -3093,18 +3276,19 @@ player_revive_monitor()
 			}
 			reviver maps\_zombiemode_score::add_to_player_score( points );
 			self.score_lost_when_downed = 0;
-
-			reviver thread say_revived_vo();
-			self thread say_revived_resp_vo();
-
+			
+			rando = randomintrange(1, 11 ); 
+			if(rando < 9) // 80% chance, people down a lot on nacht it can get repetitive
+			{
+				wait(0.25); // wait for player to be up
+				reviver thread say_revived_vo(self);
+			}
 		}
 	}
 }
 
 say_down_vo()
 {
-	wait(0.5);
-
 	index = maps\_zombiemode_weapons::get_player_index(self);
 	
 	player_index = "plr_" + index + "_";
@@ -3126,38 +3310,45 @@ say_down_vo()
 	{
 		self.vox_down_gen_available = self.vox_down_gen;
 	}
+
+	wait(0.5);
 	
 	rando = randomintrange(1, 11 );
 	//iprintln(rando);
-	if(rando < 2 && get_players().size > 2 ) // 10% chance when there's at least 3 or 4 players
+	//yelling mandown can get repetitive, so only 60% chance we respond, and if we have 3-4 players 1/7 of those times will be easter egg vox if the applicable characters down
+	if(rando < 2 && get_players().size > 2 )
 	{
-		if(index == 0) // If the downed player is player one, unfortunately only index 2 and 3 have lines for this
+		if(index == 0) // If the downed player is index 0 we yell out easter egg line specific to him, unfortunately only index 2 and 3 have lines for this so index 1 will just say nothing 
 		{
 			//iprintln("mandown_rare");
 			self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.2, "mandown_rare");
 		}
-		else if(index == 3) // If the downed player is sarge, all other 3 char have lines for this
+		else if(index == 3) // If the downed player is index 3, we say specific sarge line for him, luckily all other 3 char have lines for this
 		{
 			//iprintln("gen_sarge");
 			self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.2, "gen_sarge");
 		}
+		else // If the downed player is index 1 or 2, we dont have any specific lines for them
+		{
+			//iprintln("mandown_gen");
+			self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.2, "mandown_gen");
+		}
 	}
-	else if(rando < 7 && get_players().size != 1) // only 60% chance we yell regular mandown, it can get repetitive
+	else if(rando < 7 && get_players().size != 1) 
 	{
 		//iprintln("mandown_gen");
 		self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.2, "mandown_gen");
 	}
 	else
 	{
-		//iprintlnbold("down vo");
+		//iprintlnbold("down vo without response");
 		self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.25 );
 	}
 }
 
 
-say_revived_vo()
+say_revived_vo(revived_person)
 {
-	wait(0.16); // wait for player to be up
 	index = maps\_zombiemode_weapons::get_player_index(self);
 	
 	player_index = "plr_" + index + "_";
@@ -3180,13 +3371,15 @@ say_revived_vo()
 		self.revived_teammate_available = self.revived_teammate;
 	}
 			
-	self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.05 );
+	self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.25 );
+
+	revived_person thread say_revived_resp_vo();
+
 	
 }
 
 say_revived_resp_vo()
 {
-	wait(1.5);
 	index = maps\_zombiemode_weapons::get_player_index(self);
 	
 	player_index = "plr_" + index + "_";

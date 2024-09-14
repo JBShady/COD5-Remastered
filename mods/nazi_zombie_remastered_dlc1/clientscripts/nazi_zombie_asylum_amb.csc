@@ -75,8 +75,9 @@ main()
 
 
   declareMusicState("end_of_game");
-	musicAlias("mx_game_over", 2 );
+	musicAlias("mx_game_over", 4 );
 
+	declareMusicState("SILENT");
 
 
 	thread start_lights();

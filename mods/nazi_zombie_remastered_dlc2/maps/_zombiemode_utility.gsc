@@ -1189,7 +1189,7 @@ play_sound_at_pos( ref, pos, ent )
 	PlaySoundAtPosition( level.zombie_sounds[ref], pos ); 
 }
 
-play_sound_on_ent( ref )
+play_sound_on_ent( ref, position )
 {
 	if( IsDefined( self.script_soundalias ) )
 	{
@@ -1213,7 +1213,18 @@ play_sound_on_ent( ref )
 		return; 
 	}
 
-	self PlaySound( level.zombie_sounds[ref] ); 
+	if(isDefined(position))
+	{
+		//iprintlnbold("playing on position");
+		sound_location = position;
+	}
+	else
+	{
+		//iprintlnbold("playing on self");
+		sound_location = self;
+	}
+
+	sound_location PlaySound( level.zombie_sounds[ref] ); 
 }
 
 play_loopsound_on_ent( ref )

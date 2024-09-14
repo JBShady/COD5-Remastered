@@ -31,9 +31,9 @@ init_smoked_anims()
 
 	level.scr_anim["zombie"]["confused_run1"] 	= %ai_zombie_walk_fast_v1;
 	level.scr_anim["zombie"]["confused_run2"] 	= %ai_zombie_walk_fast_v2; 
-	level.scr_anim["zombie"]["confused_run3"] 	= %ai_zombie_run_v2; 
-	level.scr_anim["zombie"]["confused_run4"] 	= %ai_zombie_run_v2; 
-	level.scr_anim["zombie"]["confused_run5"] 	= %ai_zombie_run_v4; 
+	level.scr_anim["zombie"]["confused_run3"] 	= %ai_zombie_walk_fast_v1; 
+	level.scr_anim["zombie"]["confused_run4"] 	= %ai_zombie_walk_fast_v2; 
+	level.scr_anim["zombie"]["confused_run5"] 	= %ai_zombie_run_v2; 
 	level.scr_anim["zombie"]["confused_run6"] 	= %ai_zombie_run_v4; 
 	level.scr_anim["zombie"]["confused_run7"] 	= %ai_zombie_walk_v4;
 
@@ -53,15 +53,23 @@ trackSmokeGrenade()
 		}
 	}
 }
+/*
+-slows zombie anims to 85%
+-downgrades runners to all walkers, and sprinters to runners/walkers
+-every loop, very small chance of forcing a special taunt anim
+-every loop, small chance of forcing confused anim
+
+-as a result, most zombies will be stuck in the smoke, but the faster they are and the more of them there are, the higher chance there is that a few will slip through  
+*/
 
 watchSmokeDetonation( player )
 {
 	self waittill( "explode", position ); // we wait for 1.5 seconds before grenade explodes after being thrown and then we start here, first delay is set in wep file
 
-	wait(1.35); // another delay so we let the smoke start expanding
+	wait(1.3); // another delay so we let the smoke start expanding
 
 	gasEffectArea = spawn("trigger_radius", position, 0, 120, 150); 
-	durationOfSmoke = 16;  // smoke only exists for a set amount of time
+	durationOfSmoke = 16.05;  // smoke only exists for a set amount of time
 
 	for(;;)
 	{
@@ -71,12 +79,15 @@ watchSmokeDetonation( player )
 
 		for(i=0;i<zombies.size;i++)
 		{
-			if( zombies[i] istouching(gasEffectArea) && zombies[i] in_playable_area() ) // first we check zombies in the radius and are in playable area
+			if( zombies[i] istouching(gasEffectArea) && zombies[i].in_the_ground != true && zombies[i].has_legs ) // first we check zombies in the radius and are in playable area
 			{
 				player achievement_notify( "DLC1_ZOMBIE_SMOKE" );
 
-				if(!isSubStr(zombies[i].current_speed, "confused") && !isSubStr(zombies[i].current_speed, "walk") && self.has_legs ) // then we make sure they are not already confused or walkers or crawlers
+				//iprintln(zombies[i].current_speed);
+
+				if(!isSubStr(zombies[i].current_speed, "confused") ) // then we make sure they are not already confused or walkers or crawlers
 				{
+					// First we slow their anim down
 					if( !IsDefined( zombies[i].is_on_fire ) || ( Isdefined( zombies[i].is_on_fire ) && !zombies[i].is_on_fire ) ) // only speed up if we are NOT on fire, because if we are on fire we already have a separate speed change
 					{
 						zombies[i].moveplaybackrate = 0.85;
@@ -84,13 +95,14 @@ watchSmokeDetonation( player )
 
 					zombies[i].stored_speed = zombies[i].current_speed; // then we store their OG speed, this should NEVER have "confused" in it
 
-					if(isSubStr(zombies[i].current_speed, "run")  && zombies.size > 1 ) // if its run, we go down to walk
+					// Then we force them to a lower speed
+					if((isSubStr(zombies[i].current_speed, "run") || isSubStr(zombies[i].current_speed, "walk"))  && zombies.size > 1 ) // if its run, we go down to walk category
 					{
 						var = randomintrange(1, 7);
 						zombies[i] thread set_run_anim( "confused_walk" + var ); 
 						zombies[i].run_combatanim = level.scr_anim[zombies[i].animname]["walk" + var];
 					}
-					else if(isSubStr(zombies[i].current_speed, "sprint") && zombies.size > 1  ) // if its sprint, we go down to run
+					else if(isSubStr(zombies[i].current_speed, "sprint") && zombies.size > 1  ) // if its sprint, we go down to run category
 					{
 						var = randomintrange(1, 7);
 						zombies[i] thread set_run_anim( "confused_run" + var );
@@ -98,11 +110,18 @@ watchSmokeDetonation( player )
 					}
 				}   
 
-				rando = randomintrange(1,101);
-				if(rando <= 50 ) // 50% chance we do an additional taunt or idle even after being slowed. This is the only thing that effects walkers--so they pretty much get stunned a lot more which makes sense, theyre more likely to be confused by smoke
+				if(!isDefined(zombies[i].is_taunting) && zombies[i] in_playable_area() ) // if we are already defining taunting then that means we are currently taunting and should not spam another stun, wait to test for odds when zombie is done taunting
 				{
-					zombies[i] thread setSmokeStun(rando);
-				}    
+					rando = randomintrange(1,101);
+					if(rando <= 1 )
+					{
+						zombies[i] thread do_a_taunt_smoke(); 
+					}
+					else if(rando <= 7 )
+					{
+						zombies[i] animScripted( "smoke_zombie_stun", zombies[i].origin, zombies[i].angles, level._smoke_zombie_idle[0] );
+					}
+				}
 			}
 			else // then we check zombies that are not in the radius (this includes zombies that have since exited the radius)
 			{
@@ -144,53 +163,16 @@ watchSmokeDetonation( player )
 	}
 }
 
-setSmokeStun(rando) 
-{
-	self endon( "death" );
-	if(!IsDefined(self.is_taunting))
-	{
-		self.is_taunting = 0;	
-	}
-	else if(self.is_taunting == 1) // dont spam multiple taunts all at once
-	{
-		return;
-	}
-
-	if( !isDefined( self ) || !isAlive( self ) )
-	{
-		return;
-	}
-
-	if( !self in_playable_area() || self.in_the_ground == true )
-	{
-		return;
-	}
-
-	if( self.has_legs )
-	{
-		if(rando <= 5 ) // 10% chance we do a special taunt, otherwise just go idle
-		{
-			self do_a_taunt_smoke();
-		}
-		else
-		{
-			self animScripted( "smoke_zombie_stun", self.origin, self.angles, level._smoke_zombie_idle[0] );
-		}
-	}
-
-}
-
 do_a_taunt_smoke()
 {
-	if( self.has_legs)
-	{
-		self.is_taunting = 1;
-		self.old_origin = self.origin;
-		anime = random(level._zombie_board_taunt[self.animname]);
-		self animscripted("zombie_taunt",self.origin, self.angles, anime);
-		wait(getanimlength(anime));
-		self teleport(self.old_origin);
-		self.is_taunting = undefined;	
-	}
+	self endon( "death" );
+
+	self.is_taunting = 1;
+	self.old_origin = self.origin;
+	anime = random(level._zombie_board_taunt[self.animname]);
+	self animscripted("zombie_taunt",self.origin, self.angles, anime);
+	wait(getanimlength(anime));
+	self teleport(self.old_origin);
+	self.is_taunting = undefined;	
 }
 

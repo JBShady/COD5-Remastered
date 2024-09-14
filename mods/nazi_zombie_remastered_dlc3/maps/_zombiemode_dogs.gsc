@@ -759,6 +759,18 @@ dog_death()
 {
 	self waittill( "death" );
 
+	//dt2.0, forces saved MOD/location allowing us to get correct points on doDamage killshots
+	if(isDefined(self.saved_damagemod) && isDefined(self.saved_damagelocation))
+	{
+		mod = self.saved_damagemod;
+		hit_location = self.saved_damagelocation;
+	}
+	else
+	{
+		mod = self.damagemod;
+		hit_location = self.damagelocation;	
+	}
+
 	if( get_enemy_count() == 0 && level.zombie_total == 0 && flag("dog_round_spawning") )
 	{
 
@@ -779,7 +791,8 @@ dog_death()
 
 	if( IsPlayer( self.attacker ) )
 	{
-		self.attacker maps\_zombiemode_score::player_add_points( "death", self.damagemod, self.damagelocation, true );
+		//dt2.0 change variables to fit above check
+		self.attacker maps\_zombiemode_score::player_add_points( "death", mod, hit_location, true );
 	}
 
 	// sound

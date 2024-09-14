@@ -326,7 +326,7 @@ teleport_pad_active_think( index )
 		}
 		else if(!level.is_cooldown && !isdefined(level.teleporters_are_broken) )
 		{
-			play_sound_on_ent( "no_purchase" );
+			user play_sound_on_ent( "no_purchase" );
 		}
 		else if(isDefined(level.teleporters_are_broken) && level.teleporters_are_broken == true)
 		{

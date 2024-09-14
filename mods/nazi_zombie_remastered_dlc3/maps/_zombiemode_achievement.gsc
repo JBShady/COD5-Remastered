@@ -218,7 +218,14 @@ GiveAchievementNew(achievement)
 	{
 		self setStat( int(tableLookup( "mp/dlc3_achievements.csv", 1, achievement, 0 )), 1 );
 		thread maps\_hud_achievement::notifyMessage( notifyData );
-
+		if(!isDefined(self.achievement_count))
+		{
+			self.achievement_count = 1;
+		}
+		else
+		{
+			self.achievement_count++;			
+		}
 		//achievement_status = self GetStat( int(tableLookup( "mp/dlc3_achievements.csv", 1, achievement, 0 ) ) );
 		//iprintln("Achievement Status Updated: ",achievement_status);
 

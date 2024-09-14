@@ -108,7 +108,9 @@ main()
 
 
   declareMusicState("end_of_game");
-	musicAlias("mx_game_over", 0);
+	musicAlias("mx_game_over", 4);
+
+	declareMusicState("SILENT");
 
 
 //	thread radio_init();

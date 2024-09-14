@@ -107,7 +107,7 @@ bowie_think()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				player play_sound_on_ent( "no_purchase" );
 				player thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
 			}
 		}

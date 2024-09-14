@@ -613,6 +613,13 @@ tear_into_building()
 	
 			if( !IsDefined( chunk ) )
 			{
+		        // Fix for zombies sometimes going through windows that still have boards on - Feli
+		        if(!all_chunks_destroyed(self.first_node.barrier_chunks))
+		        {
+		            wait(0.05);
+		            continue;
+		        }
+		        
 				for( i = 0; i < self.first_node.attack_spots_taken.size; i++ )
 				{
 					self.first_node.attack_spots_taken[i] = false;
@@ -1277,17 +1284,24 @@ zombie_head_gib( attacker )
 			if(isdefined(self.hatmodel) && (self.hatmodel == "char_jap_impinf2_cap1" || self.hatmodel == "char_jap_impinfwet_body4_hband") ) // if a cap, don't shoot it off
 			{
 				self detach( self.hatModel, "" ); 
+				self play_sound_on_ent( "zombie_head_gib" );
 			}
 			else if(isdefined(self.hatmodel) )
 			{
+				self thread HelmetPopNew();
 				if( IsDefined( attacker ) )
 				{
 					self play_sound_on_ent("zombie_impact_helmet");
 				}
-				self HelmetPopNew();
+				else
+				{
+					self play_sound_on_ent( "zombie_head_gib" ); // for insta kills or other non-player kills
+				}
 			}
-
-			self play_sound_on_ent( "zombie_head_gib" );
+			else
+			{
+				self play_sound_on_ent( "zombie_head_gib" );
+			}
 			
 			self Detach( model, "", true ); 
 			self Attach( "char_ger_honorgd_zomb_behead", "", true ); 
@@ -1441,6 +1455,16 @@ head_should_gib( attacker, type, point )
 		}
 	}
 
+	//dt2.0 damage location variable is not resetting properly, so we force a head gib if the saved variable checks out, fixes no headshot gib on dt2.0 DoDamage kills
+	if(isDefined(self.saved_damagelocation) && (self.saved_damagelocation == "head" || self.saved_damagelocation == "helmet" || self.saved_damagelocation == "neck") )
+	{
+	    if( weapon == "none" || (WeaponClass( weapon ) == "pistol" && !isSubStr(weapon, "357") ) || WeaponIsGasWeapon( self.weapon ) )
+		{
+			return false; 
+		}
+		return true;
+	}
+
 	// check location now that we've checked for grenade damage (which reports "none" as a location)
 	if( !self animscripts\utility::damageLocationIsAny( "head", "helmet", "neck" ) )
 	{
@@ -1506,24 +1530,52 @@ zombie_gib_on_damage()
 			return;
 		}
 
+		//dt2.0 fixes body gibbing if on killshot using Dt2.0
+		if(isDefined(self.saved_damagemod) && isDefined(self.saved_damagelocation))
+		{
+			type = self.saved_damagemod;
+		}
+
 		if( !self zombie_should_gib( amount, attacker, type ) )
 		{
+			//if false, we end function here but we do one last check for bayonet so we can do blood fx at bare minimum, it looks nicer
+			if( type == "MOD_BAYONET" )
+			{
+				if( ( self.damageyaw > -45 ) &&( self.damageyaw <= 45 ) )				// Back quadrant
+				{
+					side = "back"; 
+				}
+				else if( ( self.damageyaw > 45 ) &&( self.damageyaw <= 135 ) )		// Right quadrant
+				{
+					side = "right"; 
+				}
+				else if( ( self.damageyaw < -45 ) &&( self.damageyaw >= -135 ) )		// Left quadrant
+				{
+					side = "left"; 
+				}
+				else if( self animscripts\utility::damageLocationIsAny( "helmet", "head", "neck", "torso_upper" ) )	
+				{
+					side = "front"; 
+				}
+				else
+				{
+					side = "front"; 
+				}
+				
+				// CODER MOD: 3/27/08 - Added blood fx to bayonet attack - JRS
+				if( GetDvarInt( "cg_blood" ) > 0 )
+				{
+					self thread animscripts\death::bayonet_death_fx( side ); 
+				}
+			}
+
 			continue; 
 		}
 
 		if( self head_should_gib( attacker, type, point ) && type != "MOD_BURNED" )
 		{
 			self zombie_head_gib( attacker );
-			if(IsDefined(attacker.headshot_count))
-			{
-				attacker.headshot_count++;
-			}
-			else
-			{
-				attacker.headshot_count = 1;
-			}
-			//stats tracking
-			attacker.stats["headshots"] = attacker.headshot_count;
+
 			attacker.stats["zombie_gibs"]++;
 
 			continue;
@@ -1600,7 +1652,7 @@ zombie_gib_on_damage()
 				if( self.damageLocation == "none" )
 				{
 					// SRS 9/7/2008: might be a nade or a projectile
-					if( type == "MOD_GRENADE" || type == "MOD_GRENADE_SPLASH" || type == "MOD_PROJECTILE" )
+					if( type == "MOD_GRENADE" || type == "MOD_GRENADE_SPLASH" || type == "MOD_PROJECTILE" || type == "MOD_ZOMBIE_BETTY" )
 					{
 						// ... in which case we have to derive the ref ourselves
 						refs = self derive_damage_refs( point );
@@ -1733,6 +1785,15 @@ zombie_should_gib( amount, attacker, type )
 			return false; 
 		case "MOD_MELEE":	
 			if( isPlayer( attacker ) && randomFloat( 1 ) > 0.3 && attacker GetCurrentWeapon() == "zombie_item_katana" )
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
+		case "MOD_BAYONET":	
+			if( isPlayer( attacker ) && randomFloat( 1 ) > 0.5 )
 			{
 				return true;
 			}
@@ -1912,7 +1973,7 @@ designate_rival_hero(player, hero, rival)
 	playRival = isdefined(players[rival]); // if player exists in lobby, set their status to true otherwise false
 	
 	// then we check range
-	if( playHero && distance (player.origin, players[hero].origin) < 400 ) // if hero is available, now lets check their distance
+	if( playHero && distanceSquared(player.origin, players[hero].origin) < 400*400 ) // if hero is available, now lets check their distance
 	{
 		playHero = true; // we are in range
 	}
@@ -1921,7 +1982,7 @@ designate_rival_hero(player, hero, rival)
 		playHero = false; // we are out of range
 	}
 	
-	if( playRival && distance (player.origin, players[rival].origin) < 400 ) // if rival is available, now lets check their distance
+	if( playRival && distanceSquared(player.origin, players[rival].origin) < 400*400 ) // if rival is available, now lets check their distance
 	{
 		playRival = true; // we are in range
 	}
@@ -1982,6 +2043,11 @@ play_death_vo(hit_location, player,mod,zombie)
 	//iprintlnbold(mod);
 	
 	//iprintlnbold(player);
+	
+	if (player maps\_laststand::player_is_in_laststand() )
+	{
+		return;
+	}
 	
 	if( getdvar("zombie_death_vo_freq") == "" )
 	{
@@ -2054,7 +2120,7 @@ play_death_vo(hit_location, player,mod,zombie)
 		}
 
 	}
-	if(weapon == "ray_gun")
+	if(/*weapon == "ray_gun" ||*/ zombie.damageweapon == "ray_gun" )
 	{
 		//Ray Gun Kills
 		if(distance(player.origin,zombie.origin) > 348 && level.zombie_vars["zombie_insta_kill"] == 0)
@@ -2070,6 +2136,12 @@ play_death_vo(hit_location, player,mod,zombie)
 		}	
 		return;
 	}
+
+	if(zombie.damageweapon == "molotov" )
+	{
+		return;
+	}
+
 	if( mod == "MOD_BURNED" )
 	{
 		//TUEY play flamethrower death sounds
@@ -2121,7 +2193,7 @@ play_death_vo(hit_location, player,mod,zombie)
 			player play_closekill_dialog (plr);				
 
 		}
-		else if( mod == "MOD_MELEE" )
+		else if( mod == "MOD_MELEE" || mod == "MOD_BAYONET" )
 		{
 			plr = "plr_" + index + "_";
 			player create_and_play_dialog ( plr, "vox_gen_exert", 0.05 );
@@ -2130,7 +2202,7 @@ play_death_vo(hit_location, player,mod,zombie)
 	}	
 
 	//This is at the end because all other dialogue takes precedent	
-	if( mod == "MOD_MELEE" && level.zombie_vars["zombie_insta_kill"] == 0 )
+	if( (mod == "MOD_MELEE" || mod == "MOD_BAYONET") && level.zombie_vars["zombie_insta_kill"] == 0 )
 	{
 		plr = "plr_" + index + "_";
 		player create_and_play_dialog ( plr, "vox_gen_exert", 0.05 );
@@ -2509,6 +2581,7 @@ do_player_playdialog(player_index, sound_to_play, waittime)
 	{
 		level.player_is_speaking = 0;	
 	}
+
 	if(level.player_is_speaking != 1)
 	{
 		level.player_is_speaking = 1;
@@ -2522,6 +2595,18 @@ do_player_playdialog(player_index, sound_to_play, waittime)
 // Called from animscripts\death.gsc
 zombie_death_animscript()
 {
+	//dt2.0, forces saved MOD/location allowing us to get correct points on doDamage killshots
+	if(isDefined(self.saved_damagemod) && isDefined(self.saved_damagelocation))
+	{
+		mod = self.saved_damagemod;
+		hit_location = self.saved_damagelocation;
+	}
+	else
+	{
+		mod = self.damagemod;
+		hit_location = self.damagelocation;	
+	}
+
 	self reset_attack_spot();
 
 	if( self maps\_zombiemode_tesla::enemy_killed_by_tesla() )
@@ -2540,7 +2625,9 @@ zombie_death_animscript()
 	// Give attacker points
 	
 	//ChrisP - 12/8/08 - added additional 'self' argument
-	level zombie_death_points( self.origin, self.damagemod, self.damagelocation, self.attacker,self );
+	
+	//dt2.0 swapped variables to fit check added above
+	level zombie_death_points( self.origin, mod, hit_location, self.attacker,self );
 
 	if( self.damagemod == "MOD_BURNED" || (self.damageWeapon == "molotov" && (self.damagemod == "MOD_GRENADE" || self.damagemod == "MOD_GRENADE_SPLASH")) )
 	{
@@ -2606,17 +2693,28 @@ damage_on_fire( player )
 		wait( randomfloatrange( 1.0, 3.0 ) );
 	}
 }
-
-check_for_perk_damage( mod, player, amount )
+//dt2.0
+check_for_perk_damage( mod, hit_location, player, amount )
 {
 	if( mod == "MOD_RIFLE_BULLET" || mod == "MOD_PISTOL_BULLET" )
 	{
-		if( Isdefined( player ) && Isalive( player ) && player HasPerk( "specialty_rof" ) )
+		if( IsDefined(self) && Isdefined( player ) && Isalive( player ) && player HasPerk( "specialty_rof" ) )
 		{			
-			extra_damage = (amount / 3); // 33% extra damage, same increase as firerate buff
-			if(extra_damage < self.health) // we dont do extra damage if a zombie would actually die as a result of the extra damage, this fixes because DoDamage wont gib/give proper score if it kills a zombie 
+			extra_damage = (amount / 3); // 33% extra damage, same increase as firerate buff. for double damage, just set extra damage = amount;
+			if(extra_damage < self.health)
 			{
 				self DoDamage( extra_damage, self.origin, player );
+			}
+			else // if the extra damage is greater than the zombie's health, then we need to save MOD and location to get proper points/gibbing after doing DoDamage
+			{
+				self.saved_damagemod = mod;
+				self.saved_damagelocation = hit_location;
+				self DoDamage( extra_damage, self.origin, player );
+				if( hit_location == "head" || hit_location == "helmet" ) // fixes leaderboard headshot stats not increasing on dt2.0 headshots
+				{
+					player.headshots++;
+					player.stats["headshots"]++;
+				}	
 			} 
 		}
 	}
@@ -2641,9 +2739,14 @@ zombie_damage( mod, hit_location, hit_origin, player, amount )
 		return; 
 	}
 
+	//dt2.0
 	if(getdvarint("classic_perks") == 0)
 	{
-		self check_for_perk_damage( mod, player, amount );
+		self check_for_perk_damage( mod, hit_location, player, amount );
+		if(isDefined(self.saved_damagemod) && isDefined(self.saved_damagelocation))
+		{
+			return; // if this is true, that means zombie is dying so no need to continue damage code, fixes unnecessary +10
+		}
 	}
 
 	if( self zombie_flame_damage( mod, player ) )
@@ -2687,24 +2790,31 @@ zombie_damage( mod, hit_location, hit_origin, player, amount )
 	}
 	else if( mod == "MOD_ZOMBIE_BETTY" )
 	{
+		damage = level.round_number * randomintrange( 100, 200 );
+		if(damage > self.health)
+		{
+			self.saved_damagemod = mod;
+			self.saved_damagelocation = hit_location;
+		}
+
 		if ( isdefined( player ) && isalive( player ) )
 		{
-			self DoDamage( level.round_number * randomintrange( 100, 200 ), self.origin, player);
+			self DoDamage( damage, self.origin, player);
 		}
 		else
 		{
-			self DoDamage( level.round_number * randomintrange( 100, 200 ), self.origin, undefined );
+			self DoDamage( damage, self.origin, undefined );
 		}
 	}
 	
-	if( mod == "MOD_MELEE" && level.zombie_vars["zombie_insta_kill"] == 0 )
+	if( (mod == "MOD_MELEE" || mod == "MOD_BAYONET") && level.zombie_vars["zombie_insta_kill"] == 0 )
 	{
 		rand = randomintrange(0, 100);
 		if(rand < 75)
 		{
 			index = maps\_zombiemode_weapons::get_player_index(player);
 			plr = "plr_" + index + "_";
-			player create_and_play_dialog ( plr, "vox_gen_exert", 0.05 );
+			player thread create_and_play_dialog ( plr, "vox_gen_exert", 0.05 );
 		}
 		return;
 	}
@@ -2725,9 +2835,14 @@ zombie_damage_ads( mod, hit_location, hit_origin, player, amount )
 		return; 
 	}
 
+	//dt2.0
 	if(getdvarint("classic_perks") == 0)
 	{
-		self check_for_perk_damage( mod, player, amount );
+		self check_for_perk_damage( mod, hit_location, player, amount );
+		if(isDefined(self.saved_damagemod) && isDefined(self.saved_damagelocation))
+		{
+			return; // if this is true, that means zombie is dying so no need to continue damage code, fixes unnecessary +10
+		}
 	}
 
 	if( self zombie_flame_damage( mod, player ) )

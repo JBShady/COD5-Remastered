@@ -513,7 +513,7 @@ vending_trigger_think()
 			if ( cheat != true )
 			{
 				//player iprintln( "Already using Perk: " + perk );
-				self playsound("deny");
+				player playsound("deny");
 				player thread play_no_money_perk_dialog();
 
 				
@@ -524,7 +524,7 @@ vending_trigger_think()
 		if ( player.score < cost )
 		{
 			//player iprintln( "Not enough points to buy Perk: " + perk );
-			self playsound("deny");
+			player playsound("deny");
     		if( RandomIntRange( 0, 100 ) >= 50 )
     		{
 				player thread play_no_money_perk_dialog();
@@ -570,11 +570,14 @@ vending_trigger_think()
 		// do the drink animation
 		gun = player perk_give_bottle_begin( perk );
 		player.is_drinking = 1;
+		self.is_drinking = 1;
+
 		player waittill_any( "fake_death", "death", "player_downed", "weapon_change_complete" );
 
 		// restore player controls and movement
 		player perk_give_bottle_end( gun, perk );
 		player.is_drinking = undefined;
+		self.is_drinking = undefined;
 		// TODO: race condition?
 		if ( player maps\_laststand::player_is_in_laststand() || ( IsDefined( player.intermission ) && player.intermission ) )
 		{
@@ -671,7 +674,7 @@ check_player_has_perk(perk)
 			{
 				if(DistanceSquared( players[i].origin, self.origin ) < dist)
 				{
-					if(!players[i] hasperk(perk) && !(players[i] in_revive_trigger()))
+					if(!players[i] hasperk(perk) && !(players[i] in_revive_trigger()) && (self.is_drinking != 1 || !isdefined(self.is_drinking)) )
 					{
 						self setvisibletoplayer(players[i]);
 						//iprintlnbold("turn it off to player");
@@ -1210,7 +1213,7 @@ perks_a_cola_jingle_sumpf(jingle)
 //			playfx (level._effect["electric_short_oneshot"], self.origin);
 			if(self.script_sound != "mx_revive_jingle")
 			{
-			playsoundatposition ("electrical_surge", self.origin);
+				playsoundatposition ("electrical_surge", self.origin);
 			}
 			
 			if(self.script_sound == "mx_speed_jingle" && level.speed_jingle == 0) 

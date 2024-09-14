@@ -135,11 +135,16 @@ init_achievement()
 
 level_start_vox()
 {
-	wait( 7 );//moved here
+	wait( 6 );//moved here
 	index = maps\_zombiemode_weapons::get_player_index( self );
 	plr = "plr_" + index + "_";
 	self thread create_and_play_dialog( plr, "nvox_start", 0.25 );
 
+	players = getplayers();
+	if(players.size == 4)
+	{
+		players[3] thread special_ohshitvox();
+	}
 }
 
 player_zombie_awareness()
@@ -304,6 +309,8 @@ play_pa_system()
 	
 	wait(8.0);	
 	playsoundatposition ("amb_pa_system", speakerA.origin);
+	wait(44.0);
+	level.play_special_pa_once = 1; // we init variable here so that prior till now, this is undefined and will block the easter egg PA, thus ensuring we don't play it twice at the same time
 
 }
 play_comp_sounds()
@@ -1175,7 +1182,7 @@ electric_trap_think()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				who play_sound_on_ent( "no_purchase" );
 			}
 		}
 	}
@@ -1260,18 +1267,27 @@ activate_electric_trap()
 	}
 	
 	//do the damage
-	self.zombie_dmg_trig thread elec_barrier_damage();
+	self.zombie_dmg_trig thread elec_barrier_damage(self);
 	
+	if( isDefined(level.play_special_pa_once) && level.play_special_pa_once == 1 && level.eggs != 1 && randomintrange(0,10) == 0 && level.round_number >= 20 ) // 10% chance, easter egg song must be off, only plays once and cannot play on top of original pa 
+	{
+		speakerA = getstruct("loudspeaker", "targetname");
+		playsoundatposition ("amb_pa_system_full", speakerA.origin);
+		level.play_special_pa_once = undefined;
+	}
+
 	// reset the zapper model
-	level waittill("arc_done");
+	self waittill("elec_done");
 	machine setmodel("zombie_zapper_power_box");
 
 	if(self.script_string == "north")
 	{
+		iprintlnbold("1");
 		level.north_on = undefined;
 	}
 	else
 	{
+		iprintlnbold("2");
 		level.south_on = undefined;
 	}
 }
@@ -1288,7 +1304,7 @@ electric_trap_fx(notify_ent)
 	{
 		self.tag_origin playsound("elec_start");
 		self.tag_origin playloopsound("elec_loop");
-		self thread play_electrical_sound();
+		self thread play_electrical_sound(notify_ent);
 	} 
 	wait(30);
 		
@@ -1299,21 +1315,21 @@ electric_trap_fx(notify_ent)
 	self.tag_origin delete(); 
 	notify_ent notify("elec_done");
 	level notify ("arc_done");
-	
 }
-play_electrical_sound()
+play_electrical_sound(notify_ent)
 {
-	level endon ("arc_done");
+	notify_ent endon ("elec_done");
+
 	while(1)
 	{	
 		wait(randomfloatrange(0.1, 0.5));
 		playsoundatposition("elec_arc", self.origin);
 	}
-	
-
 }
-elec_barrier_damage()
+elec_barrier_damage(notify_ent)
 {	
+	notify_ent endon ("elec_done");
+
 	while(1)
 	{
 		self waittill("trigger",ent);
@@ -1662,6 +1678,7 @@ and makes them available to use
 master_electric_switch()
 {
 	level.power_off = true;
+
 	trig = getent("use_master_switch","targetname");
 	master_switch = getent("master_switch","targetname");	
 	master_switch notsolid();
@@ -1695,17 +1712,6 @@ master_electric_switch()
 	{
 		trig waittill("trigger",user);
 		level.power_off = undefined;
-		players = getplayers();
-
-		if(players.size == 4 && randomintrange(0,4) == 0 ) // new vox egg, only if we have 4 players and 25% chances
-		{
-			power_dist = distanceSquared(trig.origin, players[3].origin); 
-			if(power_dist < 400 * 400 ) // only if player 4 is close to the power switch
-			{
-				players[3] thread maps\_zombiemode_spawner::do_player_playdialog("plr_3_", "nvox_gen_power_0", 0.1);
-				wait(0.1);
-			}
-		}
 	}
 	
 	array_thread(door_trigs,::trigger_off);
@@ -2587,7 +2593,7 @@ mount_mg_trigger()
 	mg_zone waittill( "trigger", player ); 
 
 	level.deploying = 0;
-	initial_hold_time = 5;
+	initial_hold_time = 4;
 	countdown_time = initial_hold_time;
 	actual_weapon = 0;
 	animation = 0;
@@ -2677,7 +2683,7 @@ mount_mg_trigger()
 		}
 
 		// If a player attempts to deploy a valid weapon
-	    if ( player UseButtonPressed() && isSubStr(actual_weapon, "bipod") && player IsTouching(mg_zone) && (!player maps\_laststand::player_is_in_laststand() ) && (!player isThrowingGrenade() ) && (!player isMeleeing() ) )
+	    if ( isDefined(player) && player UseButtonPressed() && isSubStr(actual_weapon, "bipod") && player IsTouching(mg_zone) && (!player maps\_laststand::player_is_in_laststand() ) && (!player isThrowingGrenade() ) && (!player isMeleeing() ) )
 	    {
 			if( player getFractionMaxAmmo(actual_weapon) < 0.5 ) // Not enough ammo case, begins deploying but with no ammo so we instantly reject them
 			{
@@ -2731,7 +2737,7 @@ mount_mg_trigger()
 
 	        player is_leaving_trigger(false);
 
-			if( countdown_time > 4) // Puts away weapon off-screen
+			if( countdown_time > 3.7 ) // Puts away weapon off-screen
 			{
 				//iprintlnbold("Removing wep: ", countdown_time);
 				player giveweapon("bipod_deploying");
@@ -2962,6 +2968,114 @@ isLookingAtMe(trig)
 		return 1;
 	}
 	return 0;
+}
+
+special_ohshitvox()
+{
+	self endon("disconnect");
+	self endon("death");
+	wait(4);
+
+	self.has_talked = 0;
+	for(;;)
+	{
+		zombies = getaiarray("axis" );
+		close_zombies = get_array_of_closest( self.origin, zombies, undefined, undefined, 600 );
+		
+		for( j = 0; j < zombies.size; j++ )
+		{
+			if ( (self IsLookingAt(zombies[j]) || self.score_total > 500) && self.has_talked == 0 ) 
+			{
+				self.has_talked = 1;
+				break;
+			}
+			else
+			{
+				wait(0.1);
+				continue;
+			}
+		}
+		if(self.has_talked == 1)
+		{
+			break;
+		}
+		wait(0.05);
+	}
+
+	// First line, if player 4 makes first contact with zombie
+	players = getplayers();
+	if(players.size == 4 && (players[0].score_total + players[1].score_total + players[2].score_total) > 1500)
+	{
+		return;
+	}
+	else
+	{
+		self thread maps\_zombiemode_spawner::do_player_playdialog("plr_3_", "nvox_scripted_ohshit_00", 0.05);			
+	}
+	
+	// Second line, delayed and if there are at least 2 zombies near player
+	wait(2);
+	if(close_zombies.size > 1)
+	{
+		self thread maps\_zombiemode_spawner::do_player_playdialog("plr_3_", "nvox_scripted_ohshit_01", 0.25);			
+	}
+
+	players[3] thread special_powervox();
+
+}	
+
+special_powervox()
+{	
+	self endon("disconnect");
+	self endon("death");
+
+	level waittill("special_power_dialogue"); // only get notify when 1 of the power doors is opened, and not the 2nd
+
+	if(GetDvarInt("character_dialog") == 1)
+	{
+		return;
+	}
+
+	wait(0.8);
+	power_trig = getent("use_master_switch","targetname");
+	distance = distanceSquared(power_trig.origin, self.origin);
+
+	if(distance < 300*300 && isDefined(level.power_off) && level.power_off == true)
+	{
+		self thread maps\_zombiemode_spawner::do_player_playdialog("plr_3_", "nvox_gen_power_0", 0.1);
+	}
+	else
+	{
+		return;
+	}
+	
+	level waittill("switch_flipped"); // Wait for power
+
+	zombies = getaiarray( "axis" ); // Wait for round to end 
+	while( zombies.size > 0 )
+	{
+		if(zombies.size == 0 )
+		{
+			break;
+		}
+		zombies = getaiarray("axis");
+		wait(0.1);
+	}
+
+	if(level.player_is_speaking == 1 ) // Wait for player to stop talking
+	{
+		while(level.player_is_speaking)
+		{
+			wait(0.05);
+		}
+		wait(1);
+	}
+	else
+	{
+		wait(1.5);
+	}
+
+	self thread maps\_zombiemode_spawner::do_player_playdialog("plr_3_", "nvox_gen_over_0", 0.25);
 }
 
 // Continue to balance (co-op and solo playtest)

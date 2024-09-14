@@ -443,8 +443,8 @@ init_models_and_variables_loadout()
 
 		set_laststand_pistol( "zombie_colt" );
 
-		set_player_viewmodel( "viewmodel_usa_marine_arms");
-		set_player_interactive_hands( "viewmodel_usa_marine_player");
+		set_player_viewmodel( "viewmodel_hands_cloth_marine_bare");
+		set_player_interactive_hands( "viewmodel_hands_cloth_marine_bare");
 
 		level.campaign = "american";
 		return;

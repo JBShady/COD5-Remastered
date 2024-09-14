@@ -668,7 +668,7 @@ play_sound_at_pos( ref, pos, ent )
 	PlaySoundAtPosition( level.zombie_sounds[ref], pos ); 
 }
 
-play_sound_on_ent( ref )
+play_sound_on_ent( ref, position )
 {
 	if( IsDefined( self.script_soundalias ) )
 	{
@@ -692,7 +692,18 @@ play_sound_on_ent( ref )
 		return; 
 	}
 
-	self PlaySound( level.zombie_sounds[ref] ); 
+	if(isDefined(position))
+	{
+		//iprintlnbold("playing on position");
+		sound_location = position;
+	}
+	else
+	{
+		//iprintlnbold("playing on self");
+		sound_location = self;
+	}
+
+	sound_location PlaySound( level.zombie_sounds[ref] ); 
 }
 
 play_loopsound_on_ent( ref )
@@ -1157,7 +1168,7 @@ setup_responders( player, partner1, partner2, partner3, response )
 	indexPartner = maps\_zombiemode_weapons::get_player_index(players[set_partner]); // we grab the index of the player # who is chosen so we can compare their indext to their player # position, say Player 3
 	if(set_partner == indexPartner ) // if for some reason Player 3 has an index of player 4 (meaning that the original player 3 left, and player 4 has now been demoted to player 3), then we will NOT play a line
 	{
-		if( is_player_valid( players[set_partner] ) ) // if we are down then we do not respond
+		if( is_player_valid( players[set_partner] ) && (distancesquared(player.origin, players[set_partner].origin) < 550*550) ) // if we are down then we do not respond and must be within radius
 		{
 			plr = "plr_" + set_partner + "_";
 			players[set_partner] create_and_play_responses( plr, "vox_" + response, 0.25 );

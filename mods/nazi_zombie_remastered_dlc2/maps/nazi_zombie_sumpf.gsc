@@ -190,6 +190,7 @@ include_weapons()
 	include_weapon( "zombie_m1garand" );
 	include_weapon( "zombie_gewehr43" );
 	include_weapon( "zombie_type99_rifle" );
+	include_weapon( "zombie_type99_rifle_bayonet", false ); // wall upgrade only
 	include_weapon( "zombie_svt40" );
 
 	// Full Auto
@@ -199,15 +200,12 @@ include_weapons()
 	include_weapon( "zombie_type100_smg" );
 	include_weapon( "zombie_ppsh" );
 
-	// Bolt Action
-	//include_weapon( "springfield" );	// replaced with type99_rifle
-
 	// Scoped
-	//include_weapon( "mosin_rifle_scoped_zombie" );
 	include_weapon( "ptrs41_zombie" );
 	//include_weapon( "kar98k_scoped_zombie" );	// replaced with type99_rifle_scoped
-	include_weapon( "type99_rifle_scoped_zombie" );	//
-		
+	include_weapon( "type99_rifle_scoped_zombie" );
+	include_weapon( "type99_rifle_scoped_zombie_bayonet", false );	// wall upgrade only
+
 	// Grenade
 	include_weapon( "molotov" );
 	include_weapon( "st_grenade" );
@@ -232,6 +230,7 @@ include_weapons()
 	include_weapon( "zombie_fg42" );
 	include_weapon( "zombie_mg42" );
 	include_weapon( "zombie_type99_lmg" );
+	include_weapon( "zombie_type99_lmg_bayonet", false ); // wall upgrade only
 
 	// Rocket Launcher
 	include_weapon( "bazooka_zombie" );
@@ -470,33 +469,33 @@ player_zombie_awareness()
 			}
 
 		}
-		if(players.size > 0)
+		//if(players.size > 0)
+		//{
+		//Plays 'teamwork' style dialog if there are more than 1 player...
+		close_zombs = 0;
+		for(i=0;i<zombs.size;i++)
 		{
-			//Plays 'teamwork' style dialog if there are more than 1 player...
-			close_zombs = 0;
-			for(i=0;i<zombs.size;i++)
+			if(DistanceSquared(zombs[i].origin, self.origin) < 250 * 250 && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
 			{
-				if(DistanceSquared(zombs[i].origin, self.origin) < 250 * 250 && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
-				{
-					close_zombs ++;
-					
-				}
-			}
-			if(close_zombs > 4 && players.size > 1)
-			{
-				if(randomintrange(0,20) < 5)
-				{
-					self thread play_oh_shit_dialog(false);	
-				}
-			}
-			else if(close_zombs > 7 && players.size == 1) // requires 1/3 of a horde on solo (8 out of 24)
-			{
-				if(randomintrange(0,20) < 3)
-				{
-					self thread play_oh_shit_dialog(true);	
-				}
+				close_zombs ++;
+				
 			}
 		}
+		if(close_zombs > 5 && players.size > 1)
+		{
+			if(randomintrange(0,20) < 4)
+			{
+				self thread play_oh_shit_dialog(false);	
+			}
+		}
+		else if(close_zombs > 8 && players.size == 1) // requires over 1/3 of a horde on solo (9 out of 24)
+		{
+			if(randomintrange(0,20) < 2)
+			{
+				self thread play_oh_shit_dialog(true);	
+			}
+		}
+		//}
 		
 	}
 }		
@@ -625,7 +624,7 @@ intro_screen()
 // -- FOUR-PLAYER COOP -- //
 2. “Peter's Intel” - Peter's radio can be dislodged using a grenade and dropped to the ground, but only Dempsey can recover it. To get a strong enough radio signal so the player can use it, power on the Comm Room radio hub at the desk by solving a random three-long code where each of the three radios must be interacted with in the correct order. After the radio hub is powered on, place your handheld radio on the desk to send your message and pick it up after it completes. However, before sending this message (at any point) there are two prerequisites that must be met, ensuring Dempsey has the required intel. First, the spawn room radio message must have been activated by interacting with the three radios throughout the room. Second, Dempsey must have interacted with the 115 meteor. Without this required intel, the player will not be able to send a message and their radio will play idle static while holding.
 3. “Secret Stash” - Nikolai must find some Vodka in the Storage Hut. Find the desk with the two crates and interact with the item--this acts as a dial. Turn the dial once to begin the step. For every turn, a shiny crate will be visible elsewhere in the room in one of three possible locations. The player must align the dial until it is facing the same direction as a crate. Once aligned, the player should knife the crate to search for Vodka. However, only one of the three crate locations will have it, so the player will have to keep rotating through each of the three spots until they find the Vodka. Be careful, because if you attempt to open a crate that is not aligned with the dial, the correct crate’s location will be randomized which resets any progress. If successful, knifing the correct crate will reveal a bottle of Vodka.
-4. “Blade Cleansing" - Takeo must acquire a Katana from the Fishing Hut. First, pick up the medium sized rope found at one of three random locations inside the hut. Place the rope on the fishing pole to create a fishing line. Interact one more time and the fishing pole will raise a Katana out from underneath the water. However, the blade is covered in blood and Takeo will not pick it up. To clean the blade and pick it up, without shooting your weapon kill seven zombies (a lucky Japanese number) with melee in the surrounding area.
+4. “Blade Cleansing" - Takeo must acquire a Katana from the Fishing Hut. First, pick up the medium sized rope found at one of three random locations inside the hut. Place the rope on the fishing pole to create a fishing line. Interact one more time and the fishing pole will raise a Katana out from underneath the water. However, the blade is covered in blood and Takeo will not pick it up. To clean the blade and pick it up, without shooting your weapon kill seven zombies (a lucky Japanese number) with only knife in the surrounding area, bayonet does not count.
 5. “Doc's On Call" - Richtofen must acquire his journal from his Quarters. Pick up the journal by interacting with it and avoid touching water, or else the journal will be reset back to the start, along with any progress. While holding the journal, the player must search for three intel sites across the map to take notes at. While taking notes, the player is left vulnerable and immobile.
 
 // -- SHARED -- //
@@ -1340,14 +1339,10 @@ vodka_cleanup()
 				player.has_special_weap = "zombie_item_vodka";
 
 				player playlocalsound("gren_pickup_plr");
-				wait(0.75);
-				player playlocalsound("bottle_open");
-				player setblur( 4, 0.1 );
+			
 				player thread create_and_play_dialog( plr, "vox_trap_barrel", 0.25 );
 
-				wait(0.75);
-				player setblur(0, 0.1);
-
+				player thread vodka_weapon_think();
 				break;
 			}
 			else
@@ -1368,6 +1363,58 @@ vodka_cleanup()
 	}
 	//iprintln("Nikolai steps completed");
 	//iprintln("Total Character Tasks Completed: ", level.character_tasks_completed);
+}
+
+vodka_weapon_think()
+{
+	self endon("disconnect");
+	self endon("death");
+
+	self.not_drunk = true;
+
+	self thread vodka_user_weapon_checker();
+	
+	while(1)
+	{
+		weapon = self GetCurrentWeapon();
+		if(weapon == "zombie_item_vodka" && self attackButtonPressed()) // If we "shoot" vodka wep we do sound/blur effect and then remove weapon but keep it in inventory
+		{
+			self.not_drunk = undefined;
+			self playlocalsound("bottle_open");
+			self setblur( 4, 0.1 );
+			self SwitchToWeapon( self.current_gun );
+			wait(0.75);
+			self setblur(0, 0.1);
+			self TakeWeapon("zombie_item_vodka");
+			self setactionslot(1,"weapon","zombie_item_vodka"); 
+			self.current_gun = undefined;
+
+			break;
+		}
+		wait(0.05);
+	}
+
+}
+
+vodka_user_weapon_checker()
+{
+	self endon("death");
+	self endon("disconnect");
+
+	self.current_gun = self getCurrentWeapon();
+
+	while(isDefined(self.not_drunk) && self.not_drunk == true)
+	{
+		self waittill( "weapon_change", newWeapon );
+
+		gun = self getCurrentWeapon();
+
+		if(gun != "zombie_item_vodka")
+		{
+			self.current_gun = gun;
+		}
+	}
+
 }
 
 vodka_pickup()
@@ -2916,7 +2963,7 @@ kill_shock_trigger()
 		}
 
 		zombies[i] dodamage( zombies[i].health + 666, zombies[i].origin );
-		playsoundatposition( "elec_vocals_tesla", zombies[i].origin );
+		playsoundatposition( "elec_vocals", zombies[i].origin );
 	}
 
 }

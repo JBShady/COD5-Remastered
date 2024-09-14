@@ -624,25 +624,25 @@ factory_tesla_weighting_func()
 	num_to_add = 1;
 	if( isDefined( level.pulls_since_last_tesla_gun ) )
 	{
-		// player has dropped the tesla for another weapon, so we set all future polls to 20% nerfed to 15
+		// player has dropped the tesla for another weapon, so we set all future polls to 20% nerfed to 10
 		if( isDefined(level.player_drops_tesla_gun) && level.player_drops_tesla_gun == true )
 		{						
-			num_to_add += int(.15 * level.zombie_include_weapons.size);		
+			num_to_add += int(.1 * level.zombie_include_weapons.size);		
 		}
 		
 		// player has not seen tesla gun in late rounds
 		if( !isDefined(level.player_seen_tesla_gun) || level.player_seen_tesla_gun == false )
 		{
-			// after round 10 the Tesla gun percentage increases to 20% nerfed to 15
-			if( level.round_number > 10 )
+			// after round 15 the Tesla gun percentage increases to 20% nerfed to 10
+			if( level.round_number > 15 )
 			{
-				num_to_add += int(.15 * level.zombie_include_weapons.size);
+				num_to_add += int(.1 * level.zombie_include_weapons.size);
 			}		
-			// after round 5 the Tesla gun percentage increases to 15% nerfed to 10
-			else if( level.round_number > 5 )
+			// after round 10 the Tesla gun percentage increases to 15% nerfed to 5
+			else if( level.round_number > 10 )
 			{
 				// calculate the number of times we have to add it to the array to get the desired percent
-				num_to_add += int(.10 * level.zombie_include_weapons.size);
+				num_to_add += int(.05 * level.zombie_include_weapons.size);
 			}						
 		}
 	}
@@ -658,12 +658,12 @@ factory_ray_gun_weighting_func()
 		// increase the percentage of ray gun
 		if( isDefined( level.pulls_since_last_ray_gun ) )
 		{
-			// after 12 pulls the ray gun percentage increases to 15%
+			// after 12 pulls the ray gun percentage increases to 15% nerfed to 10
 			if( level.pulls_since_last_ray_gun > 11 )
 			{
 				num_to_add += int(level.zombie_include_weapons.size*0.1);
 			}			
-			// after 8 pulls the Ray Gun percentage increases to 10%
+			// after 8 pulls the Ray Gun percentage increases to 10% nerfed to 5
 			else if( level.pulls_since_last_ray_gun > 7 )
 			{
 				num_to_add += int(.05 * level.zombie_include_weapons.size);
@@ -1110,7 +1110,7 @@ electric_trap_think( enable_flag )
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				who play_sound_on_ent( "no_purchase" );
 				who thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
 			}
 		}
@@ -1192,10 +1192,10 @@ activate_electric_trap()
 	}
 	
 	//do the damage
-	self.zombie_dmg_trig thread elec_barrier_damage();
+	self.zombie_dmg_trig thread elec_barrier_damage(self);
 	
 	// reset the zapper model
-	level waittill("arc_done");
+	//level waittill("arc_done");
 }
 
 
@@ -1210,7 +1210,7 @@ electric_trap_fx(notify_ent)
 
 	self.tag_origin playsound("elec_start");
 	self.tag_origin playloopsound("elec_loop");
-	self thread play_electrical_sound();
+	self thread play_electrical_sound(notify_ent);
 	
 	wait(30);
 		
@@ -1224,9 +1224,10 @@ electric_trap_fx(notify_ent)
 
 //
 //
-play_electrical_sound()
+play_electrical_sound(notify_ent)
 {
-	level endon ("arc_done");
+	notify_ent endon ("elec_done");
+
 	while(1)
 	{	
 		wait(randomfloatrange(0.1, 0.5));
@@ -1239,8 +1240,10 @@ play_electrical_sound()
 
 //
 //
-elec_barrier_damage()
+elec_barrier_damage(notify_ent)
 {	
+	notify_ent endon ("elec_done");
+
 	while(1)
 	{
 		self waittill("trigger",ent);
@@ -1560,34 +1563,34 @@ player_zombie_awareness()
 				}				
 			}
 		}
-		if(players.size > 0) //NEW
+		//if(players.size > 0) //NEW
+		//{
+		//Plays 'teamwork' style dialog if there are more than 1 player...
+		close_zombs = 0;
+		for(i=0;i<zombs.size;i++)
 		{
-			//Plays 'teamwork' style dialog if there are more than 1 player...
-			close_zombs = 0;
-			for(i=0;i<zombs.size;i++)
+			if(DistanceSquared(zombs[i].origin, self.origin) < 250 * 250 && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
 			{
-				if(DistanceSquared(zombs[i].origin, self.origin) < 250 * 250 && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
-				{
-					close_zombs ++;
-				}
-			}
-			if(close_zombs > 4 && players.size > 1)
-			{
-				if(randomintrange(0,20) < 5)
-				{
-					plr = "plr_" + index + "_";
-					self thread create_and_play_dialog( plr, "vox_oh_shit", .25, "resp_ohshit" );	
-				}
-			}
-			else if(close_zombs > 7 && players.size == 1) // requires 1/3 of a horde on solo (8 out of 24)
-			{
-				if(randomintrange(0,20) < 3)
-				{
-					plr = "plr_" + index + "_";
-					self thread create_and_play_dialog( plr, "vox_oh_shit", .25 );	
-				}
+				close_zombs ++;
 			}
 		}
+		if(close_zombs > 5 && players.size > 1)
+		{
+			if(randomintrange(0,20) < 4)
+			{
+				plr = "plr_" + index + "_";
+				self thread create_and_play_dialog( plr, "vox_oh_shit", .25, "resp_ohshit" );	
+			}
+		}
+		else if(close_zombs > 8 && players.size == 1) // requires over 1/3 of a horde on solo (9 out of 24)
+		{
+			if(randomintrange(0,20) < 2)
+			{
+				plr = "plr_" + index + "_";
+				self thread create_and_play_dialog( plr, "vox_oh_shit", .25 );	
+			}
+		}
+		//}
 	}
 }		
 
@@ -1698,7 +1701,7 @@ flytrap()
 		trig_control_panel waittill( "damage", amount, inflictor, direction, point, type );
 
 		weapon = inflictor getcurrentweapon();
-		if ( maps\_zombiemode_weapons::is_weapon_upgraded( weapon ) )
+		if ( maps\_zombiemode_weapons::is_weapon_upgraded( weapon ) && type != "MOD_GRENADE_SPLASH" )
 		{
 			upgrade_hit = true;
 		}
@@ -2087,36 +2090,38 @@ play_level_easteregg_vox( object )
 
 fix_bad_spots()
 {
-	//this bad spot is a  radius right at the spot where you can stand and all the zombies wont go for you
-	bad_spot = spawn( "trigger_radius",( 793.5, 666, 53 ), 0, 125, 50 ); // radius, height
-	good_spot = (759.5, 589.5, 54); // this is the closest i can get zombies to walk to towards that radius, if i tell them to go to the player or coords directly inside the radius they'll just fail
+	//this bad spot is a trigger at the spot where you can stand and the zombies wont go for you
+	invincible_spot = spawn( "trigger_radius",( 793.5, 666, 53 ), 0, 125, 50 ); // radius, height
+	good_spot = (759.5, 589.5, 54); // this is right by the trigger, it's the closest i can get zombies to walk, if i tell them to go to directly to player or coords directly inside radius it will fail (missing path node?)
 
 	while(1)
 	{
-		bad_spot waittill( "trigger", player );
-		player.has_rope = 0;
+		invincible_spot waittill( "trigger", player ); // only start checking when a player is in radius
 		while(1)
 		{
-			if( !player IsTouching( bad_spot ) ) // if player leaves we stop checking zombies
+			if( !player IsTouching( invincible_spot ) ) // if player leaves we stop checking
 			{
 				break;
 			}
-			if( !is_player_valid( player ) )
+			if( !is_player_valid( player ) ) // if player downs/dies we stop checking
 			{
 				break; 
 			}
 
 			zombies = GetAiSpeciesArray( "axis", "all" );
+			zombies = get_array_of_closest( invincible_spot.origin, zombies ); // we grab all the zombies in order of closest to player
+
 			for(i = 0; i < zombies.size; i++)
 			{
-				if(IsDefined(zombies[i].recalculating) && zombies[i].recalculating)
+				if(IsDefined(zombies[i].recalculating) && zombies[i].recalculating == true) // if zombie is already calculating we ignore
 				{
 					continue;
 				}
-				if(int(DistanceSquared(bad_spot.origin, zombies[i].origin)) < 800*800 && zombies[i] in_playable_area())
+				if(int(DistanceSquared(invincible_spot.origin, zombies[i].origin)) < 800*800 && zombies[i] in_playable_area()) // zombie enters immediate area and starts standing still, anything further does not need fixing, ignores zombies outside map because they work fine
 				{
-					zombies[i].recalculating = true;
-					zombies[i] thread recalculate_pathing(good_spot, bad_spot);
+					zombies[i].recalculating = true; // so that we can skip them in the future 
+					zombies[i] SetGoalPos(good_spot); 
+					zombies[i] thread recalculate_pathing(good_spot, invincible_spot); // if zombie enters trig we clean him up
 				}
 			}
 			wait(0.05);
@@ -2124,12 +2129,13 @@ fix_bad_spots()
 	}
 }
 
-recalculate_pathing(good_spot, bad_spot)
+recalculate_pathing(good_spot, invincible_spot)
 {
-	self SetGoalPos(good_spot);
-	while(1)
+	self endon( "death" ); // kill thread if zombie dies
+
+	while(1) // every loop we start with forcing the zombie to move towards the good spot
 	{
-		bad_spot waittill("trigger_radius", who);
+		invincible_spot waittill("trigger_radius", who); // when the zombie enters where player is invincible we check
 /*		if( isplayer(who) ) // if a new player enters the trig we force a re-calculation
 		{				// this is for cases where a player leaves then re-enters the trigger, which would result in zombies being stuck on this waittill and set to "true", and unable to recalculate a 2nd time
 			break;
@@ -2140,45 +2146,44 @@ recalculate_pathing(good_spot, bad_spot)
 		}
 		else
 		{
-			break; // if our correct zombie trigs, then break and we have succeeded no more re-calculating
+			break; // if our correct zombie has entered, then break because we no longer need to force recaclulate the zombie path because they will be able to attack our player
 		}
 	}
-	self.recalculating = false;
+	self.recalculating = undefined;
 }
 
 // only concerns
 // how does it work in co-op (when other players are far away?, when other players are near but not in, or when multiple in trig)
 //what if a player enters and then leaves trig, zombies will get stuck on recalculating true status because of our waittill (its not based on time)
 	//do it time based, say like 5 sec
-	//only grab close zombs?
 
 /*
 
 // FACTORY EGG STEPS
-// Industrial Extraordinaire -- Restore facility operations after starting the plan
+// Industrial Extraordinaire -- Restore facility operations after beginning the plan
 
 // -- SHARED -- //
-1. “Prescribed Adherence” - In order to proceed the host must have previously completed the sumpf quest. Richtofen must be in the lobby if in 4-player or solo.
-2. “Electricians” - Turn on the power and link all three teleporters to the mainframe.
+1. “Dr's Prescribed Adherence” - In order to proceed the host must have previously completed the sumpf quest. Richtofen must be in the lobby if in 4-player or solo.
+2. “Following Procedures” - Turn on the power and link all three teleporters to the mainframe.
 3. “Elevate Your Senses" - Activate the Fly Trap with a Pack-a-Punched weapon and complete Samantha’s game.
-4. “Forensic Investigation” - At any point, interact with all three corkboards throughout the map. If in 4-player, this step must be done by anyone except Richtofen.
+4. “Forensic Hunt” - At any point, interact with all three corkboards throughout the map. If in 4-player, this step must be done by anyone except Richtofen.
 
 // -- SOLO OR FOUR-PLAYER COOP -- //
-5. “Secret Preparations” - Richtofen must prepare his plan to override the teleporter functionality by studying with his journal at each of the three chalkboards by Teleporter A. 
+5. “Studious Secrets” - Richtofen must prepare his plan to override the teleporter functionality by studying with his journal at each of the three chalkboards by Teleporter A. 
 
 // -- SHARED -- //
 6. “Craft the Fuse” - Players must find and pick up a fuse hidden in one of three spots at Teleporter C. The player with the fuse must then cut off a piece of wire found in one of three spots near Teleporter B using the Bowie Knife.
 7. “Modify the Mainframe” - With the parts and plan formulated, the player must head back to the mainframe panel and insert the fuse modification. An orange light will appear as the system prepares. Complete the round to move on.
 8. “Sync Up” - The orange light will disappear, and a player can interact with the mainframe panel now to synchronize each teleporter with the new modification. Upon interacting, a timer will begin where all three teleporters have to be synced before time runs out, with the time depending on how many players are in the game. To sync the teleporters, shoot the red button inside each with a Pack-a-Punched weapon. If the timer runs out, the mainframe panel will turn red. If successful, the panel will turn orange. In both cases, you must finish the round before re-attempting or moving on.
 9. “Unlimited Power” - The mainframe panel will now allow a player to interact with it and disable an “electrical limit,” allowing more power to flow through the teleporters as per Richtofen’s plan. With the limit disabled, players should now attempt to teleport. Unfortunately, upon attempting to use any of the 3 teleporters the system will fail and the teleporters will say that the link has been interrupted. At the mainframe, the panel will have a red light and say “safety failsafe engaged” due to the players forcing in too much power. Finish the round before moving on.
-10. “Please Undo?” - players will see that they can now interact with the panel to “recycle the power” in the hopes of establishing the teleporter links. However, they will learn that “additional maintenance” is required as each teleporter is fried.
+10. “Please Work?” - players will see that they can now interact with the panel to “recycle the power” in the hopes of establishing the teleporter links. However, they will learn that “additional maintenance” is required as each teleporter is fried.
 11. “Unroutinely Maintenance” - Players must now go through each teleporter area, in any order, to make the necessary repairs. Each teleporter area will have sparks on three broken parts, with red warning lights indicating a problem. The sparks and lights will all disappear as each repair is made and the teleporter hintstring will update.
-12. “We Can Fix It” - Locate and pick up the toolbox located near Teleporter A in one of three random locations before being able to make any repairs. This player will now have the “tools.”
+12. “Yes We Can!” - Locate and pick up the toolbox located near Teleporter A in one of three random locations before being able to make any repairs. This player will now have the “tools.”
 13. “Teleporter A” - The player with the tool must interact with the three sparking areas. Without the tool, the player will be damaged. This teleporter is straightforward and demonstrates the general concept of fixing a teleporter--as we are right by where we picked up the tools. 
 14. “Teleporter B” - Players must align the lever at the correct angle matching the seconds-hand on the clock while holding a beaker of red chemicals near the boiler, which can be picked up on the nearby shelves. Upon doing so, smoke will rise up and the player with the tool must interact with the three sparks. Without the tool, the player will be damaged. Eventually, the lever will reset back to its starting position. If at any point sparks are repaired without the lever at the correct angle, the step is failed and will have to be restarted.
 15. “Teleporter C” - The player with the tool must interact with the three sparking areas. Without the tool, the player will be damaged. However, there is a lever connected to a pipe that must be aligned correctly which can be found in the tunnel by the grenade wall chalk. The lever must be set in a position corresponding to the position of each spark in order for the spark to be repaired (left, middle, right). In co-op, the lever will reset if a player is not standing at the lever “holding” it in place.
-16. “Gen Resurrection” - The telemap will still show a red light at the mainframe even after fixing all three teleporters, indicating the location of the last problem. To fix the insufficient power, players will have to shock the spawn room generator back on by zapping 10 close zombies with one tesla gun shot.
-17. “Manual Overload” - After restoring facility operations back to normal, the only way forward is to skip the official procedures. All must be in a teleporter together, and a player must fire the upgraded Wunderwaffe DG-while initiating the teleport. Upon coming out of the mainframe, a “nuke” effect will shock surrounding zombies and all players will receive a reward. This is the moment our characters would be leaving Der Riese…only time will tell what new discoveries await them.
+16. “Recharge Generator” - The telemap will still show a red light at the mainframe even after fixing all three teleporters, indicating the location of the last problem. To fix the insufficient power, players will have to shock the spawn room generator back on by zapping 10 close zombies with one tesla gun shot.
+17. “Manual Overload” - After restoring facility operations back to normal, the only way forward is to skip any protocols and go manual. All must be in a teleporter together, and a player must fire the upgraded Wunderwaffe DG-2 while initiating the teleport. Upon coming out of the mainframe, a “nuke” effect will shock surrounding zombies and all players will receive a reward. This is the moment our characters would be leaving Der Riese…only time will tell what new discoveries await them.
 
 // - Lights at the mainframe panel indicate the round must be completed before moving on. Red means something is wrong, orange means all is fine.
 
@@ -2814,7 +2819,7 @@ damage_trig_teleporter(location, angles)
 		weapon = inflictor getcurrentweapon();
 		if ( maps\_zombiemode_weapons::is_weapon_upgraded( weapon ) ) // if we have an upgraded weapon
 		{
-			if(damaged == false && teleporter_dmg_trig.health < 100000 && Distance(self.origin, point) < 100 )
+			if(damaged == false /*&& teleporter_dmg_trig.health < 100000 && Distance(self.origin, point) < 100*/ )
 			{
 				damaged = true;
 				level.syncs_completed += 1;
@@ -3360,7 +3365,7 @@ kill_shock_trigger()
 		}
 
 		zombies[i] dodamage( zombies[i].health + 666, zombies[i].origin );
-		playsoundatposition( "elec_vocals_tesla", zombies[i].origin );
+		playsoundatposition( "elec_vocals", zombies[i].origin );
 	}
 
 }
@@ -3929,6 +3934,8 @@ give_all_perks_forever()
 {
 	self endon("disconnect");
 	self endon("death");
+
+	self achievement_notify( "perk_used" );
 
 	if(!IsDefined(level._sq_perk_array))
 	{

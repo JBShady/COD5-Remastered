@@ -37,7 +37,7 @@ player_add_points( event, mod, hit_location ,is_dog)
 			//stats tracking
 			self.stats["kills"] = self.kill_tracker;
 
-			if( mod == "MOD_MELEE" && isDefined(self.getting_knives) ) // for EE, we define then undefine variable right after step, shouldnt do this any other time
+			if( mod == "MOD_MELEE" && isDefined(self.getting_knives) ) // for EE, we define then undefine variable right after step, shouldnt do this any other time. bayonet does not count as true melee
 			{	
 				self notify( "knife_kill" );
 			}
@@ -120,7 +120,7 @@ play_killstreak_vo()
 */
 player_add_points_kill_bonus( mod, hit_location )
 {
-	if( mod == "MOD_MELEE" )
+	if( mod == "MOD_MELEE" || mod == "MOD_BAYONET" )
 	{
 		return level.zombie_vars["zombie_score_bonus_melee"]; 
 	}

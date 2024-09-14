@@ -6,7 +6,7 @@ main()
 	self attach(self.headModel, "", true);
 
 /*	random = randomintrange(1,101);
-	if( random <= 5) // 0,1,2,3,4,5 = 6% chance helmet
+	if( random <= 5) // 1,2,3,4,5 = 5% chance helmet
 	{
 		self.hatModel = codescripts\character::randomElement(xmodelalias\char_ger_honorgd_helmalias::main());
 		self attach(self.hatModel, "", true);

@@ -12,6 +12,7 @@ init()
 	//designed by prod
 	//set_zombie_var( "rebuild_barrier_cap_per_round", 500 );
 	//////////////////////////////////////////
+	level.hit_it = 1;
 }
 
 init_blockers()
@@ -47,6 +48,7 @@ init_blockers()
 	{
 		flag_blockers[i] thread flag_blocker(); 
 	}	
+	
 }
 
 //
@@ -129,6 +131,9 @@ door_think()
 	// maybe just destroy the door, could be two players from opposite sides..
 	// breaking into chunks seems best.
 	// or I cuold just give it no collision
+	who = undefined;
+	current_hit_it = undefined;
+
 	while( 1 )
 	{
 		if(isDefined(self.script_noteworthy) && self.script_noteworthy == "electric_door")
@@ -158,6 +163,11 @@ door_think()
 					{
 						level [[ level.achievement_notify_func ]]( "DLC1_ZOMBIE_DOORS" );
 					}
+					if(self.origin[0] == (-437) || self.origin[0] == (-345))
+					{
+						current_hit_it = true;
+					}
+
 					bbPrint( "zombie_uses: playername %s playerscore %d round %d cost %d name %s x %f y %f z %f type door", who.playername, who.score, level.round_number, self.zombie_cost, self.target, self.origin );
 				}
 				else // Not enough money
@@ -263,6 +273,14 @@ door_think()
 			all_trigs[i] trigger_off(); 
 		}
 		break;
+	}
+
+	if(isDefined(current_hit_it) && current_hit_it == true && isDefined(level.hit_it) && level.hit_it == 1)
+	{
+		level.hit_it = undefined;
+		current_hit_it = undefined;
+
+		level notify("special_power_dialogue");
 	}
 }
 

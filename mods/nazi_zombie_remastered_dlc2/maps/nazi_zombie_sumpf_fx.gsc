@@ -102,6 +102,12 @@ wind_settings()
 
 precacheFX()
 {
+	level._effect["character_bayonet_blood_in"] = LoadFx( "impacts/fx_flesh_bayonet_impact" );
+	level._effect["character_bayonet_blood_front"] = LoadFx( "impacts/fx_flesh_bayonet_fatal_fr" );
+	level._effect["character_bayonet_blood_back"] = LoadFx( "impacts/fx_flesh_bayonet_fatal_bk" );
+	level._effect["character_bayonet_blood_right"] = LoadFx( "impacts/fx_flesh_bayonet_fatal_rt" );
+	level._effect["character_bayonet_blood_left"] = LoadFx( "impacts/fx_flesh_bayonet_fatal_lf" );
+	
 	level._effect["mp_fire_small_detail"]						    = loadfx("maps/mp_maps/fx_mp_fire_small_detail");	
 	level._effect["mp_fire_small"]							        = loadfx("maps/mp_maps/fx_mp_fire_small");
 	level._effect["mp_fire_medium"]							        = loadfx("maps/mp_maps/fx_mp_fire_medium");	

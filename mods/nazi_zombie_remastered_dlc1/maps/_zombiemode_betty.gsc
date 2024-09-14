@@ -84,7 +84,7 @@ buy_bouncing_betties()
 			}
 			else if ( who.score < self.zombie_cost ) // new
 			{	
-				play_sound_on_ent( "no_purchase" );
+				who play_sound_on_ent( "no_purchase" );
 			}
 		}
 	}

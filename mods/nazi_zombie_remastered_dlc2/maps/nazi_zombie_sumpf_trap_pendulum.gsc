@@ -149,7 +149,7 @@ penThink()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				who play_sound_on_ent( "no_purchase" );
 				who thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
 
 			}
@@ -266,7 +266,10 @@ trap_sounds(motor_left, motor_right, wheel_left, wheel_right)
 }
 penDamage(parent, who)
 {	
+	parent endon("penDown");
+
 	thread customTimer();
+
 	while(1)
 	{
 		//iprintlnbold(level.numLaunched);	
@@ -415,6 +418,8 @@ do_launch(x,y,z)
 	}
 	
 	self thread play_imp_sound();
+
+	self ragdoll_cleanup();
 	
 	self StartRagdoll();
 	
@@ -447,6 +452,30 @@ play_imp_sound()
 		playfxontag(level._effect["trap_log"],self,"tag_origin");
 		level.numFloggerVox ++;
 	}
-	wait(0.75);
+	wait(0.5);
 	self dodamage(self.health + 600, self.origin); 
+}
+
+ragdoll_cleanup()
+{
+    zombie_spawners = GetEntArray("zombie_spawner", "script_noteworthy");
+    zombie_models = GetEntArray("actor_axis_zombie_jp_swamp", "classname");
+    zombie_models = array_exclude(zombie_models, zombie_spawners); // Seemingly Includes Alive Zombies Too.
+
+    zombie_ragdolls = [];
+    for(i=0;i<zombie_models.size;i++)
+    {
+        if(zombie_models[i] IsRagdoll() && !IsAlive(zombie_models[i]))
+        {
+            zombie_ragdolls = add_to_array(zombie_ragdolls, zombie_models[i]);
+        }
+    }
+
+    zombie_ragdolls = get_array_of_closest(self.origin, zombie_ragdolls);
+    zombie_ragdolls = array_reverse(zombie_ragdolls);
+
+    if(zombie_ragdolls.size > 14) // max of 16 rag dolls default
+    {
+		zombie_ragdolls[0] delete(); // delete furthest zombie
+	}
 }
