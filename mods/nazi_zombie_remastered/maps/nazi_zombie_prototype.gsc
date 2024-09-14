@@ -635,71 +635,74 @@ player_zombie_awareness()
 		}
 
 		zombs = getaiarray("axis");
-		for(i=0;i<zombs.size;i++)
+		if(zombs.size > 1)
 		{
-			if(DistanceSquared(zombs[i].origin, self.origin) < 175 * 175)
-			{
-				if(!isDefined(zombs[i]))
-				{
-					continue;
-				}
-
-				
-				dist = 175;				
-				switch(zombs[i].zombie_move_speed)
-				{
-					case "walk": dist = 150;break;
-					case "run": dist = 130; break;
-					case "sprint": dist = 110;break;
-				}				
-				if(distance2d(zombs[i].origin,self.origin) < dist && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
-				{				
-					yaw = self animscripts\utility::GetYawToSpot(zombs[i].origin );
-					//check to see if he's actually behind the player
-					if(yaw < -100 || yaw > 100)
-					{
-						if(randomintrange(0,10) < 3 )
-						{
-							//zombs[i] playsound ("behind_vocals");
-							plr = "plr_" + index + "_";
-							self thread create_and_play_dialog( plr, "vox_near", 0.05 );
-						}
-						else if(level.player_is_speaking != 1) // nacht is scarier: only 80% chance of behind vocals, only when player isnt talking, and they're quieter
-						{
-							zombs[i] playsound ("behind_vocals");
-						}
-					}
-				}				
-			}
-		}
-
-		if(players.size > 0) //NEW
-		{
-			close_zombs = 0;
 			for(i=0;i<zombs.size;i++)
 			{
-				if(DistanceSquared(zombs[i].origin, self.origin) < 250 * 250 && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
+				if(DistanceSquared(zombs[i].origin, self.origin) < 175 * 175)
 				{
-					close_zombs ++;
-				}
-			}
-			if(close_zombs > 4 && players.size > 1)
-			{
-				if(randomintrange(0,20) <= 5) // slightly hider odds than dlc2/dlc3, players less likely to be surviving while surrounded since no jug and tighter map plus we have behind vocals that can get in the way
-				{
-					plr = "plr_" + index + "_";
-					self thread create_and_play_dialog( plr, "vox_oh_shit", .25, "resp_ohshit" );	
-				}
-			}
-			else if(close_zombs > 7 && players.size == 1) // requires 1/3 of a horde on solo (8 out of 24)
-			{
-				if(randomintrange(0,20) <= 3) // slightly hider odds than dlc2/dlc3, players less likely to be surviving while surrounded since no jug and tighter map plus we have behind vocals that can get in the way
-				{
-					plr = "plr_" + index + "_";
-					self thread create_and_play_dialog( plr, "vox_oh_shit", .25 );	
+					if(!isDefined(zombs[i]))
+					{
+						continue;
+					}
+
+					
+					dist = 175;				
+					switch(zombs[i].zombie_move_speed)
+					{
+						case "walk": dist = 150;break;
+						case "run": dist = 130; break;
+						case "sprint": dist = 110;break;
+					}				
+					if(distance2d(zombs[i].origin,self.origin) < dist && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
+					{				
+						yaw = self animscripts\utility::GetYawToSpot(zombs[i].origin );
+						//check to see if he's actually behind the player
+						if(yaw < -100 || yaw > 100)
+						{
+							if(randomintrange(0,10) < 3 )
+							{
+								//zombs[i] playsound ("behind_vocals");
+								plr = "plr_" + index + "_";
+								self thread create_and_play_dialog( plr, "vox_near", 0.05 );
+							}
+							else if(level.player_is_speaking != 1) // nacht is scarier: only 80% chance of behind vocals, only when player isnt talking, and they're quieter
+							{
+								zombs[i] playsound ("behind_vocals");
+							}
+						}
+					}				
 				}
 			}
 		}
+
+		//if(players.size > 0) //NEW
+		//{
+		close_zombs = 0;
+		for(i=0;i<zombs.size;i++)
+		{
+			if(DistanceSquared(zombs[i].origin, self.origin) < 250 * 250 && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
+			{
+				close_zombs ++;
+			}
+		}
+		if(close_zombs > 5 && players.size > 1)
+		{
+			if(randomintrange(0,20) < 4)
+			{
+				plr = "plr_" + index + "_";
+				self thread create_and_play_dialog( plr, "vox_oh_shit", .25, "resp_ohshit" );	
+			}
+		}
+		else if(close_zombs > 8 && players.size == 1) // requires over 1/3 of a horde on solo (9 out of 24)
+		{
+			if(randomintrange(0,20) < 2)
+			{
+				plr = "plr_" + index + "_";
+				self thread create_and_play_dialog( plr, "vox_oh_shit", .25 );	
+			}
+		}
+		//}
 	}
 }
 
@@ -726,7 +729,6 @@ check_for_barrel_explode()
 
 play_music_easter_egg()
 {
-
 	if(!IsDefined (level.egg_damage_counter))
 	{
 		level.egg_damage_counter = 0;		
@@ -747,5 +749,4 @@ play_music_easter_egg()
 
 	setmusicstate("WAVE_1");
 	level.eggs = 0;
-
 }
