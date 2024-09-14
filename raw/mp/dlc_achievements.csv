@@ -1,5 +1,5 @@
 stat,achievement,value
-2105,DLC_ZOMBIE_BARRIERS,0
+2109,DLC_ZOMBIE_BARRIERS,0
 2110,DLC_ZOMBIE_STARMAN,0
 2115,DLC_ZOMBIE_LAWN,0
 2120,DLC_ZOMBIE_UPSTAIRS,0
@@ -9,3 +9,9 @@ stat,achievement,value
 2140,DLC_ZOMBIE_MAGICBOX,0
 2145,DLC_ZOMBIE_LASTSTAND,0
 2150,DLC_ZOMBIE_RADIO,0
+2160,nz_prototype_highestwave_two,0
+2165,nz_prototype_highestwave_three,0
+2170,nz_prototype_highestwave_four,0
+2175,nz_prototype_totalpoints_two,0
+2180,nz_prototype_totalpoints_three,0
+2185,nz_prototype_totalpoints_four,0
