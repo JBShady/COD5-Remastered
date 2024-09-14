@@ -83,6 +83,7 @@ beginMortarTracking()
 
 		self thread mortar_check_impact(mortar);
 		mortar thread mortar_death();	
+		//mortar thread explosive_death_think();
 	}
 }
 
@@ -92,7 +93,7 @@ mortar_check_impact(mortar)
 	oldPos = mortar.origin;
 	
 	mortar_pos = [];
-	while( velocitySq != 0 )
+	while( velocitySq != 0 ) // while grenade is moving, we wait and also keep saving its position
 	{
 		wait( 0.05 );
 		velocitySq = distanceSquared( mortar.origin, oldPos );
@@ -103,7 +104,7 @@ mortar_check_impact(mortar)
 	index = -1; // init variable, if it stays -1 that means we have not touched a zombie or player
 
 	sticked = GetAiSpeciesArray( "axis", "all" );	
-	for(i=0;i<sticked.size;i++) // first we check all zombies
+	for(i=0;i<sticked.size;i++) // once the grenade has stopped moving, we check all zombies if the grenade is very close to them
 	{
 		ri_arm = sticked[i] gettagorigin("j_elbow_ri");
 		le_arm = sticked[i] gettagorigin("j_elbow_le");
@@ -119,9 +120,17 @@ mortar_check_impact(mortar)
 		return;
 	}
 
-
 	sticked[index] maps\_zombiemode_spawner::zombie_head_gib();
-	sticked[index] dodamage( sticked[index].health + 666, sticked[index].origin );
+
+	if ( Isdefined( self ) && Isalive( self ) )
+	{
+		sticked[index] dodamage( sticked[index].health + 666, sticked[index].origin, self );
+	}
+	else
+	{
+		sticked[index] dodamage( sticked[index].health + 666, sticked[index].origin, level );
+	}
+
 	//iprintlnbold("Mortar dud detected--killing zombie on impact");
 }
 
@@ -180,19 +189,37 @@ watchSatchel()
 
 			satchel.owner = self;
 
-			if(self.satchelarray.size > 20 )
+			if(self.satchelarray.size > 24 )
 			{
+				if(self.health >= 100) // if we are already at full health, lets be nice and not auto kill player
+				{
+					self.satchel_invulnerable_delay = true; // last satchel charge has nerfed splash damage
+					//self thread satchel_invulnerable_delay();
+				}
 				satchel waitTillNotMoving();
 				satchel waitAndDetonate( 0.1 );
+				wait(0.05);
+				self.satchel_invulnerable_delay = undefined;
 				continue;
 			}
 
 			self.satchelarray[self.satchelarray.size] = satchel;
 			satchel thread satchelDamage();
+			satchel thread explosive_death_think();
 		}
 	}
 }
+/*
+satchel_invulnerable_delay()
+{
+	self endon( "death" );	
+	self endon( "disconnect" );	
 
+	self.satchel_invulnerable_delay = true;
+	wait(0.5);
+	self.satchel_invulnerable_delay = undefined;
+}
+*/
 watchSatchelAltDetonate()
 {
 	self endon( "death" );	
@@ -413,13 +440,14 @@ waitAndDetonate( delay )
 		}
 	}
 
+	self notify("kill_thread");
 	self detonate();
 }
 
 
 satchelDamage()
 {
-//	self endon( "death" );
+	self endon( "kill_thread" );
 
 	self.health = 100;
 	self setcandamage(true);
@@ -433,7 +461,6 @@ satchelDamage()
 		//self waittill("damage", amount, attacker);
 
 		self waittill( "damage", amount, attacker, direction_vec, point, type );
-
 		if ( !isplayer(attacker) )
 			continue;
 		
@@ -761,4 +788,16 @@ onWeaponDamage( eInflictor, sWeapon, meansOfDeath, damage )
 		break;
 	}
 	
+}
+
+explosive_death_think()
+{
+	self waittill("death");
+
+	if(isDefined(self.trigger))
+	{
+		self.trigger delete();
+	}
+
+	self delete();
 }
