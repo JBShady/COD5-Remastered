@@ -11,7 +11,7 @@ main()
 		self.hatModel = codescripts\character::randomElement(xmodelalias\char_ger_honorgd2_helmalias::main());
 		self attach(self.hatModel, "", true);
 	}
-	else if( random <= 8) // 6,7,8 = 3% chance for both helmet and gear
+	else if( random <= 7) // 6,7 = 2% chance for both helmet and gear
 	{
 		self.hatModel = codescripts\character::randomElement(xmodelalias\char_ger_honorgd2_helmalias::main());
 		self attach(self.hatModel, "", true);
