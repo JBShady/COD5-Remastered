@@ -14,43 +14,43 @@ CONFIG              "C:\cod5\cod\cod5\bin\StringEd.cfg"
 FILENOTES           ""
 
 REFERENCE           RANDOM_WEAPON_950
-LANG_ENGLISH        "Press & hold &&1 for a Random Weapon [Cost: 950]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 for a Random Weapon [Cost: 950]"
 
 REFERENCE           TRADE_WEAPONS
-LANG_ENGLISH        "Press & hold &&1 to trade weapons"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to trade weapons"
 
 REFERENCE           WEAPON_STIELHANDGRANATE_250
-LANG_ENGLISH        "Press & hold &&1 to buy Stielhandgranaten [Cost: 250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Stielhandgranaten [Cost: 250]"
 
 REFERENCE           WEAPON_TYPE97FRAG_250
-LANG_ENGLISH        "Press & hold &&1 to buy Type 97 Grenades [Cost: 250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Type 97 Grenades [Cost: 250]"
 
 REFERENCE           WEAPON_TYPE99_200
-LANG_ENGLISH        "Press & hold &&1 to buy Type 99 Arisaka [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Type 99 Arisaka [Cost: 200]"
 
 REFERENCE           WEAPON_SPRINGFIELD_200
-LANG_ENGLISH        "Press & hold &&1 to buy M1903 Springfield [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy M1903 Springfield [Cost: 200]"
 
 REFERENCE           WEAPON_STG44_1200
-LANG_ENGLISH        "Press & hold &&1 to buy StG-44 [Cost: 1200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy StG-44 [Cost: 1200]"
 
 REFERENCE           WEAPON_THOMPSON_1200
-LANG_ENGLISH        "Press & hold &&1 to buy M1A1 Thompson [Cost: 1200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy M1A1 Thompson [Cost: 1200]"
 
 REFERENCE           WEAPON_DOUBLEBARREL_SAWED_1200
-LANG_ENGLISH        "Press & hold &&1 to buy Sawed-Off Double-Barreled Shotgun [Cost: 1200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Sawed-Off Double-Barreled Shotgun [Cost: 1200]"
 
 REFERENCE           WEAPON_BAR_1800
-LANG_ENGLISH        "Press & hold &&1 to buy M1918 BAR [Cost: 1800]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy M1918 BAR [Cost: 1800]"
 
 REFERENCE           WEAPON_BAR_BIPOD_2500
-LANG_ENGLISH        "Press & hold &&1 to buy M1918 BAR [Cost: 1800]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy M1918 BAR [Cost: 1800]"
 
 REFERENCE           PERK_QUICKREVIVE
-LANG_ENGLISH        "Press & hold &&1 to buy Quick Revive [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Quick Revive [Cost: 1500]"
 
 REFERENCE           ZIPLINE_ACTIVATE
-LANG_ENGLISH        "Press & hold &&1 to turn on the Zipline "
+LANG_ENGLISH        "Press & hold ^3&&1^7 to turn on the Zipline "
 
 REFERENCE           FLAMES_UNAVAILABLE_HAND
 LANG_ENGLISH        "The power must be activated first "
@@ -59,22 +59,25 @@ REFERENCE           TELEPORT_COOLDOWN
 LANG_ENGLISH        "Teleporters are cooling down"
 
 REFERENCE           ELECTRIC_SWITCH
-LANG_ENGLISH        "Press & hold &&1 to turn on the electricity "
+LANG_ENGLISH        "Press & hold ^3&&1^7 to turn on the electricity "
 
 REFERENCE           CRATE_OPEN_2000
-LANG_ENGLISH        "Press & hold &&1 to Search Crate [Cost: 2000 - one time only]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Search Crate [Cost: 2000 - one time only]"
 
 REFERENCE           SATCHEL_PURCHASE
-LANG_ENGLISH        "Press & hold &&1 to buy Satchel Charges [Cost: 2000 - one time only]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Satchel Charges [Cost: 2000 - one time only]"
 
 REFERENCE           SATCHEL_HOWTO
-LANG_ENGLISH        "Press [{+actionslot 4}] to equip and throw then [{+attack}] to detonate a Satchel Charge"
+LANG_ENGLISH        "Press ^3[{+actionslot 4}]^7 to equip and throw then ^3[{+attack}]^7 to detonate a Satchel Charge"
 
 REFERENCE           BETTY_PURCHASE
-LANG_ENGLISH        "Press & hold &&1 to buy Bouncing Betties [Cost: 1000 - one time only]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Bouncing Betties [Cost: 1000 - one time only]"
 
 REFERENCE           BETTY_HOWTO
-LANG_ENGLISH        "Press [{+actionslot 4}] then [{+attack}] to place a Bouncing Betty"
+LANG_ENGLISH        "Press ^3[{+actionslot 4}]^7 then ^3[{+attack}]^7 to place a Bouncing Betty"
+
+REFERENCE           BAYONET_BUY_1500
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Type 30 Bayonet [Cost: 1500 - valid weapons only]"
 
 REFERENCE           INTRO_ASYLUM_LEVEL_BERLIN
 LANG_ENGLISH        "Wittenau Sanatorium"
@@ -112,14 +115,8 @@ LANG_ENGLISH        "October 28th, 1946"
 REFERENCE           ACHIEVEMENT
 LANG_ENGLISH        "Achievement Unlocked!"
 
-REFERENCE           ENTER_FIRST_PERSON
-LANG_ENGLISH        "Hold ^3[{+melee}]^7 to enter first person view"
-
-REFERENCE           ENTER_THIRD_PERSON
-LANG_ENGLISH        "Hold ^3[{+melee}]^7 to enter third person view"
-
 REFERENCE           DEPLOY
-LANG_ENGLISH        "Press & Hold &&1 to deploy Machine Gun "
+LANG_ENGLISH        "Press & hold ^3&&1^7 to deploy Machine Gun "
 
 REFERENCE           DEPLOYING
 LANG_ENGLISH        "Deploying..."
@@ -131,13 +128,13 @@ REFERENCE           NEED_AMMO
 LANG_ENGLISH        "Need More Ammo"
 
 REFERENCE           MAINFRAME_PANEL_OVERRIDE
-LANG_ENGLISH        "Press & Hold &&1 to enable manual override"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to enable manual override"
 
 REFERENCE           MAINFRAME_PANEL_SYNC
 LANG_ENGLISH        "Awaiting synchronization"
 
 REFERENCE           MAINFRAME_PANEL_LIMIT
-LANG_ENGLISH        "Press & Hold &&1 to disable electrical current limit"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to disable electrical current limit"
 
 REFERENCE           MAINFRAME_PANEL_LIMIT_DISABLED
 LANG_ENGLISH        "Current limiter disabled"
@@ -146,7 +143,7 @@ REFERENCE           MAINFRAME_PANEL_FAILSAFE
 LANG_ENGLISH        "Emergency failsafe engaged"
 
 REFERENCE           MAINFRAME_PANEL_RECYCLE
-LANG_ENGLISH        "Press & Hold &&1 to recycle power"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to recycle power"
 
 REFERENCE           MAINFRAME_PANEL_MAINT
 LANG_ENGLISH        "Additional maintenance required"
@@ -156,6 +153,12 @@ LANG_ENGLISH        "Link interrupted"
 
 REFERENCE           TELEPORT_LACKS_POWER
 LANG_ENGLISH        "Insufficient power supply"
+
+REFERENCE           CLOSE_DOOR_1000
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Close Door [Cost: 1000]"
+
+REFERENCE           BUTTON_TO_REVIVE_PLAYER
+LANG_ENGLISH        "Press & hold ^3&&1^7 to revive player"
 
 
 ENDMARKER
