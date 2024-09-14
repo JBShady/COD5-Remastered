@@ -26,7 +26,6 @@ xanim,viewmodel_bare_hands_death_by_zomb
 localize,remastered
 localize,remastered_zombie
 localize,remastered_weap
-localize,patch
 xanim,viewmodel_ray_gun_idle_new
 xmodel,zombie_carpenter
 xmodel,viewmodel_zombie_30cal_lmg_new
@@ -91,6 +90,7 @@ xmodel,char_ger_wermachtwet_gear2
 xmodel,char_ger_wermachtwet_gear3
 xmodel,char_ger_honorgd_gear3
 sound,weapons,,all_sp
+sound,custom_character,,all_sp
 weapon,sp/bar_bipod_deploying
 weapon,sp/30cal_bipod_deploying
 weapon,sp/mg42_bipod_deploying
@@ -123,7 +123,6 @@ fx,impacts/large_woodhit_noshot
 rawfile,init_remastered.cfg
 rawfile,default_controller_unbind.cfg
 xmodel,viewmodel_usa_double_barrel_2023
-localize,key
 material,asylum_bio1
 material,asylum_bio2
 material,asylum_bio3
@@ -147,3 +146,7 @@ material,line_alt
 stringtable,mp/dlc1_achievements.csv
 localize,dlc1
 sound,achievement_sound,,all_mp
+material,ui_leaderboard
+menufile,ui/pc_joinchoosegamemode.menu
+localize,zombie
+localize,patch

@@ -42,11 +42,9 @@ images\dlc_zombie_upstairs.iwi
 images\gamefonts_pc.iwi
 images\grenadeicon.iwi
 images\hint_usable.iwi
-images\hud_arrow_left.iwi
-images\hud_arrow_right.iwi
-images\hud_arrow_up.iwi
 images\hud_m2_flamethrower.iwi
 images\hud_us_grenade.iwi
+images\leaderboard.iwi
 images\line_alt.iwi
 images\line_bio.iwi
 images\makin_door_wood2_c.iwi
@@ -233,6 +231,8 @@ sound\voiceovers\zombie\dlc0\Player0\resp_oh_shit_00.wav
 sound\voiceovers\zombie\dlc0\Player0\resp_oh_shit_01.wav
 sound\voiceovers\zombie\dlc0\Player0\resp_oh_shit_02.wav
 sound\voiceovers\zombie\dlc0\Player0\resp_oh_shit_03.wav
+sound\voiceovers\zombie\dlc0\Player0\resp_oh_shit_04.wav
+sound\voiceovers\zombie\dlc0\Player0\resp_oh_shit_05.wav
 sound\voiceovers\zombie\dlc0\Player0\revive_down_gen_00.wav
 sound\voiceovers\zombie\dlc0\Player0\revive_down_gen_01.wav
 sound\voiceovers\zombie\dlc0\Player0\revive_down_gen_02.wav
@@ -320,6 +320,7 @@ sound\voiceovers\zombie\dlc0\Player1\oh_shit_01.wav
 sound\voiceovers\zombie\dlc0\Player1\oh_shit_02.wav
 sound\voiceovers\zombie\dlc0\Player1\oh_shit_03.wav
 sound\voiceovers\zombie\dlc0\Player1\oh_shit_04.wav
+sound\voiceovers\zombie\dlc0\Player1\oh_shit_05.wav
 sound\voiceovers\zombie\dlc0\Player1\powerup_ammo_00.wav
 sound\voiceovers\zombie\dlc0\Player1\powerup_ammo_01.wav
 sound\voiceovers\zombie\dlc0\Player1\powerup_ammo_02.wav
@@ -442,6 +443,7 @@ sound\voiceovers\zombie\dlc0\Player2\oh_shit_01.wav
 sound\voiceovers\zombie\dlc0\Player2\oh_shit_02.wav
 sound\voiceovers\zombie\dlc0\Player2\oh_shit_03.wav
 sound\voiceovers\zombie\dlc0\Player2\oh_shit_04.wav
+sound\voiceovers\zombie\dlc0\Player2\oh_shit_05.wav
 sound\voiceovers\zombie\dlc0\Player2\powerup_ammo_00.wav
 sound\voiceovers\zombie\dlc0\Player2\powerup_ammo_01.wav
 sound\voiceovers\zombie\dlc0\Player2\powerup_ammo_02.wav
@@ -462,6 +464,8 @@ sound\voiceovers\zombie\dlc0\Player2\powerup_nuke_02.wav
 sound\voiceovers\zombie\dlc0\Player2\resp_oh_shit_00.wav
 sound\voiceovers\zombie\dlc0\Player2\resp_oh_shit_01.wav
 sound\voiceovers\zombie\dlc0\Player2\resp_oh_shit_02.wav
+sound\voiceovers\zombie\dlc0\Player2\resp_oh_shit_03.wav
+sound\voiceovers\zombie\dlc0\Player2\resp_oh_shit_04.wav
 sound\voiceovers\zombie\dlc0\Player2\revive_down_gen_00.wav
 sound\voiceovers\zombie\dlc0\Player2\revive_down_gen_01.wav
 sound\voiceovers\zombie\dlc0\Player2\revive_down_gen_02.wav

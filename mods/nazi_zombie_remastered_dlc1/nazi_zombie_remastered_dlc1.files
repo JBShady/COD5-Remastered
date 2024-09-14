@@ -42,13 +42,11 @@ images\gamefonts_pc.iwi
 images\grenadeicon.iwi
 images\hint_usable.iwi
 images\hud_30_cal_overheat.iwi
-images\hud_arrow_left.iwi
-images\hud_arrow_right.iwi
-images\hud_arrow_up.iwi
 images\hud_bar_overheat.iwi
 images\hud_fg42_overheat.iwi
 images\hud_m2_flamethrower.iwi
 images\hud_us_grenade.iwi
+images\leaderboard.iwi
 images\line_alt.iwi
 images\line_bio.iwi
 images\makin_door_wood2_c.iwi
@@ -81,7 +79,6 @@ maps\_zombiemode.gsc
 maps\_zombiemode_achievement.gsc
 maps\_zombiemode_betty.gsc
 maps\_zombiemode_blockers.gsc
-maps\_zombiemode_devgui.gsc
 maps\_zombiemode_health_help.gsc
 maps\_zombiemode_molotov.gsc
 maps\_zombiemode_net.gsc
@@ -419,6 +416,8 @@ sound\voiceovers\zombie\dlc1\Player3\gen_pain_01.wav
 sound\voiceovers\zombie\dlc1\Player3\gen_pain_02.wav
 sound\voiceovers\zombie\dlc1\Player3\gen_pain_03.wav
 sound\voiceovers\zombie\dlc1\Player3\gen_pain_04.wav
+sound\voiceovers\zombie\dlc1\Player3\oh_shit_special_00.wav
+sound\voiceovers\zombie\dlc1\Player3\oh_shit_special_01.wav
 sound\voiceovers\zombie\dlc1\Player3\revive_down_gen_00.wav
 sound\voiceovers\zombie\dlc1\Player3\revive_down_gen_01.wav
 sound\voiceovers\zombie\dlc1\Player3\revive_down_gen_02.wav
@@ -436,6 +435,8 @@ sound\voiceovers\zombie\dlc1\Player3\special_melee_insta_02.wav
 sound\voiceovers\zombie\dlc1\Player3\special_melee_insta_03.wav
 sound\voiceovers\zombie\dlc1\Player3\special_melee_insta_04.wav
 sound\voiceovers\zombie\dlc1\Player3\special_melee_insta_05.wav
+sound\voiceovers\zombie\dlc1\Player3\special_rare_over_00 CUT.wav
+sound\voiceovers\zombie\dlc1\Player3\special_rare_over_00.wav
 sound\voiceovers\zombie\dlc1\Player3\special_rare_power_00.wav
 sound\voiceovers\zombie\dlc1\Player3\special_start_00.wav
 sound\voiceovers\zombie\dlc1\Player3\special_start_01.wav

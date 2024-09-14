@@ -4,6 +4,7 @@ xmodel,viewmodel_rus_guard_arms
 xmodel,viewmodel_usa_pbycrew_arms
 xmodel,viewmodel_jap_infantry_arms
 xmodel,viewmodel_hands_cloth_marine_bare
+sound,custom_character,,all_sp
 sound,dlc_share,,all_sp
 sound,achievement_sound,,all_mp
 sound,dlc3_vox
@@ -65,7 +66,7 @@ menufile,ui/options_look_pc.menu
 menufile,ui/options_move_pc.menu
 menufile,ui/options_shoot_pc.menu
 menufile,ui/options_coop_pc.menu
-sound,weapons,,all_sp
+sound,weapons_dlc3,,all_sp
 weapon,sp/zombie_dp28
 weapon,sp/zombie_dp28_upgraded
 xmodel,weapon_rus_dp28_bipod_lmg
@@ -200,7 +201,6 @@ xmodel,viewmodel_dp28_up_remastered_2023
 xmodel,viewmodel_zombie_m1carbine_rifle_up_2023
 xanim,viewmodel_carbine_bigAmmo_reload_empty
 xanim,viewmodel_carbine_bigAmmo_reload
-localize,key
 weapon,sp/zombie_item_journal
 xmodel,weapon_richtofen_diary_closed
 xanim,viewmodel_anim_richtofen_diary_closed_pull_out
@@ -226,3 +226,6 @@ material,hud_arrow_left
 material,hud_arrow_right
 material,hud_arrow_up
 xmodel,char_usa_raider_gear_flametank
+material,ui_leaderboard
+menufile,ui/pc_joinchoosegamemode.menu
+localize,zombie

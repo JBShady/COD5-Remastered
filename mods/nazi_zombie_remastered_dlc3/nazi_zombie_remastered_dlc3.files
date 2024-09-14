@@ -43,9 +43,6 @@ images\dlc3_zombie_use_monkey.iwi
 images\gamefonts_pc.iwi
 images\grenadeicon.iwi
 images\hint_usable.iwi
-images\hud_arrow_left.iwi
-images\hud_arrow_right.iwi
-images\hud_arrow_up.iwi
 images\hud_beaker.iwi
 images\hud_fuse.iwi
 images\hud_fuse_wire.iwi
@@ -57,6 +54,7 @@ images\i_jbanana_richtofen_diary_c.iwi
 images\i_jbanana_richtofen_diary_n.iwi
 images\i_richtofen_diary_pencil_c.iwi
 images\i_richtofen_diary_pencil_n.iwi
+images\leaderboard.iwi
 images\line_alt.iwi
 images\line_bio.iwi
 images\makin_door_wood2_c.iwi
@@ -97,7 +95,6 @@ maps\_zombiemode_betty.gsc
 maps\_zombiemode_blockers_new.gsc
 maps\_zombiemode_bowie.gsc
 maps\_zombiemode_cymbal_monkey.gsc
-maps\_zombiemode_devgui.gsc
 maps\_zombiemode_dogs.gsc
 maps\_zombiemode_health_help.gsc
 maps\_zombiemode_molotov.gsc
