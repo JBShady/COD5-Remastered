@@ -56,7 +56,10 @@ main()
 		musicAlias("mx_eggs", 2);
 
 	declareMusicState("end_of_game");
-		musicAlias("mx_game_over", 0);
+		musicAlias("mx_game_over", 4);
+
+	declareMusicState("SILENT");
+
 
 	thread radio_init();
 
@@ -94,8 +97,7 @@ stop_radio_listener()
 		level waittill ("ktr");
 		level.stop_radio = true;
 		level notify("kzmb_next_song");
-		//iprintlnbold ("ran next song func in csc");
-		//register_clientflag_callback("scriptmover", level._ZOMBIE_RADIO_CLIENTFLAG, , true::next_song();
+
 		level waittill ("rrd");
 		level.stop_radio = false;
 		wait(0.5);
@@ -119,8 +121,8 @@ radio_advance()
 }
 
 
-radio_thread()
-{
+radio_thread(origin)
+{	
 	assert(isdefined(level.radio_id));
 	assert(isdefined(level.radio_songs));
 	assert(isdefined(level.radio_index));
@@ -129,20 +131,15 @@ radio_thread()
 	{
 		level.stop_radio = false;
 	}
-	println("Starting radio at "+self.origin);
 
 	for(;;)
 	{
 		level waittill("kzmb_next_song");
-		
-		playsound(0, "static", self.origin);
+
+		playsound(0, "static", origin);
 
 		if ( level.stop_radio == false)
 		{
-			println("client changing songs");
-
-//			playsound(0, "static", self.origin);
-
 			if(SoundPlaying(level.radio_id))
 			{
 				fade(level.radio_id, 1);
@@ -152,7 +149,7 @@ radio_thread()
 				wait(.5);
 			}
 
-			level.radio_id = playsound(0, level.radio_songs[level.radio_index], self.origin);
+			level.radio_id = playsound(0, level.radio_songs[level.radio_index], origin);
 		
 			level.radio_index += 1;
 			
@@ -175,6 +172,7 @@ radio_thread()
 
 radio_init()
 {
+	waitforclient(0);
 
 	level.radio_id = -1;
 	level.radio_index = 0;
@@ -193,19 +191,20 @@ radio_init()
 	add_song( "" ); //silence must be last
 
 	// kzmb, for all the latest killer hits
-
+/*
 	radios = getentarray(0, "kzmb","targetname");
-	
 	while (!isdefined(radios) || !radios.size)
 	{
+		iprintlnbold(radios.size);
 		wait(5); //make sure we wait around until targetname for this ent is sent over
 		radios = getentarray(0, "kzmb","targetname");
-	}
-
-	println("client found "+radios.size+" radios");
+	}*/
+	wait(5);
+	origin = (-191, 900.1, 37);
 	
-	array_thread(radios, ::radio_thread );
-	array_thread(radios, ::radio_advance );
-
+	level thread radio_thread(origin);
+	level thread radio_advance();
+	//array_thread(radios, ::radio_thread );
+	//array_thread(radios, ::radio_advance );
 	level thread stop_radio_listener();
 }
