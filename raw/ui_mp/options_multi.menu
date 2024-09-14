@@ -65,7 +65,7 @@
 		//CHOICE_DVARYESNO_VIS( 22, "@MPUI_PUNKBUSTER", cl_punkbuster, ;, when( dvarint( ui_multiplayer ) ) )
 
 
-		CHOICE_DVARFLOATLIST_VIS( 22, "@MENU_TEAM_INDICATOR", team_indicator, { "@MENU_FULL_TEAM_INDICATOR" 0 "@MENU_ABBREVIATED_TEAM_INDICATOR" 1 "@MENU_ICON_TEAM_INDICATOR" 2 }, ;, 1 )
+		CHOICE_DVARFLOATLIST_VIS( 22, "@MENU_TEAM_INDICATOR", team_indicator, { "@MENU_FULL_TEAM_INDICATOR" 0 "@MENU_ABBREVIATED_TEAM_INDICATOR" 1 "@REMASTERED_ICON_TEAM_INDICATOR" 2 }, ;, 1 )
 		//CHOICE_DVARYESNO_VIS( 24, "@MENU_ALLOW_DOWNLOAD", cl_allowdownload, ;,when( dvarint( ui_multiplayer ) ) )
 		//CHOICE_DVARFLOATLIST_VIS( 25, "@PLATFORM_TANK_CONTROLS", vehControlMode, { "@MENU_NEW" 1 "@MENU_CLASSIC" 0 }, ;, when( dvarint( ui_multiplayer ) ) )
 		CHOICE_DDVAR_VIS( 23, "@MENU_CLAN_TAG", clanName, when( !dvarint( ui_multiplayer ) && dvarBool( cl_ingame ) ) ) 

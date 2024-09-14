@@ -6,6 +6,24 @@
 
 #include "ui_mp/menustyle.inc"
 #include "ui/choices_setup_common.menu"
+
+
+#define CHOICE_BIND_VIS_FOCUS( itemIndex, textArg, cmdArg, actionArg, visArg, vis, onFocusArg, leaveFocusArg)\
+		CHOICE_CAPTION_VIS( itemIndex, textArg, visArg ) \
+		itemDef \
+		{ \
+			type			ITEM_TYPE_BIND \
+			dvar			cmdArg \
+			rect			CHOICE_ORIGIN( itemIndex ) (CHOICE_SIZE_X+120) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN \
+			textalign		ITEM_ALIGN_MIDDLE_LEFT \
+			textalignx		(CHOICE_SIZE_X+20)/*(-(CHOICE_TEXT_OFFSET_X))*/ \
+			textscale		CHOICE_TEXTSIZE \
+			textstyle		CHOICE_TEXTSTYLE \
+			style			WINDOW_STYLE_FILLED \
+			forecolor		CHOICE_TEXTCOLOR \
+			visible			visArg \
+			CHOICE_SCRIPTS_ALL( itemIndex, actionArg, show keyBindStatus; onFocusArg, hide keyBindStatus; leaveFocusArg ) \
+		}
 {
 	menuDef 
 	{
@@ -38,6 +56,7 @@
 		onClose
 		{
 			setLocalVarBool ui_hideBack 0;
+	        setLocalVarBool hint_screenshot 0;
 		}
 		onESC 
 		{ 
@@ -46,6 +65,10 @@
 
 		#include "ui_mp/leftside_controls.inc"
 		
+#define CLEAR_HINTS \
+        setLocalVarBool hint_screenshot 0;
+
+
 		CHOICE_SECTION_TITLE( 21, "@MENU_INTERACT_CAP" )
 
 		CHOICE_BIND( 22, "@MENU_USE", "+activate", ; )
@@ -56,13 +79,30 @@
 	#endif
 		
 		CHOICE_SEPARATOR( CHOICE_SEP_1 )
-		CHOICE_BIND( 24, "@MENU_SCREENSHOT", "screenshotjpeg", ; )
-		CHOICE_BIND( 25, "@REMASTERED_SCORE", "+scores", ; )
+		CHOICE_BIND_VIS_FOCUS( 24, "@MENU_SCREENSHOT", "screenshotjpeg", ;, 1, 1, setLocalVarBool hint_screenshot 1, CLEAR_HINTS )
+		CHOICE_BIND( 25, "@REMASTERED_SCOREBOARD", "+scores", ; )
 		CHOICE_BIND( 26, "@MENU_ACCEPT_INVITE", "acceptInvitation", ; )
 	//	CHOICE_BIND_VIS( 27, "@MENU_QUICK_SAVE", "savegame_lastcommit", ;, when( !dvarbool( ui_multiplayer ) ),!dvarbool( ui_multiplayer ) )
 
 		//CHOICE_BACK( "@MENU_BACK", close self )
 
 		CHOICE_KEYBINDHELP
+
+		itemDef 
+		{
+			name			hint_screenshot
+			text			"@REMASTERED_SCREENSHOT"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			340 -255 300 200 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.27
+			visible 		when( localVarBool( hint_screenshot ) )
+			mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
 	}
 }

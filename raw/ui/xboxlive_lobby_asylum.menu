@@ -92,7 +92,7 @@
 			setdvar ui_selectlobby "1";
 #endif
 			// popup for rank promotion
-			uiScript openMenuOnDvar "ui_lobbypopup" summary "popup_unlock";	
+			//uiScript openMenuOnDvar "ui_lobbypopup" summary "popup_unlock";	
 			//execnow "set ui_lobbypopup_text summary";
 			exec "set ui_lobbypopup none"; 
 						

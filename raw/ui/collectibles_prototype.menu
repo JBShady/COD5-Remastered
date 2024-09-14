@@ -4,7 +4,7 @@
 #define CHOICE_SIZE_Y			22
 
 #define CHOICE_X_START			30//0
-#define CHOICE_Y_START			55//used to be 65 but pushed up a bit for extra ach to fit
+#define CHOICE_Y_START			49//used to be 65 but pushed up a bit for extra ach to fit
 
 #define CHOICE_SEP_OFFSET_Y		-2
 #define CHOICE_SIDEITEM_SPACING	-310
@@ -54,13 +54,30 @@
 #define GAMEINFO_RECT				GAMEINFO_ORIGIN GAMEINFO_WIDTH GAMEINFO_HEIGHT
 
 #define COLLECTIBLES_TABLE		"mp/dlc_achievements.csv"
-//#define COLLECTIBLES_TABLE		"maps/collectiblesTable.csv"
 
+#define NUM_1_ROUND tableLookup( "mp/playerStatsTable.csv",	1, "nz_prototype_highestwave", 0 )
+#define NUM_2_ROUND tableLookup( COLLECTIBLES_TABLE,	1, "nz_prototype_highestwave_two", 0 )
+#define NUM_3_ROUND tableLookup( COLLECTIBLES_TABLE,	1, "nz_prototype_highestwave_three", 0 )
+#define NUM_4_ROUND tableLookup( COLLECTIBLES_TABLE,	1, "nz_prototype_highestwave_four", 0 )
 
+#define NUM_1_SCORE tableLookup( "mp/playerStatsTable.csv",	1, "nz_prototype_totalpoints", 0 )
+#define NUM_2_SCORE tableLookup( COLLECTIBLES_TABLE,	1, "nz_prototype_totalpoints_two", 0 )
+#define NUM_3_SCORE tableLookup( COLLECTIBLES_TABLE,	1, "nz_prototype_totalpoints_three", 0 )
+#define NUM_4_SCORE tableLookup( COLLECTIBLES_TABLE,	1, "nz_prototype_totalpoints_four", 0 )
 
+#define NUM_KILLS tableLookup( "mp/playerStatsTable.csv",	1, "zombie_kills", 0 )
+#define NUM_GIBS tableLookup( "mp/playerStatsTable.csv",	1, "zombie_gibs", 0 )
+#define NUM_HEADSHOTS tableLookup( "mp/playerStatsTable.csv",	1, "zombie_heashots", 0 )
+#define NUM_REVIVES tableLookup( "mp/playerStatsTable.csv",	1, "zombie_revives", 0 )
+#define NUM_DOWNS tableLookup( "mp/playerStatsTable.csv",	1, "zombie_downs", 0 )
+#define NUM_ROUNDS tableLookup( "mp/playerStatsTable.csv",	1, "zombie_rounds", 0 )
+#define NUM_POINTS tableLookup( "mp/playerStatsTable.csv",	1, "zombie_points", 0 )
+#define NUM_PERKS tableLookup( "mp/playerStatsTable.csv",	1, "zombie_perks_consumed", 0 )
+#define SECONDS_PLAYED stat(tableLookup( "mp/playerStatsTable.csv",	1, "nz_prototype_timeinwave", 0 ))
 
-//#define HAS_COLLECTIBLE(collectible) ( ( ( ( 1 << collectible ) ) != 0 ) )
-//#define NOT_HAVE_COLLECTIBLE(collectible) ( ( ( ( 1 << collectible ) ) == 0 ) )
+#define HOURS_PLAYED int(SECONDS_PLAYED/3600) 
+#define REMAINING_SECONDS (SECONDS_PLAYED - (HOURS_PLAYED * 3600)) 
+#define MINUTES_PLAYED int(REMAINING_SECONDS/60) 
 
 #define CHOICE_LOCKEDICON_VIS_SPECIAL( itemIndex, imageArg, visArg ) \
 		itemDef \
@@ -72,15 +89,13 @@
 			decoration \
 		}
 
-
 #define COLLECTIBLE_BUTTON( itemIndex, textArg, collectibleName, collectibleBit ) \
 	CHOICE_BUTTON_FOCUS_VIS_NOICON( itemIndex, textArg, ;, setdvar ui_selected_collectible collectibleName; setdvar ui_collectible_islocked 0;, ;, when( stat(collectibleBit) == 1 ) ) \
 	CHOICE_BUTTON_FOCUS_VIS_NOHI_NOICON( itemIndex, "", ;, setdvar ui_selected_collectible collectibleName; setdvar ui_collectible_islocked 1;, ;, when( stat(collectibleBit) != 1 ) ) \
 	CHOICE_DBUTTON_VIS( itemIndex, textArg, when( stat(collectibleBit) != 1 ) ) \
 	//CHOICE_LOCKEDICON_VIS_SPECIAL( itemIndex, "specialty_locked", when( stat(collectibleBit) != 1 ) )
+	
 {
-
-
 	menuDef
 	{
 		name			menu_collectibles
@@ -186,8 +201,712 @@
 			   visible			when( dvarstring("r_mode") == "1280x720" || dvarstring("r_mode") == "1600x900" || dvarstring("r_mode") == "1920x1080" || dvarstring("r_mode") == "2560x1440" || dvarstring("r_mode") == "3840x2160" ) // Line only shows up on proper HD widescreen resolutions
 
 		}
+		itemDef 
+		{
+			name			view_stats_button
+			text			"@REMASTERED_VIEW_STATS"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			215 -26 70 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			textaligny		18
+			visible			1
+			mouseEnter		{ play "mouse_over"; }
+			action 
+			{
+				play "mouse_click";
+				open "popup_tier";
+
+				//close self;
+			}	
+		}
+	}
+
+	//=========================================================
+	//======================  POPUP ======================
+	//=========================================================	
+	// main popup frame properties ----------------------------
+	#define ORIGIN_TIER_FRAME_X			46
+	#define ORIGIN_TIER_FRAME_Y			70
+	#define ORIGIN_TIER_FRAME 			ORIGIN_TIER_FRAME_X ORIGIN_TIER_FRAME_Y
+	
+	#define WIDTH_TIER_FRAME			540
+	#define HEIGHT_TIER_FRAME			338
+	#define SIZE_TIER_FRAME				WIDTH_TIER_FRAME HEIGHT_TIER_FRAME
+	#define RECT_TIER_FRAME				ORIGIN_TIER_FRAME SIZE_TIER_FRAME
+	
+	#define COLOR_TIER_FRAME			0.118 0.122 0.137 1//0.1 0.1 0.12 0.85 //0.05 0.1 0.15 0.85 //0.1 0.15 0.25 0.4
+	
+	#define BORDER_TIER_FRAME			WINDOW_BORDER_RAISED
+	#define BORDER_SIZE_TIER_FRAME		0
+	#define BORDER_COLOR_TIER_FRAME		0.35 0.35 0.37 1//0.4 0.4 0.425 1
+	
+	// list box properties -------------------------------------
+	#define PADDING						8
+	#define ORIGIN_LIST_BOX_X			(ORIGIN_TIER_FRAME_X+PADDING)
+	#define ORIGIN_LIST_BOX_Y			(ORIGIN_TIER_FRAME_Y+PADDING)
+	
+	#define WIDTH_LIST_BOX				((((WIDTH_TIER_FRAME+8)-PADDING*3)/2))
+	#define HEIGHT_LIST_BOX				((HEIGHT_TIER_FRAME+4)-PADDING*2)
+	
+	// info box properties -------------------------------------
+	#define ORIGIN_INFO_BOX_X			(ORIGIN_TIER_FRAME_X+((WIDTH_TIER_FRAME+4+PADDING)/2))
+	#define ORIGIN_INFO_BOX_Y			(ORIGIN_TIER_FRAME_Y+38)
+	
+	#define WIDTH_INFO_BOX				(((WIDTH_TIER_FRAME+4)-PADDING*3)/2)
+	#define HEIGHT_INFO_BOX				296
+
+	#define CENTER_LEADER_X -21.5
+	#define CENTER_LEADER_Y -155
+	#define	CENTER_LEADER_OFFSET 133
+	#define CENTER_LEADER_OFFSET_NUMS 84
+	#define TRUE_CENTER 21
+
+	#define	LEADER_LIST_FACTOR 17.86
+	#define	LEADER_LIST_LOWER 111.2
+
+	#include "ui_mp/popupstyle.inc"
+	#include "ui/choices_setup_popmenu.menu"
+
+	// to be macro menu
+	menuDef	{
+		name 			"popup_tier"
+		visible			0
+		fullscreen		0
+		rect			0 0 640 480 0 0
+		focusColor		COLOR_FOCUSED
+		style			WINDOW_STYLE_FILLED
+		popup
+		onESC { play "mouse_click"; close "popup_tier" }
+		onOpen { 
+			exec "set ui_hide_desc 1"; // useless?
+ 			focusFirst; } // useless?
+		onClose{
+			exec "set ui_hide_desc 0"; // useless?
+		}
+
+		itemDef 
+		{
+		       name                 ui_leaderboard
+				rect         -175 -187.5 350 375 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER		
+		       forecolor            1 1 1 1
+		       style                 WINDOW_STYLE_SHADER
+		       background      "ui_leaderboard" 
+		       decoration
+		       visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			 //  visible			when( dvarstring("r_mode") == "1280x720" || dvarstring("r_mode") == "1600x900" || dvarstring("r_mode") == "1920x1080" || dvarstring("r_mode") == "2560x1440" || dvarstring("r_mode") == "3840x2160" ) // Line only shows up on proper HD widescreen resolutions
+		}
+
+		// PLAYERS & #
+		itemDef 
+		{
+			name			ui_leaderboard_players
+			text			"@REMASTERED_PLAYERS"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) CENTER_LEADER_Y 40 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_pone
+			text			"@REMASTERED_ONE"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + (-1 + LEADER_LIST_FACTOR*1)) 40 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef
+		{
+			name			ui_leaderboard_ptwo
+			text			"@REMASTERED_TWO"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + (-1 + LEADER_LIST_FACTOR*2)) 40 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef
+		{
+			name			ui_leaderboard_pthree
+			text			"@REMASTERED_THREE"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + (-1 + LEADER_LIST_FACTOR*3)) 40 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef
+		{
+			name			ui_leaderboard_pfour
+			text			"@REMASTERED_FOUR"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + (-1 + LEADER_LIST_FACTOR*4)) 40 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+
+		// HIGH ROUND 1-4
+		itemDef 
+		{
+			name			ui_leaderboard_round
+			text			"@REMASTERED_ROUNDS"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - TRUE_CENTER) CENTER_LEADER_Y 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_round_stat
+			exp				text( stat(NUM_1_ROUND) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		COLOR_FOCUSED
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - TRUE_CENTER) (CENTER_LEADER_Y + (-1 + LEADER_LIST_FACTOR*1)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_round_stat_two
+			exp				text( stat(NUM_2_ROUND) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		COLOR_FOCUSED
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - TRUE_CENTER) (CENTER_LEADER_Y + (-1 + LEADER_LIST_FACTOR*2)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_round_stat_three
+			exp				text( stat(NUM_3_ROUND) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		COLOR_FOCUSED
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - TRUE_CENTER) (CENTER_LEADER_Y + (-1 + LEADER_LIST_FACTOR*3)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_round_stat_four
+			exp				text( stat(NUM_4_ROUND) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		COLOR_FOCUSED
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - TRUE_CENTER) (CENTER_LEADER_Y + (-1 + LEADER_LIST_FACTOR*4)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+
+		// HIGH SCORE 1-4
+		itemDef 
+		{
+			name			ui_leaderboard_score
+			text			"@REMASTERED_SCORE"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET) CENTER_LEADER_Y 40 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_score_stat
+			exp				text( stat(NUM_1_SCORE) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		COLOR_FOCUSED
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (-1 + LEADER_LIST_FACTOR*1)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_score_stat_two
+			exp				text( stat(NUM_2_SCORE) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		COLOR_FOCUSED
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (-1 + LEADER_LIST_FACTOR*2)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_score_stat_three
+			exp				text( stat(NUM_3_SCORE) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		COLOR_FOCUSED
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (-1 + LEADER_LIST_FACTOR*3)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_score_stat_four
+			exp				text( stat(NUM_4_SCORE) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		COLOR_FOCUSED
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (-1 + LEADER_LIST_FACTOR*4)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+
+		// STATS
+		itemDef 
+		{
+			name			ui_leaderboard_stats
+			text			"@REMASTERED_MAP_STATS"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + LEADER_LIST_LOWER) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_kills
+			text			"@REMASTERED_KILLS"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*1)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_kills_stat
+			exp				text( stat(NUM_KILLS) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*1)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_gibs
+			text			"@REMASTERED_GIBS"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*2)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_gibs_stat
+			exp				text( stat(NUM_GIBS) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*2)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_headshots
+			text			"@REMASTERED_HEADSHOTS"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*3)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_headshots_stat
+			exp				text( stat(NUM_HEADSHOTS) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*3)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_revives
+			text			"@REMASTERED_REVIVES"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*4)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_revives_stat
+			exp				text( stat(NUM_REVIVES) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*4)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_downs
+			text			"@REMASTERED_DOWNS"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*5)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_downs_stat
+			exp				text( stat(NUM_DOWNS) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*5)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_rounds
+			text			"@REMASTERED_ROUNDS_SURVIVED"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*6)) 100 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_rounds_stat
+			exp				text( stat(NUM_ROUNDS) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*6)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_points
+			text			"@REMASTERED_POINTS_EARNED"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*7)) 100 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_points_stat
+			exp				text( stat(NUM_POINTS) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*7)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_perks
+			text			"@REMASTERED_MYSTERY_BOX"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X - CENTER_LEADER_OFFSET) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*8)) 120 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_leaderboard_perks_stat
+			exp				text( stat(NUM_PERKS) )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*8)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_timeplayed
+			exp text(locString("@MENU_TIME_PLAYED") + ":")
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + 12/*- CENTER_LEADER_OFFSET*/) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*12)) 120 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			ui_timeplayed_stat
+			exp				text( int(HOURS_PLAYED) + "h" + int(MINUTES_PLAYED) + "m" )
+			type			1
+			style			WINDOW_STYLE_FILLED
+			forecolor		0.65 0.7 0.7 1
+			textstyle		ITEM_TEXTSTYLE_SHADOWEDMORE
+			rect			(CENTER_LEADER_X + CENTER_LEADER_OFFSET_NUMS) (CENTER_LEADER_Y + (LEADER_LIST_LOWER + LEADER_LIST_FACTOR*12)) 90 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		TEXTSIZE_SMALL
+			visible 		1
+			//mouseEnter		{ play "mouse_over"; }
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			back
+			text			"@MENU_BACK"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			-250 -26 40 20 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			textaligny		18
+			visible			1
+			mouseEnter		{ play "mouse_over"; }
+			action 
+			{
+				play "mouse_click";
+				close self;
+			}	
+		}
 	}
 }
 
 
-// WIDTH OF BUTTONS INCREASE so that you can select their far right text

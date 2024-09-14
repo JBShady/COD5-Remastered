@@ -106,8 +106,8 @@
 
 		CHOICE_SEPARATOR( CHOICE_SEP_2 )
 
-		CHOICE_DVARFLOATLIST_FOCUS_VIS( 32, "@REMASTERED_CONTROLLER_SUPPORT", cg_drawXboxHUD, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, exec "unbind f"; exec "exec default_controller.cfg"; setdvar gpad_flip_triggers 0, setLocalVarBool controller 1, CLEAR_HINTS , when ( !dvarint(cg_drawXboxHUD) ) )
-		CHOICE_DVARFLOATLIST_FOCUS_VIS( 32, "@REMASTERED_CONTROLLER_SUPPORT", cg_drawXboxHUD, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, exec "bind f +activate"; exec "exec default_controller_unbind.cfg", setLocalVarBool controller 1, CLEAR_HINTS , when ( dvarint(cg_drawXboxHUD) ) )
+		CHOICE_DVARFLOATLIST_FOCUS_VIS( 32, "@REMASTERED_CONTROLLER_SUPPORT", cg_drawDpadHUD, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, exec "unbind f"; exec "exec default_controller.cfg"; setdvar gpad_flip_triggers 0, setLocalVarBool controller 1, CLEAR_HINTS , when ( !dvarint(cg_drawDpadHUD) ) )
+		CHOICE_DVARFLOATLIST_FOCUS_VIS( 32, "@REMASTERED_CONTROLLER_SUPPORT", cg_drawDpadHUD, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, exec "bind f +activate"; exec "exec default_controller_unbind.cfg", setLocalVarBool controller 1, CLEAR_HINTS , when ( dvarint(cg_drawDpadHUD) ) )
 
 		//CHOICE_DVARFLOATLIST_VIS( 31, "@REMASTERED_CONTROLLER_SUPPORT", controller_dummy, { "@REMASTERED_CONTROLLER_ENABLE" 0 "@REMASTERED_CONTROLLER_EXECUTED" 1 }, setLocalVarBool controller_enabled 1; exec "exec default_controller.cfg" , when ( !localVarBool( controller_enabled) ) )
 
@@ -174,7 +174,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.27
-			visible 		when( !dvarint( cg_drawXboxHUD ) && localVarBool( controller ) )
+			visible 		when( !dvarint( cg_drawDpadHUD ) && localVarBool( controller ) )
 			mouseEnter		{ play "mouse_over"; }
 			decoration
 			autowrapped
@@ -190,7 +190,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.27
-			visible 		when( dvarint( cg_drawXboxHUD ) && localVarBool(controller ) )
+			visible 		when( dvarint( cg_drawDpadHUD ) && localVarBool(controller ) )
 			mouseEnter		{ play "mouse_over"; }
 			decoration
 			autowrapped

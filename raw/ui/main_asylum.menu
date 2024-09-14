@@ -370,7 +370,7 @@
 #else // #ifdef CONSOLE
 			execnow "ui_cinematic front_end_sp 3"
 			setdvar ui_showOnlineOfflineButton "1";
-			execondvarintvalue dvar_init_dummy 0 "exec init_remastered"; 
+			execondvarintvalue dvar_init 0 "exec init_remastered"; 
 			
 			//savegameshow resume;
 			//savegamehide newgame;

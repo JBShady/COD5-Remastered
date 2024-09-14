@@ -82,9 +82,9 @@
 	menuDef
 	{
     	name			"MantleHint"
-    	rect			0 126 40 40 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER // 0 115 40 40
+    	rect			0 155 40 40 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_CENTER // 0 115 40 40 // originally 0 126
 		fullScreen		0
-		visible when ( !SUBTITLES_ACTIVE && CHAPLIN_CHEAT_OFF );
+		visible 1;
 
 		itemDef
 		{
@@ -93,9 +93,57 @@
 			textscale		TEXTSIZE_SMALL
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			ownerdraw		CG_MANTLE_HINT
-			visible			1
+			visible			0
 			decoration
 		}
+
+		#define TEXTSIZE_SPEC TEXTSIZE_SMALL
+
+		itemDef
+		{
+			name			"In_3rdPersonPC"
+			type			ITEM_TYPE_TEXT
+			textscale		TEXTSIZE_SPEC
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalign		ITEM_ALIGN_CENTER
+			exp 			text ( /*"- " + */locString( "@REMASTERED_HINT_PRESS" ) + KeyBinding("+activate") +  locString( "@REMASTERED_HINT_ENTER_FIRST" ) );
+			visible			when( dvarInt( "playerSpectating" ) == 1 && dvarBool( cl_paused ) == 0 && dvarBool(cg_thirdPerson) == 1 && dvarInt( "cg_drawDpadHUD" ) == 0 )
+			decoration
+		}
+		itemDef
+		{
+			name			"In_1stPersonPC"
+			type			ITEM_TYPE_TEXT
+			textscale		TEXTSIZE_SPEC
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalign		ITEM_ALIGN_CENTER
+			exp 			text ( /*"- " + */locString( "@REMASTERED_HINT_PRESS" ) + KeyBinding("+activate") +  locString( "@REMASTERED_HINT_ENTER_THIRD" ) );
+			visible			when( dvarInt( "playerSpectating" ) == 1  && dvarBool( cl_paused ) == 0 && dvarBool(cg_thirdPerson) == 0 && dvarInt( "cg_drawDpadHUD" ) == 0 )
+			decoration
+		}
+		itemDef
+		{
+			name			"In_3rdPersonGP"
+			type			ITEM_TYPE_TEXT
+			textscale		TEXTSIZE_SPEC
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalign		ITEM_ALIGN_CENTER
+			exp 			text ( /*"- " + */locString( "@REMASTERED_HINT_PRESS" ) + locString( "@KEY_HINT_GP" ) +  locString( "@REMASTERED_HINT_ENTER_FIRST" ) );
+			visible			when( dvarInt( "playerSpectating" ) == 1  && dvarBool( cl_paused ) == 0 && dvarBool(cg_thirdPerson) == 1 && dvarInt( "cg_drawDpadHUD" ) == 1 )
+			decoration
+		}
+		itemDef
+		{
+			name			"In_1stPersonGP"
+			type			ITEM_TYPE_TEXT
+			textscale		TEXTSIZE_SPEC
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalign		ITEM_ALIGN_CENTER
+			exp 			text ( /*"- " + */locString( "@REMASTERED_HINT_PRESS" ) + locString( "@KEY_HINT_GP" ) +  locString( "@REMASTERED_HINT_ENTER_THIRD" ) );
+			visible			when( dvarInt( "playerSpectating" ) == 1  && dvarBool( cl_paused ) == 0 && dvarBool(cg_thirdPerson) == 0 && dvarInt( "cg_drawDpadHUD" ) == 1 )
+			decoration
+		}
+
 	}
 
 	// Cursor hints
@@ -498,6 +546,7 @@ menuDef
 			forecolor		1 1 1 1
 			//background	"white"
 			ownerdraw		CG_PLAYER_WEAPON_LOW_AMMO_WARNING
+			//exp 			text("^3" + KeyBinding("+reload") + "^7");
 			visible	when ( dvarInt( g_gameskill ) == 0 || dvarInt( g_gameskill ) == 1 || dvarstring( mapname ) == LEVEL_TRAINING );
 			decoration
 		}
@@ -956,108 +1005,9 @@ menuDef
 	}
 */	
 #ifdef CONSOLE
-	#define	DPAD_BASE_SIZE		28
-	#define	DPAD_BASE_SIZE_HALF	14
-	#define DPAD_ICON_Y			-1//3
-	#define DPAD_LABEL_Y		-42//44
-	#define DPAD_ICON_SPACING	30
-	menuDef
-	{
-		name			"DPad"
- 	   	rect			0 DPAD_LABEL_Y DPAD_BASE_SIZE DPAD_BASE_SIZE HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_BOTTOM
- 	   	fullScreen		0
- 	   	visible			1
- 	   	hiddenDuringScope
-		hiddenDuringFlashbang
-		visible when  ( !SUBTITLES_ACTIVE && CHAPLIN_CHEAT_OFF && dvarBool( actionSlotsHide ) == 0 && dvarBool( hud_missionFailed ) == 0 && dvarBool( compass ) == 1 && (dvarString( createfx ) != "on") && !ui_active() );
 
-		itemDef
-        {
-			ownerdraw		CG_PLAYER_ACTIONSLOT_BACK_3
-			background		"hud_dpad"
-            rect			(-DPAD_BASE_SIZE_HALF - DPAD_ICON_SPACING) DPAD_BASE_SIZE_HALF DPAD_BASE_SIZE DPAD_BASE_SIZE
-            forecolor		1 1 1 DPAD_ICON_ALPHA
-			visible 		1
-			decoration
-        }
-		itemDef
-        {
-			ownerdraw		CG_PLAYER_ACTIONSLOT_ARROW_3
-			#ifdef PS3
-			background		"hud_arrow_left"
-            rect			-DPAD_BASE_SIZE_HALF DPAD_BASE_SIZE_HALF (DPAD_BASE_SIZE - 4) (DPAD_BASE_SIZE - 4)
-            #else
-			background		"hud_arrow_left"
-            rect			-DPAD_BASE_SIZE_HALF DPAD_BASE_SIZE_HALF DPAD_BASE_SIZE DPAD_BASE_SIZE
-            #endif
-            forecolor		1 1 1 DPAD_ICON_ALPHA
-			visible 		1
-			decoration
-        }
-		itemDef // Left
-        {
-            name			"slot3"
-            rect			(-DPAD_BASE_SIZE_HALF - DPAD_ICON_SPACING) DPAD_BASE_SIZE_HALF DPAD_BASE_SIZE DPAD_BASE_SIZE
-			ownerdraw		CG_PLAYER_ACTIONSLOT_3
-			forecolor		1 1 1 DPAD_ICON_ALPHA
-			visible			1 
-			decoration
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
-			textalign		ITEM_ALIGN_LEFT
-			textscale		TEXTSIZE_SMALL
-			textfont		UI_FONT_DEFAULT
-        }
+// n/a
 
-		itemDef
-        {
-			ownerdraw		CG_PLAYER_ACTIONSLOT_BACK_4
-			background		"hud_dpad"
-            rect			(-DPAD_BASE_SIZE_HALF + DPAD_ICON_SPACING) DPAD_BASE_SIZE_HALF DPAD_BASE_SIZE DPAD_BASE_SIZE
-            forecolor		1 1 1 DPAD_ICON_ALPHA
-			visible 		1
-			decoration
-        }
-		itemDef
-        {
-			ownerdraw		CG_PLAYER_ACTIONSLOT_ARROW_4
-			#ifdef PS3
-			background		"hud_arrow_right"
-            rect			-DPAD_BASE_SIZE_HALF DPAD_BASE_SIZE_HALF (DPAD_BASE_SIZE - 4) (DPAD_BASE_SIZE - 4)
-            #else
-			background		"hud_arrow_right"
-            rect			-DPAD_BASE_SIZE_HALF DPAD_BASE_SIZE_HALF DPAD_BASE_SIZE DPAD_BASE_SIZE
-            #endif
-            forecolor		1 1 1 DPAD_ICON_ALPHA
-			visible 		1
-			decoration
-        }
-		itemDef // Right
-        {
-            name			"slot4"
-            rect			(-DPAD_BASE_SIZE_HALF + DPAD_ICON_SPACING) DPAD_BASE_SIZE_HALF DPAD_BASE_SIZE DPAD_BASE_SIZE
-			ownerdraw		CG_PLAYER_ACTIONSLOT_4
-			forecolor		1 1 1 DPAD_ICON_ALPHA
-			visible			1
-			decoration
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
-			textalign		ITEM_ALIGN_LEFT
-			textscale		TEXTSIZE_SMALL
-			textfont		UI_FONT_DEFAULT
-        }
-
-		itemDef
-        {
-			ownerdraw		CG_PLAYER_ACTIONSLOT_DPAD
-			background		"hud_dpad"
-            name			"pad"
-            rect			-DPAD_BASE_SIZE_HALF DPAD_BASE_SIZE_HALF DPAD_BASE_SIZE DPAD_BASE_SIZE
-            forecolor		1 1 1 DPAD_ICON_ALPHA
-			visible			1
-			decoration
-        }
-
-		
-    }
 #else // #ifdef PC
 
 	#define	BOTTOM_RECT_X 0
@@ -1075,8 +1025,38 @@ menuDef
 		exp				rect Y( (BOTTOM_RECT_Y-42) - (ONLINEGAME * ONLINEGAME_OFFSET) );
  	   	fullScreen		0
 		visible			when( !inkillcam() /*&& !flashbanged()*/ && !ui_active() && !scoped() && (dvarString( createfx ) != "on") && dvarint( ui_hud_hardcore ) == 0 );
-
-		itemDef // Up
+ 	   
+ 	   	// Up
+		itemDef // XBOX logo
+        {
+			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND 
+			background		"hud_dpad"
+			rect			-DPAD_BASE_SIZE_HALF DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
+            forecolor		1 1 1 DPAD_ICON_ALPHA
+			visible 		when( /*ActionSlotUsable( 1 ) &&*/ dvarInt( "cg_drawDpadHUD" ) == 1 && dvarInt( "cg_drawDpadLogos" ) == 1 && dvarInt( "miniscoreboardhide" ) != 1 ) // unsure if i want this to be usable
+			decoration
+        }
+		itemDef // XBOX arrow
+		{
+			name			"xbox_up"
+			rect			-12 -1 24 24
+			forecolor		1 1 1 DPAD_ICON_ALPHA
+			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND // this bit is weird
+			background		"hud_arrow_up"
+			visible 	when( ActionSlotUsable( 1 ) && dvarInt( "cg_drawDpadHUD" ) == 1 && dvarInt( "cg_drawDpadLogos" ) == 1  )
+			decoration
+		}
+		itemDef // XBOX arrow without logo
+		{
+			name			"xbox_up"
+			rect			-12 -6 24 24
+			forecolor		1 1 1 DPAD_ICON_ALPHA
+			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND // this bit is weird
+			background		"hud_arrow_up"
+			visible 	when( ActionSlotUsable( 1 ) && dvarInt( "cg_drawDpadHUD" ) == 1 && dvarInt( "cg_drawDpadLogos" ) != 1 )
+			decoration
+		}
+		itemDef // Image for both up
         {
 			name			"slot1"
 			rect			-DPAD_BASE_SIZE_HALF DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
@@ -1089,8 +1069,7 @@ menuDef
 			textscale		TEXTSIZE_SMALL
 			textfont		UI_FONT_OBJECTIVE
         }
-
-		itemDef 
+		itemDef // PC text up
 		{
 			rect		0 DPAD_LABEL_Y 1 1
 			exp text	( "[" + KeyBinding( "+actionslot 1" ) + "]" );
@@ -1100,98 +1079,97 @@ menuDef
 			textscale	0.25
 			textalign	ITEM_ALIGN_CENTER
 			textstyle	ITEM_TEXTSTYLE_SHADOWED
-			visible 	when( ActionSlotUsable( 1 ) && dvarInt( "cg_drawXboxHUD" ) != 1 )
+			visible 	when( ActionSlotUsable( 1 ) && dvarInt( "cg_drawDpadHUD" ) != 1 )
 			decoration 
 		}
-		itemDef
-		{
-			name			"xbox_up"
-			rect			-12 -6 24 24
-			forecolor		1 1 1 0.65
-			ownerdraw		CG_PLAYER_ACTIONSLOT_DPAD // this bit is weird
-			background		"hud_arrow_up"
-			visible 	when( ActionSlotUsable( 1 ) && dvarInt( "cg_drawXboxHUD" ) == 1 )
-			decoration
-		}
 
-		itemDef // Left
+        // Left
+		itemDef // PC image
         {
             name			"slot3"
             rect			(-DPAD_ICON_SPACING - DPAD_BASE_SIZE) DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
 			ownerdraw		CG_PLAYER_ACTIONSLOT_3
 			forecolor		1 1 1 HUD_ALPHA
-			visible 		when( dvarInt( "cg_drawXboxHUD" ) != 1 )
+			visible 		when( dvarInt( "cg_drawDpadHUD" ) != 1 )
 			decoration
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textalign		ITEM_ALIGN_LEFT
 			textscale		TEXTSIZE_SMALL
 			textfont		UI_FONT_DEFAULT
         }
-		itemDef // Left
-        {
-            name			"slot3_xbox"
-            rect			(-DPAD_ICON_SPACING - DPAD_BASE_SIZE + 37) DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
-			ownerdraw		CG_PLAYER_ACTIONSLOT_3
-			forecolor		1 1 1 HUD_ALPHA
-			visible 		when( dvarInt( "cg_drawXboxHUD" ) == 1 )
-			decoration
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
-			textalign		ITEM_ALIGN_LEFT
-			textscale		TEXTSIZE_SMALL
-			textfont		UI_FONT_DEFAULT
-        }
-		itemDef 
-		{
-			rect		(-DPAD_ICON_SPACING - DPAD_BASE_SIZE_HALF) DPAD_LABEL_Y 1 1
+		itemDef // PC text
+		{	rect		(-DPAD_ICON_SPACING - DPAD_BASE_SIZE_HALF) DPAD_LABEL_Y 1 1
 			exp text	( "[" + KeyBinding( "+actionslot 3" ) + "]" );
 			forecolor	1 1 1 0
 			exp forecolor A	( HUD_ALPHA * HudFade( "dpad" ) )
 			textfont	UI_FONT_OBJECTIVE
 			textscale	0.25
 			textalign	ITEM_ALIGN_CENTER
+		
 			textstyle	ITEM_TEXTSTYLE_SHADOWED
-			visible 	when( ActionSlotUsable( 3 ) && dvarInt( "cg_drawXboxHUD" ) != 1 )
+			visible 	when( ActionSlotUsable( 3 ) && dvarInt( "cg_drawDpadHUD" ) != 1 )
 			decoration 
 		}
-		itemDef
+
+		// Left
+		itemDef // XBOX logo
+        {
+			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND
+			background		"hud_dpad"
+            rect			(-DPAD_ICON_SPACING - DPAD_BASE_SIZE + 41) DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
+            forecolor		1 1 1 DPAD_ICON_ALPHA
+			visible 		when( dvarInt( "cg_drawDpadHUD" ) == 1 && dvarInt( "cg_drawDpadLogos" ) == 1 && dvarInt( "miniscoreboardhide" ) != 1 )
+			decoration
+        }
+		itemDef // XBOX arrow
 		{
 			name			"xbox_left"
-			rect			(-DPAD_ICON_SPACING - DPAD_BASE_SIZE_HALF + 13) DPAD_ICON_Y 24 24
-			forecolor		1 1 1 0.65
-			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND // this bit is weird
+			rect			(-DPAD_ICON_SPACING - DPAD_BASE_SIZE_HALF + 27) (DPAD_ICON_Y + 2.2) 24 24
+			forecolor		1 1 1 DPAD_ICON_ALPHA
+			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND
 			background		"hud_arrow_left"
-			visible 	when( ActionSlotUsable( 3 ) && dvarInt( "cg_drawXboxHUD" ) == 1 )
+			visible 	when( /*ActionSlotUsable( 3 ) &&*/ dvarInt( "cg_drawDpadHUD" ) == 1 && dvarInt( "cg_drawDpadLogos" ) == 1 && dvarInt( "miniscoreboardhide" ) != 1 )
 			decoration
 		}
+		itemDef // XBOX arrow with no logo
+		{
+			name			"xbox_left"
+			rect			(-DPAD_ICON_SPACING - DPAD_BASE_SIZE_HALF + 17) (DPAD_ICON_Y + 2.2) 24 24
+			forecolor		1 1 1 DPAD_ICON_ALPHA
+			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND 
+			background		"hud_arrow_left"
+			visible 	when( ActionSlotUsable( 3 ) && dvarInt( "cg_drawDpadHUD" ) == 1 && dvarInt( "cg_drawDpadLogos" ) != 1 )
+			decoration
+		}
+		itemDef // XBOX image
+        {
+            name			"slot3_xbox"
+            rect			(-DPAD_ICON_SPACING - DPAD_BASE_SIZE + 41) DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
+			ownerdraw		CG_PLAYER_ACTIONSLOT_3
+			forecolor		1 1 1 DPAD_ICON_ALPHA
+			visible 		when( dvarInt( "cg_drawDpadHUD" ) == 1 )
+			decoration
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			textfont		UI_FONT_DEFAULT
+        }
 
-		itemDef // Right
+		// Right
+		itemDef // PC image
         {
             name			"slot4"
             rect			DPAD_ICON_SPACING DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
 			ownerdraw		CG_PLAYER_ACTIONSLOT_4
 			forecolor		1 1 1 HUD_ALPHA
-			visible 		when( dvarInt( "cg_drawXboxHUD" ) != 1 )
+			visible 		when( dvarInt( "cg_drawDpadHUD" ) != 1 )
 			decoration
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textalign		ITEM_ALIGN_LEFT
 			textscale		TEXTSIZE_SMALL
 			textfont		UI_FONT_DEFAULT
         }
-		itemDef // Right
-        {
-            name			"slot4_xbox"
-            rect			(DPAD_ICON_SPACING - 41) DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
-			ownerdraw		CG_PLAYER_ACTIONSLOT_4
-			forecolor		1 1 1 HUD_ALPHA
-			visible 		when( dvarInt( "cg_drawXboxHUD" ) == 1 )
-			decoration
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
-			textalign		ITEM_ALIGN_LEFT
-			textscale		TEXTSIZE_SMALL
-			textfont		UI_FONT_DEFAULT
-        }
-
-		itemDef 
+		itemDef // PC text 
 		{
 			rect		(DPAD_ICON_SPACING + DPAD_BASE_SIZE_HALF) DPAD_LABEL_Y 1 1
 			exp text	( "[" + KeyBinding( "+actionslot 4" ) + "]" );
@@ -1201,19 +1179,53 @@ menuDef
 			textscale	0.25
 			textalign	ITEM_ALIGN_CENTER
 			textstyle	ITEM_TEXTSTYLE_SHADOWED
-			visible 	when( ActionSlotUsable( 4 ) && dvarInt( "cg_drawXboxHUD" ) != 1 )
+			visible 	when( ActionSlotUsable( 4 ) && dvarInt( "cg_drawDpadHUD" ) != 1 )
 			decoration 
 		}
-		itemDef
+
+        // Right
+		itemDef // XBOX logo
+        {
+			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND
+			background		"hud_dpad"
+            rect			(DPAD_ICON_SPACING - 41) DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
+            forecolor		1 1 1 DPAD_ICON_ALPHA
+			visible 		when( dvarInt( "cg_drawDpadHUD" ) == 1 && dvarInt( "cg_drawDpadLogos" ) == 1 && dvarInt( "miniscoreboardhide" ) != 1 )
+			decoration
+        }
+		itemDef // XBOX arrow
 		{
 			name			"xbox_right"
-			rect			(DPAD_ICON_SPACING + DPAD_BASE_SIZE_HALF - 38) DPAD_ICON_Y  24 24
-			forecolor		1 1 1 0.65
-			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND // this bit is weird
+			rect			(DPAD_ICON_SPACING + DPAD_BASE_SIZE_HALF - 51) (DPAD_ICON_Y + 2.2)  24 24
+			forecolor		1 1 1 DPAD_ICON_ALPHA
+			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND 
 			background		"hud_arrow_right"
-			visible 	when( ActionSlotUsable( 4 ) && dvarInt( "cg_drawXboxHUD" ) == 1 )
+			visible 	when( /*ActionSlotUsable( 4 ) &&*/ dvarInt( "cg_drawDpadHUD" ) == 1 && dvarInt( "cg_drawDpadLogos" ) == 1 && dvarInt( "miniscoreboardhide" ) != 1 )
 			decoration
 		}
+		itemDef // XBOX arrow with no logo
+		{
+			name			"xbox_right"
+			rect			(DPAD_ICON_SPACING + DPAD_BASE_SIZE_HALF - 38) (DPAD_ICON_Y + 2.2)  24 24
+			forecolor		1 1 1 DPAD_ICON_ALPHA
+			ownerdraw		CG_PLAYER_WEAPON_BACKGROUND 
+			background		"hud_arrow_right"
+			visible 	when( ActionSlotUsable( 4 ) && dvarInt( "cg_drawDpadHUD" ) == 1 && dvarInt( "cg_drawDpadLogos" ) != 1 )
+			decoration
+		}
+		itemDef // XBOX image
+        {
+            name			"slot4_xbox"
+            rect			(DPAD_ICON_SPACING - 41) DPAD_ICON_Y DPAD_BASE_SIZE DPAD_BASE_SIZE
+			ownerdraw		CG_PLAYER_ACTIONSLOT_4
+			forecolor		1 1 1 DPAD_ICON_ALPHA
+			visible 		when( dvarInt( "cg_drawDpadHUD" ) == 1 )
+			decoration
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalign		ITEM_ALIGN_LEFT
+			textscale		TEXTSIZE_SMALL
+			textfont		UI_FONT_DEFAULT
+        }
     }
 #endif
 

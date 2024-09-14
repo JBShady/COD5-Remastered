@@ -116,8 +116,8 @@
 
 		CHOICE_SEPARATOR( CHOICE_SEP_2 )
 
-		CHOICE_DVARFLOATLIST_FOCUS_VIS( 33, "@REMASTERED_CONTROLLER_SUPPORT", cg_drawXboxHUD, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, exec "unbind f"; exec "exec default_controller.cfg"; setdvar gpad_flip_triggers 0, setLocalVarBool controller 1, CLEAR_HINTS , when ( !dvarint(cg_drawXboxHUD) ) )
-		CHOICE_DVARFLOATLIST_FOCUS_VIS( 33, "@REMASTERED_CONTROLLER_SUPPORT", cg_drawXboxHUD, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, exec "bind f +activate"; exec "exec default_controller_unbind.cfg", setLocalVarBool controller 1, CLEAR_HINTS , when ( dvarint(cg_drawXboxHUD) ) )
+		CHOICE_DVARFLOATLIST_FOCUS_VIS( 33, "@REMASTERED_CONTROLLER_SUPPORT", cg_drawDpadHUD, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, exec "unbind f"; exec "exec default_controller.cfg"; setdvar gpad_flip_triggers 0, setLocalVarBool controller 1, CLEAR_HINTS , when ( !dvarint(cg_drawDpadHUD) ) )
+		CHOICE_DVARFLOATLIST_FOCUS_VIS( 33, "@REMASTERED_CONTROLLER_SUPPORT", cg_drawDpadHUD, { "@REMASTERED_DISABLED" 0 "@REMASTERED_ENABLED" 1 }, exec "bind f +activate"; exec "exec default_controller_unbind.cfg", setLocalVarBool controller 1, CLEAR_HINTS , when ( dvarint(cg_drawDpadHUD) ) )
 
 		//CHOICE_DVARFLOATLIST_VIS( 26, "@MENU_LANGUAGE", ui_language, { "@MENU_ENGLISH" 0 "@MENU_FRENCH" 1 "@MENU_GERMAN" 2 "@MENU_ITALIAN" 3 "@MENU_SPANISH" 4 "@MENU_BRITISH" 5 "@MENU_RUSSIAN" 6 "@MENU_POLISH" 7 "@MENU_KOREAN" 8 "@MENU_TAIWANESE" 9 "@MENU_JAPANESE" 10 "@MENU_CHINESE" 11 "@MENU_THAI" 12 }, uiScript verifyLanguage, when( dvarint( developer ) ) )
 		//CHOICE_APPLY_VIS( "@MENU_APPLY_LANGUAGE_CHANGE", open language_restart_popmenu, when ( dvarint( ui_languageChanged ) ) )		
@@ -198,7 +198,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.27
-			visible 		when( !dvarint( cg_drawXboxHUD ) && localVarBool( controller ) )
+			visible 		when( !dvarint( cg_drawDpadHUD ) && localVarBool( controller ) )
 			mouseEnter		{ play "mouse_over"; }
 			decoration
 			autowrapped
@@ -214,7 +214,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.27
-			visible 		when( dvarint( cg_drawXboxHUD ) && localVarBool(controller ) )
+			visible 		when( dvarint( cg_drawDpadHUD ) && localVarBool(controller ) )
 			mouseEnter		{ play "mouse_over"; }
 			decoration
 			autowrapped
