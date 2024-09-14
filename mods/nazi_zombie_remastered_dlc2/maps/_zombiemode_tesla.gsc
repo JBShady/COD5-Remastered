@@ -97,7 +97,7 @@ tesla_killstreak_sound_egg()
 {
 	self endon( "disconnect" );
 
-	if(randomintrange(0,4) == 0 ) // 1/4 of time
+	if(randomintrange(0,5) == 0 ) // 1/5 of time
 	{
 		wait(2);
 		index = maps\_zombiemode_weapons::get_player_index( self );
