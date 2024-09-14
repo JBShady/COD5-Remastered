@@ -40,10 +40,9 @@ zombie_radio_play()
 
 		attacker achievement_notify( "DLC_ZOMBIE_RADIO" );
 
-		//println("changing radio stations");
 		if(level.eggs != 1)
 		{
-			SetClientSysState("levelNotify","kzmb_next_song");			
+			SetClientSysState("levelNotify","kzmb_next_song" );			
 		}
 
 		wait(1.0);
@@ -72,7 +71,6 @@ stop_the_radio()
 				}
 				level clientNotify ("rrd"); //Resume the radio
 				//iprintlnbold ("resuming_radio_from_GSC");
-				
 			}
 			wait(0.5);
 	}	
