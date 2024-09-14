@@ -6,7 +6,7 @@ init()
 {
 	PrecacheItem( "syrette" );
 	PrecacheItem( "colt_dirty_harry" );
-	precachestring( &"GAME_BUTTON_TO_REVIVE_PLAYER" );
+	precachestring( &"REMASTERED_ZOMBIE_BUTTON_TO_REVIVE_PLAYER" );
 	precachestring( &"GAME_PLAYER_NEEDS_TO_BE_REVIVED" );
 	precachestring( &"GAME_PLAYER_IS_REVIVING_YOU" );	
 	precachestring( &"GAME_REVIVING" );
@@ -530,7 +530,7 @@ revive_trigger_think()
 				// are facing away. Either we have to display the hints manually here
 				// (making sure to prioritize against any other hints from nearby objects),
 				// or we need a new combined radius+lookat trigger type.						
-				self.revivetrigger setHintString( &"GAME_BUTTON_TO_REVIVE_PLAYER" );
+				self.revivetrigger setHintString( &"REMASTERED_ZOMBIE_BUTTON_TO_REVIVE_PLAYER" );
 				break;			
 			}
 		}
@@ -784,7 +784,7 @@ revive_do_revive( playerBeingRevived, reviverGun, solo_revive )
 	}
 
 	//CODER_MOD: TOMMYK 07/13/2008
-	playerBeingRevived.revivetrigger setHintString( &"GAME_BUTTON_TO_REVIVE_PLAYER" );
+	playerBeingRevived.revivetrigger setHintString( &"REMASTERED_ZOMBIE_BUTTON_TO_REVIVE_PLAYER" );
 	playerBeingRevived.revivetrigger.beingRevived = 0;
 	
 	return revived;
