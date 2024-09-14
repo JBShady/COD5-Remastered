@@ -11,7 +11,7 @@ main()
 		self.hatModel = "char_jap_impinf_body4_helm2";
 		self attach(self.hatModel, "", true);
 	}
-	else if(random <= 7) // 2% chance of special head band
+	else if(random <= 8) // 3% chance of special head band
 	{
 		self.hatModel = "char_jap_impinfwet_body4_hband";
 		self attach(self.hatModel, "", true);	
