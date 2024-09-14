@@ -6,7 +6,7 @@ init()
 {
 	init_weapons();
 	init_weapon_upgrade();
-	init_weapon_cabinet();
+	//init_weapon_cabinet();
 	treasure_chest_init();
 }
 
@@ -433,7 +433,9 @@ treasure_chest_think()
 		}
 		else if ( user.score < cost )
 		{
-			play_sound_on_ent( "no_purchase" );
+			//self play_sound_on_ent( "no_purchase" );
+			lid = getent( self.target, "targetname" ); 
+			level thread play_sound_on_ent("no_purchase", lid );
 			continue;	
 		}
 		wait 0.05; 
@@ -531,7 +533,7 @@ treasure_chest_think()
 		//Chris_P
 		//magic box dissapears and moves to a new spot after a predetermined number of uses
 
-		wait 3;
+		wait 2;
 		self enable_trigger();
 		self setvisibletoall();
 	}
@@ -1204,7 +1206,7 @@ weapon_cabinet_think()
 				}
 				else // not enough money
 				{
-					play_sound_on_ent( "no_purchase" );
+					self play_sound_on_ent( "no_purchase" );
 				}			
 			}
 			else if ( player.score >= ammo_cost )
@@ -1218,7 +1220,7 @@ weapon_cabinet_think()
 			}
 			else // not enough money
 			{
-				play_sound_on_ent( "no_purchase" );
+				self play_sound_on_ent( "no_purchase" );
 			}
 		}
 		else if( player.score >= cost ) // First time the player opens the cabinet
@@ -1270,7 +1272,7 @@ weapon_cabinet_think()
 		}
 		else // not enough money
 		{
-			play_sound_on_ent( "no_purchase" );
+			self play_sound_on_ent( "no_purchase" );
 		}		
 	}
 }
@@ -1362,7 +1364,8 @@ weapon_spawn_think()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				//self play_sound_on_ent( "no_purchase" );
+				player play_sound_on_ent( "no_purchase" );
 			}
 		}
 		else
@@ -1397,7 +1400,8 @@ weapon_spawn_think()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				//self play_sound_on_ent( "no_purchase" );
+				player play_sound_on_ent( "no_purchase" );
 			}
 		}
 	}

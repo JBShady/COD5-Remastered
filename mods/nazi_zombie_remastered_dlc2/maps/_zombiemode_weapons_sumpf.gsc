@@ -6,9 +6,11 @@ init()
 {
 	init_weapons();
 	init_weapon_upgrade();
-	init_weapon_cabinet();
+	//init_weapon_cabinet();
 	treasure_chest_init();
 	level.box_moved = false;
+
+	level thread init_bayonet_wallbuy(); // new
 }
 
 add_zombie_weapon( weapon_name, hint, cost, weaponVO, variation_count, ammo_cost  )
@@ -79,6 +81,9 @@ include_zombie_weapon( weapon_name, in_box )
 
 init_weapons()
 {
+	precachemodel("weapon_bayonet");
+	precachemodel("satchel_crate_lid_question");
+	
 	// Zombify
 	PrecacheItem( "zombie_melee" );
 	PrecacheItem( "falling_hands" );
@@ -95,32 +100,33 @@ init_weapons()
 
 	// Bolt Action                                      		
 	add_zombie_weapon( "kar98k", 								&"ZOMBIE_WEAPON_KAR98K_200", 				200,	"", 0);
-	add_zombie_weapon( "kar98k_bayonet", 						&"ZOMBIE_WEAPON_KAR98K_B_200", 				200,	"", 0);
-	add_zombie_weapon( "mosin_rifle", 							&"ZOMBIE_WEAPON_MOSIN_200", 				200,	"", 0); 
-	add_zombie_weapon( "mosin_rifle_bayonet", 					&"ZOMBIE_WEAPON_MOSIN_B_200", 				200,	"", 0 );
-	add_zombie_weapon( "springfield", 							&"ZOMBIE_WEAPON_SPRINGFIELD_200", 			200,	"", 0 );
-	add_zombie_weapon( "springfield_bayonet", 					&"ZOMBIE_WEAPON_SPRINGFIELD_B_200", 		200,	"", 0 );
+	//add_zombie_weapon( "kar98k_bayonet", 						&"ZOMBIE_WEAPON_KAR98K_B_200", 				200,	"", 0);
+	//add_zombie_weapon( "mosin_rifle", 							&"ZOMBIE_WEAPON_MOSIN_200", 				200,	"", 0); 
+	//add_zombie_weapon( "mosin_rifle_bayonet", 					&"ZOMBIE_WEAPON_MOSIN_B_200", 				200,	"", 0 );
+	//add_zombie_weapon( "springfield", 							&"ZOMBIE_WEAPON_SPRINGFIELD_200", 			200,	"", 0 );
+	//add_zombie_weapon( "springfield_bayonet", 					&"ZOMBIE_WEAPON_SPRINGFIELD_B_200", 		200,	"", 0 );
 	add_zombie_weapon( "zombie_type99_rifle", 					&"REMASTERED_ZOMBIE_WEAPON_TYPE99_200", 				200,	"vox_crappy", 8 );
-	add_zombie_weapon( "type99_rifle_bayonet", 					&"ZOMBIE_WEAPON_TYPE99_B_200", 				200,	"", 0 );
+	add_zombie_weapon( "zombie_type99_rifle_bayonet", 					&"ZOMBIE_WEAPON_TYPE99_B_200", 				200,	"", 0 );
 
 	// Semi Auto                                        		
 	add_zombie_weapon( "zombie_gewehr43", 								&"ZOMBIE_WEAPON_GEWEHR43_600", 				600,	"" , 0 );
 	add_zombie_weapon( "zombie_m1carbine", 							&"ZOMBIE_WEAPON_M1CARBINE_600",				600,	"" , 0 );
-	add_zombie_weapon( "m1carbine_bayonet", 					&"ZOMBIE_WEAPON_M1CARBINE_B_600", 			600,	"" , 0 );
+	//add_zombie_weapon( "m1carbine_bayonet", 					&"ZOMBIE_WEAPON_M1CARBINE_B_600", 			600,	"" , 0 );
 	add_zombie_weapon( "zombie_m1garand", 								&"ZOMBIE_WEAPON_M1GARAND_600", 				600,	"" , 0 );
-	add_zombie_weapon( "m1garand_bayonet", 						&"ZOMBIE_WEAPON_M1GARAND_B_600", 			600,	"" , 0 );
+	//add_zombie_weapon( "m1garand_bayonet", 						&"ZOMBIE_WEAPON_M1GARAND_B_600", 			600,	"" , 0 );
 	add_zombie_weapon( "zombie_svt40", 								&"ZOMBIE_WEAPON_SVT40_600", 				600,	"" ,			0 );
 
 	// Grenades                                         		
-	add_zombie_weapon( "fraggrenade", 							&"ZOMBIE_WEAPON_FRAGGRENADE_250", 			250,	"" , 0 );
+	//add_zombie_weapon( "fraggrenade", 							&"ZOMBIE_WEAPON_FRAGGRENADE_250", 			250,	"" , 0 );
 	add_zombie_weapon( "molotov", 								&"ZOMBIE_WEAPON_MOLOTOV_200", 				200,	"vox_crappy", 8 );
 	add_zombie_weapon( "molotov_zombie", 								&"ZOMBIE_WEAPON_MOLOTOV_200", 				200,	"vox_crappy", 8 );
 	add_zombie_weapon( "st_grenade", 						&"ZOMBIE_WEAPON_STICKGRENADE_250", 			250,	"vox_sticky" , 4 );
 	add_zombie_weapon( "stielhandgranate", 						&"REMASTERED_ZOMBIE_WEAPON_TYPE97FRAG_250", 		250,	"" ,			0, 250 );
-	add_zombie_weapon( "type97_frag", 							&"ZOMBIE_WEAPON_TYPE97FRAG_250", 			250,	"" , 0 );
+	//add_zombie_weapon( "type97_frag", 							&"ZOMBIE_WEAPON_TYPE97FRAG_250", 			250,	"" , 0 );
 
 	// Scoped
 	add_zombie_weapon( "type99_rifle_scoped_zombie", 			&"ZOMBIE_WEAPON_TYPE99_S_750", 				750,	"vox_sniper",		6);
+	add_zombie_weapon( "type99_rifle_scoped_zombie_bayonet", 			&"ZOMBIE_WEAPON_TYPE99_S_750", 				750,	"vox_sniper",		6);
 	add_zombie_weapon( "ptrs41_zombie", 						&"ZOMBIE_WEAPON_PTRS41_750", 				750,	"vox_sniper", 6);
 
 	// Full Auto                                                                                	
@@ -142,7 +148,8 @@ init_weapons()
 	add_zombie_weapon( "zombie_30cal", 							&"ZOMBIE_WEAPON_30CAL_3000", 				3000,	"vox_mg", 9 );
 	add_zombie_weapon( "zombie_mg42", 								&"ZOMBIE_WEAPON_MG42_3000", 				3000,	"vox_mg" , 9 ); 
 	add_zombie_weapon( "zombie_type99_lmg", 					&"ZOMBIE_WEAPON_TYPE99_LMG_1750", 			1750,	"vox_mg" ,		9 );
- 
+ 	add_zombie_weapon( "zombie_type99_lmg_bayonet", 					&"ZOMBIE_WEAPON_TYPE99_LMG_1750", 			1750,	"vox_mg" ,		9 );
+
 	// Grenade Launcher                                 	
 	add_zombie_weapon( "m1garand_gl_zombie", 						&"ZOMBIE_WEAPON_M1GARAND_GL_1500", 	1500,	"", 0 );
 
@@ -154,8 +161,8 @@ init_weapons()
 
 	// Special
 	add_zombie_weapon( "mine_bouncing_betty",					&"ZOMBIE_WEAPON_SATCHEL_2000",				2000,	"" );
-	add_zombie_weapon( "mortar_round", 						&"ZOMBIE_WEAPON_MORTARROUND_2000", 			2000,	"" );
-	add_zombie_weapon( "satchel_charge", 					&"ZOMBIE_WEAPON_SATCHEL_2000", 				2000,	"" );
+	//add_zombie_weapon( "mortar_round", 						&"ZOMBIE_WEAPON_MORTARROUND_2000", 			2000,	"" );
+	//add_zombie_weapon( "satchel_charge", 					&"ZOMBIE_WEAPON_SATCHEL_2000", 				2000,	"" );
 	add_zombie_weapon( "ray_gun", 							&"ZOMBIE_WEAPON_RAYGUN_10000", 				10000,	"vox_raygun", 6 );
 	add_zombie_weapon( "tesla_gun",							&"ZOMBIE_BUY_TESLA", 						10,		"vox_tesla", 6 );
 
@@ -453,18 +460,21 @@ treasure_chest_think()
 		}
 		else if ( user.score < cost )
 		{
-			play_sound_on_ent( "no_purchase" );
+			//self play_sound_on_ent( "no_purchase" );
+			lid = getent( self.target, "targetname" ); 
+			level thread play_sound_on_ent("no_purchase", lid );
+
     		if( RandomIntRange( 0, 100 ) >= 75 )
     		{
-			user thread play_no_money_box_dialog();
+				user thread play_no_money_box_dialog();
     		}
     		else if( RandomIntRange( 0, 100 ) >= 90 )
     		{
-			user thread play_no_money_weapon_dialog();
+				user thread play_no_money_weapon_dialog();
     		}
     		else
     		{
-			user thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
+				user thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
 			}
 			continue;	
 			//THIS IS GOOD, for the box + uses new/other sounds
@@ -571,7 +581,7 @@ treasure_chest_think()
 		//Chris_P
 		//magic box dissapears and moves to a new spot after a predetermined number of uses
 
-		wait 3;
+		wait 2;
 		self enable_trigger();
 		self setvisibletoall();
 	}
@@ -996,6 +1006,21 @@ treasure_chest_ChooseRandomWeapon( player )
 			continue;
 		}
 
+		// if we have bayonet weapons, remove the non bayonet version from box as we are treating them as the "same" weapon
+		if( player HasWeapon( "type99_rifle_scoped_zombie_bayonet" ) && keys[i] == "type99_rifle_scoped_zombie" )
+		{
+			continue;
+		}
+
+		if( player HasWeapon( "zombie_type99_rifle_bayonet" ) && keys[i] == "zombie_type99_rifle" )
+		{
+			continue;
+		}
+
+		if( player HasWeapon( "zombie_type99_lmg_bayonet" ) && keys[i] == "zombie_type99_lmg" )
+		{
+			continue;
+		}
 		// PI_CHANGE_BEGIN
 /*		if( isDefined(level.script) && level.script == "nazi_zombie_sumpf")
 		{
@@ -1023,7 +1048,7 @@ treasure_chest_ChooseRandomWeapon( player )
 				// increase the percentage of ray gun
 				if( isDefined( level.pulls_since_last_ray_gun ) )
 				{
-					// after 12 pulls the ray gun percentage increases to 15%
+					// after 12 pulls the ray gun percentage increases to 10%
 					
 					if( level.pulls_since_last_ray_gun > 11 )
 					{
@@ -1034,7 +1059,7 @@ treasure_chest_ChooseRandomWeapon( player )
 							filtered[filtered.size] = "ray_gun";
 						}				
 					}			
-					// after 8 pulls the Ray Gun percentage increases to 10%
+					// after 8 pulls the Ray Gun percentage increases to 5%
 					else if( level.pulls_since_last_ray_gun > 7 )
 					{
 						// calculate the number of times we have to add it to the array to get the desired percent
@@ -1051,13 +1076,13 @@ treasure_chest_ChooseRandomWeapon( player )
 		// increase the percentage of tesla gun
 		if( isDefined( level.pulls_since_last_tesla_gun ) )
 		{
-			// player has dropped the tesla for another weapon, so we set all future polls to 20%
+			// player has dropped the tesla for another weapon, so we set all future polls to 10%
 			if( isDefined(level.player_drops_tesla_gun) && level.player_drops_tesla_gun == true )
 			{						
 				// calculate the number of times we have to add it to the array to get the desired percent
 				player.groups_killed = 0; // reset counter
 
-				number_to_add = .15 * filtered.size;
+				number_to_add = .1 * filtered.size;
 				for(i=1; i<number_to_add; i++)
 				{
 					filtered[filtered.size] = "tesla_gun";
@@ -1068,21 +1093,21 @@ treasure_chest_ChooseRandomWeapon( player )
 			if( !isDefined(level.player_seen_tesla_gun) || level.player_seen_tesla_gun == false )
 			{
 
-				// after round 10 the Tesla gun percentage increases to 20%
-				if( level.round_number > 10 )
+				// after round 15 the Tesla gun percentage increases to 10%
+				if( level.round_number > 15 )
 				{
 					// calculate the number of times we have to add it to the array to get the desired percent
-					number_to_add = .15 * filtered.size;
+					number_to_add = .1 * filtered.size;
 					for(i=1; i<number_to_add; i++)
 					{
 						filtered[filtered.size] = "tesla_gun";
 					}				
 				}		
-				// after round 5 the Tesla gun percentage increases to 15%
-				else if( level.round_number > 5 )
+				// after round 10 the Tesla gun percentage increases to 5%
+				else if( level.round_number > 10 )
 				{
 					// calculate the number of times we have to add it to the array to get the desired percent
-					number_to_add = .1 * filtered.size;
+					number_to_add = .05 * filtered.size;
 					for(i=1; i<number_to_add; i++)
 					{
 						filtered[filtered.size] = "tesla_gun";
@@ -1546,7 +1571,7 @@ weapon_cabinet_think()
 				}
 				else // not enough money
 				{
-					play_sound_on_ent( "no_purchase" );
+					self play_sound_on_ent( "no_purchase" );
 					player thread maps\_zombiemode_perks::play_no_money_perk_dialog();
 				}			
 			}
@@ -1561,7 +1586,7 @@ weapon_cabinet_think()
 			}
 			else // not enough money
 			{
-				play_sound_on_ent( "no_purchase" );
+				self play_sound_on_ent( "no_purchase" );
 				player thread maps\_zombiemode_perks::play_no_money_perk_dialog();
 			}
 		}
@@ -1614,7 +1639,7 @@ weapon_cabinet_think()
 		}
 		else // not enough money
 		{
-			play_sound_on_ent( "no_purchase" );
+			self play_sound_on_ent( "no_purchase" );
 			player thread maps\_zombiemode_perks::play_no_money_perk_dialog();
 		}		
 	}
@@ -1669,7 +1694,7 @@ weapon_spawn_think()
 		{
 			for( i = 0; i < weapons.size; i++ )
 			{
-				if( weapons[i] == self.zombie_weapon_upgrade )
+				if( weapons[i] == self.zombie_weapon_upgrade || (weapons[i] == "zombie_type99_rifle_bayonet" && self.zombie_weapon_upgrade == "zombie_type99_rifle" ) ) // if we are buying arisaka and we have arisaka bayonet we bypass and pretend theyre equal
 				{
 					player_has_weapon = true; 
 				}
@@ -1714,7 +1739,9 @@ weapon_spawn_think()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				//self play_sound_on_ent( "no_purchase" );
+				player play_sound_on_ent( "no_purchase" );
+				
 	    		if( RandomIntRange( 0, 100 ) >= 75 )
 	    		{
 					player thread play_no_money_weapon_dialog();
@@ -1758,7 +1785,8 @@ weapon_spawn_think()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				//self play_sound_on_ent( "no_purchase" );
+				player play_sound_on_ent( "no_purchase" );
 			}
 		}
 	}
@@ -2050,6 +2078,14 @@ ammo_give( weapon )
 	// Check to see if ammo belongs to a primary weapon
 	if( weapon != "fraggrenade" && weapon != "stielhandgranate" && weapon != "molotov" && weapon != "st_grenade" )
 	{
+		if( weapon == "zombie_type99_rifle" ) // if we are trying to buy off arisaka but we have the arisaka bayonet, we override 
+		{
+			if( self hasweapon( "zombie_type99_rifle_bayonet" ) )
+			{
+				weapon = "zombie_type99_rifle_bayonet";			
+			}
+		}
+
 		if( isdefined( weapon ) )  
 		{
 			// get the max allowed ammo on the current weapon
@@ -2363,4 +2399,142 @@ flamethrower_swap()
 		}
 		wait( 0.2 ); 
 	}
+}
+
+init_bayonet_wallbuy()
+{
+	level.bayonet_chalk = spawn("script_model", (10734.9,645,-604.2) );
+	level.bayonet_chalk setmodel("satchel_crate_lid_question");
+	level.bayonet_chalk.angles = (0,-270,-90);
+	level.bayonet_chalk notSolid();
+	
+	wait_network_frame();
+
+	level.bayonet_model = spawn("script_model", (level.bayonet_chalk.origin + (0,-33.2,1.8)) );
+	level.bayonet_model setmodel("weapon_bayonet");
+	level.bayonet_model.angles = (0,90,0);
+	level.bayonet_model hide();
+
+	// create trigger
+	bayonet_trigger = spawn( "trigger_radius",level.bayonet_chalk.origin, 0, 45, 25 );
+	bayonet_trigger SetHintString( &"REMASTERED_ZOMBIE_BAYONET_BUY_1500" ); 
+	bayonet_trigger setCursorHint( "HINT_NOICON" ); 
+
+	bayonet_trigger thread bayonet_trigger_think();
+}
+
+bayonet_trigger_think()
+{
+	bayonet_sound = spawn( "script_origin", ( level.bayonet_chalk.origin ) );
+	cost = 1500;
+	has_been_used_once = false; 
+	lookat = level.bayonet_chalk.origin + (-1,0,3);
+
+	while( 1 )
+	{
+		self waittill( "trigger", player );
+		current_weapon = player GetCurrentWeapon();
+
+		if( !player islookingatorigin( lookat ) || !player can_buy_weapon() || isSubStr(current_weapon, "_bayonet" ) || level.falling_down == true ) // we disable hintstring with same rules as normal wall guns, also hides if already holding bayonet
+		{
+			self SetInvisibleToPlayer( player, true );
+			if(!player can_buy_weapon())
+			{
+				wait(0.1);
+			}
+			continue;
+		}
+		if( !player IsTouching( self ) ) // new check, just to be safe so that if player leaves trig it resets for another player to use
+		{
+			continue;
+		}
+
+		self SetInvisibleToPlayer( player, false );
+
+		if( !is_player_valid( player ) )
+		{
+			player thread ignore_triggers( 0.5 );
+			continue;
+		}
+
+		if( !player UseButtonPressed() || player isThrowingGrenade() ) // new check, because we're using trigger radius that triggers when we enter zone and not press F
+		{
+			continue; 
+		}
+
+		current_weapon = player GetCurrentWeapon();
+		if( !isSubStr(current_weapon, "type99" ) ) // we skip trigger if we are holding invalid weapon, but we still let player see hint 
+		{
+			player thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
+			continue;
+		}
+		else
+		{
+			player.weaponAmmo = [];
+			player.weaponAmmo[current_weapon]["clip"] = player GetWeaponAmmoClip( current_weapon );
+			player.weaponAmmo[current_weapon]["stock"] = player GetWeaponAmmoStock( current_weapon );
+		}
+
+		if(player.score < cost ) // only play no purchase sound if not enough points, note that it will only do the sound if holding valid bayonet weapon
+		{
+			bayonet_sound play_sound_on_ent( "no_purchase" );
+    		if( RandomIntRange( 0, 100 ) >= 75 )
+    		{
+				player thread play_no_money_weapon_dialog();
+    		}
+    		else
+    		{
+				player thread maps\nazi_zombie_sumpf_blockers::play_no_money_purchase_dialog();
+			}
+			wait(0.1);
+			continue;
+		}
+		// passing here means we have satisfied all conditions and can purchase 
+
+		player maps\_zombiemode_score::minus_to_player_score( cost ); 
+		
+		bayonet_sound play_sound_on_ent( "purchase" ); 
+
+		player takeweapon(current_weapon);
+		player giveweapon(current_weapon + "_bayonet");
+		player SetWeaponAmmoClip( current_weapon + "_bayonet", player.weaponAmmo[current_weapon]["clip"] );
+		player SetWeaponAmmoStock( current_weapon + "_bayonet", player.weaponAmmo[current_weapon]["stock"] );
+		player SwitchToWeapon( current_weapon + "_bayonet" );
+
+		if( has_been_used_once == false ) // show weapon only first time
+		{
+			has_been_used_once = true;
+
+			wait( 0.05 ); 
+			level.bayonet_model Show(); 
+
+			play_sound_at_pos( "weapon_show", level.bayonet_model.origin, level.bayonet_model );
+
+			time = 1; 
+			level.bayonet_model MoveTo( (level.bayonet_model.origin + (-2.5,0,0)), time ); 
+		}
+
+		index = maps\_zombiemode_weapons::get_player_index(player);
+		plr = "plr_" + index + "_";
+		player thread create_and_play_dialog ( plr, "vox_trap_chopper", 0.05 );
+
+	    continue;
+	}
+}
+//nerfed first raise time, 1.6 for normal guns, 2 for heavy guns
+//buffed arisaka regular charge time from 1.4 to 1.2, light weapon
+//missing Trench, Carbine, Garand bayonets, we are just doing japanese for now
+
+islookingatorigin( origin )
+{
+	normalvec = vectorNormalize( origin-self getShootAtPos() );
+	veccomp = vectorNormalize(( origin-( 0, 0, 24 ) )-self getShootAtPos() );
+	insidedot = vectordot( normalvec, veccomp );
+	
+	anglevec = anglestoforward( self getplayerangles() );
+	vectordot = vectordot( anglevec, normalvec );
+	if( vectordot > insidedot )
+		return true;
+	else
+		return false;
 }

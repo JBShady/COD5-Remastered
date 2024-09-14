@@ -7,7 +7,7 @@ init()
 	init_weapons();
 	init_weapon_upgrade();
 	init_pay_turret();
-	init_weapon_cabinet();
+	//init_weapon_cabinet();
 	treasure_chest_init();
 	level.box_moved = false;
 }
@@ -74,25 +74,25 @@ default_tesla_weighting_func()
 	num_to_add = 1;
 	if( isDefined( level.pulls_since_last_tesla_gun ) )
 	{
-		// player has dropped the tesla for another weapon, so we set all future polls to 20%
+		// player has dropped the tesla for another weapon, so we set all future polls to 10%
 		if( isDefined(level.player_drops_tesla_gun) && level.player_drops_tesla_gun == true )
 		{						
-			num_to_add += int(.2 * level.zombie_include_weapons.size);		
+			num_to_add += int(.1 * level.zombie_include_weapons.size);		
 		}
 		
 		// player has not seen tesla gun in late rounds
 		if( !isDefined(level.player_seen_tesla_gun) || level.player_seen_tesla_gun == false )
 		{
-			// after round 10 the Tesla gun percentage increases to 20%
-			if( level.round_number > 10 )
+			// after round 15 the Tesla gun percentage increases to 10%
+			if( level.round_number > 15 )
 			{
-				num_to_add += int(.2 * level.zombie_include_weapons.size);
+				num_to_add += int(.1 * level.zombie_include_weapons.size);
 			}		
-			// after round 5 the Tesla gun percentage increases to 15%
-			else if( level.round_number > 5 )
+			// after round 10 the Tesla gun percentage increases to 5%
+			else if( level.round_number > 10 )
 			{
 				// calculate the number of times we have to add it to the array to get the desired percent
-				num_to_add += int(.15 * level.zombie_include_weapons.size);
+				num_to_add += int(.05 * level.zombie_include_weapons.size);
 			}						
 		}
 	}
@@ -101,29 +101,29 @@ default_tesla_weighting_func()
 
 default_ray_gun_weighting_func()
 {
-	if( level.box_moved == true || level.box_moved == false )
-	{	
+	//if( level.box_moved == true || level.box_moved == false )
+	//{	
 		num_to_add = 1;
 		// increase the percentage of ray gun
 		if( isDefined( level.pulls_since_last_ray_gun ) )
 		{
-			// after 12 pulls the ray gun percentage increases to 15%
+			// after 12 pulls the ray gun percentage increases to 10%
 			if( level.pulls_since_last_ray_gun > 11 )
 			{
-				num_to_add += int(level.zombie_include_weapons.size*0.15);			
+				num_to_add += int(level.zombie_include_weapons.size*0.1);			
 			}			
-			// after 8 pulls the Ray Gun percentage increases to 10%
+			// after 8 pulls the Ray Gun percentage increases to 5%
 			else if( level.pulls_since_last_ray_gun > 7 )
 			{
-				num_to_add += int(.1 * level.zombie_include_weapons.size);
+				num_to_add += int(.05 * level.zombie_include_weapons.size);
 			}		
 		}
 		return num_to_add;	
-	}
-	else
-	{
-		return 0;
-	}
+	//}
+	//else
+	//{
+	//	return 0;
+	//}
 }
 
 
@@ -761,7 +761,10 @@ treasure_chest_think()
 		}
 		else if ( user.score < cost )
 		{
-			play_sound_on_ent( "no_purchase" );
+			//self play_sound_on_ent( "no_purchase" );
+			lid = getent( self.target, "targetname" ); 
+			level thread play_sound_on_ent("no_purchase", lid );
+
     		if( RandomIntRange( 0, 100 ) >= 75 )
     		{
 				user thread play_no_money_box_dialog();
@@ -882,7 +885,7 @@ treasure_chest_think()
 		//Chris_P
 		//magic box dissapears and moves to a new spot after a predetermined number of uses
 
-		wait 3;
+		wait 2;
 		self enable_trigger();
 		self setvisibletoall();
 	}
@@ -1803,7 +1806,7 @@ weapon_cabinet_think()
 				}
 				else // not enough money
 				{
-					play_sound_on_ent( "no_purchase" );
+					self play_sound_on_ent( "no_purchase" );
 					player thread play_no_money_weapon_dialog();
 				}			
 			}
@@ -1818,7 +1821,7 @@ weapon_cabinet_think()
 			}
 			else // not enough money
 			{
-				play_sound_on_ent( "no_purchase" );
+				self play_sound_on_ent( "no_purchase" );
 				player thread play_no_money_weapon_dialog();
 			}
 		}
@@ -1828,7 +1831,7 @@ weapon_cabinet_think()
 
 			self play_sound_on_ent( "purchase" ); 
 
-			self SetHintString( &"ZOMBIE_WEAPONCOSTAMMO", cost, ammo_cost ); 
+			self SetHintString( &"ZOMBIE_WEAPONCOSTAMMO_UPGRADE", cost, ammo_cost ); 
 			//		self SetHintString( get_weapon_hint( self.zombie_weapon_upgrade ) );
 			self setCursorHint( "HINT_NOICON" ); 
 			player maps\_zombiemode_score::minus_to_player_score( self.zombie_cost ); 
@@ -1881,7 +1884,7 @@ weapon_cabinet_think()
 		}
 		else // not enough money
 		{
-			play_sound_on_ent( "no_purchase" );
+			self play_sound_on_ent( "no_purchase" );
 			player thread play_no_money_weapon_dialog();
 		}		
 	}
@@ -1954,7 +1957,7 @@ pay_turret_think( cost )
 		}
 		else // not enough money
 		{
-			play_sound_on_ent( "no_purchase" );
+			self play_sound_on_ent( "no_purchase" );
 			player thread play_no_money_weapon_dialog();
 		}
 	}
@@ -2086,7 +2089,7 @@ weapon_spawn_think()
 
 					if(!is_grenade)
 					{
-						self SetHintString( &"ZOMBIE_WEAPONCOSTAMMO", cost, ammo_cost ); 
+						self SetHintString( &"ZOMBIE_WEAPONCOSTAMMO_UPGRADE", cost, ammo_cost ); 
 					}
 				}
 
@@ -2107,7 +2110,9 @@ weapon_spawn_think()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				//self play_sound_on_ent( "no_purchase" );
+				player play_sound_on_ent( "no_purchase" );
+				
 	    		if( RandomIntRange( 0, 100 ) >= 75 )
 	    		{
 					player thread play_no_money_weapon_dialog();
@@ -2142,7 +2147,7 @@ weapon_spawn_think()
 					self.first_time_triggered = true;
 					if(!is_grenade)
 					{ 
-						self SetHintString( &"ZOMBIE_WEAPONCOSTAMMO", cost, get_ammo_cost( self.zombie_weapon_upgrade ) ); 
+						self SetHintString( &"ZOMBIE_WEAPONCOSTAMMO_UPGRADE", cost, get_ammo_cost( self.zombie_weapon_upgrade ) ); 
 					}
 				}
 
@@ -2169,7 +2174,8 @@ weapon_spawn_think()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				//self play_sound_on_ent( "no_purchase" );
+				player play_sound_on_ent( "no_purchase" );
 			}
 		}
 	}
