@@ -341,11 +341,22 @@ REFERENCE           COMMAND
 LANG_ENGLISH        "Command"
 
 REFERENCE           USE
+LANG_ENGLISH        "^7Ò"
+
+REFERENCE           USE_XBOX
 LANG_ENGLISH        "^4X^7"
 
 REFERENCE           USE_PS3
 LANG_ENGLISH        "^1¥^7"
 
+REFERENCE           HINT_GP
+LANG_ENGLISH		"^7Ó"
+
+REFERENCE           HINT_GP_XBOX
+LANG_ENGLISH		"^3Y"
+
+REFERENCE           HINT_GP_PS3
+LANG_ENGLISH		"^2¶"
 
 ENDMARKER
 
