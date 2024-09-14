@@ -67,6 +67,9 @@ LANG_ENGLISH        "Tokarev TT-33"
 REFERENCE           TOKAREV_UP
 LANG_ENGLISH        "Cyk4-B1y4t"
 
+REFERENCE           TYPE99_BAYONET
+LANG_ENGLISH        "Type 99 w/ Bayonet"
+
 REFERENCE           TYPE99_UP
 LANG_ENGLISH        "The Eviscerator"
 
@@ -85,8 +88,14 @@ LANG_ENGLISH        "Scoped M1903 Springfield"
 REFERENCE           ARISAKA
 LANG_ENGLISH        "Type 99 Arisaka"
 
+REFERENCE           ARISAKA_BAYONET
+LANG_ENGLISH        "Type 99 Arisaka w/ Bayonet"
+
 REFERENCE           ARISAKA_SCOPED
 LANG_ENGLISH        "Scoped Type 99 Arisaka"
+
+REFERENCE           ARISAKA_SCOPED_BAYONET
+LANG_ENGLISH        "Scoped Type 99 Arisaka w/ Bayonet"
 
 REFERENCE           JOURNAL
 LANG_ENGLISH        "Richtofen's Journal"
