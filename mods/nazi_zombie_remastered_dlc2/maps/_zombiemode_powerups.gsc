@@ -434,12 +434,19 @@ powerup_drop(drop_point)
 		return;
 	}
 
+	despawn_failsafe = undefined;
+
 	// some guys randomly drop, but most of the time they check for the drop flag
 	if (rand_drop > 2)
 	{
 		if (!level.zombie_vars["zombie_drop_item"])
 		{
 			return;
+		}
+		else
+		{
+			level.zombie_vars["zombie_drop_item"] = 0; // we only get here if the variable was 1 and we have a locked in powerup
+			despawn_failsafe = true;
 		}
 
 		debug = "score";
@@ -473,6 +480,11 @@ powerup_drop(drop_point)
 	if(!valid_drop)
 	{
 		powerup delete();
+		if(isDefined(despawn_failsafe) && despawn_failsafe == true) // if we were outside the map AND we have the failsafe
+		{
+			level.zombie_vars["zombie_drop_item"] = 1; // then lets give it another shot
+			despawn_failsafe = undefined;
+		}
 		return;
 	}
 
@@ -485,7 +497,7 @@ powerup_drop(drop_point)
 	powerup thread powerup_wobble();
 	powerup thread powerup_grab();
 
-	level.zombie_vars["zombie_drop_item"] = 0;
+	//level.zombie_vars["zombie_drop_item"] = 0;
 
 
 	//powerup = powerup_setup(); 
@@ -709,6 +721,11 @@ powerup_vo(type)
 {
 	self endon("death");
 	self endon("disconnect");
+	
+	if (self maps\_laststand::player_is_in_laststand() )
+	{
+		return;
+	}
 	
 	index = maps\_zombiemode_weapons::get_player_index(self);
 	sound_to_play = undefined;
@@ -1012,6 +1029,10 @@ check_for_instakill( player )
 		if(player.use_weapon_type == "MOD_MELEE")
 		{
 			player.last_kill_method = "MOD_MELEE";
+		}
+		else if(player.use_weapon_type == "MOD_BAYONET")
+		{
+			player.last_kill_method = "MOD_BAYONET";
 		}
 		else
 		{
