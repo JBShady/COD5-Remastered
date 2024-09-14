@@ -60,22 +60,25 @@ REFERENCE           CHAR_ONE_DESC_ASY
 LANG_ENGLISH        "Missing in action. \n...\nJOHN \n401547      \nTYPE O \nT2/42 \nUSMCR \n...\nPart of 4-man Marine fire team assigned with aiding the rescue and extraction of a captured OSS operative. \n"
 
 REFERENCE           CHAR_TWO_NAME_ASY
-LANG_ENGLISH        ""Smokey""
+LANG_ENGLISH        "Paxton "Gunner" Ridge"
 
 REFERENCE           CHAR_TWO_DESC_ASY
-LANG_ENGLISH        "Missing in action. \n...\nNAME REDACTED\n \n410386    C \nTYPE A \nT. 1/43 \nUSMCR \n...\nPart of 4-man Marine fire team assigned with aiding the rescue and extraction of a captured OSS operative. \n"
+LANG_ENGLISH        "Missing in action. \n...\nRIDGE \nPAXTON \n410386    C \nTYPE A \nT. 1/43 \nUSMCR \n...\nPart of 4-man Marine fire team assigned with aiding the rescue and extraction of a captured OSS operative. \nHZFSBTHIHUKVULKWLALYUVAMVBUKOVZAPSLZHWWYV\nHJOPUNZTVRLFVBAVMHTTVZTVRLFABYULKOLNVAIHU\nHUHSVZAALHTMHJPSPAFVCLYYBULZJHWPUNVUMVVA \n"
 
 REFERENCE           CHAR_THREE_NAME_ASY
 LANG_ENGLISH        ""Corporal""
 
 REFERENCE           CHAR_THREE_DESC_ASY
-LANG_ENGLISH        "Missing in action. \n...\nNAME REDACTED\n \n400628    P \nTYPE AB \nT1/42 \nUSMCR \n...\nSquad leader assigned with directing his team in/out of the Wittenau Sanatorium facility, confirming identity of captive, and retrieving captive by any means necessary. Use of deadly force was authorized. \n"
+LANG_ENGLISH        "Missing in action. \n...\nNAME REDACTED\n \n400628    P \nTYPE AB \nT1/42 \nUSMCR \n...\nSquad leader assigned with commanding his team in/out of the Wittenau Sanatorium facility, confirming identity of captive, and retrieving captive by any means necessary. Use of deadly force was authorized. \n"
 
 REFERENCE           CHAR_FOUR_NAME_ASY
-LANG_ENGLISH        "Paxton "Gunner" Ridge"
+LANG_ENGLISH        ""Smokey""
 
 REFERENCE           CHAR_FOUR_DESC_ASY
-LANG_ENGLISH        "Missing in action. \n...\nRIDGE \nPAXTON \n310574    P \nTYPE-A- \nT10/41 \nUSMC \n...\nPart of 4-man Marine fire team assigned with aiding the rescue and extraction of a captured OSS operative. \nHZFSBTHIHUKVULKWLALYUVAMVBUKOVZAPSLZHWWYV\nHJOPUNZTVRLFVBAVMHTTVZTVRLFABYULKOLNVAIHU\nHUHSVZAALHTMHJPSPAFVCLYYBULZJHWPUNVUMVVA \n"
+LANG_ENGLISH        "Missing in action. \n...\nNAME REDACTED\n \n310574    P \nTYPE-A- \nT10/41 \nUSMC \n...\nPart of 4-man Marine fire team assigned with aiding the rescue and extraction of a captured OSS operative. \n"
+
+REFERENCE           LEVEL_ZOMBIE_ASYLUM
+LANG_ENGLISH        "Verrückt"
 
 REFERENCE           CHAR_DIALOGUE
 LANG_ENGLISH        "Character Dialogue"
@@ -93,7 +96,7 @@ REFERENCE           COOPERATIVE
 LANG_ENGLISH        "COOPERATIVE"
 
 REFERENCE           MAP_INTEL
-LANG_ENGLISH        "MAP INTEL"
+LANG_ENGLISH        "INTEL"
 
 REFERENCE           PROFILE
 LANG_ENGLISH        "PROFILE"
@@ -228,10 +231,10 @@ REFERENCE           HINT_GAMETYPE_ALT
 LANG_ENGLISH        "Adjusts the flow of zombie waves. Classic mode removes Carpenter power-ups."
 
 REFERENCE           HINT_LASTSTAND
-LANG_ENGLISH        "Adjusts the balance of players and perks. Classic mode reverts to 30-second bleed-outs, no solo Quick Revive lives, and no Double-Tap damage buff."
+LANG_ENGLISH        "Adjusts the balance of players and perks. Classic mode reverts to 30-second bleed-outs, has no solo Quick Revive lives, and has no Double-Tap damage buff."
 
 REFERENCE           HINT_LASTSTAND_ALT
-LANG_ENGLISH        "Adjusts the balance of players and perks. Classic mode reverts to 30-second bleed-outs, no solo Quick Revive lives, and no Double-Tap damage buff."
+LANG_ENGLISH        "Adjusts the balance of players and perks. Classic mode reverts to 30-second bleed-outs, has no solo Quick Revive lives, and has no Double-Tap damage buff."
 
 REFERENCE           HINT_PUSHING
 LANG_ENGLISH        "Adjusts the zombie grabbing effect. Classic mode reverts to "sticky" zombies by enabling the push player setting as in the original game."
@@ -239,14 +242,17 @@ LANG_ENGLISH        "Adjusts the zombie grabbing effect. Classic mode reverts to
 REFERENCE           HINT_SPRINTERS
 LANG_ENGLISH        "Adjusts the intensity of zombie waves. Classic mode removes newly added super-sprinter variations for an experience closer to the original release."
 
+REFERENCE           ICON_TEAM_INDICATOR
+LANG_ENGLISH        "None"
+
 REFERENCE           CLEARANCE
 LANG_ENGLISH        "Clearance Code:"
 
 REFERENCE           ACC1
-LANG_ENGLISH        "Select Access Granted"
+LANG_ENGLISH        "Select Access Granted."
 
 REFERENCE           ACC2
-LANG_ENGLISH        "Full Access Granted"
+LANG_ENGLISH        "Full Access Granted."
 
 REFERENCE           ZOMBIE_SURVIVOR
 LANG_ENGLISH        "Soul Survivor"
@@ -297,7 +303,7 @@ REFERENCE           ZOMBIE_NUKE_KILLS_DESC
 LANG_ENGLISH        "Kill no more than 1 zombie with a Nuke."
 
 REFERENCE           ZOMBIE_MELEE_KILLS_DESC
-LANG_ENGLISH        "Get 10 knife kills with Insta-Kill in a single round."
+LANG_ENGLISH        "Get 10 knife kills with Insta-Kill in a row."
 
 REFERENCE           ZOMBIE_KILLS_DESC
 LANG_ENGLISH        "Kill 200 zombies in a single game."
@@ -378,7 +384,7 @@ REFERENCE           ZOMBIE_FAST_LINK_DESC
 LANG_ENGLISH        "Link all the teleport pads before Round 8."
 
 REFERENCE           ZOMBIE_EE_FACTORY_DESC
-LANG_ENGLISH        "Restore facility operations after starting the plan."
+LANG_ENGLISH        "Restore facility operations after beginning the plan."
 
 REFERENCE           ZOMBIE_BARRIERS
 LANG_ENGLISH        "Hold the Line"
@@ -426,7 +432,7 @@ REFERENCE           ZOMBIE_FLAMETHROWER_DESC
 LANG_ENGLISH        "Complete an entire round using only the Flamethrower."
 
 REFERENCE           ZOMBIE_BARRELS_DESC
-LANG_ENGLISH        "Light 10 zombies on fire with explosive red barrels in a single game."
+LANG_ENGLISH        "Light 5 zombies on fire with explosive red barrels in a single game."
 
 REFERENCE           ZOMBIE_MORTAR_DESC
 LANG_ENGLISH        "Damage a zombie with a Satchel Charge that was detonated by a Mortar."
@@ -506,14 +512,80 @@ LANG_ENGLISH        "Achievement Description:"
 REFERENCE           ITEM
 LANG_ENGLISH        "Special Equipment"
 
-REFERENCE           SCORE
+REFERENCE           SCOREBOARD
 LANG_ENGLISH        "Scoreboard"
+
+REFERENCE           SCREENSHOT
+LANG_ENGLISH        "Requires Video Mode set to 1080p resolutions or lower."
 
 REFERENCE           CHANGE_STANCE
 LANG_ENGLISH        "Change Stance"
 
 REFERENCE           8X
 LANG_ENGLISH        "8x"
+
+REFERENCE           VIEW_STATS
+LANG_ENGLISH        "View Stats"
+
+REFERENCE           PLAYERS
+LANG_ENGLISH        "PLAYERS"
+
+REFERENCE           ONE
+LANG_ENGLISH        "1"
+
+REFERENCE           TWO
+LANG_ENGLISH        "2"
+
+REFERENCE           THREE
+LANG_ENGLISH        "3"
+
+REFERENCE           FOUR
+LANG_ENGLISH        "4"
+
+REFERENCE           ROUNDS
+LANG_ENGLISH        "ROUNDS"
+
+REFERENCE           SCORE
+LANG_ENGLISH        "SCORE"
+
+REFERENCE           MAP_STATS
+LANG_ENGLISH        "MAP STATS"
+
+REFERENCE           KILLS
+LANG_ENGLISH        "Kills"
+
+REFERENCE           GIBS
+LANG_ENGLISH        "Gibs"
+
+REFERENCE           HEADSHOTS
+LANG_ENGLISH        "Headshots"
+
+REFERENCE           REVIVES
+LANG_ENGLISH        "Revives"
+
+REFERENCE           DOWNS
+LANG_ENGLISH        "Downs"
+
+REFERENCE           ROUNDS_SURVIVED
+LANG_ENGLISH        "Rounds Survived"
+
+REFERENCE           POINTS_EARNED
+LANG_ENGLISH        "Points Earned"
+
+REFERENCE           PERKS_CONSUMED
+LANG_ENGLISH        "Perks Consumed"
+
+REFERENCE           MYSTERY_BOX
+LANG_ENGLISH        "Mystery Box Opens"
+
+REFERENCE           HINT_PRESS
+LANG_ENGLISH		"Press ^3"
+
+REFERENCE           HINT_ENTER_FIRST
+LANG_ENGLISH		"^7 to enter first person view"
+
+REFERENCE           HINT_ENTER_THIRD
+LANG_ENGLISH		"^7 to enter third person view"
 
 
 ENDMARKER
