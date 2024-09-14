@@ -17,9 +17,12 @@ REFERENCE           ZIPLINE_DEACTIVATED
 LANG_ENGLISH        "Zipline must be activated before use"
 
 REFERENCE           RANDOM_WEAPON_950
-LANG_ENGLISH        "Press & hold &&1 to use Mystery Box [Cost: 950]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to use Mystery Box [Cost: 950]"
 
 REFERENCE           WEAPONCOSTAMMO
+LANG_ENGLISH        "For Weapon [Cost: &&1], For Ammo [&&2]"
+
+REFERENCE           WEAPONCOSTAMMO_UPGRADE
 LANG_ENGLISH        "For Weapon [Cost: &&1], Ammo [&&2], Upgraded Ammo [Cost: 4500]"
 
 REFERENCE           ROUND_BEGIN
@@ -35,334 +38,334 @@ REFERENCE           UNDEFINED
 LANG_ENGLISH        "UNDEFINED!! PLEASE SET THE SCRIPT_HINT ON THE ENT PROPERLY!"
 
 REFERENCE           BUTTON_BUY_BACK_BARRIER_10
-LANG_ENGLISH        "Press & hold &&1 to buy back Barrier [Cost: 10]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy back Barrier [Cost: 10]"
 
 REFERENCE           BUTTON_BUY_BACK_BARRIER_20
-LANG_ENGLISH        "Press & hold &&1 to buy back Barrier [Cost: 20]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy back Barrier [Cost: 20]"
 
 REFERENCE           BUTTON_BUY_BACK_BARRIER_50
-LANG_ENGLISH        "Press & hold &&1 to buy back Barrier [Cost: 50]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy back Barrier [Cost: 50]"
 
 REFERENCE           BUTTON_BUY_BACK_BARRIER_100
-LANG_ENGLISH        "Press & hold &&1 to buy back Barrier [Cost: 100]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy back Barrier [Cost: 100]"
 
 REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_100
-LANG_ENGLISH        "Press & hold &&1 to Clear Debris [Cost: 100]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 100]"
 
 REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_200
-LANG_ENGLISH        "Press & hold &&1 to Clear Debris [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 200]"
 
 REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_250
-LANG_ENGLISH        "Press & hold &&1 to Clear Debris [Cost: 250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 250]"
 
 REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_500
-LANG_ENGLISH        "Press & hold &&1 to Clear Debris [Cost: 500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 500]"
 
 REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_750
-LANG_ENGLISH        "Press & hold &&1 to Clear Debris [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 750]"
 
 REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_1000
-LANG_ENGLISH        "Press & hold &&1 to Clear Debris [Cost: 1000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 1000]"
 
 REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_1250
-LANG_ENGLISH        "Press & hold &&1 to Clear Debris [Cost: 1250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 1250]"
 
 REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_1500
-LANG_ENGLISH        "Press & hold &&1 to Clear Debris [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 1500]"
 
 REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_1750
-LANG_ENGLISH        "Press & hold &&1 to Clear Debris [Cost: 1750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 1750]"
 
 REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_2000
-LANG_ENGLISH        "Press & hold &&1 to Clear Debris [Cost: 2000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 2000]"
 
 REFERENCE           BUTTON_BUY_OPEN_DOOR_100
-LANG_ENGLISH        "Press & hold &&1 to Open Door [Cost: 100]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 100]"
 
 REFERENCE           BUTTON_BUY_OPEN_DOOR_200
-LANG_ENGLISH        "Press & hold &&1 to Open Door [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 200]"
 
 REFERENCE           BUTTON_BUY_OPEN_DOOR_250
-LANG_ENGLISH        "Press & hold &&1 to Open Door [Cost: 250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 250]"
 
 REFERENCE           BUTTON_BUY_OPEN_DOOR_500
-LANG_ENGLISH        "Press & hold &&1 to Open Door [Cost: 500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 500]"
 
 REFERENCE           BUTTON_BUY_OPEN_DOOR_750
-LANG_ENGLISH        "Press & hold &&1 to Open Door [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 750]"
 
 REFERENCE           BUTTON_BUY_OPEN_DOOR_1000
-LANG_ENGLISH        "Press & hold &&1 to Open Door [Cost: 1000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 1000]"
 
 REFERENCE           BUTTON_BUY_OPEN_DOOR_1250
-LANG_ENGLISH        "Press & hold &&1 to Open Door [Cost: 1250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 1250]"
 
 REFERENCE           BUTTON_BUY_OPEN_DOOR_1500
-LANG_ENGLISH        "Press & hold &&1 to Open Door [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 1500]"
 
 REFERENCE           BUTTON_BUY_OPEN_DOOR_1750
-LANG_ENGLISH        "Press & hold &&1 to Open Door [Cost: 1750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 1750]"
 
 REFERENCE           BUTTON_BUY_OPEN_DOOR_2500
-LANG_ENGLISH        "Press & hold &&1 to Open Door [Cost: 2500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 2500]"
 
 REFERENCE           BUTTON_BUY_OPEN_DOOR_2000
-LANG_ENGLISH        "Press & hold &&1 to Open Door [Cost: 2000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 2000]"
 
 REFERENCE           BUTTON_BUY_OPEN_AREA_100
-LANG_ENGLISH        "Press & hold &&1 to Open Area [Cost: 100]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 100]"
 
 REFERENCE           BUTTON_BUY_OPEN_AREA_200
-LANG_ENGLISH        "Press & hold &&1 to Open Area [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 200]"
 
 REFERENCE           BUTTON_BUY_OPEN_AREA_250
-LANG_ENGLISH        "Press & hold &&1 to Open Area [Cost: 250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 250]"
 
 REFERENCE           BUTTON_BUY_OPEN_AREA_500
-LANG_ENGLISH        "Press & hold &&1 to Open Area [Cost: 500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 500]"
 
 REFERENCE           BUTTON_BUY_OPEN_AREA_750
-LANG_ENGLISH        "Press & hold &&1 to Open Area [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 750]"
 
 REFERENCE           BUTTON_BUY_OPEN_AREA_1000
-LANG_ENGLISH        "Press & hold &&1 to Open Area [Cost: 1000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 1000]"
 
 REFERENCE           BUTTON_BUY_OPEN_AREA_1250
-LANG_ENGLISH        "Press & hold &&1 to Open Area [Cost: 1250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 1250]"
 
 REFERENCE           BUTTON_BUY_OPEN_AREA_1500
-LANG_ENGLISH        "Press & hold &&1 to Open Area [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 1500]"
 
 REFERENCE           BUTTON_BUY_OPEN_AREA_1750
-LANG_ENGLISH        "Press & hold &&1 to Open Area [Cost: 1750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 1750]"
 
 REFERENCE           BUTTON_BUY_OPEN_AREA_2000
-LANG_ENGLISH        "Press & hold &&1 to Open Area [Cost: 2000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 2000]"
 
 REFERENCE           CABINET_OPEN_500
-LANG_ENGLISH        "Press & hold &&1 to Open Cabinet [Cost: 500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Cabinet [Cost: 500]"
 
 REFERENCE           CABINET_OPEN_1000
-LANG_ENGLISH        "Press & hold &&1 to Open Cabinet [Cost: 1000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Cabinet [Cost: 1000]"
 
 REFERENCE           CABINET_OPEN_1500
-LANG_ENGLISH        "Press & hold &&1 to Open Cabinet [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Cabinet [Cost: 1500]"
 
 REFERENCE           CABINET_OPEN_2000
-LANG_ENGLISH        "Press & hold &&1 to Open Cabinet [Cost: 2000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Cabinet [Cost: 2000]"
 
 REFERENCE           WEAPON_COLT_50
-LANG_ENGLISH        "Press & hold &&1 to buy Colt [Cost: 50]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Colt [Cost: 50]"
 
 REFERENCE           WEAPON_COLT_DH_100
-LANG_ENGLISH        "Press & hold &&1 to buy Colt Heavy Duty [Cost: 100]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Colt Heavy Duty [Cost: 100]"
 
 REFERENCE           WEAPON_NAMBU_50
-LANG_ENGLISH        "Press & hold &&1 to buy Nambu [Cost: 50]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Nambu [Cost: 50]"
 
 REFERENCE           WEAPON_SW357_100
-LANG_ENGLISH        "Press & hold &&1 to buy .357 Magnum [Cost: 100]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy .357 Magnum [Cost: 100]"
 
 REFERENCE           WEAPON_TOKAREV_50
-LANG_ENGLISH        "Press & hold &&1 to buy Tokarev TT-30 [Cost: 50]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Tokarev TT-30 [Cost: 50]"
 
 REFERENCE           WEAPON_WALTHER_50
-LANG_ENGLISH        "Press & hold &&1 to buy Walther P38 [Cost: 50]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Walther P38 [Cost: 50]"
 
 REFERENCE           WEAPON_ZOMBIECOLT_25
-LANG_ENGLISH        "Press & hold &&1 to buy Zombie Colt [Cost: 25]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Zombie Colt [Cost: 25]"
 
 REFERENCE           WEAPON_KAR98K_200
-LANG_ENGLISH        "Press & hold &&1 to buy Kar98k [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Kar98k [Cost: 200]"
 
 REFERENCE           WEAPON_KAR98K_B_200
-LANG_ENGLISH        "Press & hold &&1 to buy Kar98k + Bayonet [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Kar98k + Bayonet [Cost: 200]"
 
 REFERENCE           WEAPON_MOSIN_200
-LANG_ENGLISH        "Press & hold &&1 to buy Mosin-Nagant [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Mosin-Nagant [Cost: 200]"
 
 REFERENCE           WEAPON_MOSIN_B_200
-LANG_ENGLISH        "Press & hold &&1 to buy Mosin-Nagant [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Mosin-Nagant [Cost: 200]"
 
 REFERENCE           WEAPON_SPRINGFIELD_200
-LANG_ENGLISH        "Press & hold &&1 to buy Springfield [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Springfield [Cost: 200]"
 
 REFERENCE           WEAPON_SPRINGFIELD_B_200
-LANG_ENGLISH        "Press & hold &&1 to buy SpringField + Bayonet [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy SpringField + Bayonet [Cost: 200]"
 
 REFERENCE           WEAPON_TYPE99_200
-LANG_ENGLISH        "Press & hold &&1 to buy Arisaka [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Arisaka [Cost: 200]"
 
 REFERENCE           WEAPON_TYPE99_B_200
-LANG_ENGLISH        "Press & hold &&1 to buy Type 99 + Bayonet [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Type 99 + Bayonet [Cost: 200]"
 
 REFERENCE           WEAPON_GEWEHR43_600
-LANG_ENGLISH        "Press & hold &&1 to buy Gewehr 43 [Cost: 600]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Gewehr 43 [Cost: 600]"
 
 REFERENCE           WEAPON_M1CARBINE_600
-LANG_ENGLISH        "Press & hold &&1 to buy M1 Carbine [Cost: 600]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy M1 Carbine [Cost: 600]"
 
 REFERENCE           WEAPON_M1CARBINE_B_600
-LANG_ENGLISH        "Press & hold &&1 to buy M1 Carbine + Bayonet [Cost: 600]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy M1 Carbine + Bayonet [Cost: 600]"
 
 REFERENCE           WEAPON_M1GARAND_600
-LANG_ENGLISH        "Press & hold &&1 to buy M1 Garand [Cost: 600]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy M1 Garand [Cost: 600]"
 
 REFERENCE           WEAPON_M1GARAND_B_600
-LANG_ENGLISH        "Press & hold &&1 to buy M1 Garand + Bayonet [Cost: 600]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy M1 Garand + Bayonet [Cost: 600]"
 
 REFERENCE           WEAPON_SVT40_600
-LANG_ENGLISH        "Press & hold &&1 to buy SVT-40 [Cost: 600]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy SVT-40 [Cost: 600]"
 
 REFERENCE           WEAPON_FRAGGRENADE_250
-LANG_ENGLISH        "Press & hold &&1 to buy M2 Frag Grenade [Cost: 250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy M2 Frag Grenade [Cost: 250]"
 
 REFERENCE           WEAPON_MOLOTOV_200
-LANG_ENGLISH        "Press & hold &&1 to buy Molotov [Cost: 200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Molotov [Cost: 200]"
 
 REFERENCE           WEAPON_STICKGRENADE_250
-LANG_ENGLISH        "Press & hold &&1 to buy RGD-33 Stick Grenade [Cost: 250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy RGD-33 Stick Grenade [Cost: 250]"
 
 REFERENCE           WEAPON_STIELHANDGRANATE_250
-LANG_ENGLISH        "Press & hold &&1 to buy Stielhandgranate [Cost: 250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Stielhandgranate [Cost: 250]"
 
 REFERENCE           WEAPON_TYPE97FRAG_250
-LANG_ENGLISH        "Press & hold &&1 to buy Type 97 Frag [Cost: 250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Type 97 Frag [Cost: 250]"
 
 REFERENCE           WEAPON_KAR98K_S_750
-LANG_ENGLISH        "Press & hold &&1 to buy Kar98k + Scope [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Kar98k + Scope [Cost: 750]"
 
 REFERENCE           WEAPON_KAR98K_S_B_750
-LANG_ENGLISH        "Press & hold &&1 to buy Kar98k + Scope + Bayonet [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Kar98k + Scope + Bayonet [Cost: 750]"
 
 REFERENCE           WEAPON_MOSIN_S_750
-LANG_ENGLISH        "Press & hold &&1 to buy Mosin-Nagant + Scope [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Mosin-Nagant + Scope [Cost: 750]"
 
 REFERENCE           WEAPON_MOSIN_S_B_750
-LANG_ENGLISH        "Press & hold &&1 to buy Mosin-Nagant + Scope + Bayonet [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Mosin-Nagant + Scope + Bayonet [Cost: 750]"
 
 REFERENCE           WEAPON_PTRS41_750
-LANG_ENGLISH        "Press & hold &&1 to buy PTRS-41 [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy PTRS-41 [Cost: 750]"
 
 REFERENCE           WEAPON_SPRINGFIELD_S_750
-LANG_ENGLISH        "Press & hold &&1 to buy SpringField + Scope [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy SpringField + Scope [Cost: 750]"
 
 REFERENCE           WEAPON_SPRINGFIELD_S_B_750
-LANG_ENGLISH        "Press & hold &&1 to buy Springfield + Scope + Bayonet [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Springfield + Scope + Bayonet [Cost: 750]"
 
 REFERENCE           WEAPON_TYPE99_S_750
-LANG_ENGLISH        "Press & hold &&1 to buy Arisaka + Scope [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Arisaka + Scope [Cost: 750]"
 
 REFERENCE           WEAPON_TYPE99_S_B_750
-LANG_ENGLISH        "Press & hold &&1 to buy Type 99 + Scope + Bayonet [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Type 99 + Scope + Bayonet [Cost: 750]"
 
 REFERENCE           WEAPON_MP40_1000
-LANG_ENGLISH        "Press & hold &&1 to buy MP40 [Cost: 1000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy MP40 [Cost: 1000]"
 
 REFERENCE           WEAPON_PPSH_2000
-LANG_ENGLISH        "Press & hold &&1 to buy PPSh-41 [Cost: 2000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy PPSh-41 [Cost: 2000]"
 
 REFERENCE           WEAPON_STG44_1200
-LANG_ENGLISH        "Press & hold &&1 to buy STG-44 [Cost: 1200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy STG-44 [Cost: 1200]"
 
 REFERENCE           WEAPON_THOMPSON_1200
-LANG_ENGLISH        "Press & hold &&1 to buy Thompson [Cost: 1200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Thompson [Cost: 1200]"
 
 REFERENCE           WEAPON_TYPE100_1000
-LANG_ENGLISH        "Press & hold &&1 to buy Type 100 [Cost: 1000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Type 100 [Cost: 1000]"
 
 REFERENCE           WEAPON_DOUBLEBARREL_1200
-LANG_ENGLISH        "Press & hold &&1 to buy Double-Barreled Shotgun [Cost: 1200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Double-Barreled Shotgun [Cost: 1200]"
 
 REFERENCE           WEAPON_DOUBLEBARREL_SAWED_1200
-LANG_ENGLISH        "Press & hold &&1 to buy Sawed-Off Shotgun [Cost: 1200]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Sawed-Off Shotgun [Cost: 1200]"
 
 REFERENCE           WEAPON_SHOTGUN_1500
-LANG_ENGLISH        "Press & hold &&1 to buy M1897 Trench Gun [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy M1897 Trench Gun [Cost: 1500]"
 
 REFERENCE           WEAPON_30CAL_3000
-LANG_ENGLISH        "Press & hold &&1 to buy Browning M1919 [Cost: 3000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Browning M1919 [Cost: 3000]"
 
 REFERENCE           WEAPON_BAR_1800
-LANG_ENGLISH        "Press & hold &&1 to buy BAR [Cost: 1800]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy BAR [Cost: 1800]"
 
 REFERENCE           WEAPON_DP28_2250
-LANG_ENGLISH        "Press & hold &&1 to buy DP-28 [Cost: 2250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy DP-28 [Cost: 2250]"
 
 REFERENCE           WEAPON_FG42_1500
-LANG_ENGLISH        "Press & hold &&1 to buy FG42 [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy FG42 [Cost: 1500]"
 
 REFERENCE           WEAPON_FG42_S_1500
-LANG_ENGLISH        "Press & hold &&1 to buy FG42 + Scope [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy FG42 + Scope [Cost: 1500]"
 
 REFERENCE           WEAPON_MG42_3000
-LANG_ENGLISH        "Press & hold &&1 to buy MG42 [Cost: 3000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy MG42 [Cost: 3000]"
 
 REFERENCE           WEAPON_TYPE99_LMG_1750
-LANG_ENGLISH        "Press & hold &&1 to buy Type 99 LMG [Cost: 1750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Type 99 LMG [Cost: 1750]"
 
 REFERENCE           WEAPON_M1GARAND_GL_1500
-LANG_ENGLISH        "Press & hold &&1 to buy M1 Garand + Rifle Grenade [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy M1 Garand + Rifle Grenade [Cost: 1500]"
 
 REFERENCE           WEAPON_MOSIN_GL_1500
-LANG_ENGLISH        "Press & hold &&1 to buy Mosin-Nagant + Rifle Grenade [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Mosin-Nagant + Rifle Grenade [Cost: 1500]"
 
 REFERENCE           WEAPON_30CAL_BIPOD_3500
-LANG_ENGLISH        "Press & hold &&1 to buy Browning M1919 + Bipod [Cost: 3500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Browning M1919 + Bipod [Cost: 3500]"
 
 REFERENCE           WEAPON_BAR_BIPOD_2500
-LANG_ENGLISH        "Press & hold &&1 to buy BAR + Bipod [Cost: 2500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy BAR + Bipod [Cost: 2500]"
 
 REFERENCE           WEAPON_DP28_BIPOD_2500
-LANG_ENGLISH        "Press & hold &&1 to buy DP-28 + Bipod [Cost: 2500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy DP-28 + Bipod [Cost: 2500]"
 
 REFERENCE           WEAPON_FG42_BIPOD_2000
-LANG_ENGLISH        "Press & hold &&1 to buy FG42 + Bipod [Cost: 2000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy FG42 + Bipod [Cost: 2000]"
 
 REFERENCE           WEAPON_TYPE99_LMG_BIPOD_2250
-LANG_ENGLISH        "Press & hold &&1 to buy Type 99 LMG + Bipod [Cost: 2250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Type 99 LMG + Bipod [Cost: 2250]"
 
 REFERENCE           WEAPON_BAZOOKA_2000
-LANG_ENGLISH        "Press & hold &&1 to buy M9A1 Bazooka [Cost: 2000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy M9A1 Bazooka [Cost: 2000]"
 
 REFERENCE           WEAPON_MG42_BIPOD_3500
-LANG_ENGLISH        "Press & hold &&1 to buy MG42 + Bipod [Cost: 3500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy MG42 + Bipod [Cost: 3500]"
 
 REFERENCE           WEAPON_PANZERSCHREK_2000
-LANG_ENGLISH        "Press & hold &&1 to buy Panzerschrek [Cost: 2000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Panzerschrek [Cost: 2000]"
 
 REFERENCE           WEAPON_M2_FLAMETHROWER_3000
-LANG_ENGLISH        "Press & hold &&1 to buy Flamethrower [Cost: 3000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Flamethrower [Cost: 3000]"
 
 REFERENCE           WEAPON_MORTARROUND_2000
-LANG_ENGLISH        "Press & hold &&1 to buy Mortar Rounds [Cost: 2000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Mortar Rounds [Cost: 2000]"
 
 REFERENCE           WEAPON_SATCHEL_2000
-LANG_ENGLISH        "Press & hold &&1 to buy Satchel Charge [Cost: 2000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Satchel Charge [Cost: 2000]"
 
 REFERENCE           WEAPON_RAYGUN_10000
-LANG_ENGLISH        "Press & hold &&1 to buy Ray Gun [Cost: 10000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Ray Gun [Cost: 10000]"
 
 REFERENCE           WEAPON_BOWIE_BUY
-LANG_ENGLISH        "Press & hold &&1 to buy Bowie Knife [Cost: 3000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Bowie Knife [Cost: 3000]"
 
 REFERENCE           PLAYERZOMBIE_DOWNED
 LANG_ENGLISH        "Zombie down!"
 
 REFERENCE           PERK_QUICKREVIVE
-LANG_ENGLISH        "Press & hold &&1 to buy Revive [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Revive [Cost: 1500]"
 
 REFERENCE           PERK_FASTRELOAD
-LANG_ENGLISH        "Press & hold &&1 to buy Speed Cola [Cost: 3000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Speed Cola [Cost: 3000]"
 
 REFERENCE           PERK_DOUBLETAP
-LANG_ENGLISH        "Press & hold &&1 to buy Double Tap Root Beer [Cost: 2000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Double Tap Root Beer [Cost: 2000]"
 
 REFERENCE           PERK_JUGGERNAUT
-LANG_ENGLISH        "Press & hold &&1 to buy Jugger-Nog [Cost: 2500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Jugger-Nog [Cost: 2500]"
 
 REFERENCE           PERK_PACKAPUNCH
-LANG_ENGLISH        "Press & hold &&1 to buy Pack A Punch Upgrade [Cost: 5000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Pack A Punch Upgrade [Cost: 5000]"
 
 REFERENCE           POWERUP_INSTA_KILL
 LANG_ENGLISH        "Insta-Kill: "
@@ -377,22 +380,22 @@ REFERENCE           POWERUP_MAX_AMMO
 LANG_ENGLISH        "Max Ammo!"
 
 REFERENCE           BUTTON_REWARD_BARRIER_10
-LANG_ENGLISH        "Press & hold &&1 to Rebuild Barrier [Reward: 10]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Rebuild Barrier [Reward: 10]"
 
 REFERENCE           BUTTON_REWARD_BARRIER_20
-LANG_ENGLISH        "Press & hold &&1 to Rebuild Barrier [Reward: 20]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Rebuild Barrier [Reward: 20]"
 
 REFERENCE           BUTTON_REWARD_BARRIER_30
-LANG_ENGLISH        "Press & hold &&1 to Rebuild Barrier [Reward: 30]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Rebuild Barrier [Reward: 30]"
 
 REFERENCE           BUTTON_REWARD_BARRIER_40
-LANG_ENGLISH        "Press & hold &&1 to Rebuild Barrier [Reward: 40]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Rebuild Barrier [Reward: 40]"
 
 REFERENCE           GAME_OVER
 LANG_ENGLISH        "GAME OVER"
 
 REFERENCE           BUTTON_REWARD_BARRIER_50
-LANG_ENGLISH        "Press & hold &&1 to Rebuild Barrier [Reward: 50]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Rebuild Barrier [Reward: 50]"
 
 REFERENCE           SURVIVED_ROUNDS
 LANG_ENGLISH        "You Survived &&1 Rounds"
@@ -410,34 +413,31 @@ REFERENCE           RANDOM_WEAPON_650
 LANG_ENGLISH        "Press &&1 for a Random Weapon [Cost: 650]"
 
 REFERENCE           BUTTON_REWARD_BARRIER
-LANG_ENGLISH        "Press & hold &&1 to Rebuild Barrier"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Rebuild Barrier"
 
 REFERENCE           FLAMES_UNAVAILABLE
 LANG_ENGLISH        "The power must be activated first "
 
 REFERENCE           BUTTON_SOUTH_FLAMES
-LANG_ENGLISH        "Press & hold &&1 to activate the flame barrier [Cost: 500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to activate the flame barrier [Cost: 500]"
 
 REFERENCE           BUTTON_BUY_OPEN_AREA_2500
-LANG_ENGLISH        "Press & hold &&1 to Open Area [Cost: 2500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 2500]"
 
 REFERENCE           BUTTON_NORTH_FLAMES
-LANG_ENGLISH        "Press & hold &&1 to activate the electric barrier [Cost: 1000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to activate the electric barrier [Cost: 1000]"
 
 REFERENCE           BETTY_PURCHASE
-LANG_ENGLISH        "Press & hold &&1 to buy Bouncing Betty  [Cost: 1000 - one time only ]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Bouncing Betty  [Cost: 1000 - one time only ]"
 
 REFERENCE           BETTY_ALREADY_PURCHASED
 LANG_ENGLISH        "You have already purchased Bouncing Betties"
 
-REFERENCE           BETTY_HOWTO
-LANG_ENGLISH        "Press [{+actionslot 4}] then [{+attack}] to place a Bouncing Betty"
-
 REFERENCE           USE_AUTO_TURRET
-LANG_ENGLISH        "Press & hold &&1 to activate the Fountain Turret [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to activate the Fountain Turret [Cost: 750]"
 
 REFERENCE           ELECTRIC_SWITCH
-LANG_ENGLISH        "Press & hold &&1 to turn on the electricity "
+LANG_ENGLISH        "Press & hold ^3&&1^7 to turn on the electricity "
 
 REFERENCE           INTRO_ASYLUM_LEVEL_BERLIN
 LANG_ENGLISH        "Wittenau Sanatorium"
@@ -449,40 +449,40 @@ REFERENCE           INTRO_ASYLUM_LEVEL_SEPTEMBER
 LANG_ENGLISH        "September 6th, 1945"
 
 REFERENCE           BUY_TESLA
-LANG_ENGLISH        "Press & Hold &&1 to buy Tesla Gun [cost : 10]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Tesla Gun [cost : 10]"
 
 REFERENCE           WEAPON_STICKY
-LANG_ENGLISH        "Press & Hold &&1 to buy Sticky Grenade [cost : 10]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Sticky Grenade [cost : 10]"
 
 REFERENCE           ACTIVATE_TRAP
-LANG_ENGLISH        "Press & hold &&1 to Activate Trap [Cost: 750]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Activate Trap [Cost: 750]"
 
 REFERENCE           CLEAR_DEBRIS
 LANG_ENGLISH        "Gate must be opened first"
 
 REFERENCE           TRADE_WEAPONS
-LANG_ENGLISH        "Press & hold &&1 to trade Weapons"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to trade Weapons"
 
 REFERENCE           ZIPLINE_USE
-LANG_ENGLISH        "Press & hold &&1 to activate the Zipline [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to activate the Zipline [Cost: 1500]"
 
 REFERENCE           ZIPLINE_ACTIVATE
-LANG_ENGLISH        "Press & hold &&1 to turn on the Zipline"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to turn on the Zipline"
 
 REFERENCE           AMMO_BOX
-LANG_ENGLISH        "Press & Hold &&1 to buy Max Ammo: [Costs everything you have - minimum 10,000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Max Ammo: [Costs everything you have - minimum 10,000]"
 
 REFERENCE           PERK_GENERIC
-LANG_ENGLISH        "Press & hold &&1 to buy "
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy "
 
 REFERENCE           POWER_UP_TPAD
-LANG_ENGLISH        "Press & hold &&1 to initiate link to the mainframe"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to initiate link to the mainframe"
 
 REFERENCE           TELEPORT_TO_CORE
-LANG_ENGLISH        "Press & hold &&1 to teleport to the mainframe [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to teleport to the mainframe [Cost: 1500]"
 
 REFERENCE           LINK_TPAD
-LANG_ENGLISH        "Press & hold &&1 to link the teleport pad to the mainframe"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to link the teleport pad to the mainframe"
 
 REFERENCE           LINK_ACTIVE
 LANG_ENGLISH        "Link activated"
@@ -497,13 +497,13 @@ REFERENCE           TELEPORT_COOLDOWN
 LANG_ENGLISH        "Teleporter is cooling down"
 
 REFERENCE           TRAP_DOOR
-LANG_ENGLISH        "Press & hold &&1 to activate Trap Door [Cost: 1000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to activate Trap Door [Cost: 1000]"
 
 REFERENCE           PROJ_DOOR
-LANG_ENGLISH        "Press & hold &&1 to Open Door"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door"
 
 REFERENCE           PROJ_LIFT
-LANG_ENGLISH        "Press & hold &&1 to Activate Lift [Cost: 500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Activate Lift [Cost: 500]"
 
 REFERENCE           PAY_TURRET
 LANG_ENGLISH        "Press & hold [{+activate}] to Use Turret [Cost: &&1]"
@@ -512,25 +512,25 @@ REFERENCE           AUTO_TURRET
 LANG_ENGLISH        "Press & hold [{+activate}] to activate automatic Turret [Cost &&1]"
 
 REFERENCE           BUILD_BRIDGE
-LANG_ENGLISH        "Press & hold &&1 to Build Bridge [Cost: 1000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to Build Bridge [Cost: 1000]"
 
 REFERENCE           GET_UPGRADED
-LANG_ENGLISH        "Press & Hold &&1 to take your upgraded weapon"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to take your upgraded weapon"
 
 REFERENCE           USE_TELEPORTER
-LANG_ENGLISH        "Press & hold &&1 to use teleporter [Cost: 1500]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to use teleporter [Cost: 1500]"
 
 REFERENCE           ACTIVATE_TELEPORTER
-LANG_ENGLISH        "Press & hold &&1 to activate teleporter"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to activate teleporter"
 
 REFERENCE           COAST_ZIPLINE
-LANG_ENGLISH        "Press & hold &&1 to use zipline [Cost: 1000]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to use zipline [Cost: 1000]"
 
 REFERENCE           COAST_ZIPLINE_WAIT
 LANG_ENGLISH        "The zipline must be activated first"
 
 REFERENCE           COAST_ZIPLINE_ACTIVATE
-LANG_ENGLISH        "Press & hold &&1 to activate zipline"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to activate zipline"
 
 
 ENDMARKER
