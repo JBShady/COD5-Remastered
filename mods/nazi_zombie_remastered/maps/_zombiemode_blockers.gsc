@@ -47,6 +47,24 @@ init_blockers()
 	{
 		flag_blockers[i] thread flag_blocker(); 
 	}	
+
+	if(getDvarInt( "zombiemode_dev") == 1 )
+	{
+		level.closeable_door = true;
+	}
+	else
+	{
+		level.closeable_door = undefined; // experimental
+	}
+
+	if(isDefined(level.closeable_door) && level.closeable_door == true)
+	{
+		level.number_doors = 3;
+
+		level.saved_origin = zombie_doors[0].doors[0].origin;
+
+		level thread door_checker("door_opened");
+	}
 }
 
 //
@@ -154,9 +172,9 @@ door_think()
 				{
 					// set the score
 					who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost ); 
-					if( isDefined( level.achievement_notify_func ) )
+					if( isDefined( level.closeable_door ) && level.closeable_door == true )
 					{
-						level [[ level.achievement_notify_func ]]( "Locksmith" );
+						level notify( "door_opened" );
 					}
 					bbPrint( "zombie_uses: playername %s playerscore %d round %d cost %d name %s x %f y %f z %f type door", who.playername, who.score, level.round_number, self.zombie_cost, self.target, self.origin );
 				}
@@ -250,7 +268,7 @@ door_think()
 		//CHRIS_P
 		//set any flags
 		if( IsDefined( self.script_flag ) )
-		{
+		{			
 			flag_set( self.script_flag );
 		}				
 		
@@ -263,6 +281,12 @@ door_think()
 		}
 		break;
 	}
+
+	if(isDefined(level.perma_reopen) && level.perma_reopen == true )
+	{
+		level thread can_close_door();		
+	}
+
 }
 
 
@@ -339,7 +363,116 @@ set_door_unusable()
 	self UseTriggerRequireLookAt();
 }
 
+door_checker(notify_name)
+{
+	counter = 0;
 
+	while( 1 )
+	{
+		level waittill( notify_name );
+		counter += 1;
+		if( counter >= level.number_doors )
+		{
+			level thread can_close_door();
+			break;
+		}
+	}
+}
+
+can_close_door()
+{
+	inside_door = spawn( "trigger_radius",(175.39, 587.4, 1.1), 0, 25, 25 );
+
+	wait(2);
+	
+	level.perma_reopen = true;
+
+	closable_door_trigger = spawn( "trigger_radius",(175.39, 587.4, 1.12), 0, 100, 25 );
+	closable_door_trigger SetHintString( &"REMASTERED_ZOMBIE_CLOSE_DOOR_1000" ); 
+	closable_door_trigger setCursorHint( "HINT_NOICON" ); 
+
+	closable_door_trigger thread closable_door_think(inside_door);
+}
+
+// dont play sounds on door, its in the wall
+// player can move into door while its closing
+// need to add round cooldown 
+closable_door_think(inside_door)
+{
+	zombie_doors = GetEntArray( "zombie_door", "targetname" ); // only one door, door 0 	zombie_doors[0]
+
+	cost = 1000;
+
+	while( 1 )
+	{
+		self waittill( "trigger", player );
+		if( player isTouching( inside_door) )
+		{
+			self SetInvisibleToPlayer( player, true );
+			continue;
+		}
+		if( !player IsTouching( self ) ) // new check, just to be safe so that if player leaves trig it resets for another player to use
+		{
+			continue;
+		}
+		if( !is_player_valid( player ) )
+		{
+			player thread ignore_triggers( 0.5 );
+			continue;
+		}
+		
+		self SetInvisibleToPlayer( player, false );
+
+		if( !player UseButtonPressed() || player isThrowingGrenade() ) // new check, because we're using trigger radius that triggers when we enter zone and not press F
+		{
+			continue; 
+		}
+
+		if(player.score < cost && (!IsDefined(player.has_satchel) || (player.has_satchel == false) ) ) // only if we DONT have points and we DONT have satchel
+		{
+			play_sound_at_pos( "no_purchase", zombie_doors[0].doors[0].origin ); 
+			wait(0.5);
+			continue;
+		}
+
+		play_sound_at_pos( "door_slide_open", zombie_doors[0].doors[0].origin );
+
+		break;
+
+	}
+
+	time = 1; 
+
+	zombie_doors[0].doors[0] NotSolid(); 
+	zombie_doors[0].doors[0] ConnectPaths();
+
+	zombie_doors[0].doors[0] MoveTo( level.saved_origin, time, time * 0.25, time * 0.25 ); 
+	zombie_doors[0].doors[0] thread door_solid_thread();
+
+	wait(randomfloat(.15));						
+
+	play_sound_at_pos( "purchase", zombie_doors[0].doors[0].origin );
+
+	self delete();
+
+	level waittill ( "between_round_over" ); // wait a round before we can close it
+
+	zombie_doors = GetEntArray( "zombie_door", "targetname" ); 
+
+	for( i = 0; i < zombie_doors.size; i++ )
+	{
+		all_trigs = getentarray( zombie_doors[i].target, "target" ); 
+		for( j = 0; j < all_trigs.size; j++ )
+		{
+			all_trigs[j] trigger_on(); 
+		}
+		zombie_doors[i] thread door_init(); 
+		zombie_doors[i].doors[0].door_moving = undefined;
+	}
+
+
+
+}
 //
 // DEBRIS ----------------------------------------------------------------------------------- //
 //
@@ -402,9 +535,9 @@ debris_think()
 			{
 				// set the score
 				who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost ); 
-				if( isDefined( level.achievement_notify_func ) )
+				if( isDefined( level.closeable_door ) && level.closeable_door == true )
 				{
-					level [[ level.achievement_notify_func ]]( "Locksmith" );
+					level notify( "door_opened" );
 				}
 				bbPrint( "zombie_uses: playername %s playerscore %d round %d cost %d name %s x %f y %f z %f type debris", who.playername, who.score, level.round_number, self.zombie_cost, self.target, self.origin );
 				
