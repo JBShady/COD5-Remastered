@@ -254,6 +254,8 @@ treasure_chest_init()
 	chests = GetEntArray( "treasure_chest_use", "targetname" ); 
 
 	array_thread( chests, ::treasure_chest_think ); 
+
+	array_thread( chests, ::disable_satchel ); 
 }
 
 set_treasure_chest_cost( cost )
@@ -263,8 +265,6 @@ set_treasure_chest_cost( cost )
 
 treasure_chest_think()
 {
-	level thread disable_satchel(self);
-
 	cost = 950;
 	if( IsDefined( level.zombie_treasure_chest_cost ) )
 	{
@@ -294,7 +294,9 @@ treasure_chest_think()
 		}
 		else if ( user.score < cost )
 		{
-			play_sound_on_ent( "no_purchase" );
+			//self play_sound_on_ent( "no_purchase" );
+			lid = getent( self.target, "targetname" ); 
+			level thread play_sound_on_ent("no_purchase", lid );
 			continue;	
 		}
 		
@@ -302,6 +304,9 @@ treasure_chest_think()
 	}
 
 	user achievement_notify( "DLC_ZOMBIE_MAGICBOX" );
+	
+	//stat tracking
+	user.stats["perks"]++;
 
 	// trigger_use->script_brushmodel lid->script_origin in radiant
 	lid = getent( self.target, "targetname" ); 
@@ -367,7 +372,7 @@ treasure_chest_think()
 	// give weapon here...
 	lid thread treasure_chest_lid_close( self.timedOut ); 
 	
-	wait 3; 
+	wait 2; 
 
 	self enable_trigger(); 	
 	self setvisibletoall();
@@ -375,9 +380,9 @@ treasure_chest_think()
 	self thread treasure_chest_think(); 
 }
 
-disable_satchel(trigger)
+disable_satchel()
 {
-	box = spawn( "trigger_radius",trigger.origin + (0, 0, 0.1), 0, 55, 10 );
+	box = spawn( "trigger_radius",self.origin + (0, 0, 0.1), 0, 55, 10 );
 
 	while(1)
 	{
@@ -548,7 +553,7 @@ treasure_chest_ChooseRandomWeapon( player )
 		{
 			continue;
 		}
-		if( keys[i] == "mortar_round" && isDefined(self.has_mortar) && self.has_mortar == true )
+		if( keys[i] == "mortar_round" && isDefined(player.has_mortar) && player.has_mortar == true )
 		{
 			continue;
 		}
@@ -824,7 +829,8 @@ weapon_cabinet_think()
 				}
 				else // not enough money
 				{
-					play_sound_on_ent( "no_purchase" );
+					level thread play_sound_on_ent("no_purchase", doors[0] );
+					//self play_sound_on_ent( "no_purchase" );
 				}			
 			}
 			else if ( player.score >= ammo_cost )
@@ -837,7 +843,8 @@ weapon_cabinet_think()
 			}
 			else // not enough money
 			{
-				play_sound_on_ent( "no_purchase" );
+				level thread play_sound_on_ent("no_purchase", doors[0] );
+				//self play_sound_on_ent( "no_purchase" );
 			}
 		}
 		else if( player.score >= cost ) // First time the player opens the cabinet
@@ -898,7 +905,8 @@ weapon_cabinet_think()
 		}
 		else // not enough money
 		{
-			 play_sound_on_ent( "no_purchase" );
+			level thread play_sound_on_ent("no_purchase", doors[0] );
+			//self play_sound_on_ent( "no_purchase" );
 		}		
 	}
 }
@@ -954,14 +962,14 @@ weapon_crate_think()
 			continue;
 		}
 
-		if( !player UseButtonPressed() ) // new check, because we're using trigger radius that triggers when we enter zone and not press F
+		if( !player UseButtonPressed() || player isThrowingGrenade() ) // new check, because we're using trigger radius that triggers when we enter zone and not press F
 		{
 			continue; 
 		}
 		if(player.score < cost && (!IsDefined(player.has_satchel) || (player.has_satchel == false) ) ) // only if we DONT have points and we DONT have satchel
 		{
 			crate_sound play_sound_on_ent( "no_purchase" );
-			wait(0.5);
+			wait(0.1);
 			continue;
 		}
 
@@ -1134,7 +1142,8 @@ weapon_spawn_think()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				//self play_sound_on_ent( "no_purchase" );
+				player play_sound_on_ent( "no_purchase" );
 			}
 		}
 		else
@@ -1169,7 +1178,8 @@ weapon_spawn_think()
 			}
 			else
 			{
-				play_sound_on_ent( "no_purchase" );
+				//self play_sound_on_ent( "no_purchase" );
+				player play_sound_on_ent( "no_purchase" );
 			}
 		}
 	}
