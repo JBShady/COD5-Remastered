@@ -161,6 +161,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Added "no purchase" sound effect when player does not have enough points
 * Fixed Mystery Box playing the debris sound for other players after every use once moving locations
 * Fixed Mystery Box playing the lid close sound when floating away during a Teddy Bear even though the lid never closes
+* Fixed Mystery Box jingle stopping when too many other sounds play
 * Fixed Wonder Weapon stinger sound effect sometimes not playing
 * Der Riese & Shi No Numa boxes now share equal weighted odds for Wonder Weapons, which have also been slightly nerfed so the Ray Gun and DG-2 are not overly common
 * Verrückt & Nacht Der Untoten boxes remain a full lottery, except for the Teddy Bear which is still slightly less forgiving than on later maps
