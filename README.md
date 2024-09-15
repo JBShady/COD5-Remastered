@@ -30,11 +30,12 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 
 ### General
 * All maps now use the same (more optimized) zombie spawning formula as Der Riese, fixing the unbalanced 24-limit on solo. Togglable with the new "Gametype" setting in Game Options
-* All maps now make use of improved scripting and bug fixes that were only added into the later DLCs, including but not limited to network safe spawning
+* All maps now make use of improved scripting and bug fixes that were only added into the later DLCs
 * AI no longer pushes, removing the "grabbing" effect where zombies slowed the player down. Togglable with the new "Enemy Grabbing" setting in Game Options
 * Added all zombiemode achievements that were on the console version (as well as custom achievements for maps that didn't have them) complete with notifications, sounds, icons, and a menu
 * Added stats tracking based on the console version for achievements, personal records, time played, rank, and other miscellaneous stats on a per-map basis that save to the player's profile
 * Purchase sounds that previously played on triggers now play on the player/object itself to prevent potential entity sound bugs
+* All maps utilize network safe spawning
 * Cheats disabled by default
 
 ### Player
@@ -178,6 +179,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Carpenter available on all maps, togglable under the "Gametype" setting in Game Options
 * Max Ammmos now refill equipment on all maps (betties, molotovs, grenades, etc.)
 * Fixed Insta-Kill special melee voiceover still being able to play from non-melee kills
+* Fixed the last hellhound sometimes not dropping Max Ammos, especially on Shi No Numa
 * Increased volume of Insta-Kill active loop sound
 * Double points now effects Carpenters and Nukes giving +800 and +400 respectively
 * Double points stack on all maps like originally scripted. However, it has been capped at only giving up to 4x for balance reasons
