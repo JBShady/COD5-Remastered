@@ -1,0 +1,260 @@
+#include "ui/menudef.h"
+
+// Press START display for maps:
+#define VIS_PRESS_START ( dvarstring( mapname ) != "intro_pac" && dvarstring( mapname ) != "outro" )
+#define VIS_PRESS_START_TO_CONTINUE ( dvarstring( mapname ) == "intro_pac" && dvarstring( mapname ) != "outro" )
+//#define VIS_PRESS_START 1
+
+// Displays after level has loaded, and we're waiting for the player to click before starting the game.
+{
+	assetGlobalDef
+	{
+		fadeClamp 1.0				// sets the fadeup alpha
+		fadeCycle 1					// how often fade happens in milliseconds
+		fadeAmount 0.1				// amount to adjust alpha per cycle
+	}
+
+	menuDef
+	{
+		name				"pregame"
+  		rect				0 0 640 480
+		fullScreen			1
+		focusColor			COLOR_FOCUSED
+		backcolor			0 0 0 0
+		style				WINDOW_STYLE_FILLED
+		onEsc
+		{
+			exec "set cl_bypassMouseInput 0"
+			uiScript playerstart
+		}
+
+		onOpen
+		{
+			execondvarintvalue cg_drawDpadHUD 1 "set cl_bypassMouseInput 1"; 
+			setdvar ui_SaveLoadVisible "0";
+			setfocus press_to_skip;
+		}
+
+		onClose
+		{
+			exec "set cl_bypassMouseInput 0"
+		}
+
+		itemDef 
+		{
+			style			WINDOW_STYLE_FILLED
+			rect			FULLSCREEN_WIDE
+			backcolor		0 0 0 1
+			visible			1
+			background		"white"
+			decoration
+		}
+		
+
+		itemDef 
+		{
+			style			WINDOW_STYLE_FILLED
+			rect			FULLSCREEN_WIDE
+			backcolor		1 1 1 1
+			visible			1
+			background		cinematic
+			ownerdraw		UI_CINEMATIC
+			decoration
+		}
+		
+		itemDef
+		{
+			type			ITEM_TYPE_TEXT
+			#ifdef PC
+				rect			-250 388 500 0 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+			#else
+				rect			-225 352 450 0 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
+			#endif
+			textcinematicsubtitle
+			textfont		UI_FONT_DEFAULT
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		0.38
+			textalign		ITEM_ALIGN_TOP_CENTER
+			visible			1
+			decoration
+			autowrapped
+		}		
+		
+		itemDef
+		{
+			name			"profile"
+			visible			1
+			rect			40 40 560 400
+			ownerdraw		UI_LOADPROFILING
+			decoration
+		}
+
+		// the button
+		// Text message saying you should click to continue
+
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_TITLE
+			border			0
+			bordercolor		1 1 1 1
+			rect			-128 445 896 45
+			textalign		ITEM_ALIGN_TOP_CENTER
+			textaligny		28
+			forecolor		1 1 1 1
+			backcolor		0 0 0 0
+			visible			1
+			decoration
+		}
+		
+#ifdef CONSOLE
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			text			"@MENU_PRESS_START_TO_CONTINUE"
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_TITLE
+			border			0
+			bordercolor		1 1 1 1
+			rect			0 418 640 45
+			textalign		ITEM_ALIGN_TOP_CENTER
+			textaligny		4
+			forecolor		1 1 1 1
+			backcolor		0 0 0 0
+			visible			when ( VIS_PRESS_START_TO_CONTINUE && ( dvarString( mapname ) != "credits" ) && ( dvarInt( loc_language ) != 0 ) );
+			decoration
+		}
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			text			"@MENU_PRESS_START"
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_TITLE
+			border			0
+			bordercolor		1 1 1 1
+			rect			0 418 640 45
+			textalign		ITEM_ALIGN_TOP_CENTER
+			textaligny		4
+			forecolor		1 1 1 1
+			backcolor		0 0 0 0
+			visible			when ( iscinematicfinished() == 1 && ( dvarString( mapname ) != "credits" ) && VIS_PRESS_START && ( dvarInt( loc_language ) != 0 ) );
+			decoration
+		}
+#endif // #ifdef CONSOLE
+#ifdef PC
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			text			"@MENU_CLICK_TO_START_THE_MISSION"
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_SMALL
+			border			0
+			bordercolor		1 1 1 1
+			rect			0 368 640 45
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalign		ITEM_ALIGN_TOP_CENTER
+			textaligny		4
+			forecolor		1 1 1 0.5
+			backcolor		0 0 0 0
+			visible when ( !dvarbool( ui_isSaving ) && dvarstring( credits ) != "1" && VIS_PRESS_START && dvarInt( "cg_drawDpadHUD" ) != 1 );
+			decoration
+		}
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			text			"@MENU_CLICK_TO_CONTINUE"
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_SMALL
+			border			0
+			bordercolor		1 1 1 1
+			rect			0 368 640 45
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalign		ITEM_ALIGN_TOP_CENTER
+			textaligny		4
+			forecolor		1 1 1 0.5
+			backcolor		0 0 0 0
+			visible when ( !dvarbool( ui_isSaving ) && dvarstring( mapname ) == "credits" && VIS_PRESS_START && dvarInt( "cg_drawDpadHUD" ) != 1 );
+			decoration
+		}
+#endif // #ifdef PC
+
+		itemDef
+		{
+			name			press_to_skip
+			type			ITEM_TYPE_BUTTON
+			rect			-130 -2 900 486
+			style			WINDOW_STYLE_EMPTY
+			visible			when( dvarString( mapname ) != "outro" )
+			forecolor		0 0 0 0
+			backcolor		0 0 0 0
+			action
+			{
+				exec "set cl_bypassMouseInput 0"
+				uiScript playerstart
+			}
+			execkeyint BUTTON_A
+			{
+				exec "set cl_bypassMouseInput 0"
+				uiScript playerstart
+			}
+			execkeyint BUTTON_B
+			{
+				exec "set cl_bypassMouseInput 0"
+				uiScript playerstart
+			}
+			execkeyint BUTTON_START
+			{
+				exec "set cl_bypassMouseInput 0"
+				uiScript playerstart
+			}
+		}
+
+#include "ui/safearea.menu"
+
+/*
+#ifdef PS3
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			text			"@PLATFORM_UI_SELECTBUTTON"
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_SMALL
+			border			0
+			bordercolor		1 1 1 1
+			rect			40 328 600 45 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalign		ITEM_ALIGN_TOP_LEFT
+			textaligny		4
+			forecolor		1 1 1 0.8
+			backcolor		0 0 0 0
+			visible when ( !dvarbool( ui_isSaving ) && VIS_PRESS_START );
+			decoration
+		}
+#endif
+
+#ifdef XENON
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			text			"@PLATFORM_UI_SELECTBUTTON"
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_SMALL
+			border			0
+			bordercolor		1 1 1 1
+			rect			40 328 600 45 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textalign		ITEM_ALIGN_TOP_LEFT
+			textaligny		4
+			forecolor		1 1 1 0.8
+			backcolor		0 0 0 0
+			visible when ( !dvarbool( ui_isSaving ) && VIS_PRESS_START );
+			decoration
+		}
+#endif
+
+
+*/
+	}
+}
+
