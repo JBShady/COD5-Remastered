@@ -1467,7 +1467,11 @@ zombie_gib_on_damage()
 				{
 					self.has_legs = false; 
 					self AllowedStances( "crouch" ); 
-										
+						
+					// reduce collbox so player can jump over
+					//self setPhysParams( 15, 0, 24 );
+					//not in waw engine
+
 					which_anim = RandomInt( 6 ); 
 					if(self.a.gib_ref == "no_legs")
 					{
@@ -2313,7 +2317,7 @@ do_player_playdialog(player_index, sound_to_play, waittime, response)
 		level.player_is_speaking = 0;	
 	}
 
-	if(level.player_is_speaking != 1)
+	if(level.player_is_speaking != 1 && self.sessionstate != "intermission")
 	{
 		level.player_is_speaking = 1;
 		//iprintlnbold(sound_to_play);

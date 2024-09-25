@@ -1673,7 +1673,7 @@ do_player_playdialog(player_index, sound_to_play, waittime )
 		level.player_is_speaking = 0;	
 	}
 
-	if(level.player_is_speaking != 1)
+	if(level.player_is_speaking != 1 && self.sessionstate != "intermission")
 	{
 		level.player_is_speaking = 1;
 		//iprintlnbold(sound_to_play);
