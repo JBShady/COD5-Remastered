@@ -234,19 +234,20 @@
 		CHOICE_SECTION_TITLE( 21, "@MENU_TEXTURE_SETTINGS_CAP" )
 
 		CHOICE_DVARSTRINGLIST( 22, "@MENU_TEXTURE_MIPMAPS", r_texFilterMipMode, { "@MENU_AUTOMATIC"; "Unchanged"; "@MENU_BILINEAR"; "Force Bilinear"; "@MENU_TRILINEAR"; "Force Trilinear" }, setLocalVarBool ui_showApply 1 )
-		CHOICE_DVARSLIDER( 23, "@MENU_TEXTURE_ANISOTROPY", r_texFilterAnisoMin, 1, 1, 16, setLocalVarBool ui_showApply 1 )
-		CHOICE_DVARFLOATLIST( 26, "@MENU_TEXTURE_QUALITY", ui_r_picmip_manual, { "@MENU_AUTOMATIC" 0 "@MENU_MANUAL" 1 }, setLocalVarBool ui_showApply 1 )
-		CHOICE_DVARFLOATLIST_VIS( 27, "@MENU_TEXTURE_RESOLUTION", ui_r_picmip, { "@MENU_LOW" 3 "@MENU_NORMAL" 2 "@MENU_HIGH" 1 "@MENU_EXTRA" 0 }, setLocalVarBool ui_showApply 1, when( dvarint( ui_r_picmip_manual ) ) )
-		CHOICE_DVARFLOATLIST_VIS( 28, "@MENU_NORMAL_MAP_RESOLUTION", ui_r_picmip_bump, { "@MENU_LOW" 3 "@MENU_NORMAL" 2 "@MENU_HIGH" 1 "@MENU_EXTRA" 0 }, setLocalVarBool ui_showApply 1, when( dvarint( ui_r_picmip_manual ) ) )
-		CHOICE_DVARFLOATLIST_VIS( 29, "@MENU_SPECULAR_MAP_RESOLUTION", ui_r_picmip_spec, { "@MENU_LOW" 3 "@MENU_NORMAL" 2 "@MENU_HIGH" 1 "@MENU_EXTRA" 0 }, setLocalVarBool ui_showApply 1, when( dvarint( ui_r_picmip_manual ) ) )
+		CHOICE_DVARFLOATLIST( 23, "@REMASTERED_ANISO", r_texFilterAnisoMax, { "@MENU_LOW" 4 "@MENU_NORMAL" 16 }, setLocalVarBool ui_showApply 1 )
+		CHOICE_DVARSLIDER( 24, "@MENU_TEXTURE_ANISOTROPY", r_texFilterAnisoMin, 1, 1, 16, setLocalVarBool ui_showApply 1 )
+		CHOICE_DVARFLOATLIST( 27, "@MENU_TEXTURE_QUALITY", ui_r_picmip_manual, { "@MENU_AUTOMATIC" 0 "@MENU_MANUAL" 1 }, setLocalVarBool ui_showApply 1 )
+		CHOICE_DVARFLOATLIST_VIS( 28, "@MENU_TEXTURE_RESOLUTION", ui_r_picmip, { "@MENU_LOW" 3 "@MENU_NORMAL" 2 "@MENU_HIGH" 1 "@MENU_EXTRA" 0 }, setLocalVarBool ui_showApply 1, when( dvarint( ui_r_picmip_manual ) ) )
+		CHOICE_DVARFLOATLIST_VIS( 29, "@MENU_NORMAL_MAP_RESOLUTION", ui_r_picmip_bump, { "@MENU_LOW" 3 "@MENU_NORMAL" 2 "@MENU_HIGH" 1 "@MENU_EXTRA" 0 }, setLocalVarBool ui_showApply 1, when( dvarint( ui_r_picmip_manual ) ) )
+		CHOICE_DVARFLOATLIST_VIS( 30, "@MENU_SPECULAR_MAP_RESOLUTION", ui_r_picmip_spec, { "@MENU_LOW" 3 "@MENU_NORMAL" 2 "@MENU_HIGH" 1 "@MENU_EXTRA" 0 }, setLocalVarBool ui_showApply 1, when( dvarint( ui_r_picmip_manual ) ) )
 
 		//when on menu, we are just changing the dummy var because our client script will set the actual 2 dvars
-		CHOICE_DVARFLOATLIST_VIS( 24, "@REMASTERED_LOD_RIGID", r_lodBiasRigid_settings, { "@REMASTERED_HIGH" -200 "@REMASTERED_DEFAULT" 0 }, ; , when( !dvarint(cl_ingame) ) ) // Increases LOD bias for detailed models
-		CHOICE_DVARFLOATLIST_VIS( 25, "@REMASTERED_LOD_SKINNED", r_lodBiasSkinned_settings, { "@REMASTERED_HIGH" -200 "@REMASTERED_DEFAULT" 0 }, ; , when( !dvarint(cl_ingame) ) ) // Increases LOD bias for detailed models
+		CHOICE_DVARFLOATLIST_VIS( 25, "@REMASTERED_LOD_RIGID", r_lodBiasRigid_settings, { "@REMASTERED_HIGH" -200 "@REMASTERED_DEFAULT" 0 }, ; , when( !dvarint(cl_ingame) ) ) // Increases LOD bias for detailed models
+		CHOICE_DVARFLOATLIST_VIS( 26, "@REMASTERED_LOD_SKINNED", r_lodBiasSkinned_settings, { "@REMASTERED_HIGH" -200 "@REMASTERED_DEFAULT" 0 }, ; , when( !dvarint(cl_ingame) ) ) // Increases LOD bias for detailed models
 
 		//however, when we are in game we will edit the actual settings
-		CHOICE_DVARFLOATLIST_VIS( 24, "@REMASTERED_LOD_RIGID", r_lodBiasRigid, { "@REMASTERED_HIGH" -200 "@REMASTERED_DEFAULT" 0 }, exec "setfromdvar r_lodBiasRigid_settings r_lodBiasRigid" , when( dvarint(cl_ingame) ) ) 
-		CHOICE_DVARFLOATLIST_VIS( 25, "@REMASTERED_LOD_SKINNED", r_lodBiasSkinned, { "@REMASTERED_HIGH" -200 "@REMASTERED_DEFAULT" 0 }, exec "setfromdvar r_lodBiasSkinned_settings r_lodBiasSkinned" , when( dvarint(cl_ingame) ) ) 
+		CHOICE_DVARFLOATLIST_VIS( 25, "@REMASTERED_LOD_RIGID", r_lodBiasRigid, { "@REMASTERED_HIGH" -200 "@REMASTERED_DEFAULT" 0 }, exec "setfromdvar r_lodBiasRigid_settings r_lodBiasRigid" , when( dvarint(cl_ingame) ) ) 
+		CHOICE_DVARFLOATLIST_VIS( 26, "@REMASTERED_LOD_SKINNED", r_lodBiasSkinned, { "@REMASTERED_HIGH" -200 "@REMASTERED_DEFAULT" 0 }, exec "setfromdvar r_lodBiasSkinned_settings r_lodBiasSkinned" , when( dvarint(cl_ingame) ) ) 
 
 		//CHOICE_DDVARALTTEXT_VIS( 24, "@REMASTERED_LOD", "@REMASTERED_DETAIL", when( INGAME && dvarString( "lod_bias_enable") == "0" ) )
 		//CHOICE_DDVARALTTEXT_VIS( 24, "@REMASTERED_LOD", "@REMASTERED_LOW_DETAIL", when( INGAME && dvarString( "lod_bias_enable") == "1" ) )
