@@ -742,7 +742,7 @@ give_model( class )
 			{
 				case 0:
 					character\char_usa_marine_player1::main();
-					self SetClientDvar( "cg_ScoresColor_Gamertag_0" , GetDvar( "cg_hudGrenadeIndicatorTargetColor") );
+					self SetClientDvar( "cg_ScoresColor_Gamertag_0" , "1 1 1 1" );
 					//self iprintln("Character 1, Cap, no gear, loose pants");
 					break;
 				case 1:
@@ -760,6 +760,12 @@ give_model( class )
 					self SetClientDvar( "cg_ScoresColor_Gamertag_0" , GetDvar( "cg_ScoresColor_Gamertag_3" ) );
 					//self iprintln("Character 4, No headware, gear, loose pants");
 					break;
+			}
+
+			solo_white = GetDvarint("cg_SoloScoreColorWhite");
+			if(isDefined(solo_white) && solo_white == 1)
+			{
+				self SetClientDvar( "cg_ScoresColor_Gamertag_0" , "1 1 1 1" );
 			}
 		}
 		else

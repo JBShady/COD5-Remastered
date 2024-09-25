@@ -777,8 +777,7 @@ give_model( class )
 				character\char_zomb_player_0::main();
 				self SetUp_Weapons(level.startguns[0]);
 				self SetViewModel("viewmodel_hands_cloth_marine_bare");
-				self SetClientDvar( "cg_ScoresColor_Gamertag_0" , GetDvar( "cg_hudGrenadeIndicatorTargetColor") );
-				//Because we're overriding the color for player _0 dvar, the game forgets that Dempsey's name is white, so let's grab the (white) color from something else that doesn't  change
+				self SetClientDvar( "cg_ScoresColor_Gamertag_0" , "1 1 1 1" );
 				break;
 			case 1:
 				character\char_zomb_player_1::main();
@@ -799,7 +798,12 @@ give_model( class )
 				self SetClientDvar( "cg_ScoresColor_Gamertag_0" , GetDvar( "cg_ScoresColor_Gamertag_3" ) );
 				break;
 			}
-		
+
+			solo_white = GetDvarint("cg_SoloScoreColorWhite");
+			if(isDefined(solo_white) && solo_white == 1)
+			{
+				self SetClientDvar( "cg_ScoresColor_Gamertag_0" , "1 1 1 1" );
+			}
 		}
 		else if( isDefined( level.use_zombie_heroes ) && level.use_zombie_heroes ) 
 		{
