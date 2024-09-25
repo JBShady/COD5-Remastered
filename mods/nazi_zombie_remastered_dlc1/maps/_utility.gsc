@@ -1511,7 +1511,7 @@ magic_bullet_shield( health, time, oldhealth, maxhealth_modifier, no_death_detec
 		self.health = health; 
 		self.maxhealth = ( self.health * maxhealth_modifier ); 
 		oldHealth = self.health; 
-		self waittill( "pain" ); 
+		self waittill( "damage" ); // This needs to listen to damage instead of pain for zombies - Feli
 
 		if( oldHealth == self.health )// the game spams pain notify every frame while a guy is in pain script
 			continue; 
