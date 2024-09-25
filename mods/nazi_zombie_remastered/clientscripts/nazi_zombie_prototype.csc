@@ -160,6 +160,34 @@ dvar_update() // if we happen to change the dummy setting VARS on the main menu 
 			SetClientDvar("r_lodBiasSkinned", -200);
 		}
 
+		// FAILSAFES FOR BETTER BOBBING
+		if(GetDvarFloat("cg_bobWeaponMax") != 5 ) // weapon bob
+		{
+			SetClientDvar("cg_bobWeaponMax", 5);
+		}
+		if(GetDvar("bg_bobAmplitudeProne") != "0.08 0.04" ) // prone bob
+		{
+			SetClientDvar("bg_bobAmplitudeProne", "0.08 0.04");
+		}
+
+		// DIFFICULTY DVARS FOR DMG
+		if(GetDvarFloat("bg_fallDamageMinHeight") != 150 ) // fall dmg
+		{
+			SetClientDvar("bg_fallDamageMinHeight", 150);
+		}
+		if(GetDvarInt("player_deathInvulnerableToProjectile") != 0 ) // failsafe
+		{
+			SetClientDvar("player_deathInvulnerableToProjectile", 0);
+		}
+		if(GetDvarInt("player_deathInvulnerableTime") != 0 ) // failsafe
+		{
+			SetClientDvar("player_deathInvulnerableTime", 0);
+		}
+		if(GetDvarInt("player_deathInvulnerableToMelee") != 0 ) // failsafe
+		{
+			SetClientDvar("player_deathInvulnerableToMelee", 0);
+		}
+	
 		wait(0.05);
 
 	}

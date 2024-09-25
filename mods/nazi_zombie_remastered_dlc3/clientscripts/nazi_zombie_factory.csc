@@ -82,7 +82,7 @@ player_dvar_init()
 	players = GetLocalPlayers();
 	for(i = 0; i < players.size; i++)
 	{
-		players[i] thread dvar_update(i);
+		players[i] thread dvar_update();
 		//players[i] thread fov_fix(i);
 
 	}
@@ -104,7 +104,7 @@ fov_fix()
 	}
 }
 
-dvar_update(localclientnum) // if we happen to change the dummy setting VARS on the main menu and load in-game, the actual dvar will not reflect the dummy, which in these cases we hard-code in the dvar to update
+dvar_update() // if we happen to change the dummy setting VARS on the main menu and load in-game, the actual dvar will not reflect the dummy, which in these cases we hard-code in the dvar to update
 {
 	self endon("disconnect");
 
@@ -167,6 +167,34 @@ dvar_update(localclientnum) // if we happen to change the dummy setting VARS on 
 		else if(GetDvarInt("r_lodBiasSkinned_settings") == -200 ) 
 		{
 			SetClientDvar("r_lodBiasSkinned", -200);
+		}
+
+		// FAILSAFES FOR BETTER BOBBING
+		if(GetDvarFloat("cg_bobWeaponMax") != 5 ) // weapon bob
+		{
+			SetClientDvar("cg_bobWeaponMax", 5);
+		}
+		if(GetDvar("bg_bobAmplitudeProne") != "0.08 0.04" ) // prone bob
+		{
+			SetClientDvar("bg_bobAmplitudeProne", "0.08 0.04");
+		}
+
+		// DIFFICULTY DVARS FOR DMG
+		if(GetDvarFloat("bg_fallDamageMinHeight") != 150 ) // fall dmg
+		{
+			SetClientDvar("bg_fallDamageMinHeight", 150);
+		}
+		if(GetDvarInt("player_deathInvulnerableToProjectile") != 0 ) // failsafe
+		{
+			SetClientDvar("player_deathInvulnerableToProjectile", 0);
+		}
+		if(GetDvarInt("player_deathInvulnerableTime") != 0 ) // failsafe
+		{
+			SetClientDvar("player_deathInvulnerableTime", 0);
+		}
+		if(GetDvarInt("player_deathInvulnerableToMelee") != 0 ) // failsafe
+		{
+			SetClientDvar("player_deathInvulnerableToMelee", 0);
 		}
 
 		wait(0.05);
