@@ -7,7 +7,7 @@ main()
  
 	// *Fog section* 
 
-	setdvar("scr_fog_exp_halfplane", "550"); // OG 835
+	setdvar("scr_fog_exp_halfplane", "700"); // OG 835
 	setdvar("scr_fog_exp_halfheight", "200");
 	setdvar("scr_fog_nearplane", "165");
 	setdvar("scr_fog_red", "0.5");
@@ -48,7 +48,7 @@ main()
 fog_settings()
 {
 	start_dist 			= 165;
-	halfway_dist 		= 550; //originally 835
+	halfway_dist 		= 700; //originally 835
 	halfway_height 		= 200;
 	base_height 		= 75;
 	red 				= 0.5;
