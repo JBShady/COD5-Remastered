@@ -107,7 +107,7 @@
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textalign		ITEM_ALIGN_CENTER
 			exp 			text ( /*"- " + */locString( "@REMASTERED_HINT_PRESS" ) + KeyBinding("+activate") +  locString( "@REMASTERED_HINT_ENTER_FIRST" ) );
-			visible			when( dvarInt( "playerSpectating" ) == 1 && dvarBool( cl_paused ) == 0 && dvarBool(cg_thirdPerson) == 1 && dvarInt( "cg_drawDpadHUD" ) == 0 )
+			visible			when( dvarInt( "playerSpectating" ) == 1 && dvarBool( cl_paused ) == 0 && dvarBool(cg_thirdPerson) == 1 && dvarInt( "cg_drawDpadHUD" ) != 1  )
 			decoration
 		}
 		itemDef
@@ -118,7 +118,7 @@
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textalign		ITEM_ALIGN_CENTER
 			exp 			text ( /*"- " + */locString( "@REMASTERED_HINT_PRESS" ) + KeyBinding("+activate") +  locString( "@REMASTERED_HINT_ENTER_THIRD" ) );
-			visible			when( dvarInt( "playerSpectating" ) == 1  && dvarBool( cl_paused ) == 0 && dvarBool(cg_thirdPerson) == 0 && dvarInt( "cg_drawDpadHUD" ) == 0 )
+			visible			when( dvarInt( "playerSpectating" ) == 1  && dvarBool( cl_paused ) == 0 && dvarBool(cg_thirdPerson) == 0 && dvarInt( "cg_drawDpadHUD" ) != 1 )
 			decoration
 		}
 		itemDef
@@ -161,7 +161,19 @@
 			textscale		TEXTSIZE_SMALL
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			ownerdraw		CG_CURSORHINT
-			visible			1
+			visible			when(dvarInt( "cg_drawDpadHUD" ) != 1 )
+			decoration
+		}
+
+		itemDef
+		{
+			name			"chRect_xbox"
+			rect			0 0 40 40 // 64x64
+			textscale		(TEXTSIZE_SMALL + 0.02)
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			//textfont 		UI_FONT_SMALL
+			ownerdraw		CG_CURSORHINT
+			visible			when(dvarInt( "cg_drawDpadHUD" ) == 1)
 			decoration
 		}
 	}
@@ -387,11 +399,10 @@
 	}
 }		
 
-	
 menuDef
 {
 	name			"competitivemodescores"
-	rect			-103 -71 0 0 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
+	rect			-128 -75 0 0 HORIZONTAL_ALIGN_RIGHT VERTICAL_ALIGN_BOTTOM
 	fullScreen		0
 	visible when 	( !ui_active() && dvarint( ui_hud_hardcore ) == 0 && dvarBool( miniscoreboardhide ) == 0 && dvarBool( hud_missionFailed ) == 0 && dvarint( arcademode ) == 1 || dvarint( zombiemode ) == 1 );
 	
@@ -409,7 +420,7 @@ menuDef
 #else
 #define WEAPINFO_X -150
 #endif
-#define WEAPINFO_Y -63
+#define WEAPINFO_Y -64
 
 	menuDef
 	{
