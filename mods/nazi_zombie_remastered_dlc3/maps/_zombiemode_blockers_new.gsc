@@ -170,6 +170,7 @@ door_think()
 		}
 
 		// Door has been activated, make it do its thing
+		sound_played = false;
 		for(i=0;i<self.doors.size;i++)
 		{
 			self.doors[i] NotSolid(); 
@@ -234,10 +235,11 @@ door_think()
 			}
 
 			// Just play purchase sound on the first door
-			if( i == 0 )
-			{
-				play_sound_at_pos( "purchase", self.doors[i].origin );
-			}
+            if(!sound_played)
+            {
+                play_sound_at_pos( "purchase", self.doors[i].origin );
+                sound_played = true;
+            }
 				
 			//Chris_P - just in case spawners are targeted
 			if( isDefined( self.doors[i].target ) )
@@ -529,7 +531,7 @@ debris_move( struct )
 
 	self waittill( "movedone" );
 
-	self play_sound_on_entity ("couch_slam");
+	self thread play_sound_on_entity ("couch_slam");
 //	self playloopsound ("couch_loop");
 //	self delete();
 	if( IsDefined( self.script_fxid ) )
@@ -572,9 +574,11 @@ blocker_init()
 		targets[j].claimed = false;
 		targets[j].og_origin = targets[j].origin;
 		self.barrier_chunks[self.barrier_chunks.size] = targets[j];
-
-		self blocker_attack_spots();
 	}
+    
+    // Moved out of the loop, as it makes no sense to be run for every barrier chunk - Feli
+	if(self.barrier_chunks.size > 0)
+		self blocker_attack_spots();
 
 	assert( IsDefined( self.clip ) );
 	self.trigger_location = getstruct( self.target, "targetname" ); 
@@ -748,12 +752,19 @@ blocker_trigger_think()
 			chunk Show(); 
 	
 			//TUEY Play the sounds
-			player.rebuild_barrier_reward += cost;
-			if( player.rebuild_barrier_reward < level.zombie_vars["rebuild_barrier_cap_per_round"] )
+			player.rebuild_barrier_reward++; // jb - each time we repair it increases by just 1 indicating how many # of repairs, not points #, so that 2x points doesnt nerf us
+
+			chunk play_sound_on_ent( "rebuild_barrier_piece" );
+			if( (player.rebuild_barrier_reward < level.zombie_vars["rebuild_barrier_cap_per_round"]) )
 			{
-				chunk play_sound_on_ent( "rebuild_barrier_piece" );
+				play_sound_at_pos("purchase", player.origin);
+				failsafe = true;
 			}
-	
+			else
+			{
+				failsafe = undefined;
+			}
+
 			self thread replace_chunk( chunk, has_perk );
 	
 			assert( IsDefined( self.clip ) );
@@ -771,7 +782,7 @@ blocker_trigger_think()
 			}
 	
 			// set the score
-			if( player.rebuild_barrier_reward < level.zombie_vars["rebuild_barrier_cap_per_round"] )
+			if( (player.rebuild_barrier_reward < level.zombie_vars["rebuild_barrier_cap_per_round"]) && isDefined(failsafe) && failsafe == true ) // only give points if we got sound, because of one sec delay
 			{
 				player maps\_zombiemode_score::add_to_player_score( cost );
 
@@ -994,8 +1005,12 @@ replace_chunk( chunk, has_perk, via_powerup )
 	
 	chunk waittill_notify_or_timeout( "movedone", 1 ); 
 	assert( chunk.origin == chunk.og_origin );
-	earthquake( RandomFloatRange( 0.3, 0.4 ), RandomFloatRange(0.2, 0.4), chunk.origin, 150 ); 
 
+	if( !isdefined( via_powerup  ) )
+	{
+		earthquake( RandomFloatRange( 0.3, 0.4 ), RandomFloatRange(0.2, 0.4), chunk.origin, 150 ); 
+	}
+	
 	chunk.target_by_zombie = undefined;
 	chunk.destroyed = false; 
 	
