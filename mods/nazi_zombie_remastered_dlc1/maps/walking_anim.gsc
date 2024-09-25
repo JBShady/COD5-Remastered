@@ -3,25 +3,19 @@
 
 main()
 {	
-	players = GetPlayers();
-	array_thread(players,::walk_main);
-	array_thread(players,::rot_main);
-	array_thread(players,::prone_checks);
+	self thread walk_main();
+	self thread rot_main();
+	self thread prone_checks();
 }
 
 walk_main()
 {
 	self endon("disconnect");
 
+	self SetClientDvar("cg_bobWeaponMax", 5);
+
 	while(1)
 	{
-		self setClientDvar("cg_bobWeaponMax", "5");
-		self setClientDvar( "bg_fallDamageMinHeight", "150" );
-		
-		self setClientDvar( "player_deathInvulnerableToProjectile", "0" );
-		self setClientDvar( "player_deathInvulnerableTime", "0" );
-		self setClientDvar( "player_deathInvulnerableToMelee", "0" );
-
 		if( self ADSButtonPressed())
 		{
 			self setClientDvar("cg_bobweaponamplitude", "0.16");	
@@ -55,10 +49,16 @@ prone_checks()
 {
 	self endon("disconnect");
 	
+	self SetClientDvar("bg_bobAmplitudeProne", "0.08 0.04");
+
+	if(getDvarInt( "cg_lowerGun" ) == 1 && GetPlayers().size == 1 )
+	{
+		self SetClientDvar("cg_gun_move_minspeed", 0);
+		return;
+	}
+
 	while(1)
 	{
-		self SetClientDvar("bg_bobAmplitudeProne","0.08 0.04");
-
 		if( self GetStance() == "prone" || self GetStance() == "crouch" )
 		{
 			self SetClientDvar("cg_gun_move_minspeed", 0);
