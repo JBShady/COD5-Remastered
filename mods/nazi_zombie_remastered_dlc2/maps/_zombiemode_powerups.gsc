@@ -348,6 +348,8 @@ get_num_window_destroyed()
 
 watch_for_drop()
 {
+	flag_wait( "all_players_connected" ); 
+
 	players = get_players();
 	score_to_drop = ( players.size * level.zombie_vars["zombie_score_start"] ) + level.zombie_vars["zombie_powerup_drop_increment"];
 
