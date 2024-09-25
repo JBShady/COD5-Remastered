@@ -587,5 +587,8 @@ LANG_ENGLISH		"^7 to enter first person view"
 REFERENCE           HINT_ENTER_THIRD
 LANG_ENGLISH		"^7 to enter third person view"
 
+REFERENCE           ANISO
+LANG_ENGLISH		"Max Anisotropy"
+
 
 ENDMARKER
