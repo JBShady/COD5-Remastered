@@ -21,8 +21,8 @@ setup_teleport_aftereffects()
 	level.teleport_ae_funcs = [];
 
 	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_fov;
-	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_shellshock;
-	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_shellshock_electric;
+	//level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_shellshock;
+	//level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_shellshock_electric;
 	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_bw_vision;
 	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_red_vision;
 	level.teleport_ae_funcs[level.teleport_ae_funcs.size] = clientscripts\nazi_zombie_factory_teleporter::teleport_aftereffect_flashy_vision;
