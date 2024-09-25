@@ -16,6 +16,9 @@ character\char_usa_marine_player1.gsc
 character\char_usa_marine_player2.gsc
 character\char_usa_marine_player3.gsc
 character\char_usa_marine_player4.gsc
+clientscripts\_ambientpackage.csc
+clientscripts\_audio.csc
+clientscripts\_lights.csc
 clientscripts\_load.csc
 clientscripts\_utility.csc
 clientscripts\createfx\nazi_zombie_prototype_fx.csc

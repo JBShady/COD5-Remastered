@@ -28,8 +28,11 @@ character\char_jap_zombie.csv
 character\char_jap_zombie.gsc
 character\char_jap_zombie_nocap.csv
 character\char_jap_zombie_nocap.gsc
+clientscripts\_ambientpackage.csc
+clientscripts\_audio.csc
 clientscripts\_callbacks.csc
 clientscripts\_footsteps.csc
+clientscripts\_lights.csc
 clientscripts\_load.csc
 clientscripts\_utility.csc
 clientscripts\_zombiemode_tesla.csc

@@ -13,8 +13,11 @@ character\char_ger_honorguard_zombies.csv
 character\char_ger_honorguard_zombies.gsc
 character\char_ger_honorguard2_zombies.csv
 character\char_ger_honorguard2_zombies.gsc
+clientscripts\_ambientpackage.csc
+clientscripts\_audio.csc
 clientscripts\_callbacks.csc
 clientscripts\_footsteps.csc
+clientscripts\_lights.csc
 clientscripts\_load.csc
 clientscripts\_utility.csc
 clientscripts\_zombie_mode.csc
