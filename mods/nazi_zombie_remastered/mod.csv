@@ -159,4 +159,5 @@ localize,dlc
 sound,achievement_sound,,all_mp
 material,ui_leaderboard
 menufile,ui/pc_joinchoosegamemode.menu
+menufile,ui/pregame.menu
 localize,zombie

@@ -74,7 +74,6 @@ xmodel,viewmodel_rus_dp28_bipod_lmg
 xmodel,weapon_rus_dp28_bipod_lmg_up
 xmodel,viewmodel_rus_dp28_bipod_lmg_up
 xmodel,weapon_zombie_type100_smg_up
-xmodel,viewmodel_zombie_type100_smg_up
 xmodel,viewmodel_usa_tesla_gun_remastered
 xmodel,viewmodel_usa_tesla_gun_remastered_up
 xmodel,weapon_usa_tesla_upgraded
@@ -228,4 +227,5 @@ material,hud_arrow_up
 xmodel,char_usa_raider_gear_flametank
 material,ui_leaderboard
 menufile,ui/pc_joinchoosegamemode.menu
+menufile,ui/pregame.menu
 localize,zombie
