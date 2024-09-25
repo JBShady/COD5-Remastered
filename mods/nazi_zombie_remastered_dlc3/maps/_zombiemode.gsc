@@ -178,8 +178,6 @@ main(init_zombie_spawner_name)
 	//chrisp - adding spawning vo 
 	//level thread spawn_vo();
 	
-	//add ammo tracker for VO
-	level thread track_players_ammo_count();
 	level thread disable_character_dialog();
 
 	//level thread prevent_near_origin();
@@ -215,87 +213,71 @@ zombiemode_melee_miss()
 /*------------------------------------
 chrisp - adding vo to track players ammo
 ------------------------------------*/
-track_players_ammo_count()
+
+track_ammo_count()
 {
 	self endon("disconnect");
 	self endon("death");
-	if(!IsDefined (level.player_ammo_low))	
+	if(!IsDefined (self.player_ammo_low))	
 	{
-		level.player_ammo_low = 0;
+		self.player_ammo_low = false;
 	}	
-	if(!IsDefined(level.player_ammo_out))
+	if(!IsDefined(self.player_ammo_out))
 	{
-		level.player_ammo_out = 0;
+		self.player_ammo_out = false;
 	}
-	while(1)
+	while ( true )
 	{
-		players = get_players();
-		for(i=0;i<players.size;i++)
+		wait 0.5;
+		if ( !is_player_valid( self ) )
+		{				
+			continue;
+		}
+		weap = self getcurrentweapon();
+
+		if(!isDefined(weap) || weap == "none" || weap == "zombie_perk_bottle_doubletap" || weap == "zombie_perk_bottle_jugg" || weap == "zombie_perk_bottle_revive" || weap == "zombie_perk_bottle_sleight" || weap == "mine_bouncing_betty" || weap == "syrette" || weap == "zombie_knuckle_crack" || weap == "zombie_bowie_flourish" || weap == "m2_flamethrower_zombie" || weap == "m2_flamethrower_zombie_upgraded" || weap == "m7_launcher_zombie" || weap == "m7_launcher_zombie_upgraded" || (isSubStr(weap, "zombie_item")) || weap == "falling_hands" || weap == "zombie_melee" )
 		{
-	
-			weap = players[i] getcurrentweapon();
-			//iprintln("current weapon: " + weap);
-			//iprintlnbold(weap);
-			//Excludes all Perk based 'weapons' so that you don't get low ammo spam.
-			if(!isDefined(weap) || weap == "none" || weap == "zombie_perk_bottle_doubletap" || weap == "zombie_perk_bottle_jugg" || weap == "zombie_perk_bottle_revive" || weap == "zombie_perk_bottle_sleight" || weap == "mine_bouncing_betty" || weap == "syrette" || weap == "zombie_knuckle_crack" || weap == "zombie_bowie_flourish" || weap == "m2_flamethrower_zombie" || weap == "m2_flamethrower_zombie_upgraded" || weap == "m7_launcher_zombie" || weap == "m7_launcher_zombie_upgraded" || (isSubStr(weap, "zombie_item")) || weap == "falling_hands" || weap == "zombie_melee" )
+			continue;
+		}
+		ammo_count = self GetAmmoCount( weap );
+		if ( ammo_count > 5 )
+		{
+			continue;
+		}		
+
+		if ( ammo_count > 0 )
+		{
+			if ( !self.player_ammo_low )
 			{
-				continue;
-			}
-			//iprintln("checking ammo for " + weap);
-			if ( players[i] GetAmmoCount( weap ) > 5)
-			{
-				continue;
-			}		
-			if ( players[i] maps\_laststand::player_is_in_laststand() )
-			{				
-				continue;
-			}
-			else if (players[i] GetAmmoCount( weap ) < 5 && players[i] GetAmmoCount( weap ) > 0)
-			{
-				if (level.player_ammo_low == 0)
-				{
-					//iprintlnbold("threading low ammo");
-					level.player_ammo_low = 1;
-					players[i] thread add_low_ammo_dialog();		
-					players[i] thread ammo_dialog_timer();
-					level waittill("send_dialog_reminder");
-					level.player_ammo_low = 0;
-				}
-	
-			}
-			else if (players[i] GetAmmoCount( weap ) == 0)
-			{	
-				if(!isDefined(weap) || weap == "none")
-				{
-					continue;	
-				}				
-				level.player_ammo_out = 1;
-				players[i] thread add_no_ammo_dialog( weap );
-				//iprintlnbold("threading no ammo");
-				//put in this wait to keep the game from spamming about being low on ammo.
-				wait(20);
-				//iprintlnbold("no ammo ready");
-				level.player_ammo_out = 0;												
-			}
-			else
-			{
-				continue;
+				self thread add_low_ammo_dialog();
+				self thread ammo_low_dialog_timer();
 			}
 		}
-		wait(.5);
+		else
+		{	
+			if ( !self.player_ammo_out )
+			{
+				self thread add_no_ammo_dialog( weap );
+				self thread ammo_out_dialog_timer();
+			}
+		}
 	}	
 }
-ammo_dialog_timer()
+
+ammo_low_dialog_timer()
 {
-	level endon ("ammo_out");
-	while(1)
-	{
-		wait(20);
-		level notify ("send_dialog_reminder");	
-		break;
-	}	
-	
+	self.player_ammo_low = true;
+	wait 20;
+	self.player_ammo_low = false;
 }
+
+ammo_out_dialog_timer()
+{
+	self.player_ammo_out = true;
+	wait 20;
+	self.player_ammo_out = false;	
+}
+
 add_low_ammo_dialog()
 {
 	index = maps\_zombiemode_weapons::get_player_index(self);	
@@ -321,8 +303,6 @@ add_low_ammo_dialog()
 			
 	self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.25);	
 	
-	
-	
 }
 add_no_ammo_dialog( weap )
 {
@@ -331,7 +311,10 @@ add_no_ammo_dialog( weap )
 	// Let's pause here a couple of seconds to see if we're really out of ammo.
 	// If you take a weapon, there's a second or two where your current weapon
 	// will be set to no ammo while you switch to the new one.
-	wait(2);
+	while ( self isSwitchingWeapons() )
+	{
+		wait 0.1;
+	}
 
 	curr_weap = self getcurrentweapon();
 	if ( !IsDefined(curr_weap) || curr_weap != weap || self GetAmmoCount( curr_weap ) != 0 )
@@ -363,8 +346,6 @@ add_no_ammo_dialog( weap )
 	}
 
 	self maps\_zombiemode_spawner::do_player_playdialog(player_index, sound_to_play, 0.25);	
-	
-	
 	
 }
 
@@ -1108,6 +1089,10 @@ onPlayerConnect()
 		player thread player_revive_monitor();
 		player thread watchGrenadeThrow();
 		
+		player thread maps\walking_anim::main();
+
+		player thread track_ammo_count();
+
 		player thread maps\_zombiemode_betty::bouncing_betty_watch(); 
 		player thread maps\_zombiemode_betty::betty_no_weapons(); 
 
@@ -1186,7 +1171,7 @@ onPlayerSpawned()
 		players = getplayers();
 		if(players.size > 1)
 		{
-			self SetClientDvar( "cg_ScoresColor_Gamertag_0" , GetDvar( "cg_hudGrenadeIndicatorTargetColor") );
+			self SetClientDvar( "cg_ScoresColor_Gamertag_0" , "1 1 1 1" );
 			self SetClientDvar( "cg_ScoresColor_Gamertag_1" , GetDvar( "cg_ScoresColor_Gamertag_1") );
 			self SetClientDvar( "cg_ScoresColor_Gamertag_2" , GetDvar( "cg_ScoresColor_Gamertag_2") );
 			self SetClientDvar( "cg_ScoresColor_Gamertag_3" , GetDvar( "cg_ScoresColor_Gamertag_3") );
@@ -1215,6 +1200,11 @@ onPlayerSpawned()
         "player_meleechargefriction", "2500",
 		"cg_hudDamageIconTime", "2500" );
    
+   		self setClientDvar( "bg_fallDamageMinHeight", "150" );
+		self setClientDvar( "player_deathInvulnerableToProjectile", "0" );
+		self setClientDvar( "player_deathInvulnerableTime", "0" );
+		self setClientDvar( "player_deathInvulnerableToMelee", "0" );
+		
 		self FreezeControls( false );
 
 		if( getDvar( "classic_perks" ) == "" || getDvar("classic_perks") == "0" ) // if dvar doesn't exist or is disabled, we stay default
@@ -1746,13 +1736,21 @@ round_spawning()
 	// DEBUG HACK:	
 	//max = 1;
 	old_spawn = undefined;
-	while( count < max )
+	while( count < max ) // JB potential fix change to while(1)?
 	{
-		wait_network_frame(); //UGX fix
+		wait_network_frame();
 		if(level.enemy_spawns.size <= 0)
 		{
-			continue; //UGX fix
+			wait(0.1);
+			continue;
 		}
+
+        if(get_enemy_count() > 31)
+		{
+			wait(0.05);
+            continue;
+		}
+		
 		spawn_point = level.enemy_spawns[RandomInt( level.enemy_spawns.size )]; 
 
 		if( !IsDefined( old_spawn ) )
@@ -1766,75 +1764,33 @@ round_spawning()
 		old_spawn = spawn_point;
 
 	//	iPrintLn(spawn_point.targetname + " " + level.zombie_vars["zombie_spawn_delay"]);
-		while( get_enemy_count() > 31 )
-		{
-			wait( 0.05 );
-		}
 
 		// MM Mix in dog spawns...
+        spawned_dog = false;
 		if ( IsDefined( level.mixed_rounds_enabled ) && level.mixed_rounds_enabled == 1 )
 		{
-			spawn_dog = false;
-			if ( level.round_number > 30 )
-			{
-				if ( RandomInt(100) < 3 )
+			// Moved in helper functions - Feli
+            if(should_spawn_mixed_dog())
+            {
+                spawned_dog = spawn_mixed_dog();
+				if(spawned_dog)
 				{
-					spawn_dog = true;
+					level.zombie_total--;
+					count++; 
 				}
-			}
-			else if ( level.round_number > 25 && mixed_spawns < 3 )
-			{
-				if ( RandomInt(100) < 2 )
-				{
-					spawn_dog = true;
-				}
-			}
-			else if ( level.round_number > 20 && mixed_spawns < 2 )
-			{
-				if ( RandomInt(100) < 2 )
-				{
-					spawn_dog = true;
-				}
-			}
-			else if ( level.round_number > 15 && mixed_spawns < 1 )
-			{
-				if ( RandomInt(100) < 1 )
-				{
-					spawn_dog = true;
-				}
-			}
-
-			if ( spawn_dog )
-			{
-				keys = GetArrayKeys( level.zones );
-				for ( i=0; i<keys.size; i++ )
-				{
-					if ( level.zones[ keys[i] ].is_occupied )
-					{
-						akeys = GetArrayKeys( level.zones[ keys[i] ].adjacent_zones );
-						for ( k=0; k<akeys.size; k++ )
-						{
-							if ( level.zones[ akeys[k] ].is_active &&
-								 !level.zones[ akeys[k] ].is_occupied &&
-								 level.zones[ akeys[k] ].dog_locations.size > 0 )
-							{
-								maps\_zombiemode_dogs::special_dog_spawn( undefined, 1, undefined );
-								level.zombie_total--;
-								wait_network_frame();
-							}
-						}
-					}
-				}
-			}
+            }
 		}
 
-		ai = spawn_zombie( spawn_point ); 
-		if( IsDefined( ai ) )
-		{
-			level.zombie_total--;
-			ai thread round_spawn_failsafe();
-			count++; 
-		}
+		if(!spawned_dog) // Spawn zombie if no dog was spawned - Feli
+        {
+            ai = spawn_zombie( spawn_point ); 
+            if( IsDefined( ai ) )
+            {
+                level.zombie_total--;
+                ai thread round_spawn_failsafe();
+                count++; 
+            }
+        }
 		wait( level.zombie_vars["zombie_spawn_delay"] ); 
 		wait_network_frame();
 	}
@@ -1856,6 +1812,91 @@ round_spawning()
 
 	}
 
+}
+
+// Helper function, finds suitable spawn location and spawns one dog - Feli
+spawn_mixed_dog()
+{
+    if(has_suitable_dog_spawn_zone())
+    {
+        // Now check if we successfully spawned one
+        if(maps\_zombiemode_dogs::special_dog_spawn( undefined, 1 ))
+        {
+            wait_network_frame();
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+// Helper function, checks whether there is any suitable zone for a mixed dog spawn - Feli
+has_suitable_dog_spawn_zone()
+{
+    keys = GetArrayKeys( level.zones );
+    
+    // Special case for only one zone
+    if(keys.size == 1)
+    {
+        zone = level.zones[keys[0]];
+        return zone.is_active && zone.dog_locations.size > 0;
+    }
+    
+    // Standard logic
+    for ( i=0; i<keys.size; i++ )
+    {
+        if ( level.zones[ keys[i] ].is_occupied )
+        {
+            akeys = GetArrayKeys( level.zones[ keys[i] ].adjacent_zones );
+            for ( k=0; k<akeys.size; k++ )
+            {
+                zone = level.zones[ akeys[k] ];
+                if ( zone.is_active &&
+                     !zone.is_occupied &&
+                     zone.dog_locations.size > 0 )
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+// Helper function, returns true if we should try for a mixed dog spawn - Feli
+should_spawn_mixed_dog()
+{
+    spawn_dog = false;
+	if ( level.round_number > 30 )
+	{
+		if ( RandomInt(100) < 3 )
+		{
+			spawn_dog = true;
+		}
+	}
+	else if ( level.round_number > 25 )
+	{
+		if ( RandomInt(100) < 2 )
+		{
+			spawn_dog = true;
+		}
+	}
+	else if ( level.round_number > 20 )
+	{
+		if ( RandomInt(100) < 2 )
+		{
+			spawn_dog = true;
+		}
+	}
+	else if ( level.round_number > 15 )
+	{
+		if ( RandomInt(100) < 1 )
+		{
+			spawn_dog = true;
+		}
+	}
+    
+    return spawn_dog;
 }
 
 // TESTING: spawn one zombie at a time
@@ -2283,10 +2324,10 @@ round_think()
 	{
 		//////////////////////////////////////////
 		//designed by prod DT#36173
-		maxreward = 50 * level.round_number;
-		if ( maxreward > 500 )
-			maxreward = 500;
-		level.zombie_vars["rebuild_barrier_cap_per_round"] = maxreward;
+		maxrepairs = 5 * level.round_number;
+		if ( maxrepairs > 50 )
+			maxrepairs = 50;
+		level.zombie_vars["rebuild_barrier_cap_per_round"] = maxrepairs;
 		//////////////////////////////////////////
 
 		level.round_timer = level.zombie_vars["zombie_round_time"]; 
@@ -3433,7 +3474,7 @@ store_crumb( origin )
 //CODER MOD: TOMMY K
 nazizombies_upload_highscore()
 {
-	if( getDvarInt( "classic_zombies") == 1 ) // if playing with 24 limit or with super sprinters disabled, these are considered cheats because they make the game easier. classic perks or grabby zombies is OK, these make the game harder
+	if( getDvarInt( "classic_zombies") == 1 || getDvarInt( "zombiemode_dev") == 1 ) // if playing with 24 limit or with super sprinters disabled, these are considered cheats because they make the game easier. classic perks or grabby zombies is OK, these make the game harder
 	{
 		//iPrintLn("Highscores not saved, current Game Options configuration not allowed");
 		return;
@@ -3556,43 +3597,43 @@ nazizombies_set_new_zombie_stats()
 		players[i] zombieStatSet( "zombie_gibs", total_zombie_gibs ); // 2107
 		players[i] zombieStatSet( "nz_factory_timeinwave", int(level.current_play_time + previous_play_time) ); 
 
-		if( getDvarInt( "classic_zombies") == 1 ) // if playing with 24 limit, this considered cheats because they make the game easier. classic perks or grabby zombies is OK, these make the game harder
+/*		if( getDvarInt( "classic_zombies") == 1 ) // if playing with 24 limit, this considered cheats because they make the game easier. classic perks or grabby zombies is OK, these make the game harder
 		{
 			//iPrintLn("Highscores not saved, current Game Options configuration not allowed");
 		}
 		else
+		{*/
+		players[i].xp = players[i] zombieStatGet( "rankxp" );
+
+		if( players[i].xp <= 160000 ) // once we get 160k XP, then we are at max level so dont need to keep adding
 		{
-			players[i].xp = players[i] zombieStatGet( "rankxp" );
+			players[i].xp = total_kills * 10; // calculate our new xp,  based on 1 zombie kill = 10 xp, we cannot lose progress because its tied to total kills which gets summed above 
 
-			if( players[i].xp <= 160000 ) // once we get 160k XP, then we are at max level so dont need to keep adding
-			{
-				players[i].xp = total_kills * 10; // calculate our new xp,  based on 1 zombie kill = 10 xp, we cannot lose progress because its tied to total kills which gets summed above 
-
-				players[i].rank = players[i] maps\_challenges_coop::getRankForXp( players[i].xp ); // this allows us to SetRank below which updates it on the HUD on the end game screen
-				players[i] zombieStatSet( "rankxp", players[i].xp );  // this is the hardcoded stat we need to save progress
-			}
-
-			if ( players[i].xp >= 160000 ) // once we have gotten max rank, we can prestige
-			{
-				players[i].prestige = int(total_rounds/total_downs); // round to down ratio, because this ratio is different every game we can lose progress on this stat
-
-				if(players[i].prestige > 10) // if higher than 10, lock at 10
-				{
-					players[i].prestige = 10;
-				}
-				
-				//players[i] SetClientDvars("prestige_dlc3", prestige); // new, runs menu that averages all 4 map prestiges
-				//players[i] openMenunomouse(game["menu_endgame_prestige"]);
-
-				players[i] zombieStatSet( "plevel", players[i].prestige ); 
-			}
-			else
-			{
-				players[i].prestige = 0; // if we are still not max level we remain at no prestige
-			}
-
-			players[i] setRank( players[i].rank, players[i].prestige ); // i believe this is needed for updating it on HUD end game screen
+			players[i].rank = players[i] maps\_challenges_coop::getRankForXp( players[i].xp ); // this allows us to SetRank below which updates it on the HUD on the end game screen
+			players[i] zombieStatSet( "rankxp", players[i].xp );  // this is the hardcoded stat we need to save progress
 		}
+
+		if ( players[i].xp >= 160000 ) // once we have gotten max rank, we can prestige
+		{
+			players[i].prestige = int(total_rounds/total_downs); // round to down ratio, because this ratio is different every game we can lose progress on this stat
+
+			if(players[i].prestige > 10) // if higher than 10, lock at 10
+			{
+				players[i].prestige = 10;
+			}
+			
+			//players[i] SetClientDvars("prestige_dlc3", prestige); // new, runs menu that averages all 4 map prestiges
+			//players[i] openMenunomouse(game["menu_endgame_prestige"]);
+
+			players[i] zombieStatSet( "plevel", players[i].prestige ); 
+		}
+		else
+		{
+			players[i].prestige = 0; // if we are still not max level we remain at no prestige
+		}
+
+		players[i] setRank( players[i].rank, players[i].prestige ); // i believe this is needed for updating it on HUD end game screen
+	//	}
 
 		// note: to get stat number, do table lookup without GetStat--GetStat forces the stat value
 	}

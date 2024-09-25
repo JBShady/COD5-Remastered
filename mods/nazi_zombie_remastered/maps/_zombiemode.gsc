@@ -118,7 +118,6 @@ main()
 
 	DisableGrenadeSuicide();
 
-	level thread track_players_ammo_count();
 	level thread disable_character_dialog();
 
 	// Do a SaveGame, so we can restart properly when we die
@@ -686,8 +685,12 @@ onPlayerConnect()
 		player thread onPlayerDisconnect(); 
 		player thread player_revive_monitor();
 
+		player thread maps\walking_anim::main();
+
 		player thread watchGrenadeThrow();
 		
+		player thread track_ammo_count();
+
 		player thread maps\_zombiemode_molotov::trackMolotov(); 
 
 		player.score = level.zombie_vars["zombie_score_start"]; 
@@ -761,7 +764,7 @@ onPlayerSpawned()
 		players = getplayers();
 		if(players.size > 1)
 		{
-			self SetClientDvar( "cg_ScoresColor_Gamertag_0" , GetDvar( "cg_hudGrenadeIndicatorTargetColor") );
+			self SetClientDvar( "cg_ScoresColor_Gamertag_0" , "1 1 1 1" );
 			self SetClientDvar( "cg_ScoresColor_Gamertag_1" , GetDvar( "cg_ScoresColor_Gamertag_1") );
 			self SetClientDvar( "cg_ScoresColor_Gamertag_2" , GetDvar( "cg_ScoresColor_Gamertag_2") );
 			self SetClientDvar( "cg_ScoresColor_Gamertag_3" , GetDvar( "cg_ScoresColor_Gamertag_3") );
@@ -787,6 +790,11 @@ onPlayerSpawned()
         "aim_automelee_lerp", "50",
         "player_meleechargefriction", "2500",
 		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
+
+		self setClientDvar( "bg_fallDamageMinHeight", "150" );
+		self setClientDvar( "player_deathInvulnerableToProjectile", "0" );
+		self setClientDvar( "player_deathInvulnerableTime", "0" );
+		self setClientDvar( "player_deathInvulnerableToMelee", "0" );
 
 		self FreezeControls( false );
 
@@ -1218,15 +1226,20 @@ round_spawning()
 
 	while( count < max )
 	{
-		wait_network_frame(); //UGX fix
-		if(level.enemy_spawns.size <= 0) continue; //UGX fix
+		wait_network_frame();
+		if(level.enemy_spawns.size <= 0)
+		{
+			wait(0.1);
+			continue;
+		}
+
+        if(get_enemy_count() > 31)
+		{
+			wait(0.05);
+            continue;
+		}
 
 		spawn_point = level.enemy_spawns[RandomInt( level.enemy_spawns.size )]; 
-
-		while( get_enemy_count() > 31 )
-		{
-			wait( 0.05 );
-		}
 
 		ai = spawn_zombie( spawn_point ); 
 
@@ -1586,10 +1599,10 @@ round_think()
 	{
 		//////////////////////////////////////////
 		//designed by prod DT#36173
-		maxreward = 50 * level.round_number;
-		if ( maxreward > 500 )
-			maxreward = 500;
-		level.zombie_vars["rebuild_barrier_cap_per_round"] = maxreward;
+		maxrepairs = 5 * level.round_number;
+		if ( maxrepairs > 50 )
+			maxrepairs = 50;
+		level.zombie_vars["rebuild_barrier_cap_per_round"] = maxrepairs;
 		//////////////////////////////////////////
 		
 		level.round_timer = level.zombie_vars["zombie_round_time"]; 
@@ -2654,7 +2667,7 @@ store_crumb( origin )
 //CODER MOD: TOMMY K
 nazizombies_upload_highscore()
 {
-	if( getDvarInt( "classic_zombies") == 1 || getDvarInt( "super_sprinters") == 1 ) // if playing with 24 limit or with super sprinters disabled, these are considered cheats because they make the game easier. classic perks or grabby zombies is OK, these make the game harder
+	if( getDvarInt( "classic_zombies") == 1 || getDvarInt( "super_sprinters") == 1 || getDvarInt( "zombiemode_dev") == 1 ) // if playing with 24 limit or with super sprinters disabled, these are considered cheats because they make the game easier. classic perks or grabby zombies is OK, these make the game harder
 	{
 		//iPrintLn("Highscores not saved, current Game Options configuration not allowed");
 		return;
@@ -2777,40 +2790,40 @@ nazizombies_set_new_zombie_stats()
 		players[i] zombieStatSet( "zombie_gibs", total_zombie_gibs ); // 2107
 		players[i] zombieStatSet( "nz_prototype_timeinwave", int(level.current_play_time + previous_play_time) ); 
 
-		if( getDvarInt( "classic_zombies") == 1 || getDvarInt( "super_sprinters") == 1 ) // if playing with 24 limit or with super sprinters disabled, these are considered cheats because they make the game easier. classic perks or grabby zombies is OK, these make the game harder
+/*		if( getDvarInt( "classic_zombies") == 1 || getDvarInt( "super_sprinters") == 1 || getDvarInt( "zombiemode_dev" ) == 1 ) // if playing with 24 limit or with super sprinters disabled, these are considered cheats because they make the game easier. classic perks or grabby zombies is OK, these make the game harder
 		{
 			//iPrintLn("Highscores not saved, current Game Options configuration not allowed");
 		}
 		else
+		{*/
+		players[i].xp = players[i] zombieStatGet( "rankxp" );
+
+		if( players[i].xp <= 160000 ) // once we get 160k XP, then we are at max level so dont need to keep adding
 		{
-			players[i].xp = players[i] zombieStatGet( "rankxp" );
+			players[i].xp = total_kills * 10; // calculate our new xp,  based on 1 zombie kill = 10 xp, we cannot lose progress because its tied to total kills which gets summed above 
 
-			if( players[i].xp <= 160000 ) // once we get 160k XP, then we are at max level so dont need to keep adding
-			{
-				players[i].xp = total_kills * 10; // calculate our new xp,  based on 1 zombie kill = 10 xp, we cannot lose progress because its tied to total kills which gets summed above 
-
-				players[i].rank = players[i] maps\_challenges_coop::getRankForXp( players[i].xp ); 
-				players[i] zombieStatSet( "rankxp", players[i].xp ); 
-			}
-
-			if ( players[i].xp >= 160000 ) // once we have gotten max rank, we can prestige
-			{
-				players[i].prestige = int(total_rounds/total_downs); // round to down ratio, because this ratio is different every game we can lose progress on this stat
-
-				if(players[i].prestige > 10)
-				{
-					players[i].prestige = 10;
-				}
-
-				players[i] zombieStatSet( "plevel", players[i].prestige ); 
-			}
-			else
-			{
-				players[i].prestige = 0;
-			}
-
-			players[i] setRank( players[i].rank, players[i].prestige );
+			players[i].rank = players[i] maps\_challenges_coop::getRankForXp( players[i].xp ); 
+			players[i] zombieStatSet( "rankxp", players[i].xp ); 
 		}
+
+		if ( players[i].xp >= 160000 ) // once we have gotten max rank, we can prestige
+		{
+			players[i].prestige = int(total_rounds/total_downs); // round to down ratio, because this ratio is different every game we can lose progress on this stat
+
+			if(players[i].prestige > 10)
+			{
+				players[i].prestige = 10;
+			}
+
+			players[i] zombieStatSet( "plevel", players[i].prestige ); 
+		}
+		else
+		{
+			players[i].prestige = 0;
+		}
+
+		players[i] setRank( players[i].rank, players[i].prestige );
+	//	}
 		
 		// note: to get stat number, do table lookup without GetStat--GetStat forces the stat value
 	}
@@ -3070,54 +3083,61 @@ player_intermission()
 	}
 }
 
-
-track_players_ammo_count()
+track_ammo_count()
 {
 	self endon("disconnect");
 	self endon("death");
-	if(!IsDefined (level.player_ammo_low))	
+	if(!IsDefined (self.player_ammo_low))	
 	{
-		level.player_ammo_low = 0;
+		self.player_ammo_low = false;
 	}	
-	while(1)
+	if(!IsDefined(self.player_ammo_out))
 	{
-		players = get_players();
-		for(i=0;i<players.size;i++)
+		self.player_ammo_out = false;
+	}
+	while ( true )
+	{
+		wait 0.5;
+		if ( !is_player_valid( self ) )
+		{				
+			continue;
+		}
+		weap = self getcurrentweapon();
+
+		if(!isDefined(weap) || weap == "none" || weap == "syrette" || weap == "m2_flamethrower_zombie" || weap == "m7_launcher" || weap == "satchel_charge" || weap == "mortar_round" || weap == "zombie_melee" || weap == "falling_hands" )
 		{
-	
-			weap = players[i] getcurrentweapon();
-			//Excludes all Perk based 'weapons' so that you don't get low ammo spam.
-			if(!isDefined(weap) || weap == "none" || weap == "syrette" || weap == "m2_flamethrower_zombie" || weap == "m7_launcher" || weap == "satchel_charge" || weap == "mortar_round" || weap == "zombie_melee" || weap == "falling_hands" )
+			continue;
+		}
+		ammo_count = self GetAmmoCount( weap );
+		if ( ammo_count > 5 )
+		{
+			continue;
+		}		
+
+		if ( ammo_count > 0 )
+		{
+			if ( !self.player_ammo_low )
 			{
-				continue;
-			}
-			if ( players[i] GetAmmoCount( weap ) > 5)
-			{
-				continue;
-			}
-			if ( players[i] maps\_laststand::player_is_in_laststand() )
-			{				
-				continue;
-			}
-			else if (players[i] GetAmmoCount( weap ) < 5 && players[i] GetAmmoCount( weap ) > 0)
-			{
-				if (level.player_ammo_low == 0)
-				{
-					level.player_ammo_low = 1;
-					players[i] thread add_low_ammo_dialog();		
-					//put in this wait to keep the game from spamming about being low on ammo.
-					wait(20);
-					level.player_ammo_low = 0;
-				}
-	
-			}
-			else
-			{
-				continue;
+				self thread add_low_ammo_dialog();
+				self thread ammo_low_dialog_timer();
 			}
 		}
-		wait(.5);
+/*		else
+		{	
+			if ( !self.player_ammo_out )
+			{
+				self thread add_no_ammo_dialog( weap );
+				self thread ammo_out_dialog_timer();
+			}
+		}*/
 	}	
+}
+
+ammo_low_dialog_timer()
+{
+	self.player_ammo_low = true;
+	wait 20;
+	self.player_ammo_low = false;
 }
 
 add_low_ammo_dialog()
