@@ -741,7 +741,7 @@ dog_death()
 		hit_location = self.damagelocation;	
 	}
 
-	if( get_enemy_count() == 0 && level.zombie_total == 0 )
+	if( get_enemy_count() == 0 && level.zombie_total <= 0 )
 	{
 
 		level.last_dog_origin = self.origin;
