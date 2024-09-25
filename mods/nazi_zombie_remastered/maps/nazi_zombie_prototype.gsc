@@ -39,8 +39,6 @@ main()
 	maps\_zombiemode_health_help::init();
 	//maps\_zombiemode_coord_help::init();
 
-	maps\walking_anim::main();
-
 	level thread intro_screen();
 
 	players = get_players(); 
@@ -134,7 +132,7 @@ fix_hax()
 	{
 	
 		//stairs
-		wait(.5);
+		wait(1);
 		if( distance2d(self.origin,( 101, -100, 40)) < check )
 		{
 			self setorigin ( (101, -90, self.origin[2]));
@@ -514,7 +512,7 @@ intro_screen()
 	for(i = 0;  i < 3; i++)
 	{
 		level.intro_hud[i] = newHudElem();
-		level.intro_hud[i].x = 4;
+		level.intro_hud[i].x = 6;
 		level.intro_hud[i].y = 0;
 		level.intro_hud[i].alignX = "left";
 		level.intro_hud[i].alignY = "bottom";
@@ -646,13 +644,22 @@ player_zombie_awareness()
 						continue;
 					}
 
-					
+					rando = 2;
 					dist = 175;				
 					switch(zombs[i].zombie_move_speed)
 					{
-						case "walk": dist = 150;break;
-						case "run": dist = 130; break;
-						case "sprint": dist = 110;break;
+						case "walk":
+							dist = 150;
+							rando = 3;
+							break;
+						case "run":
+							dist = 130;
+							rando = 3;
+							break;
+						case "sprint":
+							dist = 110;
+							rando = 2;
+							break;
 					}				
 					if(distance2d(zombs[i].origin,self.origin) < dist && (zombs[i].origin[2] < self.origin[2] + 80 && zombs[i].origin[2] > self.origin[2] - 80) )
 					{				
@@ -660,7 +667,7 @@ player_zombie_awareness()
 						//check to see if he's actually behind the player
 						if(yaw < -100 || yaw > 100)
 						{
-							if(randomintrange(0,10) < 3 )
+							if(randomintrange(0,10) < rando )
 							{
 								//zombs[i] playsound ("behind_vocals");
 								plr = "plr_" + index + "_";

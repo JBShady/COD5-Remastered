@@ -117,7 +117,6 @@ main()
 
 	maps\_zombiemode::main();
     maps\nazi_zombie_sumpf_blockers::init();
-	maps\walking_anim::main();
 	//maps\_zombiemode_coord_help::init();
 	maps\_zombiemode_health_help::init();
 
@@ -555,7 +554,7 @@ intro_screen()
 	for(i = 0;  i < 3; i++)
 	{
 		level.intro_hud[i] = newHudElem();
-		level.intro_hud[i].x = 4;
+		level.intro_hud[i].x = 6;
 		level.intro_hud[i].y = 0;
 		level.intro_hud[i].alignX = "left";
 		level.intro_hud[i].alignY = "bottom";

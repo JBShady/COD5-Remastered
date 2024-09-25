@@ -98,8 +98,6 @@ main()
 	maps\_zombiemode::main("receiver_zone_spawners");
 	//maps\_zombiemode_coord_help::init();
 	maps\_zombiemode_health_help::init();
-
-	maps\walking_anim::main();
 	
 	init_sounds();
 	init_achievement();
@@ -312,7 +310,7 @@ intro_screen()
 	for(i = 0;  i < 3; i++)
 	{
 		level.intro_hud[i] = newHudElem();
-		level.intro_hud[i].x = 4;
+		level.intro_hud[i].x = 6;
 		level.intro_hud[i].y = 0;
 		level.intro_hud[i].alignX = "left";
 		level.intro_hud[i].alignY = "bottom";
@@ -1866,33 +1864,36 @@ hanging_dead_guy( name )
 setup_meteor_audio()
 {
     level.meteor_counter = 0;
-	level thread meteor_egg( "meteor_one", (901.5, -557.5, 163) ); // High
-	level thread meteor_egg( "meteor_two", (990, -900.5, 118) ); // Low
-	level thread meteor_egg( "meteor_three", (-1346, -445, 251.5) ); // Type 100
+	level thread meteor_egg( "meteor_one"/*, (901.5, -557.5, 163)*/ ); // High
+	level thread meteor_egg( "meteor_two"/*, (990, -900.5, 118)*/ ); // Low
+	level thread meteor_egg( "meteor_three"/*, (-1346, -445, 251.5)*/ ); // Type 100
 }
 
-meteor_egg( trigger_name, coords )
+meteor_egg( trigger_name )
 {
 	meteor_trig = getent ( trigger_name, "targetname");
 
 	meteor_trig UseTriggerRequireLookAt();
 	meteor_trig SetCursorHint( "HINT_NOICON" ); 
-		
-	//meteor_trig PlayLoopSound( "meteor_loop" );
+	
+	sound_ent = spawn("script_origin", meteor_trig.origin);
+	sound_ent PlayLoopSound( "meteor_fixed_loop" );
 
 	meteor_trig waittill( "trigger", player );
 	
-	//meteor_trig stoploopsound(1);
+	sound_ent stoploopsound(1);
 
-	player playsound( "meteor_affirm" );
+	player playsound( "meteor_fixed_affirm" );
 	
-
 	level.meteor_counter = level.meteor_counter + 1;
 	
 	if( level.meteor_counter == 3 )
 	{ 
 	    level thread play_music_easter_egg();
 	}
+	wait(1);
+	meteor_trig delete();
+	sound_ent delete();
 }
 
 play_music_easter_egg()
