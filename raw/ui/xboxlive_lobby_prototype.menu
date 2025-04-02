@@ -273,9 +273,9 @@
 
 		#define SETUP_ACTION_GAMESETUP \
 				open "pc_gamesetup_coop";
-
+/*
 		#define SETUP_ACTION_CHALLENGES \
-				open menu_challenges
+				open menu_challenges*/
 
 #ifdef CONSOLE
 	
