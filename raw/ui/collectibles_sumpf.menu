@@ -128,12 +128,12 @@
 		COLLECTIBLE_BUTTON( 9, "@REMASTERED_ZOMBIE_POINTS",ZOMBIE_POINTS, tablelookup( COLLECTIBLES_TABLE, 1,"DLC2_ZOMBIE_POINTS" , 0 ) )
 		COLLECTIBLE_BUTTON( 10, "@REMASTERED_ZOMBIE_SECRET",ZOMBIE_SECRET, tablelookup( COLLECTIBLES_TABLE, 1,"DLC2_ZOMBIE_SECRET" , 0 ) )
 
-#define COLLECTIBLE_BUTTON( itemIndex, textArg, collectibleName, collectibleBit ) \
+#define COLLECTIBLE_BUTTON_SECRET( itemIndex, textArg, collectibleName, collectibleBit ) \
 	CHOICE_BUTTON_FOCUS_VIS_NOICON( itemIndex, textArg, ;, setdvar ui_selected_collectible collectibleName; setdvar ui_collectible_islocked 0;, ;, when( stat(collectibleBit) == 1 && dvarInt( sumpf_quest) == 1 ) ) \
 	CHOICE_BUTTON_FOCUS_VIS_NOHI_NOICON( itemIndex, "", ;, setdvar ui_selected_collectible collectibleName; setdvar ui_collectible_islocked 1;, ;, when( stat(collectibleBit) != 1 && dvarInt( sumpf_quest) == 1 ) ) \
 	CHOICE_DBUTTON_VIS( itemIndex, textArg, when( stat(collectibleBit) != 1 && dvarInt( sumpf_quest) == 1	) ) \
 
-		COLLECTIBLE_BUTTON( 11, "@REMASTERED_ZOMBIE_EE",ZOMBIE_EE, tablelookup( COLLECTIBLES_TABLE, 1,"DLC2_ZOMBIE_EE" , 0 ) )
+		COLLECTIBLE_BUTTON_SECRET( 11, "@REMASTERED_ZOMBIE_EE",ZOMBIE_EE, tablelookup( COLLECTIBLES_TABLE, 1,"DLC2_ZOMBIE_EE" , 0 ) )
 
 		// ---------------------- Final Drawing ------------------------------//
 		#define LOCAL_X_CARD_OFFSET -500
