@@ -443,7 +443,7 @@ laststand_bleedout( delay )
 		wait( 0.1 );
 	}
 	
-	setClientSysState("lsm", "0", self);	// Notify client last stand ended.
+	setClientSysState("lsm", "3", self);	// Notify client last stand ended.
 	
 	if (isdefined(level.is_zombie_level ) && level.is_zombie_level)
 	{
@@ -635,6 +635,9 @@ can_revive( revivee )
 		return false;
 	
 	if(level.falling_down == true)
+		return false;
+	
+	if( self.sessionstate == "spectator" )
 		return false;
 	
 	//chrisp - fix issue where guys can sometimes revive thru a wall	

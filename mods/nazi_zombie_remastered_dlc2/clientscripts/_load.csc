@@ -15,24 +15,14 @@ levelNotifyHandler(clientNum, state, oldState)
 
 end_last_stand(clientNum)
 {
-	self waittill("lastStandEnd");
+	//self waittill("lastStandEnd");
+	realwait(0.1);
 	
-	println("Last stand ending for client " + clientNum);
-	
-	if(getlocalplayers().size == 1)	// No busing modifications in split screen.
-	{
-		setBusState("return_default");
-	}
-	
-	realwait(0.7);
-	
-	println("Gasp.");
 	PlayLocalSound(clientNum, "revive_gasp");
 }
 
 last_stand_thread(clientNum)
 {
-	self thread end_last_stand(clientNum);
 	
 	self endon("lastStandEnd");
 	
@@ -103,7 +93,16 @@ last_stand_monitor(clientNum, state, oldState)
 	{
 		if(level._laststand[clientNum])
 		{
+			if(state != "3")
+			{
+				self thread end_last_stand(clientNum); // skip breathing sound if we get 3 (which is when we bleed out into spectator)
+			}
+			
 			player notify("lastStandEnd");
+			if(getlocalplayers().size == 1)	// No busing modifications in split screen.
+			{
+				setBusState("return_default");
+			}
 			level._laststand[clientNum] = false;
 		}
 	}

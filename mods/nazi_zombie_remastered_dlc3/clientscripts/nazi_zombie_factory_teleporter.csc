@@ -90,6 +90,7 @@ teleport_aftereffect_fov( localClientNum )
 	}
 
 	SetClientDvar( "cg_fov", end_fov );
+	SetClientDvar( "cg_fov_settings", end_fov );
 
 }
 
