@@ -219,10 +219,10 @@ REFERENCE           CONTROLLER_SUPPORT
 LANG_ENGLISH        "Controller Mode"
 
 REFERENCE           CONTROLLER_V1
-LANG_ENGLISH        "Gamepad disabled. \nEnable to bind controls and use console style HUD buttons."
+LANG_ENGLISH        "Enable to bind gamepad controls and use console style HUD."
 
 REFERENCE           CONTROLLER_V2
-LANG_ENGLISH        "Gamepad enabled. \nNote: Only Xbox controllers have native support. Active during gameplay."
+LANG_ENGLISH        "Note: Only Xbox controllers have native support. \nActive during gameplay."
 
 REFERENCE           HINT_GAMETYPE
 LANG_ENGLISH        "Adjusts the flow of zombie waves. Classic mode reverts to the 24 per-round limit in solo and removes Carpenter power-ups."
@@ -589,6 +589,9 @@ LANG_ENGLISH		"^7 to enter third person view"
 
 REFERENCE           ANISO
 LANG_ENGLISH		"Max Anisotropy"
+
+REFERENCE           AIM_ASS_DESC
+LANG_ENGLISH		"This setting automatically helps guide your sights onto targets within range and is designed to be used with a controller, not mouse. Are you sure you want to enable it?"
 
 
 ENDMARKER
