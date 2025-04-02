@@ -891,13 +891,13 @@
 			exec "party_timerVisible 0"; \
 			exec "xstartprivateparty"; \
 			setdvar ui_mptype "0"; \
+			exec "set ui_mapname nazi_zombie_sumpf"; \
+			exec "set ui_gametype zom";	\
 			SETUP_ACTION_PUBLIC_GAME \
 			SET_ARCADE_MODE \
 			SETUP_ACTION_SUMMARY_RESET \
 			//SET_DEFAULT_MAP_AND_MODE
-			exec "set ui_mapname nazi_zombie_sumpf"; \
-			exec "set ui_gametype zom";	\
-			
+
 		#ifdef XENON
 			CHOICE_BUTTON_BG( 1, 1 );
 			CHOICE_HIGHLIGHT( 1, 1 );
