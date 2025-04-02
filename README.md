@@ -30,8 +30,8 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 
 ### General
 * AI can no longer push the player, which removes the "grabbing" effect where touching zombies would slow the player down. Togglable with the new "Enemy Grabbing" setting in Game Options
-* All maps now use the same (more balanced) exponential zombie spawning formula from Der Riese which removes the limit of 24 max zombies per round on solo. Togglable with the new "Gametype" setting in Game Options, note that playing with the 24-limit is considered a cheat and records will not save
-* All maps now make use of improved scripting tweaks and bug fixes that were added into the later DLCs
+* All maps now use the same (more balanced) exponential zombie spawning formula from Der Riese which removes the limit of 24 max zombies per round on solo. Togglable with the new "Gametype" setting in Game Options, note that playing with the 24-limit is considered a cheat and high round records will not save
+* All maps now make use of improved scripting and bug fixes that were added into the later DLCs
 * All maps make use of slightly improved net related code from the later DLCs, including network safe spawning and network wait functions
 * Added all zombiemode achievements that were on the console version (and custom achievements for maps that didn't have them). Complete with notifications, sounds, icons, and a menu
 * Added stats tracking based on the console version for achievements, personal records, time played, kills, downs, and other miscellaneous stats on a per-map basis that are saved to the player's profile
@@ -39,7 +39,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Unused entities are cleared after use, both for one time items like radios or songs and for temporary scripting tasks
 * Fixed instances where functions should have been threaded instead of being called, which originally resulted in unnecessary delays or bugs
 * Game is hardcoded to Campaign "normal" difficulty as the level of difficulty unintentionally changed health regen and other variables in zombies
-* Cheats disabled by default, use devmap to load in with cheats. Note that leaderboard stats and rank are not saved while playing with devmap
+* Cheats disabled by default, use devmap to load in with cheats. Note that no leaderboard stats or ranks will save while playing with devmap so that you can still test features of the mod or develop without skewing legitimate stats you may have worked hard to earn
 
 ### Player
 * Player now spawns as a random character in solo instead of always the Player 1 character
@@ -147,7 +147,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Anti-aliasing now goes up to 8x instead of just 4x
 * Max anisotropy texture filtering setting added to the menu and can now be set to 16. Now, the slider lets you properly set your min value from 0-16 instead of the values 5-16 not doing anything because the max being set to 4 would override it
 * All settings and stats are saved to the selected profile even if the game is closed, crashes, switches profiles, etc.
-* Leaderboard records do not save if player has set Gametype or Difficulty to "Classic," as this makes the mod substantially easier and are considered cheats  
+* Leaderboard high round records do not save if player has set Gametype or Difficulty to "Classic," as this makes the mod substantially easier and are considered cheats. Note that rank and miscellaneous player statistics such as kills and playtime will still save when using these custom settings 
 * Note that some "fake" DVARs were created for bypassing cheat protected settings, labeled the same as the regular DVAR but with "_settings" to allow the player to edit them on the menu and have it carry over in-game
 
 | New Settings | DVAR | Default | Other Values | Description |
@@ -339,7 +339,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Unique to this map, zombies can use the original "sprint" crawler animation that was later cut
 * Unique to this map, while all future melee animations have been added, they have been rebalanced for this map specifically so zombies are still more likely to stop before hitting to reflect how these zombies are less advanced (and makes for better gameplay given the tight layout and lack of perks)
 * Unique to this map, taunt animations from later maps have been purposefully excluded to reflect how these zombies are less advanced 
-* Added a cut rare type of "super sprinter" that comes after round 10, toggleable under "Enemy Intensity" in Game Options. Note that disabling this is considered a cheat and records will not save
+* Added a cut rare type of "super sprinter" that comes after round 10, toggleable under "Enemy Intensity" in Game Options. Note that disabling this is considered a cheat and high round records will not save
 * Reorganized the Nacht zombie vocals to have more consistency between ambient, attack, and sprint categories with less repetition
 * Added very quiet and rare behind vocals so that zombies are still likely to surprise the player. Player will also nervously breathe if a zombie is too close behind them
 * Replaced the existing grey uniform zombie variant texture with an SS camouflage texture, which fits better with the battlefield atmosphere of the map
@@ -365,7 +365,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Added new categories for powerups, perks, Teddy Bear (cut), and downed lines (cut)
 * Added missing taunt animations that were only into future maps
 * Added the Nacht original "sprint" crawler animation to bridge the transition between the first two maps because they feel similar, but it remains cut on Der Riese
-* Added a second new cut "super sprinter" that comes after round 10, toggleable under "Enemy Intensity" in Game Options. Note that disabling this is considered a cheat and records will not save
+* Added a cut rare type of "super sprinter" that comes after round 10, toggleable under "Enemy Intensity" in Game Options. Note that disabling this is considered a cheat and high round records will not save
 * Added easter egg scripted dialogue for Player 4
 * Added easter egg PA system music that can play after using the traps too much
 
@@ -705,7 +705,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Legacy icons patch: Available for both PlayStation or Xbox style, these patches replace the 3D graphic button logos on Controller Mode which generic 2D text/shapes, which is less accurate to recreating the console HUD but more faithful to the original PC release. Available on my Discord
 
 ## Experimental Features
-* Toggleable with console command `zombiemode_dev 1`, these features will never be the default/accessible in regular gameplay and are considered cheats, records will not save
+* Toggleable with console command `zombiemode_dev 1`, these features will never be the default/accessible in regular gameplay and are considered cheats, high round records will not save
 * Enables ability to close 'help' door on Nacht Der Untoten after opening
 
 ## Special Thanks & Credits
