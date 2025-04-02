@@ -325,8 +325,8 @@ precache_scripted_fx()
 	level._effect["zapper_wall"] = loadfx("misc/fx_zombie_zapper_wall_control_on");
 	level._effect["elec_trail_one_shot"] = loadfx("misc/fx_zombie_elec_trail_oneshot");
 	
-	level._effect["zapper_light_ready"] = loadfx("misc/fx_zombie_zapper_light_green");
-	level._effect["zapper_light_notready"] = loadfx("misc/fx_zombie_zapper_light_red");
+	level._effect["zapper_light_ready"] = loadfx("maps/zombie/fx_zombie_light_glow_green");
+	level._effect["zapper_light_notready"] = loadfx("maps/zombie/fx_zombie_light_glow_red");
 	level._effect["wire_sparks_oneshot"] = loadfx("env/electrical/fx_elec_wire_spark_dl_oneshot");
 
 
