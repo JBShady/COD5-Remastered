@@ -8,6 +8,7 @@ xmodel,char_usa_raider_head4_1
 xmodel,char_usa_raider_head1_2
 xmodel,char_usa_raider_head4_3
 xmodel,char_usa_raider_head4_4
+xmodel,collision_wall_64x64x10
 weapon,sp/springfield_scoped_zombie
 weapon,sp/type100_smg
 weapon,sp/svt40
@@ -149,5 +150,7 @@ sound,achievement_sound,,all_mp
 material,ui_leaderboard
 menufile,ui/pc_joinchoosegamemode.menu
 menufile,ui/pregame.menu
+menufile,ui/error.menu
+menufile,ui/scriptmenus/menu_clientdvar.menu
 localize,zombie
 localize,patch

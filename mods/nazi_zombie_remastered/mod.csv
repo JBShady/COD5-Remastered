@@ -160,4 +160,6 @@ sound,achievement_sound,,all_mp
 material,ui_leaderboard
 menufile,ui/pc_joinchoosegamemode.menu
 menufile,ui/pregame.menu
+menufile,ui/error.menu
+menufile,ui/scriptmenus/menu_clientdvar.menu
 localize,zombie

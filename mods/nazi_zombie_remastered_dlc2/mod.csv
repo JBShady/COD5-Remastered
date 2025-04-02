@@ -218,4 +218,6 @@ fx,impacts/fx_flesh_bayonet_fatal_lf
 material,ui_leaderboard
 menufile,ui/pc_joinchoosegamemode.menu
 menufile,ui/pregame.menu
+menufile,ui/error.menu
+menufile,ui/scriptmenus/menu_clientdvar.menu
 localize,zombie
