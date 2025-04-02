@@ -5,7 +5,7 @@ This mod fixes bugs, improves consistency, adds quality of life tweaks, and make
 
 [YouTube](https://www.youtube.com/c/JBShady)
 
-[Twitter](https://twitter.com/jb_shady_)
+[Twitter](https://twitter.com/john_b4nana)
 
 [Donate](https://paypal.me/alexmintz01)
 
