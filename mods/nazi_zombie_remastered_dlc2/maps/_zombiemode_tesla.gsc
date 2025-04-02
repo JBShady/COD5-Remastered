@@ -24,12 +24,12 @@ init()
 	precacheshellshock( "electrocution" );
 	
 	set_zombie_var( "tesla_max_arcs",			5 );
-	set_zombie_var( "tesla_max_enemies_killed", 20 );
+	set_zombie_var( "tesla_max_enemies_killed", 10 );
 	set_zombie_var( "tesla_radius_start",		300 );
 	set_zombie_var( "tesla_radius_decay",		20 );
 	set_zombie_var( "tesla_head_gib_chance",	50 );
 	set_zombie_var( "tesla_arc_travel_time",	0.5, undefined, true );
-	set_zombie_var( "tesla_kills_for_powerup",	15 );
+	set_zombie_var( "tesla_kills_for_powerup",	10 );
 	set_zombie_var( "tesla_min_fx_distance",	128 );
 	set_zombie_var( "tesla_network_death_choke",4 );
 

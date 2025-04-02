@@ -366,6 +366,10 @@ turnLightGreen(name)
 		if (isDefined(zapper_lights[i].target))
 		{
 			old_light_effect = getent(zapper_lights[i].target, "targetname");
+			if(name == "pendulum_light" && i == 1 ) // messed w the coords a bit
+			{
+				old_light_effect.origin = old_light_effect.origin + (0, 3, 0);
+			}	
 			light_effect = spawn("script_model",old_light_effect.origin);
 			//light_effect = spawn("script_model",zapper_lights[i].origin);
 			light_effect setmodel("tag_origin");
@@ -398,6 +402,10 @@ turnLightRed(name)
 		if (isDefined(zapper_lights[i].target))
 		{
 			old_light_effect = getent(zapper_lights[i].target, "targetname");
+			if(name == "pendulum_light" && i == 1 ) // messed w the coords a bit
+			{
+				old_light_effect.origin = old_light_effect.origin + (0, 3, 0);
+			}	
 			light_effect = spawn("script_model",old_light_effect.origin);
 			//light_effect = spawn("script_model",zapper_lights[i].origin);
 			light_effect setmodel("tag_origin");	
@@ -736,6 +744,10 @@ book_useage()
 		level.first_time = 0; // for our diary vox
 		wait(2.5); // we wait so players dont instantly pick up items after quest activates
 		level thread diary_pickup();
+		wait(10);
+		book_trig delete();
+		maniac_l delete();
+		maniac_r delete();
 	}
 
 }
@@ -2735,7 +2747,9 @@ toilet_useage()
 	
 	wait(291);	
 	setmusicstate("WAVE_1");
-	level.eggs = 0;				
+	level.eggs = 0;		
+
+	toilet_trig delete();		
 }
 play_radio_sounds()
 {
@@ -2757,6 +2771,11 @@ play_radio_sounds()
 	radio_one playsound ("static");
 	radio_two playsound ("static");
 	radio_three playsound ("static");
+	wait(2);
+	radio_one delete();
+	radio_two delete();
+	radio_three delete();
+	pa_system delete();
 }
 radio_eggs()
 {
@@ -2783,7 +2802,12 @@ battle_radio()
 	battle_radio_origin = getent("battle_radio_origin", "targetname");
 	
 	battle_radio_trig waittill( "trigger", player);		
-	battle_radio_origin playsound ("battle_message");
+	battle_radio_origin playsound ("battle_message", "battle_message_over");
+	battle_radio_origin waittill("battle_message_over");
+	wait(0.05);
+	battle_radio_trig delete();
+	battle_radio_origin delete();
+
 
 }
 whisper_radio()
@@ -2799,7 +2823,11 @@ whisper_radio()
 	whisper_radio_origin = getent("whisper_radio_origin", "targetname");
 	
 	whisper_radio_trig waittill( "trigger");		
-	whisper_radio_origin playsound ("whisper_message");
+	whisper_radio_origin playsound ("whisper_message", "whisper_message_over");
+	whisper_radio_origin waittill("whisper_message_over");
+	wait(0.05);
+	whisper_radio_trig delete();
+	whisper_radio_origin delete();
 
 }
 radio_one()
@@ -2892,6 +2920,8 @@ meteor_trigger()
 		}
 
 	}
+
+	dmgtrig delete();
 
 	
 }

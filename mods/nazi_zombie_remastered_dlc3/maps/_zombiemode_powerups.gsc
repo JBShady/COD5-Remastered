@@ -309,7 +309,7 @@ get_next_powerup()
 
 	//level.windows_destroyed = get_num_window_destroyed();
 
-	while( (powerup == "carpenter" && get_num_window_destroyed() < 5) || getDvarInt( "classic_zombies") == 1 )
+	while( (powerup == "carpenter" && get_num_window_destroyed() < 6) || getDvarInt( "classic_zombies") == 1 )
 	{	
 		
 		
@@ -487,6 +487,8 @@ powerup_drop(drop_point)
 		debug = "random";
 	}	
 
+	level.powerup_drop_count++;
+
 	// never drop unless in the playable area
 	playable_area = getentarray("playable_area","targetname");
 
@@ -515,11 +517,11 @@ powerup_drop(drop_point)
 			level.zombie_vars["zombie_drop_item"] = 1; // then lets give it another shot
 			despawn_failsafe = undefined;
 		}
+		level.powerup_drop_count--;
 		return;
 	}
 
 	powerup powerup_setup();
-	level.powerup_drop_count++;
 
 	print_powerup_drop( powerup.powerup_name, debug );
 
@@ -731,7 +733,7 @@ powerup_grab()
 
 		for (i = 0; i < players.size; i++)
 		{
-			if (distance (players[i].origin, self.origin) < 64)
+			if (distance (players[i].origin, self.origin) < 64 && players[i].sessionstate != "intermission" && players[i].sessionstate != "spectator" )
 			{
 				playfx (level._effect["powerup_grabbed"], self.origin);
 				playfx (level._effect["powerup_grabbed_wave"], self.origin);	
@@ -777,9 +779,11 @@ powerup_grab()
 					}
 				}
 
+				level thread powerup_sound(self.origin);
+
 				wait( 0.1 );
 
-				playsoundatposition("powerup_grabbed", self.origin);
+				//playsoundatposition("powerup_grabbed", self.origin);
 				self stoploopsound();
 
 				self delete();
@@ -788,6 +792,12 @@ powerup_grab()
 		}
 		wait 0.1;
 	}	
+}
+
+powerup_sound(origin)
+{
+	wait( 0.1 );
+	playsoundatposition("powerup_grabbed", origin);
 }
 
 start_carpenter( origin )
@@ -1034,10 +1044,10 @@ powerup_wobble()
 powerup_timeout()
 {
 	self endon ("powerup_grabbed");
-
+	
 	wait 15;
-
-	for (i = 0; i < 40; i++)
+	
+	for (i = 0; i < 47; i++)
 	{
 		// hide and show
 		if (i % 2)
@@ -1048,12 +1058,12 @@ powerup_timeout()
 		{
 			self show();
 		}
-
-		if (i < 15)
+			
+		if (i < 22)
 		{
 			wait 0.5;
 		}
-		else if (i < 25)
+		else if (i < 32)
 		{
 			wait 0.25;
 		}
@@ -1274,18 +1284,22 @@ check_for_instakill( player )
 
 		}
 
-		if( flag( "dog_round" ) )
+/*		if( flag( "dog_round" ) )
 		{
 			self DoDamage( self.health + 666, self.origin, player );
 			player notify("zombie_killed");
 		}
 		else
+		{*/
+		if( !( self enemy_is_dog() ) )
 		{
 			self maps\_zombiemode_spawner::zombie_head_gib();
-			self DoDamage( self.health + 666, self.origin, player );
-			player notify("zombie_killed");
-			
 		}
+
+		self DoDamage( self.health + 666, self.origin, player );
+		player notify("zombie_killed");
+			
+		//}
 	}
 }
 

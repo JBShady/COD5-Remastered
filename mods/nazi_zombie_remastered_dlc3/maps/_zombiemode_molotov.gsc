@@ -49,13 +49,16 @@ watchMolotovFire(player)
 			{
 				zombies[i].molotov_flamed = true;
 
-				if( i < 4 ) // don't spam flame FX, just char zombies after a few
+				if( !( zombies[i] enemy_is_dog() ) ) // only flame normal zombs
 				{
-					zombies[i] thread animscripts\death::flame_death_fx();
-				}
-				else
-				{
-					zombies[i] StartTanning();
+					if( i < 4 ) // don't spam flame FX, just char zombies after a few
+					{
+						zombies[i] thread animscripts\death::flame_death_fx();
+					}
+					else
+					{
+						zombies[i] StartTanning();
+					}
 				}
 
 				zombies[i] thread damage_on_fire_molotov( player );
@@ -76,6 +79,11 @@ damage_on_fire_molotov( player ) // same damage as flamethrower, but we only do 
 	
 	flame_ticks = randomintrange(2,5);
 
+	if(self.moveplaybackrate > 0.85) // flamer = 0.8, smoke/molotov = 0.85
+	{
+		self.moveplaybackrate = 0.85;
+	}
+	
 	for(;;)
 	{
 		if( level.round_number < 6 )

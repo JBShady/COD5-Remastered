@@ -29,6 +29,7 @@ main()
 	precachemodel("lights_tinhatlamp_on");
 	precachemodel("lights_indlight_on");
 	precachemodel("lights_indlight");
+	precacheModel("collision_wall_64x64x10"); // new
 	precachemodel("char_usa_raider_gear_flametank");
 	
 	level.valve_hint_north = (&"ZOMBIE_BUTTON_NORTH_FLAMES");
@@ -39,7 +40,6 @@ main()
 	precachestring(&"ZOMBIE_BETTY_ALREADY_PURCHASED");
 	precachestring(&"REMASTERED_ZOMBIE_BETTY_HOWTO");
 	precachestring(&"ZOMBIE_FLAMES_UNAVAILABLE");
-	precachestring(&"REMASTERED_ZOMBIE_FLAMES_UNAVAILABLE_HAND");
 	precachestring(&"ZOMBIE_USE_AUTO_TURRET");
 	precachestring(&"REMASTERED_ZOMBIE_ELECTRIC_SWITCH");
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_ASYLUM_LEVEL_BERLIN");
@@ -103,6 +103,8 @@ main()
 
 	players = getplayers();
 	players[randomint(players.size)] thread level_start_vox(); //Plays a "Power's Out" Message from a random player at start
+
+	spawncollision("collision_wall_64x64x10","collider", (880, -190.5, 260), (0, 0, 0)); // new, fixes jump spot by double tap trap
 
 	level thread intro_screen();
 	//level thread debug_health();
@@ -1025,6 +1027,7 @@ toilet_useage()
 				wait(240);	
 				setmusicstate("WAVE_1");
 				level.eggs = 0;
+				toilet_trig delete();
 				
 			}
 				
@@ -1099,15 +1102,15 @@ self = use trigger associated with the gas valve
 ------------------------------------*/
 electric_trap_think()
 {	
-	self sethintstring(&"REMASTERED_ZOMBIE_FLAMES_UNAVAILABLE_HAND");
+	self sethintstring(&"ZOMBIE_FLAMES_UNAVAILABLE");
+	self setCursorHint( "HINT_NOICON" );
+
 	self.is_available = undefined;
 	self.zombie_cost = 1000;
 	self.in_use = 0;
 	
 	while(1)
 	{
-		valve_trigs = getentarray(self.script_noteworthy ,"script_noteworthy");		
-	
 		//wait until someone uses the valve
 		self waittill("trigger",who);
 		if( who in_revive_trigger() )
@@ -1127,15 +1130,20 @@ electric_trap_think()
 				if(!self.in_use)
 				{
 					self.in_use = 1;
+
+					//turn off the valve triggers associated with this valve until the gas is available again
+					valve_trigs = getentarray(self.script_noteworthy ,"script_noteworthy");		
+					array_thread (valve_trigs,::trigger_off);
+					
 					play_sound_at_pos( "purchase", who.origin );
+					//set the score
+					who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost );
+					
+
 					self thread electric_trap_move_switch(self);
 					//need to play a 'woosh' sound here, like a gas furnace starting up
 					self waittill("switch_activated");
-					//set the score
-					who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost );
 
-					//turn off the valve triggers associated with this valve until the gas is available again
-					array_thread (valve_trigs,::trigger_off);
 					
 					//this trigger detects zombies walking thru the flames
 					self.zombie_dmg_trig = getent(self.target,"targetname");
@@ -1281,12 +1289,12 @@ activate_electric_trap()
 
 	if(self.script_string == "north")
 	{
-		iprintlnbold("1");
+		//iprintlnbold("1");
 		level.north_on = undefined;
 	}
 	else
 	{
-		iprintlnbold("2");
+		//iprintlnbold("2");
 		level.south_on = undefined;
 	}
 }
@@ -1370,7 +1378,7 @@ player_elec_damage()
 		level.elec_loop = 0;
 	}	
 	
-	if( !isDefined(self.is_burning) && !self maps\_laststand::player_is_in_laststand() )
+	if( !isDefined(self.is_burning) && !self maps\_laststand::player_is_in_laststand() && self.sessionstate != "spectator" )
 	{
 		self stopShellshock();
 
@@ -1393,7 +1401,7 @@ player_elec_damage()
 		if(!self hasperk("specialty_armorvest") || self.health - 100 < 1)
 		{
 			
-			radiusdamage(self.origin,10,self.health + 100,self.health + 100);
+			radiusdamage(self.origin + (0, 0, 5),10,self.health + 100,self.health + 100);
 			self.is_burning = undefined;
 
 		}
@@ -1442,7 +1450,7 @@ zombie_elec_death(flame_chance)
 			self thread electroctute_death_fx();
 			self thread play_elec_vocals();
 		}
-		wait(randomfloat(1.25));
+		wait(randomfloat(1.1));
 		self playsound("zombie_arc");
 	}
 
@@ -1593,7 +1601,7 @@ Fountain_Mg42_Activate()
 				who maps\_zombiemode_score::minus_to_player_score( trig.zombie_cost ); 
 				trig.is_activated = true;
 				trig trigger_off();
-				trig sethintstring(&"REMASTERED_ZOMBIE_FLAMES_UNAVAILABLE_HAND");
+				trig sethintstring(&"ZOMBIE_FLAMES_UNAVAILABLE");
 				
 				//the fountain top sinks down	
 				fountain_top = getent("fountain_top","targetname");
@@ -1713,7 +1721,6 @@ master_electric_switch()
 		level.power_off = undefined;
 	}
 	
-	array_thread(door_trigs,::trigger_off);
 	master_switch rotateroll(-90,.3);
 
 	//TO DO (TUEY) - kick off a 'switch' on client script here that operates similiarly to Berlin2 subway.
@@ -1735,7 +1742,6 @@ master_electric_switch()
 	clientnotify("doubletap_on");
 	clientnotify("jugger_on");
 	level notify("switch_flipped");
-	maps\_audio::disable_bump_trigger("switch_door_trig");
 	level thread play_the_numbers();
 	left_org = getent("audio_swtch_left", "targetname");
 	right_org = getent("audio_swtch_right", "targetname");
@@ -1803,6 +1809,9 @@ master_electric_switch()
 	south_zapper_light_green();
 
 	wait(6);
+	maps\_audio::disable_bump_trigger("switch_door_trig");
+	array_thread(door_trigs,::trigger_off);
+
 	fx_org stoploopsound();
 	level notify ("sleight_on");
 	level notify("revive_on");
@@ -1810,10 +1819,9 @@ master_electric_switch()
 	level notify ("doubletap_on");
 	level notify ("juggernog_on");
 
-
-
 	//level waittill("electric_on_middle_door");
 	doors = getentarray(door_trigs[0].target,"targetname");
+
 	open_bottom_doors(doors);
 	
 	exploder(101);
@@ -1828,6 +1836,8 @@ master_electric_switch()
 play_door_dialog()
 {
 	self endon ("warning_dialog");
+	level endon("switch_flipped");
+
 	timer = 0;
 	while(1)
 	{
@@ -1862,7 +1872,7 @@ play_door_dialog()
 set_door_unusable()
 {
 	
-	self sethintstring(&"REMASTERED_ZOMBIE_FLAMES_UNAVAILABLE_HAND");
+	self sethintstring(&"ZOMBIE_FLAMES_UNAVAILABLE");
 	self UseTriggerRequireLookAt();
 	 
 }

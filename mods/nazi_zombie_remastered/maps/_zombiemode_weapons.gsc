@@ -271,7 +271,7 @@ treasure_chest_think()
 		cost = level.zombie_treasure_chest_cost;
 	}
 
-	self set_hint_string( self, "default_treasure_chest_" + cost );
+	self SetHintString( &"REMASTERED_ZOMBIE_RANDOM_WEAPON_950" ); 
 	self setCursorHint( "HINT_NOICON" );
 	
 	// waittill someuses uses this
@@ -331,7 +331,17 @@ treasure_chest_think()
 
 	self.grab_weapon_hint = true;
 	self.chest_user = user;
-	self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS" ); 
+
+	primaryWeapons = user GetWeaponsListPrimaries(); 
+	if(weapon_spawn_org.weapon_string == "molotov" || weapon_spawn_org.weapon_string == "mortar_round" || primaryWeapons.size <= 1  )
+	{
+		self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS_ALT" ); 
+	}
+	else
+	{
+		self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS" ); 
+	}
+	
 	self setCursorHint( "HINT_NOICON" ); 
 	self setvisibletoplayer( user );
 
@@ -1031,7 +1041,7 @@ setup_client_hintelem()
 	{
 		self.hintelem = newclienthudelem(self);
 	}
-	self.hintelem init_hint_hudelem(320, 220, "center", "bottom", 1.6, 1.0);
+	self.hintelem init_hint_hudelem(320, 220, "center", "bottom", 1.3, 1.0);
 }
 
 //satchel hint stuff

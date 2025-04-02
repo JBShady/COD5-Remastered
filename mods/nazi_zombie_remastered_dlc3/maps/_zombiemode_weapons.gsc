@@ -736,7 +736,7 @@ treasure_chest_think()
 		cost = self.zombie_cost;
 	}
 
-	self set_hint_string( self, "default_treasure_chest_" + cost );
+	self SetHintString( &"REMASTERED_ZOMBIE_RANDOM_WEAPON_950" ); 
 	self setCursorHint( "HINT_NOICON" );
 
 	//self thread decide_hide_show_chest_hint( "move_imminent" );
@@ -816,7 +816,16 @@ treasure_chest_think()
 		// Let the player grab the weapon and re-enable the box //
 		self.grab_weapon_hint = true;
 		self.chest_user = user;
-		self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS" ); 
+		primaryWeapons = user GetWeaponsListPrimaries(); 
+
+		if( (weapon_spawn_org.weapon_string == "molotov" && !user HasWeapon("zombie_cymbal_monkey") ) || (weapon_spawn_org.weapon_string == "zombie_cymbal_monkey" && !user HasWeapon("molotov") ) || primaryWeapons.size <= 1 )
+		{
+			self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS_ALT" ); 
+		}
+		else
+		{
+			self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS" ); 
+		}
 		self setCursorHint( "HINT_NOICON" ); 
 		self setvisibletoplayer( user );
 
@@ -1652,7 +1661,7 @@ treasure_chest_give_weapon( weapon_string )
 	{
 		for( i = 0; i < primaryWeapons.size; i++ )
 		{
-			if( primaryWeapons.size == 1 || primaryWeapons[i] == "zombie_colt" || primaryWeapons[i] == "zombie_tokarev" || primaryWeapons[i] == "zombie_nambu" || primaryWeapons[i] == "zombie_walther" )
+			if( primaryWeapons.size <= 1 || primaryWeapons[i] == "zombie_colt" || primaryWeapons[i] == "zombie_tokarev" || primaryWeapons[i] == "zombie_nambu" || primaryWeapons[i] == "zombie_walther" )
 			{
 				continue; 
 			}

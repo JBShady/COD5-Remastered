@@ -251,7 +251,13 @@ set_player_score_hud( is_change, init )
 
 	self thread score_highlight( self.score, score_diff, is_change ); 
 
-	if( IsDefined( init ) )
+	// cap points at 1 billion
+	if(self.score > 1000000000)
+	{
+		self.score = 1000000000;
+	}
+
+	if( IsDefined( init ) && init == true )
 	{
 		return; 
 	}

@@ -2163,7 +2163,8 @@ play_death_vo(hit_location, player, mod, zombie)
 		}
 
 	}
-	if(/*weapon == "ray_gun" || weapon == "ray_gun_upgraded" ||*/ zombie.damageweapon == "ray_gun" || zombie.damageweapon == "ray_gun_upgraded" )
+
+	if((mod == "MOD_PROJECTILE" || mod == "MOD_PROJECTILE_SPLASH") && (zombie.damageweapon == "ray_gun" || zombie.damageweapon == "ray_gun_upgraded") )
 	{
 		//Ray Gun Kills
 		if(distance(player.origin,zombie.origin) > 348 && level.zombie_vars["zombie_insta_kill"] == 0)
@@ -2200,8 +2201,8 @@ play_death_vo(hit_location, player, mod, zombie)
 		{
 			plr = "plr_" + index + "_";
 			player create_and_play_dialog ( plr, "vox_crawl_kill", 0.25 );
+			return; // return only if we do this vox, so we can also test for other vox quotes
 		}
-		return;
 	}
 	
 	//Bowie knife: Plays 25% chance vox, or else exert on knife kill
@@ -2717,7 +2718,7 @@ zombie_death_animscript()
 
 	if( self.damagemod == "MOD_BURNED" || (self.damageWeapon == "molotov" && (self.damagemod == "MOD_GRENADE" || self.damagemod == "MOD_GRENADE_SPLASH")) )
 	{
-		if(level.flame_death_fx_frame < 5 && !self enemy_is_dog())
+		if(level.flame_death_fx_frame < 4 && !self enemy_is_dog())
 		{
 			level.flame_death_fx_frame++;
 			level thread reset_flame_death_fx_frame();
@@ -3194,6 +3195,27 @@ find_flesh()
 		}
 			
 		player = get_closest_valid_player( self.origin, self.ignore_player ); 
+
+		if( players.size == 1 && players[0].ignoreme )
+		{
+		    structs = getstructarray( "initial_spawn_points", "targetname" );
+			sleight = getEnt("vending_sleight", "targetname");
+
+			if(distancesquared(players[0].origin, structs[0].origin) > distancesquared(players[0].origin, sleight.origin) )
+			{
+				downed_goal = structs[0].origin;
+			}
+			else
+			{
+				downed_goal = sleight.origin + (110, 0, 0); // failsafe in case player is in spawn
+			}
+
+		    while( players.size == 1 && players[0].ignoreme && level.solo_reviving_failsafe == 1 )
+		    {
+		        self SetGoalPos( downed_goal ); // spawn point by quick revive
+		        wait 0.5;
+		    }
+		}
 		
 		if( !isDefined( player ) && !isDefined( zombie_poi ) )
 		{

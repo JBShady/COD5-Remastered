@@ -732,6 +732,8 @@ check_for_barrel_explode()
 	}
 	self waittill ("damage");
 	level.egg_damage_counter = level.egg_damage_counter + 1;
+
+	//self delete();
 }
 
 play_music_easter_egg()

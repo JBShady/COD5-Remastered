@@ -185,6 +185,14 @@ door_think()
 				}
 			}
 		}
+		
+		// get all trigs, we might want a trigger on both sides
+		// of some junk sometimes
+		all_trigs = getentarray( self.target, "target" ); 
+		for( i = 0; i < all_trigs.size; i++ )
+		{
+			all_trigs[i] trigger_off(); 
+		}
 
 		// Door has been activated, make it do its thing
 		sound_played = false;
@@ -274,13 +282,6 @@ door_think()
 			flag_set( self.script_flag );
 		}				
 		
-		// get all trigs, we might want a trigger on both sides
-		// of some junk sometimes
-		all_trigs = getentarray( self.target, "target" ); 
-		for( i = 0; i < all_trigs.size; i++ )
-		{
-			all_trigs[i] trigger_off(); 
-		}
 		break;
 	}
 
@@ -880,7 +881,7 @@ blocker_trigger_think()
 			player.rebuild_barrier_reward++; // jb - each time we repair it increases by just 1 indicating how many # of repairs, not points #, so that 2x points doesnt nerf us
 
 			chunk play_sound_on_ent( "rebuild_barrier_piece" );
-			if( (player.rebuild_barrier_reward < level.zombie_vars["rebuild_barrier_cap_per_round"]) )
+			if( (player.rebuild_barrier_reward <= level.zombie_vars["rebuild_barrier_cap_per_round"]) )
 			{
 				play_sound_at_pos("purchase", player.origin);
 				failsafe = true;
@@ -907,7 +908,7 @@ blocker_trigger_think()
 			}
 	
 			// set the score
-			if( (player.rebuild_barrier_reward < level.zombie_vars["rebuild_barrier_cap_per_round"]) && isDefined(failsafe) && failsafe == true ) // only give points if we got sound, because of one sec delay
+			if( (player.rebuild_barrier_reward <= level.zombie_vars["rebuild_barrier_cap_per_round"]) && isDefined(failsafe) && failsafe == true ) // only give points if we got sound, because of one sec delay
 			{
 				player maps\_zombiemode_score::add_to_player_score( cost );
 

@@ -1772,7 +1772,7 @@ zombie_death_animscript()
 
 	if( self.damagemod == "MOD_BURNED" || (self.damageWeapon == "molotov" && (self.damagemod == "MOD_GRENADE" || self.damagemod == "MOD_GRENADE_SPLASH")) )
 	{
-		if(level.flame_death_fx_frame < 5 )
+		if(level.flame_death_fx_frame < 4 )
 		{
 			level.flame_death_fx_frame++;
 			level thread reset_flame_death_fx_frame();
@@ -1987,7 +1987,7 @@ zombie_death_event( zombie )
 	zombie waittill( "death" );
 	zombie thread zombie_eye_glow_stop();
 	//DEATH SOUNDS
-	playsoundatposition ("death_vocals", zombie.origin);
+	//playsoundatposition ("death_vocals", zombie.origin);
 
 	// this is controlling killstreak voice over in the asylum.gsc
 	if(isdefined (zombie.attacker) && isplayer(zombie.attacker) )
@@ -2407,7 +2407,7 @@ play_death_vo(hit_location, player,mod,zombie)
 	{
 		//TUEY play flamethrower death sounds
 		rand = randomintrange(0, 100);
-		if(rand < 20)
+		if(rand < 15)
 		{
 			plr = "plr_" + index + "_";
 			player play_flamethrower_dialog (plr);
@@ -2427,16 +2427,16 @@ play_death_vo(hit_location, player,mod,zombie)
 		}
 	}
 
-	if(zombie.damageweapon == "molotov" || zombie.damageweapon == "ray_gun" /*|| weapon == "ray_gun"*/ )
+	if(zombie.damageweapon == "molotov" || ((mod == "MOD_PROJECTILE" || mod == "MOD_PROJECTILE_SPLASH") && zombie.damageweapon == "ray_gun") )
 	{
 		return;
 	}
 
 	//Explosive Kills
-	if((mod == "MOD_GRENADE_SPLASH" || mod == "MOD_GRENADE" || mod == "MOD_ZOMBIE_SATCHEL" ) && level.zombie_vars["zombie_insta_kill"] == 0 )
+	if((mod == "MOD_GRENADE_SPLASH" || mod == "MOD_GRENADE" ) && level.zombie_vars["zombie_insta_kill"] == 0 ) // grenade has higher odds because sometimes mod is unknown
 	{
 		rand = randomintrange(0, 100);
-		if(rand < 60)
+		if(rand < 70)
 		{
 			plr = "plr_" + index + "_";
 			player play_explosion_dialog(plr);
@@ -2444,7 +2444,7 @@ play_death_vo(hit_location, player,mod,zombie)
 		return;
 	}
 	
-	if( mod == "MOD_PROJECTILE" || mod == "MOD_EXPLOSIVE" )
+	if( mod == "MOD_PROJECTILE" || mod == "MOD_EXPLOSIVE" || mod == "MOD_ZOMBIE_SATCHEL" ) // added support for satchel and mortar
 	{	
 		rand = randomintrange(0, 100);
 		if(rand < 60)

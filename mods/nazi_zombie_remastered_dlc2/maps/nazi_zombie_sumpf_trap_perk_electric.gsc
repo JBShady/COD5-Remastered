@@ -86,18 +86,23 @@ electric_trap_think()
 				if(!self.in_use)
 				{
 					self.in_use = 1;
+
+					self trigger_off();
+
+					level thread maps\nazi_zombie_sumpf::turnLightRed(self.script_string);
+
 					play_sound_at_pos( "purchase", who.origin );
+					//set the score
+					who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost );
+
 					who thread add_trap_dialog();
 					self thread electric_trap_move_switch(self);
 					//need to play a 'woosh' sound here, like a gas furnace starting up
 					self waittill("switch_activated");
-					//set the score
-					who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost );
 
 					//turn off the valve triggers associated with this valve until the gas is available again
 					//array_thread (valve_trigs,::trigger_off);
-					self trigger_off();
-					level thread maps\nazi_zombie_sumpf::turnLightRed(self.script_string);
+
 					
 					//this trigger detects zombies walking thru the flames
 					self.zombie_dmg_trig = getent(self.target,"targetname");
@@ -358,7 +363,7 @@ player_elec_damage()
 		level.elec_loop = 0;
 	}	
 	
-	if( !isDefined(self.is_burning) && !self maps\_laststand::player_is_in_laststand() )
+	if( !isDefined(self.is_burning) && !self maps\_laststand::player_is_in_laststand() && self.sessionstate != "spectator" )
 	{
 		self stopShellshock();
 
@@ -381,7 +386,7 @@ player_elec_damage()
 		if(!self hasperk("specialty_armorvest") || self.health - 100 < 1)
 		{
 			
-			radiusdamage(self.origin,10,self.health + 100,self.health + 100);
+			radiusdamage(self.origin + (0, 0, 5),10,self.health + 100,self.health + 100);
 			self.is_burning = undefined;
 
 		}
@@ -433,7 +438,7 @@ zombie_elec_death(flame_chance)
 				self thread electroctute_death_fx();
 				self thread play_elec_vocals();
 			}
-			wait(randomfloat(1.25));
+			wait(randomfloat(1.1));
 			self playsound("zombie_arc");
 		}
 	}

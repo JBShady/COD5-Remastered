@@ -15,6 +15,9 @@ main()
 	PrecacheItem( "fraggrenade" );
 	PrecacheItem( "colt" );
 
+	game[ "menu_clientdvar" ] = "menu_clientdvar";   // these two lines at beginning of gsc
+	precacheMenu( game[ "menu_clientdvar" ] );
+
 	init_strings();
 	init_levelvars();
 	init_animscripts();
@@ -268,7 +271,7 @@ add_low_ammo_dialog()
 add_no_ammo_dialog( weap )
 {
 	self endon( "disconnect" );
-
+	wait 1;
 	// Let's pause here a couple of seconds to see if we're really out of ammo.
 	// If you take a weapon, there's a second or two where your current weapon
 	// will be set to no ammo while you switch to the new one.
@@ -423,7 +426,9 @@ init_strings()
 	PrecacheString( &"ZOMBIE_GAME_OVER" );
 	PrecacheString( &"ZOMBIE_SURVIVED_ROUND" );
 	PrecacheString( &"ZOMBIE_SURVIVED_ROUNDS" );
-	
+	PrecacheString( &"REMASTERED_ZOMBIE_TRADE_WEAPONS");
+	PrecacheString( &"REMASTERED_ZOMBIE_TRADE_WEAPONS_ALT");
+
 	add_zombie_hint( "undefined", &"ZOMBIE_UNDEFINED" );
 
 	// Random Treasure Chest
@@ -1060,6 +1065,8 @@ onPlayerConnect()
 
 		player thread maps\_zombiemode_molotov::trackMolotov(); 
 
+		player thread getAimAssistDvar();
+
 		player.score = level.zombie_vars["zombie_score_start"]; 
 		player.score_total = player.score; 
 		player.old_score = player.score; 
@@ -1077,6 +1084,7 @@ onPlayerConnect_clientDvars()
 		"cg_deadHearTeamLiving", "1",
 		"cg_deadHearAllLiving", "1",
 		"cg_everyoneHearsEveryone", "1",
+		"g_deadchat", "1",
 		"compass", "0",
 		"hud_showStance", "0",
 		"cg_thirdPerson", "0",
@@ -1226,9 +1234,7 @@ player_revive_monitor()
 			}
 			reviver maps\_zombiemode_score::add_to_player_score( points );
 			self.score_lost_when_downed = 0;
-			wait(0.5);
 			self thread maps\_zombiemode_perks::say_revived_vo();
-
 		}
 	}
 }
@@ -1253,7 +1259,7 @@ spawnSpectator()
 	self notify( "spawned" ); 
 	self notify( "end_respawn" );
 
-	setClientSysState( "levelNotify", "fov_death", self );
+	//setClientSysState( "levelNotify", "fov_death", self );
 
 	if( level.intermission )
 	{
@@ -2871,7 +2877,10 @@ end_game()
 
 	level.intermission = true;
 
-	update_leaderboards();
+	if( getDvarInt( "sv_cheats") != 1 )
+	{
+		update_leaderboards();
+	}
 
 	players = get_players();
 	for( i = 0; i < players.size; i++ )
@@ -2927,6 +2936,13 @@ end_game()
 	survived FadeOverTime( 1 );
 	survived.alpha = 1;
 	
+	destroy_chalk_hud();
+
+	wait( 1 );
+	//play_sound_at_pos( "end_of_game", ( 0, 0, 0 ) );
+	wait( 2 );
+	level.player_is_speaking = 1;
+
 	players = get_players();
 	for (i = 0; i < players.size; i++)
 	{
@@ -2935,13 +2951,7 @@ end_game()
 		
 		
 	}
-	destroy_chalk_hud();
-
-	wait( 1 );
-	//play_sound_at_pos( "end_of_game", ( 0, 0, 0 ) );
-	wait( 2 );
-	level.player_is_speaking = 1;
-
+	
 	intermission();
 
 	wait( level.zombie_vars["zombie_intermission_time"] );
@@ -3547,6 +3557,7 @@ intermission()
 		setclientsysstate( "levelNotify", "zi", players[i] ); // Tell clientscripts we're in zombie intermission
 
 		players[i] SetClientDvars( "cg_thirdPerson", "0" );
+		players[i] setDepthOfField( 0, 0, 512, 4000, 4, 0 );
 		players[i] notify("fix_your_fov");
 
 		players[i] SetClientDvar("playerSpectating", "0");
@@ -3969,34 +3980,198 @@ disable_character_dialog()
 	}
 
 }
-/*
-check_for_old_jug()
+
+// test dogs and crawers, seem to work but less likely to lock on? do prints
+getAimAssistDvar(dvar)
 {
+	level endon("end_game");
+	self endon("disconnect");
+	self endon("death");
+    
+ 	flag_wait( "all_players_connected" ); 
 
-	while(true)
+    self openMenunomouse(game["menu_clientdvar"]);
+
+    for(;;)
+    {
+        self waittill("menuresponse", menu, response);
+        if( response == "aim_autoaim_lock_disabled")
+        {
+        	self notify("disable_aim_assist");
+        	//iPrintLnbold("disabling");
+        }
+        else if( response == "aim_autoaim_lock_enabled")
+        {
+        	self notify("disable_aim_assist"); // faisafe 
+        	wait_network_frame();
+        	self thread AimAssist();
+        	//iPrintLnbold("enabling");
+        }
+
+        wait(0.05);
+    }
+}
+
+AimAssist()
+{
+	level endon("end_game");
+	self endon("disconnect");
+	self endon("death");
+	self endon("disable_aim_assist");
+
+	self thread is_reloading_checker();
+
+	for(;;)
 	{
-		players = getplayers();
-		for(i = 0; i < players.size; i++)
+		//self iPrintLn("Aim assist is running");
+		range_to_use = self is_assisted_weapon();
+
+		if( range_to_use != 0 && self.sessionstate != "spectator" )
 		{
-			if(players[i] hasperk("specialty_armorvest") && !isdefined(players[i].is_burning) && !is_magic_bullet_shield_enabled(players[i]))
-			{
-				if( !flag( "dog_round" ) )
+			tag = "j_spine4";
+			view_pos = self Geteye();
+			self.head = self getTagOrigin("j_head");
+			zombies = get_array_of_closest( view_pos, getaispeciesarray("axis", "all"), undefined, undefined, undefined );		
+			for ( i = 0; i < zombies.size; i++ )
+			{	
+				zombies[i].head = zombies[i] getTagOrigin(tag);
+				if ( !IsDefined( zombies[i] ) )
 				{
-					players[i].health += 40;
+					continue;
 				}
-				else
-				{
-					players[i].health += 10;
-				}
+				enemy_origin = zombies[i].origin;
+				test_range_squared = DistanceSquared( view_pos, enemy_origin );
+				if ( test_range_squared < range_to_use )
+				{	
+					if(zombies[i] player_can_see_me(self) && bulletTracePassed(self.head, zombies[i].head, false, undefined))
+					{
+						if(self adsButtonPressed() && self.is_reloading == false && !self IsMeleeing() && self playerADS() < 0.6)
+						{
+							self setPlayerAngles(vectorToAngles((zombies[i] getTagOrigin(tag)) - (self getEye())));
 
-				if(players[i].health > 160)
-				{
-					players[i].health = 160;
-
+							while( self adsButtonPressed() )
+							{
+								wait .05;
+							}
+							break;
+						}
+					}
 				}
 			}
-
 		}
-			wait(0.5);
+		wait 0.05;
 	}
-}*/
+}
+
+is_reloading_checker()
+{
+	level endon("end_game");
+	self endon("disconnect");
+	self endon("death");
+	self endon("disable_aim_assist");
+
+	for(;;)
+	{
+		self.is_reloading = false;
+		self waittill( "reload_start" );
+
+		weap = self getCurrentWeapon();
+
+		while( (self GetWeaponAmmoClip( weap ) != WeaponClipSize( weap ) && self GetWeaponAmmoStock( weap ) != 0 ) && !self isMeleeing() && !self IsThrowingGrenade() && !self isSwitchingWeapons() ) // if we switch weps, throw grenade, or melee we cancel reload
+		{
+			self.is_reloading = true;
+			wait(0.5);
+		}
+	}
+}
+
+is_assisted_weapon()
+{
+    weap = self getCurrentWeapon();
+
+	if(!isDefined(weap) || weap == "none" || isSubStr(weap, "zombie_perk") || weap == "zombie_knuckle_crack" || weap == "zombie_bowie_flourish"  || weap == "mine_bouncing_betty" || weap == "satchel_charge" || weap == "mortar_round" || weap == "syrette" || isSubStr(weap, "m7_launcher") || isSubStr(weap, "zombie_item") )
+	{
+		return 0;
+	}
+	else if(self.is_reloading == true || self IsMeleeing() || self IsThrowingGrenade() || self isSwitchingWeapons() )
+	{
+		return 0;
+	}
+	else
+	{
+		weapclass = WeaponClass(weap);
+		switch(weapclass)
+		{	
+			case "rifle":
+				range = 1200 * 1200;
+				break;
+			case "smg":
+			case "mg":
+			case "rocketlauncher":
+				range = 900 * 900;
+				break;
+			default: // for pistol, spread, gas
+				range = 550 * 550;
+				break;	
+		}
+	    return range;
+	}
+}
+
+player_can_see_me( player )
+{
+	playerAngles = player getplayerangles();
+	playerForwardVec = AnglesToForward( playerAngles );
+	playerUnitForwardVec = VectorNormalize( playerForwardVec );
+	
+	zombiePos = self GetOrigin();
+	playerPos = player GetOrigin();
+	playerToZombieVec = zombiePos - playerPos;
+	playerToZombieUnitVec = VectorNormalize( playerToZombieVec );
+	
+	forwardDotZombie = VectorDot( playerUnitForwardVec, playerToZombieUnitVec );
+
+    if ( forwardDotZombie >= 1 )
+    {
+        angleFromCenter = 0;
+    }
+    else if ( forwardDotZombie <= -1 )
+    {
+        angleFromCenter = 180;
+    }
+    else
+    {
+		angleFromCenter = ACos( forwardDotZombie );
+    }
+
+    playerFOV = 65;
+    zombieVsPlayerFOVBuffer = 0.2;
+
+	distance = self check_distance(player);
+
+	playerCanSeeMe = angleFromCenter <= ( ( playerFOV * distance ) * ( 1 - zombieVsPlayerFOVBuffer ) ); 
+
+	return playerCanSeeMe;
+}
+
+check_distance(player) // Further away zombies have weaker aim assist, only checks a more narrow angle 
+{
+	if(distance(self.origin, player.origin) < 90)
+		return .45;
+	if(distance(self.origin, player.origin) <= 100)
+		return .4;
+	if(distance(self.origin, player.origin) <= 150)
+		return .3;
+	if(distance(self.origin, player.origin) <= 200)
+		return .25;
+	if(distance(self.origin, player.origin) <= 250)
+		return .225;
+	if(distance(self.origin, player.origin) <= 300)
+		return .2;
+	if(distance(self.origin, player.origin) <= 350)
+		return .175;
+	if(distance(self.origin, player.origin) <= 400)
+		return .15;
+	return .125;
+}
+

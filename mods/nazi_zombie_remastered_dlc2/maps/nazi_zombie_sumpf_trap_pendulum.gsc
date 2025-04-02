@@ -113,8 +113,9 @@ penThink()
 				{
 					self.in_use = 1;
 					penBuyTrigger = getentarray("pendulum_buy_trigger","targetname");
-					level thread maps\nazi_zombie_sumpf::turnLightRed("pendulum_light");
 					array_thread (penBuyTrigger,::trigger_off);
+
+					level thread maps\nazi_zombie_sumpf::turnLightRed("pendulum_light");
 
 					play_sound_at_pos( "purchase", who.origin );
 					who thread play_trap_dialog();
@@ -325,12 +326,14 @@ playerPenDamage(trap)
 		//radiusdamage(self.origin,10,self.health + 100,self.health + 100);
 		if(!self hasperk("specialty_armorvest") || self.health - 100 < 1)
 		{
-			radiusdamage(self.origin,10,self.health + 100,self.health + 100);
+			radiusdamage(self.origin + (0, 0, 5),10,self.health + 100,self.health + 100);
+			self playlocalsound ("melee_hit");
 			self SetStance( "crouch" );
 		}
 		else
 		{
 			self dodamage(100, self.origin); // Changed to be same method as electric trap, if you have 100 health or less you instantly die (so, that also means with no jug) but if you have jug it does ticks of damage until 100. Buffed, flogger more dangerous than elec trap 
+			self playlocalsound ("melee_hit");
 			self SetStance( "crouch" );
 			wait(.1);
 		}
@@ -476,6 +479,10 @@ ragdoll_cleanup()
 
     if(zombie_ragdolls.size > 14) // max of 16 rag dolls default
     {
-		zombie_ragdolls[0] delete(); // delete furthest zombie
+    	zombies_to_delete = zombie_ragdolls.size - 14;
+    	for(i=0;i<zombies_to_delete;i++)
+    	{
+			zombie_ragdolls[i] delete(); // delete furthest zombie
+    	}
 	}
 }

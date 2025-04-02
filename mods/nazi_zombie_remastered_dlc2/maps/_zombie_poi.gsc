@@ -8,7 +8,6 @@ init()
 	if( players.size == 1 )
 	{
 	//iprintln ("reviving player");
-	//level.revive_point create_zombie_point_of_interest( 15360, 960, 100000, true );
 	self.ignoreme = true;
 	level.solo_reviving_failsafe = 1;
 	wait 10;
@@ -17,6 +16,5 @@ init()
 
 	//iprintln ("player revived");
 	
-	//level.revive_point create_zombie_point_of_interest( 0, 0, 0, false );
 	}
 }

@@ -410,7 +410,7 @@ treasure_chest_think()
 		cost = self.zombie_cost;
 	}
 
-	self set_hint_string( self, "default_treasure_chest_" + cost );
+	self SetHintString( &"REMASTERED_ZOMBIE_RANDOM_WEAPON_950" ); 
 	self setCursorHint( "HINT_NOICON" );
 
 	// waittill someuses uses this
@@ -481,7 +481,16 @@ treasure_chest_think()
 		self.grab_weapon_hint = true;
 		self.chest_user = user;
 		//level thread treasure_chest_user_hint( self, user );
-		self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS" ); 
+
+		primaryWeapons = user GetWeaponsListPrimaries(); 
+		if( (weapon_spawn_org.weapon_string == "molotov" && !user HasWeapon("m8_white_smoke") ) || (weapon_spawn_org.weapon_string == "m8_white_smoke" && !user HasWeapon("molotov") ) || primaryWeapons.size <= 1 )
+		{
+			self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS_ALT" ); 
+		}
+		else
+		{
+			self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS" ); 
+		}
 		self setCursorHint( "HINT_NOICON" ); 
 		self setvisibletoplayer( user );
 
@@ -1086,7 +1095,7 @@ treasure_chest_give_weapon( weapon_string )
 	{
 		for( i = 0; i < primaryWeapons.size; i++ )
 		{
-			if( primaryWeapons.size == 1 || primaryWeapons[i] == "zombie_colt" )
+			if( primaryWeapons.size <= 1 || primaryWeapons[i] == "zombie_colt" )
 			{
 				continue; 
 			}
@@ -1504,7 +1513,7 @@ weapon_give( weapon )
 	{
 		for( i = 0; i < primaryWeapons.size; i++ )
 		{
-			if( primaryWeapons.size == 1 || primaryWeapons[i] == "zombie_colt" )
+			if( primaryWeapons.size <= 1 || primaryWeapons[i] == "zombie_colt" )
 			{
 				continue; 
 			}
@@ -1529,7 +1538,6 @@ weapon_give( weapon )
 	}
 	if( weapon == "molotov" )
 	{
-			//self TakeWeapon( "st_grenade" );
 		has_weapon = self HasWeapon( "m8_white_smoke" );
 		if( isDefined(has_weapon) && has_weapon )
 		{

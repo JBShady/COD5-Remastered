@@ -22,7 +22,12 @@ main()
 
 	assert( IsPlayer( self.enemy ) );
 	self notify( "dog_combat" );
-	
+
+	if(!flag("dog_round" ) && level.zombie_total < 10 )
+	{
+		self.dog_recently_hit = true;
+	}
+
 	if ( IsPlayer(self.enemy) )
 		self meleeBiteAttackPlayer(self.enemy);
 }

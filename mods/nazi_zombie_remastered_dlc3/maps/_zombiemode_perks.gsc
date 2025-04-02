@@ -583,23 +583,16 @@ revive_machine_exit()
 	
 	machine_trigger disable_trigger();
 
-//	machine_trigger delete();
 	wait(2.0);
-
-    //Delete eletrict power surge SFX
-    //Delete music stinger and jingle
 
     for ( i=0; i<machine_bump.size; i++ )
     {
         if(machine_bump[i].script_string == "revive_perk")
         {
-            machine_bump[i].script_sound = "null"; 
+			machine_bump[i].script_activated = 0;
         }
     }
-
-/*	machine_song = GetEnt( "perksacola", "targetname" );
-	machine_song.script_sound = "null";*/
-
+    
 	machine playsound( "box_move" );
 	playsoundatposition("whoosh", machine.origin );
 
@@ -1641,7 +1634,8 @@ say_down_vo()
 
 say_revived_vo()
 {
-	
+	wait(0.8);
+
 	index = maps\_zombiemode_weapons::get_player_index(self);
 	
 	player_index = "plr_" + index + "_";

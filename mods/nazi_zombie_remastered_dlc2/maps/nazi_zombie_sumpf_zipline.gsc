@@ -96,11 +96,12 @@ initZipline ()
 	zipPowerTrigger = getent("zip_lever_trigger", "targetname");
 	zipPowerTrigger.lever = getent(zipPowerTrigger.target, "targetname");
 	zipPowerTrigger sethintstring(&"REMASTERED_ZOMBIE_ZIPLINE_ACTIVATE");
-	//zipPowerTrigger SetCursorHint("HINT_NOICON");
 	
 	//wait until powered up
 	zipPowerTrigger waittill("trigger", who);
-	
+	zipPowerTrigger sethintstring("");
+	zipPowerTrigger SetCursorHint("HINT_NOICON");
+
 	zipHintDeactivated = getent("zipline_deactivated_hint_trigger", "targetname");
 	zipHintDeactivated delete();
 	
@@ -312,8 +313,11 @@ zipThink()
 						}	
 									
 						//self.in_use = 1;
-						
+
 						play_sound_at_pos( "purchase", who.origin );
+
+						//set the score
+						who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost );
 						
 						//if we used the trigger on the electric switch, we need to move the handle
 						if (IsDefined(self.script_noteworthy) && self.script_noteworthy == "static")
@@ -322,9 +326,6 @@ zipThink()
 							self.lever playsound("switch");		
 							self waittill ("recallLeverDone");
 						}
-						
-						//set the score
-						who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost );
 						
 						//if we're using the trigger in the zipline, the purchaser needs to be passed to ensure that he's on it
 						if (IsDefined(self.script_noteworthy) && self.script_noteworthy == "nonstatic")
@@ -468,9 +469,14 @@ activateZip(rider)
 		{
 			//dogs just need to explode so they're not floating where the zipline was
 			if ( zombs[i] enemy_is_dog() )
+			{
 				zombs[i].a.nodeath = true;
+			}
 			else
+			{
+				zombs[i] maps\nazi_zombie_sumpf_trap_pendulum::ragdoll_cleanup();
 				zombs[i] StartRagdoll();
+			}
 		
 			zombs[i] dodamage(zombs[i].health + 600, zombs[i].origin);
 		}	
@@ -704,8 +710,10 @@ activateZip(rider)
 	self notify ("zipDone");
 }
 			
-zipDamage (parent)
+zipDamage(parent)
 {
+	level endon ("machine_off");
+
 	while(1)
 	{
 		self waittill("trigger",ent);
@@ -773,9 +781,14 @@ zombieZipDamage()
 	
 	//dogs just need to explode so they're not floating where the zipline was
 	if ( self enemy_is_dog() )
+	{
 		self.a.nodeath = true;
+	}
 	else
+	{
+		self maps\nazi_zombie_sumpf_trap_pendulum::ragdoll_cleanup();
 		self StartRagdoll();
+	}
 		
 	self dodamage(self.health + 600, self.origin); 	
 }

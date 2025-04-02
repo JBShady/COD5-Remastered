@@ -325,7 +325,7 @@ setup_client_hintelem()
 	{
 		self.hintelem = newclienthudelem(self);
 	}
-	self.hintelem init_hint_hudelem(320, 220, "center", "bottom", 1.6, 1.0);
+	self.hintelem init_hint_hudelem(320, 220, "center", "bottom", 1.3, 1.0);
 }
 
 

@@ -45,7 +45,6 @@ main()
 	SetDvar( "perk_altMeleeDamage", 1000 ); // adjusts how much melee damage a player with the perk will do, needs only be set once
 
 	precachestring(&"ZOMBIE_FLAMES_UNAVAILABLE");
-	precachestring(&"REMASTERED_ZOMBIE_FLAMES_UNAVAILABLE_HAND");
 
 	precachestring(&"REMASTERED_ZOMBIE_ELECTRIC_SWITCH");
 
@@ -158,7 +157,7 @@ main()
 	level thread setup_meteor_audio();
 	//level thread meteor_egg_play();
 	level thread radio_egg_init( "radio_one", "radio_one_origin" );
-	level thread radio_egg_init( "radio_two", "radio_two_origin" );
+	//level thread radio_egg_init( "radio_two", "radio_two_origin" );
 	level thread radio_egg_init( "radio_three", "radio_three_origin" );
 	level thread radio_egg_init( "radio_four", "radio_four_origin" );
 	level thread radio_egg_init( "radio_five", "radio_five_origin" );
@@ -878,6 +877,8 @@ power_electric_switch()
 
 	master_switch rotateroll(-90,.3);
 
+	trig delete();	
+
 	//TO DO (TUEY) - kick off a 'switch' on client script here that operates similiarly to Berlin2 subway.
 	master_switch playsound("switch_flip");
 	flag_set( "electricity_on" );
@@ -912,8 +913,6 @@ power_electric_switch()
 //	clientnotify( "power_on" );
 	ClientNotify( "pl1" );	// power lights on
 	exploder(600);
-
-	trig delete();	
 	
 	playfx(level._effect["switch_sparks"] ,getstruct("power_switch_fx","targetname").origin);
 
@@ -982,7 +981,9 @@ electric_trap_dialog()
 ------------------------------------*/
 electric_trap_think( enable_flag )
 {	
-	self sethintstring(&"REMASTERED_ZOMBIE_FLAMES_UNAVAILABLE_HAND");
+	self sethintstring(&"ZOMBIE_FLAMES_UNAVAILABLE");
+	self setCursorHint( "HINT_NOICON" );
+
 	self.zombie_cost = 1000;
 	
 	self thread electric_trap_dialog();
@@ -1059,11 +1060,13 @@ electric_trap_think( enable_flag )
 					array_thread (triggers, ::trigger_off);
 
 					play_sound_at_pos( "purchase", who.origin );
-					self thread electric_trap_move_switch(self);
-					//need to play a 'woosh' sound here, like a gas furnace starting up
-					self waittill("switch_activated");
 					//set the score
 					who maps\_zombiemode_score::minus_to_player_score( self.zombie_cost );
+					
+					self thread electric_trap_move_switch(self);
+
+					//need to play a 'woosh' sound here, like a gas furnace starting up
+					self waittill("switch_activated");
 
 					//this trigger detects zombies walking thru the flames
 					self.zombie_dmg_trig trigger_on();
@@ -1282,7 +1285,7 @@ player_elec_damage()
 		level.elec_loop = 0;
 	}	
 	
-	if( !isDefined(self.is_burning) && !self maps\_laststand::player_is_in_laststand() )
+	if( !isDefined(self.is_burning) && !self maps\_laststand::player_is_in_laststand() && self.sessionstate != "spectator" )
 	{
 		self stopShellshock();
 
@@ -1305,7 +1308,7 @@ player_elec_damage()
 		if(!self hasperk("specialty_armorvest") || self.health - 100 < 1)
 		{
 			
-			radiusdamage(self.origin,10,self.health + 100,self.health + 100);
+			radiusdamage(self.origin + (0, 0, 5),10,self.health + 100,self.health + 100);
 			self.is_burning = undefined;
 
 		}
@@ -1357,7 +1360,7 @@ zombie_elec_death(flame_chance)
 				self thread electroctute_death_fx();
 				self thread play_elec_vocals();
 			}
-			wait(randomfloat(1.25));
+			wait(randomfloat(1.1));
 			self playsound("zombie_arc");
 		}
 	}
@@ -1657,6 +1660,10 @@ check_for_change_quick()
 			play_sound_at_pos( "purchase", player.origin );
 			break;
 		}
+		else if(level.revive_gone == true )
+		{
+			break;
+		}
 	}
 }
 
@@ -1727,7 +1734,7 @@ flytrap()
 	flag_wait( "ee_exp_monkey" );
 	flag_wait( "ee_bowie_bear" );
 	flag_wait( "ee_perk_bear" );
-
+	trig_control_panel delete();
 /*	level.teleporter_powerups_reward = true;
 	wait( 4.0 );
 
@@ -1765,13 +1772,16 @@ hide_and_seek_target( target_name )
 	
 	level.flytrap_counter = level.flytrap_counter +1;
 	thread flytrap_samantha_vox();
-	trig playsound( "object_hit" );
+	trig playsound( "object_hit", "object_hit_done" );
 
 	for ( i=0; i<obj_array.size; i++ )
 	{
-		obj_array[i] Hide();
+		obj_array[i] delete();
 	}
 	flag_set( target_name );
+	trig waittill("object_hit_done");
+	wait(0.05);
+	trig delete();
 }
 
 phono_egg_init( trigger_name, origin_name )
@@ -1780,7 +1790,7 @@ phono_egg_init( trigger_name, origin_name )
 	{
 		level.phono_counter = 0;	
 	}
-	players = getplayers();
+
 	phono_trig = getent ( trigger_name, "targetname");
 	phono_origin = getent( origin_name, "targetname");
 	
@@ -1791,42 +1801,43 @@ phono_egg_init( trigger_name, origin_name )
 	
 	phono_trig UseTriggerRequireLookAt();
 	phono_trig SetCursorHint( "HINT_NOICON" ); 
-	
-	for(i=0;i<players.size;i++)
-	{			
-		phono_trig waittill( "trigger", players);
-		level.phono_counter = level.phono_counter + 1;
-		phono_origin play_phono_egg();
-	}	
-}
+		
+	phono_trig waittill( "trigger", players);
 
-play_phono_egg()
-{
 	if(!IsDefined (level.phono_counter))
 	{
 		level.phono_counter = 0;	
 	}
 	
-	if( level.phono_counter == 1 )
+	level.phono_counter = level.phono_counter + 1;
+
+	switch(level.phono_counter)
 	{
-		//iprintlnbold( "Phono Egg One Activated!" );
-		self playsound( "phono_one" );
+		case 1:
+			sound_to_play = "phono_one";
+			break;
+		case 2:
+			sound_to_play = "phono_two";
+			break;
+		case 3:
+			sound_to_play = "phono_three";
+			break;
+		default:
+			sound_to_play = undefined;
+			break;
 	}
-	if( level.phono_counter == 2 )
-	{
-		//iprintlnbold( "Phono Egg Two Activated!" );
-		self playsound( "phono_two" );
-	}
-	if( level.phono_counter == 3 )
-	{
-		//iprintlnbold( "Phono Egg Three Activated!" );
-		self playsound( "phono_three" );
-	}
+	
+	phono_origin playsound( sound_to_play );
+	
+	wait(120);
+
+	phono_trig delete();
+	phono_origin delete();
+
 }
 
 radio_egg_init( trigger_name, origin_name )
 {
-	players = getplayers();
 	radio_trig = getent( trigger_name, "targetname");
 	radio_origin = getent( origin_name, "targetname");
 
@@ -1839,13 +1850,15 @@ radio_egg_init( trigger_name, origin_name )
 	radio_trig SetCursorHint( "HINT_NOICON" ); 
 	radio_origin playloopsound( "radio_static" );
 
-	for(i=0;i<players.size;i++)
-	{			
-		radio_trig waittill( "trigger", players);
-		radio_origin stoploopsound( .1 );
-		//iprintlnbold( "You activated " + trigger_name + ", playing off " + origin_name );
-		radio_origin playsound( trigger_name );
-	}	
+	radio_trig waittill( "trigger", players);
+
+	radio_origin stoploopsound( .1 );
+	radio_origin playsound( trigger_name );
+
+	wait(120);
+
+	radio_trig delete();
+	radio_origin delete();
 }
 
 

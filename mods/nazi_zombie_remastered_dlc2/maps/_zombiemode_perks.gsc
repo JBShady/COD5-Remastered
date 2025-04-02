@@ -294,22 +294,24 @@ revive_machine_exit()
 	
 	machine_trigger disable_trigger();
 
-//	machine_trigger delete();
 	wait(2.0);
 
-    //Delete eletrict power surge SFX
-    //Delete music stinger and jingle
-
-    for ( i=0; i<machine_bump.size; i++ )
-    {
-        if(machine_bump[i].script_string == "revive_perk")
-        {
-            machine_bump[i].script_sound = "null"; 
-        }
-    }
-
-/*	machine_song = GetEnt( "perksacola", "targetname" );
-	machine_song.script_sound = "null";*/
+	if(machine.origin == (11678.2, 3609.9, -655) ) // drs
+	{
+		machine_bump[0].script_activated = 0;
+	}
+	else if(machine.origin == (8521.5, 3200.5, -667) ) // fishing
+	{
+		machine_bump[1].script_activated = 0;
+	}
+	else if(machine.origin == (7841, -1195, -683.2) ) // comms
+	{
+		machine_bump[2].script_activated = 0; 
+	}
+	else if(machine.origin == (12382.5, -1200, -644) ) // storage
+	{
+		machine_bump[3].script_activated = 0;
+	}
 
 	machine playsound( "box_move" );
 	playsoundatposition("whoosh", machine.origin );
@@ -1299,7 +1301,7 @@ perks_a_cola_jingle()
 				level.speed_jingle = 0;
 				temp_org_speed delete();
 			}
-			if(self.script_sound == "mx_revive_jingle" && level.revive_jingle == 0) 
+			if(self.script_sound == "mx_revive_jingle" && level.revive_jingle == 0 && level.revive_gone == false && level.solo_second_lives_left > 1 ) 
 			{
 				level.revive_jingle = 1;
 				temp_org_revive = spawn("script_origin", self.origin);
@@ -1402,7 +1404,8 @@ say_down_vo()
 
 say_revived_vo()
 {
-	
+	wait(0.8);
+
 	index = maps\_zombiemode_weapons::get_player_index(self);
 	
 	player_index = "plr_" + index + "_";

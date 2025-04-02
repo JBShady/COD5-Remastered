@@ -1884,13 +1884,13 @@ play_death_vo(hit_location, player,mod,zombie)
 		}
 	}
 
-	if(zombie.damageweapon == "molotov" || zombie.damageweapon == "ray_gun" /*|| weapon == "ray_gun"*/ )
+	if(zombie.damageweapon == "molotov" || ((mod == "MOD_PROJECTILE" || mod == "MOD_PROJECTILE_SPLASH") && zombie.damageweapon == "ray_gun") )
 	{
 		return;
 	}
 	
 	//Explosive Kills
-	if((mod == "MOD_GRENADE_SPLASH" || mod == "MOD_GRENADE") && level.zombie_vars["zombie_insta_kill"] == 0 )
+	if((mod == "MOD_GRENADE_SPLASH" || mod == "MOD_GRENADE" ) && level.zombie_vars["zombie_insta_kill"] == 0 ) // grenade has higher odds because sometimes mod is unknown
 	{
 		rand = randomintrange(0, 100);
 		if(rand < 70)
@@ -1904,7 +1904,7 @@ play_death_vo(hit_location, player,mod,zombie)
 	if( mod == "MOD_PROJECTILE")
 	{	
 		rand = randomintrange(0, 100);
-		if(rand < 70)
+		if(rand < 60)
 		{
 			plr = "plr_" + index + "_";
 			player play_explosion_dialog(plr);
@@ -1957,7 +1957,7 @@ zombie_death_animscript()
 
 	if( self.damagemod == "MOD_BURNED" || (self.damageWeapon == "molotov" && (self.damagemod == "MOD_GRENADE" || self.damagemod == "MOD_GRENADE_SPLASH")) )
 	{
-		if(level.flame_death_fx_frame < 5 )
+		if(level.flame_death_fx_frame < 4 )
 		{
 			level.flame_death_fx_frame++;
 			level thread reset_flame_death_fx_frame();
@@ -2352,9 +2352,20 @@ find_flesh()
 		if( players.size == 1 && players[0].ignoreme )
 		{
 		    structs = getstructarray( "initial_spawn_points", "targetname" ); 
+			start_pos = 0;
+
+			if(distancesquared(players[0].origin, structs[0].origin) > distancesquared(players[0].origin, structs[3].origin) )
+			{
+				start_pos = 0;
+			}
+			else
+			{
+				start_pos = 3; // failsafe in case player is in runaway spot
+			}
+
 		    while( players.size == 1 && players[0].ignoreme && level.solo_reviving_failsafe == 1 )
 		    {
-		        self SetGoalPos(structs[0].origin); // spawn point by quick revive
+		        self SetGoalPos(structs[start_pos].origin ); 
 		        wait 0.5;
 		    }
 		}

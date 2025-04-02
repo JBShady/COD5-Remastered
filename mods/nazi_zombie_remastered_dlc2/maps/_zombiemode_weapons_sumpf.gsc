@@ -429,10 +429,8 @@ treasure_chest_think()
 		cost = self.zombie_cost;
 	}
 
-	self set_hint_string( self, "default_treasure_chest_" + cost );
+	self SetHintString( &"REMASTERED_ZOMBIE_RANDOM_WEAPON_950" ); 
 	self setCursorHint( "HINT_NOICON" );
-
-
 
 	// waittill someuses uses this
 	user = undefined;
@@ -516,7 +514,16 @@ treasure_chest_think()
 
 		self.grab_weapon_hint = true;
 		self.chest_user = user;
-		self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS" ); 
+
+		primaryWeapons = user GetWeaponsListPrimaries(); 
+		if( (weapon_spawn_org.weapon_string == "molotov" && !user HasWeapon("st_grenade") ) || (weapon_spawn_org.weapon_string == "st_grenade" && !user HasWeapon("molotov") ) || primaryWeapons.size <= 1 )
+		{
+			self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS_ALT" ); 
+		}
+		else
+		{
+			self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS" ); 
+		}
 		self setCursorHint( "HINT_NOICON" ); 
 		self setvisibletoplayer( user );
 
@@ -1436,7 +1443,7 @@ treasure_chest_give_weapon( weapon_string )
 	{
 		for( i = 0; i < primaryWeapons.size; i++ )
 		{
-			if( primaryWeapons.size == 1 || primaryWeapons[i] == "zombie_colt" || primaryWeapons[i] == "zombie_tokarev" || primaryWeapons[i] == "zombie_nambu" || primaryWeapons[i] == "zombie_walther" )
+			if( primaryWeapons.size <= 1 || primaryWeapons[i] == "zombie_colt" || primaryWeapons[i] == "zombie_tokarev" || primaryWeapons[i] == "zombie_nambu" || primaryWeapons[i] == "zombie_walther" )
 			{
 				continue; 
 			}
@@ -1720,7 +1727,7 @@ weapon_spawn_think()
 					}
 				}
 
-				current_weapon = self getCurrentWeapon();
+				current_weapon = player getCurrentWeapon();
 				if( current_weapon == "tesla_gun" )
 				{
 					player.groups_killed = 0; 
@@ -1856,7 +1863,7 @@ weapon_give( weapon )
 	{
 		for( i = 0; i < primaryWeapons.size; i++ )
 		{
-			if( primaryWeapons.size == 1 || primaryWeapons[i] == "zombie_colt" || primaryWeapons[i] == "zombie_tokarev" || primaryWeapons[i] == "zombie_nambu" || primaryWeapons[i] == "zombie_walther" )
+			if( primaryWeapons.size <= 1 || primaryWeapons[i] == "zombie_colt" || primaryWeapons[i] == "zombie_tokarev" || primaryWeapons[i] == "zombie_nambu" || primaryWeapons[i] == "zombie_walther" )
 			{
 				continue; 
 			}

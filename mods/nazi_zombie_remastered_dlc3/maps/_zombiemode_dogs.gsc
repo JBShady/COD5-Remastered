@@ -409,24 +409,6 @@ dog_spawn_factory_logic( dog_array, favorite_enemy)
 	return dog_locs[0];
 }
 
-last_stand_run_away()
-{
-    self endon("death");
-
-    while(1)
-    {
-        players = getplayers();
-		if( players.size == 1 && players[0].ignoreme )
-        {
-            iPrintLnBold("Dogs should run");
-            target_point = GetNode( "traverse", "targetname" ); 
-            self setgoalnode(target_point);
-        }
-        wait(0.05);
-    }
-
-}
-
 get_favorite_enemy()
 {
 	dog_targets = getplayers();
@@ -707,6 +689,11 @@ dog_init()
 	self dog_fx_eye_glow();
 	self dog_fx_trail();
 
+	if(getplayers().size == 1)
+	{
+		self thread solo_quickrevive(); 
+	}
+
 	self thread dog_death();
 
 	self disable_pain();
@@ -834,8 +821,6 @@ zombie_setup_attack_properties_dog()
 	
 	self thread dog_behind_audio();
 
-	//self thread last_stand_run_away();
-
 	// allows zombie to attack again
 	self.ignoreall = false; 
 
@@ -936,6 +921,11 @@ special_dog_spawn( spawners, num_to_spawn, sam_attack )
 	{
 		return false;
 	}
+
+	if(isDefined(sam_attack) && sam_attack == true && num_to_spawn == 4 && level.tele_reward != "dog" && level.tele_reward != "nothing" )
+	{
+		thread play_sound_2d( "sam_nospawn" );
+	}
 	
 	if ( !IsDefined(num_to_spawn) )
 	{
@@ -944,6 +934,7 @@ special_dog_spawn( spawners, num_to_spawn, sam_attack )
 
 	spawn_point = undefined;
 	count = 0;
+
 	while ( count < num_to_spawn )
 	{
 		//update the player array.
@@ -1000,11 +991,6 @@ special_dog_spawn( spawners, num_to_spawn, sam_attack )
 		waiting_for_next_dog_spawn( count, num_to_spawn );
 	}
 
-	if(isDefined(sam_attack) && sam_attack == true && num_to_spawn == 4 && level.tele_reward != "dog" && level.tele_reward != "nothing" )
-	{
-		thread play_sound_2d( "sam_nospawn" );
-	}
-
 	return true;
 }
 
@@ -1042,5 +1028,26 @@ dog_stalk_audio()
 		self playsound( "hellhound_stalk", "stalk_vox_done" );			
 		self waittill( "stalk_vox_done" );
 		wait randomfloatrange(1,4);		
+	}
+}
+
+solo_quickrevive()
+{
+	self endon( "death" );
+	level endon( "intermission" );
+
+	while(1)
+	{
+		level waittill("dog_solo_revive");
+        
+        sav = self.favoriteenemy;
+        self.favoriteenemy = undefined;
+        
+        random = randomintrange(0, level.enemy_dog_locations.size);
+        self SetGoalPos(level.enemy_dog_locations[random].origin);
+        
+        wait(10.5);
+
+        self.favoriteenemy = sav;
 	}
 }

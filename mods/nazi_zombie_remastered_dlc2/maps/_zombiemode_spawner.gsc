@@ -2120,7 +2120,7 @@ play_death_vo(hit_location, player,mod,zombie)
 		}
 
 	}
-	if(/*weapon == "ray_gun" ||*/ zombie.damageweapon == "ray_gun" )
+	if((mod == "MOD_PROJECTILE" || mod == "MOD_PROJECTILE_SPLASH") && zombie.damageweapon == "ray_gun")
 	{
 		//Ray Gun Kills
 		if(distance(player.origin,zombie.origin) > 348 && level.zombie_vars["zombie_insta_kill"] == 0)
@@ -2631,7 +2631,7 @@ zombie_death_animscript()
 
 	if( self.damagemod == "MOD_BURNED" || (self.damageWeapon == "molotov" && (self.damagemod == "MOD_GRENADE" || self.damagemod == "MOD_GRENADE_SPLASH")) )
 	{
-		if(level.flame_death_fx_frame < 5 && !self enemy_is_dog())
+		if(level.flame_death_fx_frame < 4 && !self enemy_is_dog())
 		{
 			level.flame_death_fx_frame++;
 			level thread reset_flame_death_fx_frame();
@@ -3054,9 +3054,21 @@ find_flesh()
 		if( players.size == 1 && players[0].ignoreme )
 		{
 		    structs = getstructarray( "initial_spawn_points", "targetname" ); 
+
+			start_pos = 0;
+
+			if(distancesquared(players[0].origin, structs[0].origin) > distancesquared(players[0].origin, structs[1].origin) )
+			{
+				start_pos = 0;
+			}
+			else
+			{
+				start_pos = 1; // failsafe in case player is in runaway spot
+			}
+
 		    while( players.size == 1 && players[0].ignoreme && level.solo_reviving_failsafe == 1 )
 		    {
-		        self SetGoalPos(structs[0].origin);
+		        self SetGoalPos(structs[start_pos].origin ); 
 		        wait 0.5;
 		    }
 		}

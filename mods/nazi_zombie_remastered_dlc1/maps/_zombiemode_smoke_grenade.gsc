@@ -88,7 +88,7 @@ watchSmokeDetonation( player )
 				if(!isSubStr(zombies[i].current_speed, "confused") ) // then we make sure they are not already confused or walkers or crawlers
 				{
 					// First we slow their anim down
-					if( !IsDefined( zombies[i].is_on_fire ) || ( Isdefined( zombies[i].is_on_fire ) && !zombies[i].is_on_fire ) ) // only speed up if we are NOT on fire, because if we are on fire we already have a separate speed change
+					if( !IsDefined( zombies[i].is_on_fire ) ) // only change speed if we are NOT on fire, because if we are on fire we already have a separate speed change
 					{
 						zombies[i].moveplaybackrate = 0.85;
 					}
@@ -127,7 +127,7 @@ watchSmokeDetonation( player )
 			{
 				if(isSubStr(zombies[i].current_speed, "confused") && isDefined(zombies[i].stored_speed) ) // if they happen to be previously confused, now we reset them back to their OG anim because they left the smoke, otherwise we do nothing
 				{
-					if( !IsDefined( zombies[i].is_on_fire ) || ( Isdefined( zombies[i].is_on_fire ) && !zombies[i].is_on_fire ) ) // only speed up if we are NOT on fire, because if we are on fire we already have a separate speed change
+					if( !IsDefined( zombies[i].is_on_fire ) ) // only change speed if we are NOT on fire, because if we are on fire we already have a separate speed change
 					{
 						zombies[i].moveplaybackrate = 1.0;
 					}
@@ -153,7 +153,7 @@ watchSmokeDetonation( player )
 	{
 		if(isSubStr(zombies[i].current_speed, "confused") && isDefined(zombies[i].stored_speed) ) // if they happen to be previously confused even if they never left the radius, we force them all back to their OG anim because now the smoke has faded away
 		{
-			if( !IsDefined( zombies[i].is_on_fire ) || ( Isdefined( zombies[i].is_on_fire ) && !zombies[i].is_on_fire ) ) // only speed up if we are NOT on fire, because if we are on fire we already have a separate speed change
+			if( !IsDefined( zombies[i].is_on_fire ) ) // only change speed if we are NOT on fire, because if we are on fire we already have a separate speed change
 			{
 				zombies[i].moveplaybackrate = 1.0;
 			}
