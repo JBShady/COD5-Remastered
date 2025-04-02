@@ -1,0 +1,32 @@
+{
+	menuDef
+	{		
+		name "menu_clientdvar"
+		rect 0 0 1 1
+		fullscreen 0
+		visible 0
+		onOpen
+		{
+			execOnDvarIntValue aim_autoaim_lock 1 "openmenu menu_clientdvar_response"; // only open this if our dvar is set to 1
+			close self;
+		}
+		onEsc
+		{
+		}
+	}
+	menuDef
+	{		
+		name "menu_clientdvar_response"
+		rect 0 0 1 1
+		fullscreen 0
+		visible 0
+		onOpen
+		{
+			scriptMenuResponse "aim_autoaim_lock_enabled";
+			close self;
+		}
+		onEsc
+		{
+		}
+	}
+}
