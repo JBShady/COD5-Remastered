@@ -19,6 +19,9 @@ LANG_ENGLISH        "Press & hold ^3&&1^7 for a Random Weapon [Cost: 950]"
 REFERENCE           TRADE_WEAPONS
 LANG_ENGLISH        "Press & hold ^3&&1^7 to trade weapons"
 
+REFERENCE           TRADE_WEAPONS_ALT
+LANG_ENGLISH        "Press & hold ^3&&1^7 to equip weapon"
+
 REFERENCE           WEAPON_STIELHANDGRANATE_250
 LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Stielhandgranaten [Cost: 250]"
 
@@ -51,9 +54,6 @@ LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Quick Revive [Cost: 1500]"
 
 REFERENCE           ZIPLINE_ACTIVATE
 LANG_ENGLISH        "Press & hold ^3&&1^7 to turn on the Zipline "
-
-REFERENCE           FLAMES_UNAVAILABLE_HAND
-LANG_ENGLISH        "The power must be activated first "
 
 REFERENCE           TELEPORT_COOLDOWN
 LANG_ENGLISH        "Teleporters are cooling down"
