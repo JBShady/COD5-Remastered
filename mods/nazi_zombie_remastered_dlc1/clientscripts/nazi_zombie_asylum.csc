@@ -84,15 +84,16 @@ fov_fix()
 {
 	while(1)
 	{
-		level waittill( "fov_death", localClientNum ); // Wait for death
+/*		level waittill( "fov_death", localClientNum ); // Wait for death
 		fov = GetDvarFloat("cg_fov"); // Save FOV
 		if(fov < 65)
 		{
 			fov = 65; // failsafe incase we save 40 as the fov from spectating
-		}
+		}*/
 		
 		level waittill( "fov_reset", localClientNum ); // Wait for respawn
-		SetClientDvar("cg_fov", fov); // Fix FOV in case it gets reset
+		real_fov = GetDvarFloat("cg_fov_settings"); 
+		SetClientDvar("cg_fov", real_fov); 
 	}
 }
 
@@ -100,9 +101,15 @@ dvar_update() // if we happen to change the dummy setting VARS on the main menu 
 {
 	self endon("disconnect");
 
-	if(GetDvarInt("cg_fov") == 40 ) // if still stuck on 40 fov from third person
+	if(GetDvarInt("cg_fov_settings") < 65 ) // failsafe
 	{
-		SetClientDvar("cg_fov", 65); // reset back to normal
+		SetClientDvar("cg_fov", 65); 
+		SetClientDvar("cg_fov_settings", 65); 
+	}
+	else
+	{
+		real_fov = GetDvarFloat("cg_fov_settings"); 
+		SetClientDvar("cg_fov", real_fov); 
 	}
 
 	//if dvars do not exist, reset to default value just incase
