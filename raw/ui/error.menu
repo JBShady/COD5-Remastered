@@ -1,0 +1,696 @@
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+
+#define CHOICE_X_START			0
+#define CHOICE_Y_START			34
+
+#define CHOICE_GROUP			"errors"
+
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+#include "ui_mp/popupstyle.inc"
+#include "ui/choices_setup_popmenu.menu"
+
+#undef CHOICE_SIZE_X
+#define CHOICE_SIZE_X			180
+
+#undef CHOICE_Y_START
+#define CHOICE_Y_START			230
+
+#define ERROR_TITLE_X 50
+#define ERROR_TITLE_Y 50
+#define ERROR_TITLE_WIDTH 540
+#define ERROR_TITLE_HEIGHT 20
+
+#define ERROR_MSG_X ERROR_TITLE_X
+#define ERROR_MSG_Y ( ERROR_TITLE_Y + 26 )
+#define ERROR_MSG_WIDTH ERROR_TITLE_WIDTH
+#define ERROR_MSG_HEIGHT 255
+
+#define ERROR_BG_COLOR 0.02 0.0 0.0 0.7
+#define ERROR_TRIM_COLOR 0.25 0.25 0.25 0.75
+
+{
+
+	menuDef
+	{
+		#define ERROR_ONESC \
+			uiScript clearError; \
+			close self; \
+			open main; 
+
+		CENTER_POPUP_SETUP_ONOPEN( error_popmenu, 3, ERROR_ONESC, setfocus exit_button;, 1 )
+		
+		#define ERROR_ACTION \
+				play "mouse_click"; \
+				uiScript clearError; \
+				close self; \
+				open main;
+				
+		CHOICE_POPMENU_TITLE( dvarString( "com_errorTitle" ) )
+		CHOICE_POPMENU_SUBTITLE( dvarString( "com_errorMessage" ) )
+
+		CHOICE_BUTTON_FOCUS_VIS_EX( 3, "@MENU_EXIT", ERROR_ACTION, play "mouse_over", ;, 1, name exit_button; )
+	}
+	
+	menuDef
+	{
+		#define INFO_ONESC \
+			uiScript clearError; \
+			close self;
+
+		CENTER_POPUP_SETUP_ONOPEN( info_popmenu, 3, INFO_ONESC, setfocus ok_button;, 1 )
+		
+		#undef INFO_ACTION
+		#define INFO_ACTION \
+				play "mouse_click"; \
+				uiScript clearError; \
+				close self;
+				
+		CHOICE_POPMENU_TITLE( dvarString( "com_errorTitle" ) )
+		CHOICE_POPMENU_SUBTITLE( dvarString( "com_errorMessage" ) )
+
+		//CHOICE_BUTTON_FOCUS_VIS_EX( 3, "@MENU_OK", INFO_ACTION, play "mouse_over", ;, 1, name ok_button; )
+	}
+
+	#ifdef PS3
+		// PS3 controller removed warning
+		menuDef
+		{
+			CENTER_POPUP_SETUP( controllerremoved_popmenu, 1, ;, 1 )
+			CHOICE_POPMENU_TITLE( "@PLATFORM_CONTROLLER_DISCONNECTED" )
+			itemDef 
+			{ 
+				type			ITEM_TYPE_BUTTON 
+				rect			0 0 0 0 0 0 
+				exp				text(""); 
+				visible			1
+			}
+		}
+		// I know, not an error, handy here
+		// profile lookup dialog
+		menuDef
+		{
+			CENTER_POPUP_SETUP( profile_lookup_popmenu, 1, ;, 1 )
+			CHOICE_POPMENU_TITLE( "@PLATFORM_PROFILE_LOOKUP" )
+			itemDef 
+			{ 
+				type			ITEM_TYPE_BUTTON 
+				rect			0 0 0 0 0 0 
+				exp				text(""); 
+				visible			1
+			}
+		}
+	#endif
+
+	//#undef CHOICE_SIZE_X
+	//#define CHOICE_SIZE_X			320
+	
+	// save game data corrupted warning
+	#define LOCAL_DL_ANIMATION (sin(milliseconds()*0.005)+1)*0.5
+
+
+	menuDef
+	{
+		READDEVICE_POPUP( popup_gettingdata, 2, ;,focusfirst;,;, 1 )
+		onESC 
+		{ 
+			close menu_xboxlive;
+			close popup_findgame;
+			close findgame_category;
+			close popup_gettingdata;
+			close live_cac_popup;
+			close popup_gamesetup_private;
+			close private_cac_popup;
+			exec "onlinegame 0";
+			exec "xstopprivateparty";
+			exec "xstopparty";
+			exec "splitscreencontrols";
+		}
+
+		READDEVICE_CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_DOWNLOADING_GAME_SETTINGS" ), when( LOCAL_DL_ANIMATION <= 0.25 ) exp rect X( -290 ) )
+		READDEVICE_CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_DOWNLOADING_GAME_SETTINGS" ) + "." , when( LOCAL_DL_ANIMATION > 0.25 && LOCAL_DL_ANIMATION <= 0.5 ) exp rect X( -290 ) )
+		READDEVICE_CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_DOWNLOADING_GAME_SETTINGS" ) + ".." , when( LOCAL_DL_ANIMATION > 0.5 && LOCAL_DL_ANIMATION <= 0.75 ) exp rect X( -290 ) )
+		READDEVICE_CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_DOWNLOADING_GAME_SETTINGS" ) + "..." , when( LOCAL_DL_ANIMATION > 0.75 ) exp rect X( -290 ) )
+	}
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_connectingtolobby, 2, focusFirst;, 1 )
+		onESC 
+		{ 
+			close self;
+			close menu_xboxlive;
+			close popup_findgame;
+			close popup_gettingdata;
+			close live_cac_popup;
+			close popup_gamesetup_private;
+			close private_cac_popup;
+			exec "onlinegame 0";
+			exec "xstopprivateparty";
+			exec "xstopparty";
+			exec "splitscreencontrols";
+		}
+		
+		CHOICE_POPMENU_SUBTITLE( "" )
+		
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_CONNECTING_TO_LOBBY" ), when( LOCAL_DL_ANIMATION <= 0.25 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_CONNECTING_TO_LOBBY" ) + "." , when( LOCAL_DL_ANIMATION > 0.25 && LOCAL_DL_ANIMATION <= 0.5 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_CONNECTING_TO_LOBBY" ) + ".." , when( LOCAL_DL_ANIMATION > 0.5 && LOCAL_DL_ANIMATION <= 0.75 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_CONNECTING_TO_LOBBY" ) + "..." , when( LOCAL_DL_ANIMATION > 0.75 ); )
+	}
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_connecting_dw, 2, focusFirst;, 1 )
+		onESC 
+		{ 
+			close menu_xboxlive;
+			close popup_findgame;
+			close popup_gettingdata;
+			close live_cac_popup;
+			close popup_gamesetup_private;
+			close private_cac_popup;
+			close main_online
+			exec "onlinegame 0";
+			close self;
+		}
+		
+		CHOICE_POPMENU_SUBTITLE( "" )
+		
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_CONNECTING_DW" ), when( LOCAL_DL_ANIMATION <= 0.25 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_CONNECTING_DW" ) + "." , when( LOCAL_DL_ANIMATION > 0.25 && LOCAL_DL_ANIMATION <= 0.5 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_CONNECTING_DW" ) + ".." , when( LOCAL_DL_ANIMATION > 0.5 && LOCAL_DL_ANIMATION <= 0.75 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_CONNECTING_DW" ) + "..." , when( LOCAL_DL_ANIMATION > 0.75 ); )
+	}
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_creating_account, 2, focusFirst;, 1 )
+		onESC 
+		{ 
+			close self;
+		}
+		
+		CHOICE_POPMENU_SUBTITLE( "" )
+		
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_CREATING_PROFILE" ), when( LOCAL_DL_ANIMATION <= 0.25 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_CREATING_PROFILE" ) + "." , when( LOCAL_DL_ANIMATION > 0.25 && LOCAL_DL_ANIMATION <= 0.5 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_CREATING_PROFILE" ) + ".." , when( LOCAL_DL_ANIMATION > 0.5 && LOCAL_DL_ANIMATION <= 0.75 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_CREATING_PROFILE" ) + "..." , when( LOCAL_DL_ANIMATION > 0.75 ); )
+	}
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_deleting_account, 2, focusFirst;, 1 )
+		onESC 
+		{ 
+			close self;
+		}
+		
+		CHOICE_POPMENU_SUBTITLE( "" )
+		
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_DELETING_PROFILE" ), when( LOCAL_DL_ANIMATION <= 0.25 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_DELETING_PROFILE" ) + "." , when( LOCAL_DL_ANIMATION > 0.25 && LOCAL_DL_ANIMATION <= 0.5 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_DELETING_PROFILE" ) + ".." , when( LOCAL_DL_ANIMATION > 0.5 && LOCAL_DL_ANIMATION <= 0.75 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_DELETING_PROFILE" ) + "..." , when( LOCAL_DL_ANIMATION > 0.75 ); )
+	}
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_dw_dns_lookup, 2, focusFirst;, 1 )
+		
+		CHOICE_POPMENU_SUBTITLE( "" )
+		
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_RETRIEVING_SERVERS" ), when( LOCAL_DL_ANIMATION <= 0.25 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_RETRIEVING_SERVERS" ) + "." , when( LOCAL_DL_ANIMATION > 0.25 && LOCAL_DL_ANIMATION <= 0.5 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_RETRIEVING_SERVERS" ) + ".." , when( LOCAL_DL_ANIMATION > 0.5 && LOCAL_DL_ANIMATION <= 0.75 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_RETRIEVING_SERVERS" ) + "..." , when( LOCAL_DL_ANIMATION > 0.75 ); )
+	}
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_dw_retrieve_accounts, 2, focusFirst;, 1 )
+		
+		CHOICE_POPMENU_SUBTITLE( "" )
+		
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_RETRIEVING_ACCOUNTS" ), when( LOCAL_DL_ANIMATION <= 0.25 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_RETRIEVING_ACCOUNTS" ) + "." , when( LOCAL_DL_ANIMATION > 0.25 && LOCAL_DL_ANIMATION <= 0.5 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_RETRIEVING_ACCOUNTS" ) + ".." , when( LOCAL_DL_ANIMATION > 0.5 && LOCAL_DL_ANIMATION <= 0.75 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_RETRIEVING_ACCOUNTS" ) + "..." , when( LOCAL_DL_ANIMATION > 0.75 ); )
+	}
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_dw_authorize_account, 2, focusFirst;, 1 )
+		
+		CHOICE_POPMENU_SUBTITLE( "" )
+		
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_AUTHORISING_ACCOUNT" ), when( LOCAL_DL_ANIMATION <= 0.25 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_AUTHORISING_ACCOUNT" ) + "." , when( LOCAL_DL_ANIMATION > 0.25 && LOCAL_DL_ANIMATION <= 0.5 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_AUTHORISING_ACCOUNT" ) + ".." , when( LOCAL_DL_ANIMATION > 0.5 && LOCAL_DL_ANIMATION <= 0.75 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_AUTHORISING_ACCOUNT" ) + "..." , when( LOCAL_DL_ANIMATION > 0.75 ); )
+	}
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_dw_downloading_account_data, 2, focusFirst;, 1 )
+		
+		CHOICE_POPMENU_SUBTITLE( "" )
+		
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_DOWNLOADING_ACCOUNT_DATA" ), when( LOCAL_DL_ANIMATION <= 0.25 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_DOWNLOADING_ACCOUNT_DATA" ) + "." , when( LOCAL_DL_ANIMATION > 0.25 && LOCAL_DL_ANIMATION <= 0.5 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_DOWNLOADING_ACCOUNT_DATA" ) + ".." , when( LOCAL_DL_ANIMATION > 0.5 && LOCAL_DL_ANIMATION <= 0.75 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_DOWNLOADING_ACCOUNT_DATA" ) + "..." , when( LOCAL_DL_ANIMATION > 0.75 ); )
+	}
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_error_deleting_account, 3, focusFirst;, 1 )
+		
+		CHOICE_POPMENU_SUBTITLE( "@MENU_ERROR_DELETING_PROFILE" )
+
+		CHOICE_BUTTON( 3, "@MENU_OK", close self; )
+	}
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_error_creating_account, 3, focusFirst;, 1 )
+		
+		CHOICE_POPMENU_SUBTITLE( "@MENU_ERROR_CREATING_PROFILE" )
+
+		CHOICE_BUTTON( 3, "@MENU_OK", close self; )
+	}
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_account_not_available, 3, focusFirst;, 1 )
+		
+		CHOICE_POPMENU_SUBTITLE( "@MENU_ACCOUNT_NOT_AVAILABLE" )
+
+		CHOICE_BUTTON( 3, "@MENU_OK", close self; )
+	}
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_reconnectingtoparty, 2, close menu_xboxlive; close popup_gettingdata;, 1 )
+		
+		#define LOCAL_RECON_ANIMATION (sin(milliseconds()*0.005)+1)*0.5
+		
+		CHOICE_POPMENU_SUBTITLE( "" )
+
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_RECONNECTING_TO_SQUAD" ), when( LOCAL_RECON_ANIMATION <= 0.25 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_RECONNECTING_TO_SQUAD" ) + ".", when( LOCAL_RECON_ANIMATION > 0.25 && LOCAL_RECON_ANIMATION <= 0.5 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_RECONNECTING_TO_SQUAD" ) + "..", when( LOCAL_RECON_ANIMATION > 0.5 && LOCAL_RECON_ANIMATION <= 0.75 ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( locString( "@MENU_RECONNECTING_TO_SQUAD" ) + "...", when( LOCAL_RECON_ANIMATION > 0.75 ); )
+	}
+
+#ifdef PC
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			230
+
+	#undef CHOICE_X_START
+	#define CHOICE_X_START			78
+
+#else
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			200
+#endif //#ifdef PC
+	
+/*
+	menuDef 
+	{
+		CENTER_POPUP_SETUP( save_corrupted, 3, ;, 1 )
+		
+		CHOICE_POPMENU_TITLE( "@MENU_SAVE_CORRUPTED" )
+		CHOICE_POPMENU_SUBTITLE( "@MENU_SAVEDATA_CORRUPTED" )
+		
+		CHOICE_BUTTON( 3, "@MENU_OK", close self; )
+	}
+	*/
+	menuDef 
+	{
+		CENTER_POPUP_SETUP( popmenu_browser_error, 3, ;, 1 )
+		
+		CHOICE_POPMENU_TITLE( "@MENU_ERROR" )
+		
+		#undef INFO_ACTION
+		#define INFO_ACTION \
+				play "mouse_click"; \
+				uiScript clearError; \
+				close self;
+				
+		CHOICE_POPMENU_SUBTITLE( dvarString( "com_errorMessage" ) )
+
+		CHOICE_BUTTON_FOCUS_VIS_EX( 3, "@MENU_OK", INFO_ACTION, play "mouse_over", ;, 1, name ok_button; )	}
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_cannot_connect_to_lsp, 3, ;, 1 )
+		
+		CHOICE_POPMENU_TITLE( "@MENU_LSP_ERROR_TITLE" )
+		CHOICE_POPMENU_SUBTITLE( "@MENU_LSP_ERROR" )
+		
+		CHOICE_BUTTON( 3, "@MENU_OK", close self; )
+	}
+	
+	menuDef
+	{
+		CENTER_POPUP_SETUP( popup_cannot_connect_to_dw, 3, ;, 1 )
+		
+		CHOICE_POPMENU_TITLE( "@MENU_DW_ERROR_TITLE" )
+		CHOICE_POPMENU_SUBTITLE( "@MENU_DW_ERROR_CANNOTCONNECT" )
+		
+		CHOICE_BUTTON( 3, "@MENU_OK", close self; )
+	}
+
+	menuDef 
+	{
+		CENTER_POPUP_SETUP( error_popmenu_party, 3, focusFirst; uiScript clearError; close error_popmenu_party;, 1 )
+		execKeyInt 27
+		{
+			focusFirst;
+			uiScript clearError;
+			close error_popmenu_party;
+		}
+		
+		CHOICE_POPMENU_TITLE( dvarSTring("com_errorTitle") )
+		CHOICE_POPMENU_SUBTITLE( dvarSTring("com_errorMessage") )
+		
+		CHOICE_BUTTON( 3, "@MENU_OK", uiScript clearError; close error_popmenu_party; )
+	}	
+	
+	menuDef 
+	{
+		CENTER_POPUP_SETUP( error_popmenu_lobby, 3, focusFirst;	uiScript clearError; close error_popmenu_lobby;, 1 )
+		execKeyInt 27
+		{
+			focusFirst;
+			uiScript clearError;
+			close error_popmenu_lobby;
+		}
+		
+		CHOICE_POPMENU_TITLE( dvarSTring("com_errorTitle") )
+		CHOICE_POPMENU_SUBTITLE( dvarSTring("com_errorMessage") )
+		
+		CHOICE_BUTTON( 3, "@MENU_OK", uiScript clearError; close error_popmenu_lobby; )
+	}
+	
+	menuDef 
+	{
+		CENTER_POPUP_SETUP( acceptinvite_warning, 3, close "acceptinvite_warning";, 1 )
+		
+		CHOICE_POPMENU_TITLE( "@MENU_ACCEPTINVITETITLE" )
+		CHOICE_POPMENU_SUBTITLE_VIS( "@MENU_LEAVEMPGAMEWARNINGSQUADHOST", when( privatepartyhost() && !aloneinparty() ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( "@MENU_LEAVESQUADWARNING", when( !privatepartyhost() && !inlobby() ); )
+		CHOICE_POPMENU_SUBTITLE_VIS( "@MENU_LEAVEMPGAMEWARNING", when( !privatepartyhost() && inlobby() ); )
+		
+		CHOICE_BUTTON( 2, "@MENU_RESUMEGAME", close self; )
+		CHOICE_BUTTON( 3, "@MENU_ACCEPTINVITE", close self; exec "acceptInvite"; )
+	}		
+	
+	menuDef 
+	{
+		CENTER_POPUP_SETUP_ONOPEN( startmatch_popup, 3, ;, ;, 1 )
+		
+		CHOICE_POPMENU_TITLE( "@MENU_ERROR" )
+		CHOICE_POPMENU_SUBTITLE( "@MENU_TWO_MIN_SUBTITLE" )
+		
+		CHOICE_BUTTON( 3, "@MENU_OK", close self )
+	}
+
+	
+	//#define VIS_PRESS_START ( dvarstring( mapname ) != "bog_a" && dvarstring( mapname ) != "bog_b" )
+	#define VIS_PRESS_START 1
+		
+	menuDef
+	{
+		name			"pregame_loaderror"
+		rect			0 0 640 480
+		fullScreen		1
+		focusColor		COLOR_FOCUSED
+		backcolor		1 1 1 0
+		style			WINDOW_STYLE_FILLED
+		onClose
+		{
+			//uiScript clearError
+		}
+		onOpen
+		{
+			setdvar ui_SaveLoadVisible "0";
+		}
+		onEsc
+		{
+			uiScript playerstart
+		}
+
+		// background
+		itemDef 
+		{
+			style			WINDOW_STYLE_FILLED
+			rect			FULLSCREEN_WIDE
+			backcolor		1 1 1 1
+			visible			1
+			background		cinematic
+			ownerdraw		UI_CINEMATIC
+			decoration
+		}
+
+		itemDef
+		{
+			name			"profile"
+			visible			1
+			rect			40 40 560 400
+			ownerdraw		UI_LOADPROFILING
+			decoration
+		}
+
+		itemDef
+		{
+			name			errorinfo
+			rect			120 142 400 255
+			type			ITEM_TYPE_TEXT
+			style			WINDOW_STYLE_FILLED
+			textalign		ITEM_ALIGN_TOP_CENTER
+			autowrapped
+			dvar			"com_errorMessage"
+			textscale		.8
+			forecolor		1 .2 .2 1
+			visible			1
+			decoration
+		}
+
+#ifdef PS3
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			text			"@PLATFORM_UI_PRESS_BUTTONSELECTCHOICE"
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_SMALL
+			border			0
+			bordercolor		1 1 1 1
+			rect			0 388 640 45
+			textalign		ITEM_ALIGN_TOP_CENTER
+			textaligny		4
+			forecolor		1 1 1 0.4
+			backcolor		0 0 0 0
+			visible when ( !dvarbool( ui_isSaving ) && VIS_PRESS_START );
+			decoration
+		}
+#endif
+
+#ifdef XENON
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			text			"@MENU_PRESS_START_TO_SKIP"
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_SMALL
+			border			0
+			bordercolor		1 1 1 1
+			rect			0 388 640 45
+			textalign		ITEM_ALIGN_TOP_CENTER
+			textaligny		4
+			forecolor		1 1 1 0.4
+			backcolor		0 0 0 0
+			visible when ( !dvarbool( ui_isSaving ) && VIS_PRESS_START );
+			decoration
+		}
+#endif
+
+#ifdef PC
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			text			"@MENU_CLICK_TO_START_THE_MISSION"
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_SMALL
+			border			0
+			bordercolor		1 1 1 1
+			rect			0 388 640 45
+			textalign		ITEM_ALIGN_TOP_CENTER
+			textaligny		4
+			forecolor		1 1 1 0.4
+			backcolor		0 0 0 0
+			visible when ( !dvarbool( ui_isSaving ) && dvarstring( credits ) != "1" && VIS_PRESS_START );
+			decoration
+		}
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			text			"@MENU_CLICK_TO_CONTINUE"
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_SMALL
+			border			0
+			bordercolor		1 1 1 1
+			rect			0 388 640 45
+			textalign		ITEM_ALIGN_TOP_CENTER
+			textaligny		4
+			forecolor		1 1 1 0.4
+			backcolor		0 0 0 0
+			visible when ( !dvarbool( ui_isSaving ) && dvarstring( mapname ) == "credits" && VIS_PRESS_START );
+			decoration
+		}
+#endif // #ifdef PC
+
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			rect			-128 0 896 480
+			style			WINDOW_STYLE_EMPTY
+			visible			1
+			forecolor		0 0 0 0
+			backcolor		0 0 0 0
+			action
+			{
+				uiScript playerstart
+			}
+		}
+
+		#include "ui/safearea.menu"
+	}
+
+	menuDef
+	{
+		name			"pregame_loaderror_mp"
+		rect			0 0 640 480
+		fullScreen		1
+		focusColor		COLOR_FOCUSED
+		backcolor		1 1 1 0
+		style			WINDOW_STYLE_FILLED
+		blurWorld		6.0
+		onClose
+		{
+			uiScript clearError
+		}
+		onOpen
+		{
+			setdvar ui_SaveLoadVisible "0";
+		}
+
+		// background
+		itemDef
+		{
+			style			WINDOW_STYLE_FILLED
+			rect			FULLSCREEN_WIDE
+			backcolor		0.2 0.2 0.2 .5
+			visible			1
+			decoration
+		}
+
+		
+
+		itemDef
+		{
+			name			"profile"
+			visible			1
+			rect			40 40 560 400
+			ownerdraw		UI_LOADPROFILING
+			decoration
+		}
+
+		itemDef
+		{
+			name			errorinfo
+			rect			120 142 400 255
+			type			ITEM_TYPE_TEXT
+			style			WINDOW_STYLE_FILLED
+			textalign		ITEM_ALIGN_TOP_CENTER
+			autowrapped
+			dvar			"com_errorMessage"
+			textscale		.8
+			forecolor		1 .2 .2 1
+			visible			1
+			decoration
+		}
+
+		// the button
+		// Text message saying you should click to continue
+#ifdef CONSOLE
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			text			"@MENU_PRESS_START"
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_TITLE
+			rect			0 388 640 45
+			textalign		ITEM_ALIGN_TOP_CENTER
+			textaligny		4
+			forecolor		1 1 1 1
+			visible			1
+			decoration
+		}
+#endif // #ifdef CONSOLE
+
+#ifdef PC
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			text			"@MENU_CLICK_TO_START_THE_MISSION"
+			style			WINDOW_STYLE_FILLED
+			textscale		TEXTSIZE_TITLE
+			rect			0 388 640 45
+			textalign		ITEM_ALIGN_TOP_CENTER
+			textaligny		4
+			forecolor		1 1 1 1
+			visible			1
+			decoration
+		}
+#endif // #ifdef PC
+
+		itemDef
+		{
+			type			ITEM_TYPE_BUTTON
+			rect			-128 0 896 480
+			style			WINDOW_STYLE_EMPTY
+			visible			1
+			forecolor		0 0 0 0
+			backcolor		0 0 0 0
+			action
+			{
+				uiScript clearLoadErrorsSummary
+			}
+		}
+
+		#include "ui/safearea.menu"
+	}
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP( mature_content_pc_disable_warning, 3, ;, 1 )
+		
+		CHOICE_POPMENU_TITLE( "@MENU_WARNING" )
+		CHOICE_POPMENU_SUBTITLE( "@MENU_WARNING_DISABLE_MATURE_CONTENT" )
+	
+		CHOICE_BUTTON( 2, "@MENU_YES", close self; setdvar cg_blood "0"; setdvar cg_mature "0"; )
+		CHOICE_BUTTON( 3, "@MENU_NO", close self; )
+	}
+
+	menuDef
+	{
+		CENTER_POPUP_SETUP( save_corrupted, 3, ;, 1 ) // hijacking popup because stupid fucking game wont let us do a custom name, this is unused in all of my custom menus
+		
+		CHOICE_POPMENU_TITLE( "@MENU_AIM_ASSIST" )
+		CHOICE_POPMENU_SUBTITLE( "@REMASTERED_AIM_ASS_DESC" )
+	
+		CHOICE_BUTTON( 2, "@MENU_YES", scriptMenuResponse "aim_autoaim_lock_enabled"; setdvar aim_autoaim_lock "1"; close options_game; close self;  )
+		CHOICE_BUTTON( 3, "@MENU_NO", /*close options_game;*/ close self; /*scriptMenuResponse "aim_autoaim_lock_disabled"; setdvar aim_autoaim_lock "0"*/ )
+	}
+
+}
