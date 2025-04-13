@@ -181,6 +181,9 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 | Zombiemode Developer | `zombiemode_dev` | `0` | `1` | Developer command to enable experimental features of the mod, requires map restart. |
 | Character | `character` | `0` Random | `1-4` Player # | Developer command to change character in solo, requires map restart. |
 | Health Counter | `cg_drawHealthCount` | `0` | `1` | Developer command to enable health counter in solo, requires map restart. |
+| Health Counter | `cg_drawHealthCountCoop` | `0` | `1` | Developer command to enable health counter in co-op games, requires map restart. |
+| Game Timers | `cg_drawTimers` | `0` | `1` | Developer command to enable game and round timers for all players, requires map restart. |
+| Trap Timers | `cg_drawTrapTimers` | `0` | `1` | Developer command to enable trap cooldown timers for all players, requires map restart. |
 | Solo Score Color | `cg_SoloScoreColorWhite` | `0` | `1` | Forces white points color in solo, requires map restart. |
 | Lower Gun | `cg_lowerGun` | `0` | `1` | Removes custom weapon bobbing so weapon just lowers only in solo, requires map restart. |
 | D-pad Logos | `cg_drawDpadLogos` | `1` | `0` | Disable or enable background D-pad logos when using controller if you just want neutral arrows. |
@@ -385,6 +388,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * When picking up a powerup, character voiceover chooses from three lines instead of one
 * When opening the second or third hut, there is a 50% chance of the closest player having voiceover on the randomization of perks
 * When a perk is decided, there is a higher chance of the closest player within a close proximity shouting the perk's name, as these voicelines were previously very unlikely to play
+* Hut perks are now a fully lottery instead of always forcing Jugger-nog or Speed Cola on the first hut
 * Fixed perk machines from clipping into the wall in the Dr.'s hut
 * Reduced Arisaka wallbuy and chalk from clipping into a wood board
 * Electric traps still utilizie old light fx that was more ambient, which fits the atmosphere better as a jungle facility would not have as good of a power grid as the other maps
@@ -398,7 +402,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Zipline no longer can glitch player maxhealth values to the wrong value
 * Added zombie jump down animation from upper zipline station so zombies do not look like they are holding an invisible gun
 * Fixed Richtofen's name being cut off in co-op loadscreen, appearing as if his name was mispelled
-* Added hidden easter egg quest including secret items and hidden achievement, required to complete Der Riese quest
+* Added hidden easter egg quest including secret items and hidden achievement, the achievement is required to begin Der Riese quest
 
 ## Der Riese
 * Updated "mission intro" in the bottom left corner to include the full storyline accurate date
@@ -434,9 +438,10 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * All weapons are 100% consistent in stats, behavior, and appearance between each map
 * All use the best available materials (HD textures from Singleplayer, weathered materials if available, normal/spec maps, better reflections)
 * All added weapons (and their upgraded variants) use official sounds, stats, names, effects, models, and materials unless non-existent. In such rare cases, they were created from scratch while still matching Treyarch's style
+* Bullet weapons show tracers like future Call of Duties, i.e., when shooting there is a chance you see a quick flash as the bullet travels to the target which just looks cooler
 * Added missing idle bob, gear sounds, and proper sprint settings for various holdable items and weapons 
 * Weapons cannot share ammo reserves anymore because it was a glitchy system where players sometimes would not lose ammo correctly
-* All maps share the same loadout, except for the exceptions described in the table below:
+* All maps share the same loadout, except for the following differences listed below:
 
 ### Loadout
 | Category | Nacht Der Untoten  | Verrückt | Shi No Numa | Der Riese |
@@ -446,12 +451,12 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 | **Scoped Rifles** | Scoped Kar98k (Cabinet) | Scoped Springfield | Scoped Arisaka | Scoped Mosin Nagant |
 | **Rocket Launcher** | Panzerschrek | Panzerschrek | M9A1 Bazooka | Panzerschrek |
 | **Frag Grenades** | Stielhandgranate | Stielhandgranate | Type 97 Grenade | Stielhandgranate |
-| **Speical Grenades** | Molotov | Molotov, Smoke Grenade | Molotov, Sticky Grenade | Molotov, Monkey Bomb |
+| **Special Grenades** | Molotov, Signal Flare | Molotov, Smoke Grenade | Molotov, Sticky Grenade | Molotov, Monkey Bomb |
 | **Equipment** | Satchel Charges (Crate), Mortar | Bouncing Betties, Bipods | Bouncing Betties, Bayonets | Bouncing Betties, Bowie Knife |
 | **Entirely New Weapons** | SVT-40 | SVT-40 | SVT-40, DP-28, Type 99 | SVT-40, DP-28, Type 99 |
 | **Missing Weapons Added** | Type 100, PPSh-41 | Type 100 | None | M1 Garand, Sawed-Off Double Barrel |
 | **Wonder Weapons** | Ray Gun | Ray Gun | Ray Gun, Wunderwaffe DG-2 | Ray Gun, Wunderwaffe DG-2 |
-| **Easter Eggs** | N/A | N/A | Katana | N/A |
+| **Easter Egg Items** | N/A | N/A | Radio, Vodka, Katana, Journal | Beaker, Journal |
 
 #### Starting Pistols
 * Starting pistols are now faction dependent. Americans spawn with the Colt M1911, Russian with the Tokarev T-33, Japanese with Type 14 Nambu, and German with Walther P38
@@ -481,7 +486,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * (Upgraded) Custom model with unique UV mapping of silver etching
 
 #### M9A1 Bazooka
-* Tweaked sprint and raise animation timing to look better
+* Tweaked animation sprint/raise/lower timing to look better as this should feel like a heavy weapon
 * Has identical damage and ammo stats with the Panzerschreck, used on non-German maps
 
 #### Type 30 Bayonets
@@ -525,6 +530,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Limit of 25 charges planted per player, last charge auto detonates but deals nerfed damage to player
 * Disabled friendly fire to prevent griefing, unless the satchel owner disconnects
 * Added prone settings so weapon lowers as player crawls
+* Tutorial hintstring based on Campaign to be realistic, but slightly improved functionality for less cluttered text
 
 #### Scoped Snipers
 * Have identical damage and ammo between variants depending on the map
@@ -624,6 +630,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 #### FG42
 * Updated viewmodels to look more complete when playing on higher FOVs
 * (Upgraded) Receives telescopic scope attachment and updated model to add silver texturing to the metal gaps
+* (Upgraded) With scope, weapon is slightly easier to handle with slightly better accuracy aimed down sights
 
 #### Browning M1919
 * Name rearranged to M1919 Browning for historical accuracy
