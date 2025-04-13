@@ -441,7 +441,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Bullet weapons show tracers like future Call of Duties, i.e., when shooting there is a chance you see a quick flash as the bullet travels to the target which just looks cooler
 * Added missing idle bob, gear sounds, and proper sprint settings for various holdable items and weapons 
 * Weapons cannot share ammo reserves anymore because it was a glitchy system where players sometimes would not lose ammo correctly
-* All maps share the same loadout, except for the following differences listed below:
+* **All maps share the same loadout, except for the following differences listed below:**
 
 ### Loadout
 | Category | Nacht Der Untoten  | Verrückt | Shi No Numa | Der Riese |
