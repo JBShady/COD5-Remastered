@@ -115,7 +115,7 @@ mortar_check_impact(mortar)
 		}
 	}
 
-	if(index == -1 ) // if still -1, it is sticking to environment so we skip faking the nade as there is no need (unless we have a positive water depth, we fake in water so the grenade doesn't spam-sink weirdly)
+	if(index == -1 ) // if still -1, it was thrown at environment
 	{
 		return;
 	}
