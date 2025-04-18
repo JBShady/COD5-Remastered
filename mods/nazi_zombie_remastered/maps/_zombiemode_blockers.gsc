@@ -809,7 +809,7 @@ blocker_trigger_think()
 	//trigger thread blocker_doubler_hint( "default_reward_barrier_piece_", original_cost );
 	//////////////////////////////////////////
 	
-	doubler_status = level.zombie_vars["zombie_powerup_point_doubler_on"];
+	//doubler_status = level.zombie_vars["zombie_powerup_point_doubler_on"];
 
 	if( level.zombie_vars["zombie_point_scalar"] == 2 )
 	{
@@ -857,9 +857,9 @@ blocker_trigger_think()
 
 			player.potentially_spamming = true;
 
-			if( doubler_status != level.zombie_vars["zombie_powerup_point_doubler_on"] )
-			{
-				doubler_status = level.zombie_vars["zombie_powerup_point_doubler_on"];
+			//if( doubler_status != level.zombie_vars["zombie_powerup_point_doubler_on"] )
+			//{
+			//	doubler_status = level.zombie_vars["zombie_powerup_point_doubler_on"];
 				cost = original_cost;
 				if( level.zombie_vars["zombie_point_scalar"] == 2 )
 				{
@@ -869,7 +869,7 @@ blocker_trigger_think()
 				{
 					cost = original_cost * 4;
 				}
-			}
+			//}
 	
 			// restore a random chunk
 			chunk = get_random_destroyed_chunk( self.barrier_chunks ); 
