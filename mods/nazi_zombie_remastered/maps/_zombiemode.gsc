@@ -2193,10 +2193,10 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 				}
 				else
 				{
-					finalDamage = radiusDamage(eInflictor.origin, 256,125,45, eAttacker);
+					finalDamage = radiusDamage(eInflictor.origin, 290,140,35, eAttacker);
 				}
 			}
-			if(isSubStr(sWeapon, "flare") ) // Radius 96, damage low
+			else if(isSubStr(sWeapon, "flare") ) // Radius 96, damage low
 			{
 				finalDamage = radiusDamage(eInflictor.origin, 96,20,10, eAttacker); 
 			}
@@ -2204,6 +2204,7 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 			{
 				finalDamage = radiusDamage(eInflictor.origin, 256,120,50, eAttacker);
 			}
+			iPrintLnbold(finalDamage, sMeansOfDeath);
 			// Inner radius damage is always above 100, so that right below you it will kill you with no Jug
 			self maps\_callbackglobal::finishPlayerDamageWrapper( eInflictor, eAttacker, finalDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, modelIndex, psOffsetTime ); 
 			return;
@@ -2242,7 +2243,8 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 	{
 		if( self.health > 75 )
 		{
-			finalDamage = radiusDamage(eInflictor.origin, 265,135,50, eAttacker);
+			finalDamage = radiusDamage(eInflictor.origin, 325,150,35, eAttacker);
+			iPrintLnbold(finalDamage, sMeansOfDeath);
 
 			self maps\_callbackglobal::finishPlayerDamageWrapper( eInflictor, eAttacker, finalDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, modelIndex, psOffsetTime ); 
 			return;
