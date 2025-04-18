@@ -2242,7 +2242,7 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 	{
 		if( self.health > 75 )
 		{
-			finalDamage = radiusDamage(eInflictor.origin, 265,130,50, eAttacker);
+			finalDamage = radiusDamage(eInflictor.origin, 265,135,50, eAttacker);
 
 			self maps\_callbackglobal::finishPlayerDamageWrapper( eInflictor, eAttacker, finalDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, modelIndex, psOffsetTime ); 
 			return;

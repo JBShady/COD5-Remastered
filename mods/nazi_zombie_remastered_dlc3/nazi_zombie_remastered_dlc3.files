@@ -110,6 +110,7 @@ maps\_zombiemode_server_throttle.gsc
 maps\_zombiemode_spawner.gsc
 maps\_zombiemode_tesla.gsc
 maps\_zombiemode_timer.gsc
+maps\_zombiemode_timers.gsc
 maps\_zombiemode_utility.gsc
 maps\_zombiemode_weapons.gsc
 maps\_zombiemode_zone_manager.gsc
@@ -122,6 +123,7 @@ maps\nazi_zombie_factory_teleporter.gsc
 maps\nazi_zombie_sumpf_blockers.gsc
 maps\walking_anim.gsc
 mod.csv
+sound\Stream\Music\Mission\zombie\mx_beauty.wav
 weapons\sp\falling_hands
 weapons\sp\m1garand_gl_zombie
 weapons\sp\m1garand_gl_zombie_upgraded
