@@ -68,7 +68,10 @@ REFERENCE           SATCHEL_PURCHASE
 LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Satchel Charges [Cost: 2000 - one time only]"
 
 REFERENCE           SATCHEL_HOWTO
-LANG_ENGLISH        "Press ^3[{+actionslot 4}]^7 to equip and throw then ^3[{+attack}]^7 to detonate a Satchel Charge"
+LANG_ENGLISH        "Press ^3[{+actionslot 4}]^7 to equip a Satchel Charge"
+
+REFERENCE           SATCHEL_HOWTO2
+LANG_ENGLISH        "Press ^3[{+toggleads_throw}]^7 to throw a Satchel Charge and press ^3[{+attack}]^7 to detonate"
 
 REFERENCE           BETTY_PURCHASE
 LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Bouncing Betties [Cost: 1000 - one time only]"
