@@ -6,6 +6,8 @@
 
 main()
 {
+	level.remaster_mod = true;
+
 	maps\_destructible_opel_blitz::init();
 	level.startInvulnerableTime = 1000;
 
@@ -37,6 +39,8 @@ main()
 	level thread below_ground_death();
 	
 	maps\_zombiemode_health_help::init();
+	maps\_zombiemode_timers::init();
+
 	//maps\_zombiemode_coord_help::init();
 
 	level thread intro_screen();
@@ -336,6 +340,9 @@ include_weapons()
 		
 	// Grenade
 	include_weapon( "molotov" );
+
+	include_weapon( "signal_flare" );
+	
 	include_weapon( "stielhandgranate", false ); // Only a wallbuy
 
 	// Grenade Launcher

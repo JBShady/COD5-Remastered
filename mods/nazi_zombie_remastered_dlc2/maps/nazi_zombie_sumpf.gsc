@@ -19,6 +19,8 @@
 
 main()
 {
+	level.remaster_mod = true;
+
 	// make sure we randomize things in the map once
 	level.randomize_perks = false;
 	
@@ -102,8 +104,6 @@ main()
 	PrecacheItem( "zombie_item_journal_writing" );
 	precachemodel("static_berlin_books_diary"); // model on shelf
 
-
-
 	level.radio_fin = false;
 	
 	//JV - shellshock for player zipline damage
@@ -119,6 +119,7 @@ main()
     maps\nazi_zombie_sumpf_blockers::init();
 	//maps\_zombiemode_coord_help::init();
 	maps\_zombiemode_health_help::init();
+	maps\_zombiemode_timers::init();
 
 	//init_sounds();
 	init_zombie_sumpf();

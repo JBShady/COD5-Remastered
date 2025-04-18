@@ -10,6 +10,8 @@
 
 main()
 {
+	level.remaster_mod = true;
+
 	// enable for dog rounds
 	level.dogs_enabled = true;
 	
@@ -98,6 +100,7 @@ main()
 		mgs[i] hide();
 	}
 	maps\_zombiemode_health_help::init();
+	maps\_zombiemode_timers::init();
 
 	//maps\_zombiemode_coord_help::init();
 

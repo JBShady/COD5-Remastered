@@ -9,6 +9,8 @@
 
 main()
 {
+	level.remaster_mod = true;
+
 	// This has to be first for CreateFX -- Dale
 	maps\nazi_zombie_factory_fx::main();
 
@@ -97,7 +99,8 @@ main()
 	maps\_zombiemode::main("receiver_zone_spawners");
 	//maps\_zombiemode_coord_help::init();
 	maps\_zombiemode_health_help::init();
-	
+	maps\_zombiemode_timers::init();
+
 	init_sounds();
 	init_achievement();
 	//ESM - activate the initial exterior goals
@@ -2254,7 +2257,6 @@ sumpf_check()
 
 phase_one_quest()
 {
-
 	while(1) // first we just make sure to wait until we have explored the map enough
 	{
 		if(level.flytrap_counter >= 3 && level.successful_corks >= 3 )
@@ -2723,7 +2725,7 @@ mainframe_panel_a() // May need a check in co-op for hintstring showing properly
 	playFxOnTag(level._effect["zapper_light_waiting"], fx_light, "tag_origin");
 
 	wait(0.55);
-	//level.panel_s_o delete();
+	level.panel_s_o delete();
 	fuse delete();
 
 	index = maps\_zombiemode_weapons::get_player_index(player);
@@ -2748,7 +2750,7 @@ damage_trig_checker()
 
 		level waittill("begin_sync"); // we wait for a user to notify from the trigger
 	
-		level.panel_s_o playloopsound( "ticktock_loop" ); // plays loop sound on script origin @ mainframe panel
+		//level.panel_s_o playloopsound( "ticktock_loop" ); // plays loop sound on script origin @ mainframe panel
 		level.sync_timer_active = "counting"; // set up timer
 		level thread sync_timer(); // set up timer
 
@@ -2766,7 +2768,7 @@ damage_trig_checker()
 			//iprintln("counting");
 			wait( .05 );
 		}		
-		level.panel_s_o stoploopsound(.05); // we always stop loop sound, either if we fail or suceed
+		//level.panel_s_o stoploopsound(.05); // we always stop loop sound, either if we fail or suceed
 
 		level.panel_trigger_sync delete(); // we delete the trigger because we're going to thread again and spawn another if we loop
 		
@@ -2774,7 +2776,14 @@ damage_trig_checker()
 
 		if(level.sync_timer_active == "success")
 		{
-			playsoundatposition( "pa_buzz",  (-186, 301, 140) ); // plays good sound on panel
+			ClientNotify( "scd_egg" ); // stop ticking loops forever after success
+
+			players = getplayers();
+			for( i = 0; i < players.size; i++ )
+			{
+				players[i] notify( "stop_countdown_egg" ); // for hud
+			}
+
 			break;
 		}
 		else if(level.sync_timer_active == "off") // ran out of time
@@ -2791,7 +2800,9 @@ damage_trig_checker()
 
 		}
 	}
-	level.panel_s_o delete();
+	//level.panel_s_o delete();
+	wait(0.1);
+	playsoundatposition( "pa_buzz",  (-186, 301, 140) ); // plays good sound on panel
 
 	fx_light = spawn("script_model", (-177, 295.1, 144));
 	fx_light setModel("tag_origin");
@@ -2809,8 +2820,38 @@ sync_timer() // balanced for co-op and solo
 	players = getplayers();
 	time = 60;
 	time /= players.size;
+
+	switch(players.size) // start notify for clock, no end client notify needed if timer runs out because sound will just auto stop after timer is up anyways
+	{
+	case 1: 
+		ClientNotify("pac_egg_one");
+		break;
+	case 2: 
+		ClientNotify("pac_egg_two");
+		break;
+	case 3: 
+		ClientNotify("pac_egg_three");
+		break;
+	case 4: 
+		ClientNotify("pac_egg_four");
+		break;
+	default:
+		ClientNotify("pac_egg_one");
+		break;
+	}
+
+	for( i = 0; i < players.size; i++ )
+	{
+		players[i] thread maps\_zombiemode_timer::start_timer( time , "stop_countdown_egg" ); // for hud
+	}
+
 	wait(time);
 	level.sync_timer_active = "off";
+
+	for( i = 0; i < players.size; i++ )
+	{
+		players[i] notify( "stop_countdown_egg" ); // for hud
+	}
 }
 
 damage_trig_teleporter(location, angles)
