@@ -1579,6 +1579,11 @@ zombie_should_gib( amount, attacker, type )
 			return false; 
 	}
 
+	if( self.damageWeapon == "signal_flare" )
+	{
+		return false; 
+	}
+
 	if( type == "MOD_PISTOL_BULLET" || type == "MOD_RIFLE_BULLET" )
 	{
 		if( !IsDefined( attacker ) || !IsPlayer( attacker ) )
@@ -1769,8 +1774,7 @@ zombie_death_animscript()
 
 	// Give attacker points
 	level zombie_death_points( self.origin, mod, hit_location, self.attacker,self );
-
-	if( self.damagemod == "MOD_BURNED" || (self.damageWeapon == "molotov" && (self.damagemod == "MOD_GRENADE" || self.damagemod == "MOD_GRENADE_SPLASH")) )
+	if( self.damagemod == "MOD_BURNED" || (self.damageWeapon == "molotov" && (self.damagemod == "MOD_GRENADE" || self.damagemod == "MOD_GRENADE_SPLASH")) || self.damageWeapon == "signal_flare" )
 	{
 		if(level.flame_death_fx_frame < 4 )
 		{
@@ -1864,9 +1868,8 @@ zombie_damage( mod, hit_location, hit_origin, player, amount )
 		player maps\_zombiemode_score::player_add_points( "damage", mod, hit_location );
 	}
 
-	if ( mod == "MOD_GRENADE" || mod == "MOD_GRENADE_SPLASH" )
+	if ( (mod == "MOD_GRENADE" || mod == "MOD_GRENADE_SPLASH") && self.damageWeapon != "signal_flare")
 	{
-
 		if ( isdefined( player ) && isalive( player ) )
 		{
 			self DoDamage( level.round_number + randomintrange( 100, 500 ), self.origin, player);
@@ -1878,7 +1881,6 @@ zombie_damage( mod, hit_location, hit_origin, player, amount )
 	}
 	else if( mod == "MOD_PROJECTILE" || mod == "MOD_PROJECTILE_SPLASH" )
 	{
-
 		if ( isdefined( player ) && isalive( player ) )
 		{
 			self DoDamage( level.round_number * randomintrange( 0, 100 ), self.origin, player);
@@ -2056,6 +2058,8 @@ find_flesh()
 	self.goalradius = 32;
 	while( 1 )
 	{
+		zombie_poi = self get_zombie_point_of_interest( self.origin );
+
 		players = get_players();
 		// If playing single player, never ignore the player
 		if( players.size == 1 )
@@ -2064,13 +2068,14 @@ find_flesh()
 		}
 
 		player = get_closest_valid_player( self.origin, self.ignore_player ); 
-		
-		if( !IsDefined( player ) )
+
+		if( !isDefined( player ) && !isDefined( zombie_poi ) )
 		{
 			self zombie_history( "find flesh -> can't find player, continue" );
 			if( IsDefined( self.ignore_player ) )
 			{
 				self.ignore_player = undefined;
+				self.ignore_player = [];
 			}
 
 			wait( 1 ); 
@@ -2079,6 +2084,7 @@ find_flesh()
 
 		self.ignore_player = undefined;
 
+		self.enemyoverride = zombie_poi;
 		self.favoriteenemy = player;
 		self thread zombie_pathing();
 
@@ -2136,50 +2142,68 @@ zombie_pathing()
 	self endon( "zombie_acquire_enemy" );
 	level endon( "intermission" );
 
-	self notify( "stop_acquire_acquire_enemy" );
-	self endon( "stop_acquire_acquire_enemy" );
+	assert( IsDefined( self.favoriteenemy ) || IsDefined( self.enemyoverride ) );
 
-	if( IsDefined( self.favoriteenemy ) )
+	self thread zombie_follow_enemy();
+	self waittill( "bad_path" );
+	
+	if( isDefined( self.enemyoverride ) ) 
+	{
+		debug_print( "Zombie couldn't path to point of interest at origin: " + self.enemyoverride[0] + " Falling back to breadcrumb system" );
+		if( isDefined( self.enemyoverride[1] ) )
+		{
+			self.enemyoverride = self.enemyoverride[1] invalidate_attractor_pos( self.enemyoverride, self );
+			self.zombie_path_timer = 0;
+			return;
+		}
+	}
+	else
+	{
+		debug_print( "Zombie couldn't path to player at origin: " + self.favoriteenemy.origin + " Falling back to breadcrumb system" );
+	}
+	
+	if( !isDefined( self.favoriteenemy ) )
+	{
+		self.zombie_path_timer = 0;
+		return;
+	}
+	else
 	{
 		self.favoriteenemy endon( "disconnect" );
+	}
 
-		self thread zombie_follow_enemy();
+	crumb_list = self.favoriteenemy.zombie_breadcrumbs;
+	bad_crumbs = [];
 
+	while( 1 )
+	{
+		if( !is_player_valid( self.favoriteenemy ) )
+		{
+			self.zombie_path_timer = 0;
+			return;
+		}
+
+		goal = zombie_pathing_get_breadcrumb( self.favoriteenemy.origin, crumb_list, bad_crumbs, ( RandomInt( 100 ) < 20 ) );
+		
+		if ( !IsDefined( goal ) )
+		{
+			debug_print( "Zombie exhausted breadcrumb search" );
+			goal = self.favoriteenemy.spectator_respawn.origin;
+		}
+
+		debug_print( "Setting current breadcrumb to " + goal );
+
+		self.zombie_path_timer += 1000;
+		self SetGoalPos( goal );
 		self waittill( "bad_path" );
 
-		crumb_list = self.favoriteenemy.zombie_breadcrumbs;
-		bad_crumbs = [];
-
-		while( 1 )
+		debug_print( "Zombie couldn't path to breadcrumb at " + goal + " Finding next breadcrumb" );
+		for( i = 0; i < crumb_list.size; i++ )
 		{
-			if( !is_player_valid( self.favoriteenemy ) )
+			if( goal == crumb_list[i] )
 			{
-				self.zombie_path_timer = 0;
-				return;
-			}
-
-			goal = zombie_pathing_get_breadcrumb( self.favoriteenemy.origin, crumb_list, bad_crumbs, ( RandomInt( 100 ) < 20 ) );
-			
-			if ( !IsDefined( goal ) )
-			{
-				debug_print( "Zombie exhausted breadcrumb search" );
-				goal = self.favoriteenemy.spectator_respawn.origin;
-			}
-
-			debug_print( "Setting current breadcrumb to " + goal );
-
-			self.zombie_path_timer += 1000;
-			self SetGoalPos( goal );
-			self waittill( "bad_path" );
-
-			debug_print( "Zombie couldn't path to breadcrumb at " + goal + " Finding next breadcrumb" );
-			for( i = 0; i < crumb_list.size; i++ )
-			{
-				if( goal == crumb_list[i] )
-				{
-					bad_crumbs[bad_crumbs.size] = i;
-					break;
-				}
+				bad_crumbs[bad_crumbs.size] = i;
+				break;
 			}
 		}
 	}
@@ -2238,15 +2262,31 @@ zombie_follow_enemy()
 	self endon( "death" );
 	self endon( "zombie_acquire_enemy" );
 	self endon( "bad_path" );
+	
 	level endon( "intermission" );
 
 	while( 1 )
 	{
-		if( IsDefined( self.favoriteenemy ) )
+		if( isDefined( self.enemyoverride ) && isDefined( self.enemyoverride[1] ) )
 		{
+			if( distanceSquared( self.origin, self.enemyoverride[0] ) > 1*1 )
+			{
+				self OrientMode( "face motion" );
+			}
+			else
+			{
+				self OrientMode( "face point", self.enemyoverride[1].origin );
+			}
+			self.ignoreall = true;
+			self SetGoalPos( self.enemyoverride[0] );
+		}
+		else if( IsDefined( self.favoriteenemy ) )
+		{
+			self.ignoreall = false;
+			self OrientMode( "face default" );
 			self SetGoalPos( self.favoriteenemy.origin );
 		}
-
+		
 		wait( 0.1 );
 	}
 }
@@ -2427,7 +2467,7 @@ play_death_vo(hit_location, player,mod,zombie)
 		}
 	}
 
-	if(zombie.damageweapon == "molotov" || ((mod == "MOD_PROJECTILE" || mod == "MOD_PROJECTILE_SPLASH") && zombie.damageweapon == "ray_gun") )
+	if(zombie.damageweapon == "molotov" || zombie.damageweapon == "signal_flare" || ((mod == "MOD_PROJECTILE" || mod == "MOD_PROJECTILE_SPLASH") && zombie.damageweapon == "ray_gun") )
 	{
 		return;
 	}

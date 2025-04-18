@@ -1469,6 +1469,11 @@ zombie_should_gib( amount, attacker, type )
 			return false; 
 	}
 
+	if( self.damageWeapon == "m8_white_smoke" )
+	{
+		return false; 
+	}
+
 	if( type == "MOD_PISTOL_BULLET" || type == "MOD_RIFLE_BULLET" )
 	{
 		if( !IsDefined( attacker ) || !IsPlayer( attacker ) )
@@ -2084,7 +2089,7 @@ zombie_damage( mod, hit_location, hit_origin, player, amount )
 		player maps\_zombiemode_score::player_add_points( "damage", mod, hit_location, false );
 	}
 
-	if ( mod == "MOD_GRENADE" || mod == "MOD_GRENADE_SPLASH" )
+	if ( (mod == "MOD_GRENADE" || mod == "MOD_GRENADE_SPLASH") && self.damageWeapon != "m8_white_smoke")
 	{
 		if ( isdefined( player ) && isalive( player ) )
 		{
@@ -2338,7 +2343,8 @@ find_flesh()
 //		{
 //			self.ignore_player = self.favoriteenemy;
 //		}
-		
+		zombie_poi = self get_zombie_point_of_interest( self.origin );
+
 		players = get_players();
 				
 		// If playing single player, never ignore the player
@@ -2369,12 +2375,13 @@ find_flesh()
 		        wait 0.5;
 		    }
 		}
-		if( !IsDefined( player ) )
+		if( !isDefined( player ) && !isDefined( zombie_poi ) )
 		{
 			self zombie_history( "find flesh -> can't find player, continue" );
 			if( IsDefined( self.ignore_player ) )
 			{
 				self.ignore_player = undefined;
+				self.ignore_player = [];
 			}
 
 			wait( 1 ); 
@@ -2383,6 +2390,7 @@ find_flesh()
 
 		self.ignore_player = undefined;
 
+		self.enemyoverride = zombie_poi;
 		self.favoriteenemy = player;
 		self thread zombie_pathing();
 
@@ -2404,11 +2412,35 @@ zombie_pathing()
 	self endon( "zombie_acquire_enemy" );
 	level endon( "intermission" );
 
-	assert( IsDefined( self.favoriteenemy ) );
-	self.favoriteenemy endon( "disconnect" );
+	assert( IsDefined( self.favoriteenemy ) || IsDefined( self.enemyoverride ) );
 
 	self thread zombie_follow_enemy();
 	self waittill( "bad_path" );
+	
+	if( isDefined( self.enemyoverride ) ) 
+	{
+		debug_print( "Zombie couldn't path to point of interest at origin: " + self.enemyoverride[0] + " Falling back to breadcrumb system" );
+		if( isDefined( self.enemyoverride[1] ) )
+		{
+			self.enemyoverride = self.enemyoverride[1] invalidate_attractor_pos( self.enemyoverride, self );
+			self.zombie_path_timer = 0;
+			return;
+		}
+	}
+	else
+	{
+		debug_print( "Zombie couldn't path to player at origin: " + self.favoriteenemy.origin + " Falling back to breadcrumb system" );
+	}
+	
+	if( !isDefined( self.favoriteenemy ) )
+	{
+		self.zombie_path_timer = 0;
+		return;
+	}
+	else
+	{
+		self.favoriteenemy endon( "disconnect" );
+	}
 
 	crumb_list = self.favoriteenemy.zombie_breadcrumbs;
 	bad_crumbs = [];
@@ -2552,15 +2584,29 @@ zombie_follow_enemy()
 
 	while( 1 )
 	{
-		if( IsDefined( self.favoriteenemy ) )
+		if( isDefined( self.enemyoverride ) && isDefined( self.enemyoverride[1] ) )
 		{
+			if( distanceSquared( self.origin, self.enemyoverride[0] ) > 1*1 )
+			{
+				self OrientMode( "face motion" );
+			}
+			else
+			{
+				self OrientMode( "face point", self.enemyoverride[1].origin );
+			}
+			self.ignoreall = true;
+			self SetGoalPos( self.enemyoverride[0] );
+		}
+		else if( IsDefined( self.favoriteenemy ) )
+		{
+			self.ignoreall = false;
+			self OrientMode( "face default" );
 			self SetGoalPos( self.favoriteenemy.origin );
 		}
-
+		
 		wait( 0.1 );
 	}
 }
-
 
 // When a Zombie spawns, set his eyes to glowing.
 zombie_eye_glow()
