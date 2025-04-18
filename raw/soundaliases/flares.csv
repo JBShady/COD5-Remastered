@@ -1,0 +1,7 @@
+name,sequence,file,platform,vol_min,vol_max,pitch_min,pitch_max,dist_min,dist_max,dist_reverb_max,limit_count,limit_type,entity_limit_count,entity_limit_type,bus,spatialized,type,probability,loop,masterslave,loadspec,reverb_falloff_curve,subtitle,compression,randomize_type,secondaryaliasname,chainaliasname,volumefalloffcurve,startdelay,speakermap,reverb_send,lfe percentage,center percentage,platform,envelop_min,envelop_max,envelop percentage,occlusion_level,real_delay,distance_lpf,move_type,move_time,min_priority,max_priority,min_priority_threshold,max_priority_threshold,doppler
+# Flares,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+flare_launch,,SFX\Amb\flare\flashbang_toss_b.wav,!wii,1,1,0.8,1.1,200,1600,1800,,,,,full_vol,3d,,,,,all_sp,,,,,,,curve4,,,0.6,,,,,,,0.4,,no,,,100,100,0.25,1,
+flare_exp,,SFX\Amb\flare\flashbang_asplode_trail.wav,!wii,1,1,1,1,200,1800,2400,,,,,explosion,3d,,,,,all_sp,,,,,,,curve4,,,0.6,,,,,,,0.4,,no,,,100,100,0.25,1,
+flashbang_tinnitus_loop,,sfx/character/tinnitus/flareshock_eq.wav,!wii,0.3,0.3,1,1,,,,,,,,full_vol,2d,,,looping,,all_sp,,,,,,,curve4,,,,,,,,,,,,,,,100,100,0.25,1,
+flashbang_tinnitus_loop_silent,,sfx/character/tinnitus/flareshock_eq.wav,!wii,0,0,1,1,,,,,,,,full_vol,2d,,,looping,,all_sp,,,,,,,curve4,,,,,,,,,,,,,,,100,100,0.25,1,
+flashbang_tinnitus_end,,sfx/character/tinnitus/flareshock_fade_eq.wav,!wii,0.3,0.3,1,1,100,5000,,,,,,full_vol,2d,,,,,all_sp,,,,,,,curve4,,,,,,,,,,,,,,,100,100,0.25,1
