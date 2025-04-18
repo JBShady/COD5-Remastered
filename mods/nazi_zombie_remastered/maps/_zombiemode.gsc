@@ -45,7 +45,8 @@ main()
 	maps\_zombiemode_spawner::init();
 	maps\_zombiemode_powerups::init();
 	maps\_zombiemode_radio::init();	
-		
+	maps\_zombiemode_flare::init();	
+
 	init_utility();
 
 	// register a client system...
@@ -616,6 +617,8 @@ zombie_intro_screen( string1, string2, string3, string4, string5 )
         "player_meleechargefriction", "2500",
         "dynEnt_spawnedLimit", level.dynEnt_spawnedLimit,
 		"cg_hudDamageIconTime", "2500", // fixed damage marks from disappearing too quick
+		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
+		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
 		"playerSpectating", "0"
 		 ); 
 	}
@@ -643,6 +646,8 @@ players_playing()
         "player_meleechargefriction", "2500",
         "dynEnt_spawnedLimit", level.dynEnt_spawnedLimit,
 		"cg_hudDamageIconTime", "2500", // fixed damage marks from disappearing too quick
+		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
+		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
 		"playerSpectating", "0"
 		); 
 
@@ -698,6 +703,8 @@ onPlayerConnect()
 
 		player thread maps\_zombiemode_molotov::trackMolotov(); 
 
+		player thread maps\_zombiemode_flare::trackFlare(); 
+
 		player thread getAimAssistDvar();
 
 		player.score = level.zombie_vars["zombie_score_start"]; 
@@ -734,6 +741,8 @@ onPlayerConnect_clientDvars()
 		"player_strafeSpeedScale", "0.9", // buffed strafe
 		"player_sprintStrafeSpeedScale", "0.8",  // buffed strafe
 		"playerSpectating", "0", // spectating hud
+		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
+		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
 		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
 
 	self SetClientDvars(
@@ -797,6 +806,8 @@ onPlayerSpawned()
 		"aim_automelee_range", "96",
         "aim_automelee_lerp", "50",
         "player_meleechargefriction", "2500",
+		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
+		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
 		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
 
 		self setClientDvar( "bg_fallDamageMinHeight", "150" );
@@ -2185,6 +2196,10 @@ player_damage_override( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, 
 					finalDamage = radiusDamage(eInflictor.origin, 256,130,45, eAttacker);
 				}
 			}
+			if(isSubStr(sWeapon, "flare") ) // Radius 96, damage low
+			{
+				finalDamage = radiusDamage(eInflictor.origin, 96,20,10, eAttacker); 
+			}
 			else // For frags (and all other cases), Radius 256, damage low (300-75)
 			{
 				finalDamage = radiusDamage(eInflictor.origin, 256,120,50, eAttacker);
@@ -3552,7 +3567,7 @@ AimAssist()
 				test_range_squared = DistanceSquared( view_pos, enemy_origin );
 				if ( test_range_squared < range_to_use )
 				{	
-					if(zombies[i] player_can_see_me(self) && bulletTracePassed(self.head, zombies[i].head, false, undefined))
+					if(zombies[i] player_can_see_me(self, false) && bulletTracePassed(self.head, zombies[i].head, false, undefined))
 					{
 						if(self adsButtonPressed() && self.is_reloading == false && !self IsMeleeing() && self playerADS() < 0.6)
 						{
@@ -3627,7 +3642,7 @@ is_assisted_weapon()
 	}
 }
 
-player_can_see_me( player )
+player_can_see_me( player, override )
 {
 	playerAngles = player getplayerangles();
 	playerForwardVec = AnglesToForward( playerAngles );
@@ -3657,6 +3672,11 @@ player_can_see_me( player )
     zombieVsPlayerFOVBuffer = 0.2;
 
 	distance = self check_distance(player);
+
+	if(isDefined(override) && override == true )
+	{
+		distance = 0.8;
+	}
 
 	playerCanSeeMe = angleFromCenter <= ( ( playerFOV * distance ) * ( 1 - zombieVsPlayerFOVBuffer ) ); 
 
