@@ -976,6 +976,10 @@ full_ammo_powerup( drop_item )
 			}
 		}
 
+	    if( players[i] HasWeapon( "signal_flare" ) )
+	    {
+	        players[i] SetWeaponAmmoClip( "signal_flare", 3 );
+	    }
 	    if( players[i] HasWeapon( "molotov" ) )
 	    {
 	        players[i] SetWeaponAmmoClip( "molotov", 4 );
@@ -1213,6 +1217,7 @@ full_ammo_on_hud( drop_item )
 	// set up the hudelem
 	hudelem = maps\_hud_util::createFontString( "objective", 2 );
 	hudelem maps\_hud_util::setPoint( "TOP", undefined, 0, level.zombie_vars["zombie_timer_offset"] - (level.zombie_vars["zombie_timer_offset_interval"] * 2));
+	hudelem.y = hudelem.y - 6;
 	hudelem.sort = 0.5;
 	hudelem.alpha = 0;
 	hudelem fadeovertime(0.5);
@@ -1242,7 +1247,7 @@ full_ammo_move_hud()
 
 	self FadeOverTime( move_fade_time ); 
 	self MoveOverTime( move_fade_time );
-	self.y = 270;
+	self.y = 270 - 6;
 	self.alpha = 0;
 
 	wait move_fade_time;
