@@ -62,6 +62,8 @@ main()
 
 	level thread fov_fix();
 
+	//level thread flare_vision();
+
 	// This needs to be called after all systems have been registered.
 	thread waitforclient(0);
 
@@ -202,3 +204,15 @@ dvar_update() // if we happen to change the dummy setting VARS on the main menu 
 
 
 // The only flaw: If we try to manually edit a dvar on the main menu, depending on what your dummy dvar is set to, it may not do anything when you load in. But this is fine, all are accessible from settings there is no reason to use console
+
+
+/*flare_vision( )
+{
+	level waittill( "tae", localClientNum );
+
+	//iprintlnbold( "***Flare Aftereffect***\n" );
+	savedVis = GetVisionSetNaked( localClientNum );
+	VisionSetNaked( localClientNum, "flare", 0.4 );
+	realwait( 1.25 );
+	VisionSetNaked( localClientNum, savedVis, 1 );
+}*/
