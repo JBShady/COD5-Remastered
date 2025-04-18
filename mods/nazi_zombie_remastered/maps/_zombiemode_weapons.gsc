@@ -101,6 +101,7 @@ init_weapons()
                                                         		
 	// Grenades                                         		
 	add_zombie_weapon( "molotov", 								&"ZOMBIE_WEAPON_MOLOTOV_200", 								200,	"vox_crappy",	4); // 100% of the time, except Sarge has one reepating line
+	add_zombie_weapon( "signal_flare", 								&"ZOMBIE_WEAPON_MOLOTOV_200", 								200,	"",	0);
 	add_zombie_weapon( "stielhandgranate", 						&"REMASTERED_ZOMBIE_WEAPON_STIELHANDGRANATE_250",	250,	"",				0);
 
 	// Scoped
@@ -142,6 +143,8 @@ init_weapons()
 	add_zombie_weapon( "ray_gun", 							&"ZOMBIE_WEAPON_RAYGUN_10000", 									10000,	"vox_raygun",	3); // 66% chance for all characters except Sarge because he has 3 unique lines, so 100% for him
 	// ONLY 1 OF THE BELOW SHOULD BE ALLOWED
 	add_limited_weapon( "m2_flamethrower_zombie", 1 );
+	add_limited_weapon( "signal_flare", 1 );
+
 }             
 
 add_limited_weapon( weapon_name, amount )
@@ -333,7 +336,8 @@ treasure_chest_think()
 	self.chest_user = user;
 
 	primaryWeapons = user GetWeaponsListPrimaries(); 
-	if(weapon_spawn_org.weapon_string == "molotov" || weapon_spawn_org.weapon_string == "mortar_round" || primaryWeapons.size <= 1  )
+	//if(weapon_spawn_org.weapon_string == "molotov" || weapon_spawn_org.weapon_string == "mortar_round" || primaryWeapons.size <= 1  )
+	if( (weapon_spawn_org.weapon_string == "molotov" && !user HasWeapon("signal_flare") ) || (weapon_spawn_org.weapon_string == "signal_flare" && !user HasWeapon("molotov") ) || weapon_spawn_org.weapon_string == "mortar_round" || primaryWeapons.size <= 1 )
 	{
 		self sethintstring( &"REMASTERED_ZOMBIE_TRADE_WEAPONS_ALT" ); 
 	}
@@ -716,7 +720,7 @@ treasure_chest_give_weapon( weapon_string )
 
 		if( isdefined( current_weapon ) )
 		{
-			if( !( weapon_string == "fraggrenade" || weapon_string == "stielhandgranate" || weapon_string == "molotov" || weapon_string == "mortar_round" ) )
+			if( !( weapon_string == "fraggrenade" || weapon_string == "stielhandgranate" || weapon_string == "molotov" || weapon_string == "mortar_round" || weapon_string == "signal_flare" ) )
 			self TakeWeapon( current_weapon ); 
 		} 
 	} 
@@ -730,7 +734,7 @@ treasure_chest_give_weapon( weapon_string )
 				continue; 
 			}
 
-			if( weapon_string != "fraggrenade" && weapon_string != "stielhandgranate" && weapon_string != "molotov" || weapon_string == "mortar_round" )
+			if( weapon_string != "fraggrenade" && weapon_string != "stielhandgranate" && weapon_string != "molotov" && weapon_string != "mortar_round" && weapon_string != "signal_flare"  )
 			{
 				self TakeWeapon( primaryWeapons[i] ); 
 			}
@@ -738,6 +742,24 @@ treasure_chest_give_weapon( weapon_string )
 	}
 
 	self play_sound_on_ent( "purchase" ); 
+
+	if( weapon_string == "molotov" )
+	{
+		has_weapon = self HasWeapon( "signal_flare" );
+		if( isDefined(has_weapon) && has_weapon )
+		{
+			self TakeWeapon( "signal_flare" );
+		}
+	}
+	if( weapon_string == "signal_flare" )
+	{
+		has_weapon = self HasWeapon( "molotov" );
+		if( isDefined(has_weapon) && has_weapon )
+		{
+			self TakeWeapon( "molotov" );
+		}
+
+	}
 
     if ( (weapon_string == "ray_gun") )
     {
@@ -1022,14 +1044,49 @@ show_satchel_hint(satchel)
 {
 	self endon("death");
 	self endon("disconnect");
+	level endon("intermission");
 
 	self setup_client_hintelem();
 	self.hintelem setText(&"REMASTERED_ZOMBIE_SATCHEL_HOWTO");
 	wait(0.25);
 	satchel SetInvisibleToPlayer( self, true ); // moved to here so we have a little delay if we instantly buy
-	wait(3.75);
+	
+	timer = 3;
+
+	while( self GetCurrentWeapon() != "satchel_charge" ) // smart hint, switches to hint 2 if we pull out satchles otherwise just waits until we do
+	{
+		if(isDefined(timer))
+		{
+	        timer -= 0.05;
+		}
+        wait(0.05);
+
+        if(timer <= 0)
+        {
+			self.hintelem settext("");	
+			timer = undefined;
+        }
+	}
+
+	self.hintelem setText(&"REMASTERED_ZOMBIE_SATCHEL_HOWTO2");
+	wait(3.5);
 	self.hintelem settext("");	
+	self.hintelem destroy();
 	self.hintelem delete();
+	self notify("satchel_hud_destroyed");
+
+}
+
+hud_satchel_deathwatch()
+{
+	self endon("satchel_hud_destroyed");
+	self waittill("death");
+	
+	if(isDefined(self.hintelem))
+	{
+		self.hintelem delete();
+		self.hintelem destroy();
+	}
 }
 
 setup_client_hintelem()
@@ -1246,7 +1303,7 @@ weapon_give( weapon )
 
 		if( isdefined( current_weapon ) )
 		{
-			if( !( weapon == "fraggrenade" || weapon == "stielhandgranate" || weapon == "molotov" ) )
+			if( !( weapon == "fraggrenade" || weapon == "stielhandgranate" || weapon == "molotov" || weapon == "mortar_round" || weapon == "signal_flare" ) )
 			{
 				self TakeWeapon( current_weapon ); 
 			}
@@ -1262,12 +1319,33 @@ weapon_give( weapon )
 				continue; 
 			}
 
-			if( weapon != "fraggrenade" && weapon != "stielhandgranate" && weapon != "molotov" )
+			if( weapon != "fraggrenade" && weapon != "stielhandgranate" && weapon != "molotov" && weapon != "mortar_round" && weapon != "signal_flare" )
 			{
 				self TakeWeapon( primaryWeapons[i] ); 
 			}
 		}
 	}
+
+	if( weapon == "signal_flare" )
+	{
+		// PI_CHANGE_BEGIN
+		// JMA 051409 sanity check to see if we have the weapon before we remove it	
+		has_weapon = self HasWeapon( "molotov" );
+		if( isDefined(has_weapon) && has_weapon )
+		{
+			self TakeWeapon( "molotov" );
+		}
+
+	}
+	if( weapon == "molotov" )
+	{
+		has_weapon = self HasWeapon( "signal_flare" );
+		if( isDefined(has_weapon) && has_weapon )
+		{
+			self TakeWeapon( "signal_flare" );
+		}
+	}
+
 
 	self play_sound_on_ent( "purchase" );
 	self GiveWeapon( weapon, 0 ); 
@@ -1300,7 +1378,7 @@ ammo_give( weapon )
 	give_ammo = false; 
 
 	// Check to see if ammo belongs to a primary weapon
-	if( weapon != "fraggrenade" && weapon != "stielhandgranate" && weapon != "molotov" )
+	if( weapon != "fraggrenade" && weapon != "stielhandgranate" && weapon != "molotov" && weapon != "signal_flare" )
 	{
 		if( isdefined( weapon ) )  
 		{
