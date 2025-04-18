@@ -89,8 +89,10 @@ maps\_zombiemode_perks.gsc
 maps\_zombiemode_powerups.gsc
 maps\_zombiemode_radio.gsc
 maps\_zombiemode_score.gsc
+maps\_zombiemode_server_throttle.gsc
 maps\_zombiemode_smoke_grenade.gsc
 maps\_zombiemode_spawner.gsc
+maps\_zombiemode_timers.gsc
 maps\_zombiemode_utility.gsc
 maps\_zombiemode_weapons.gsc
 maps\createart\nazi_zombie_asylum_art.gsc

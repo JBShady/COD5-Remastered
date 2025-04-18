@@ -493,7 +493,9 @@ activateZip(rider)
 		if ( is_player_valid(peeps[i]) && ((peeps[i] IsTouching(self.volume) || (IsDefined (rider) && peeps[i] == rider ))))
 		{
 			self.riders = array_add(self.riders, peeps[i]);
-			peeps[i] thread magic_bullet_shield(100000000, 0);
+
+			peeps[i] thread magic_bullet_shield(100000, 0);
+
 			//peeps[i].ignoreme = true;
 			peeps[i].on_zipline = true;
 			peeps[i] setstance("stand");

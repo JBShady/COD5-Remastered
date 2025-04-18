@@ -70,13 +70,16 @@ maps\_utility.gsc
 maps\_zombiemode.gsc
 maps\_zombiemode_achievement.gsc
 maps\_zombiemode_blockers.gsc
+maps\_zombiemode_flare.gsc
 maps\_zombiemode_health_help.gsc
 maps\_zombiemode_molotov.gsc
 maps\_zombiemode_net.gsc
 maps\_zombiemode_powerups.gsc
 maps\_zombiemode_radio.gsc
 maps\_zombiemode_score.gsc
+maps\_zombiemode_server_throttle.gsc
 maps\_zombiemode_spawner.gsc
+maps\_zombiemode_timers.gsc
 maps\_zombiemode_utility.gsc
 maps\_zombiemode_weapons.gsc
 maps\createart\nazi_zombie_prototype_art.gsc
@@ -659,6 +662,7 @@ weapons\sp\ptrs41_zombie
 weapons\sp\ray_gun
 weapons\sp\satchel_charge
 weapons\sp\shotgun
+weapons\sp\signal_flare
 weapons\sp\springfield
 weapons\sp\stg44
 weapons\sp\stielhandgranate

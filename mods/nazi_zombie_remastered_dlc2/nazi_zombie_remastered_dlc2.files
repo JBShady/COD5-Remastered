@@ -138,6 +138,7 @@ maps\_zombiemode_score.gsc
 maps\_zombiemode_server_throttle.gsc
 maps\_zombiemode_spawner.gsc
 maps\_zombiemode_tesla.gsc
+maps\_zombiemode_timers.gsc
 maps\_zombiemode_utility.gsc
 maps\_zombiemode_weapons.gsc
 maps\_zombiemode_weapons_sumpf.gsc

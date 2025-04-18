@@ -17,6 +17,7 @@ weapon,sp/ppsh
 weapon,sp/type100_smg
 weapon,sp/mortar_round
 weapon,sp/satchel_charge
+weapon,sp/signal_flare
 // test
 xmodel,viewmodel_zombie_30cal_lmg_new
 xmodel,weapon_mp_30cal_bipod_lmg
@@ -37,6 +38,8 @@ xmodel,viewmodel_jap_type99_bipod_lmg
 xmodel,weapon_jap_type99_bipod_lmg
 xmodel,viewmodel_zombie_type100_smg_remastered_2023
 xmodel,weapon_zombie_type100_smg
+xmodel,viewmodel_mp_flare_stick
+xmodel,weapon_mp_flare_stick
 menufile,ui/objective_info.menu
 menufile,ui_mp/options_multi.menu
 menufile,ui/pc_gamesetup_coop_prototype.menu
@@ -117,6 +120,7 @@ xmodel,char_ger_wermachtwet_gear2
 xmodel,char_ger_wermachtwet_gear3
 xmodel,char_ger_wermachtwet_helm1
 sound,custom_character,,all_sp
+sound,flares,,all_sp
 weapon,sp/falling_hands
 xanim,viewmodel_bare_hands_z_death_idle
 xanim,viewmodel_bare_hands_death_by_zomb
@@ -163,3 +167,4 @@ menufile,ui/pregame.menu
 menufile,ui/error.menu
 menufile,ui/scriptmenus/menu_clientdvar.menu
 localize,zombie
+rawfile,vision/flare.vision

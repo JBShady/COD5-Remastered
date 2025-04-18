@@ -25,6 +25,7 @@ walk_main()
 		{
 			self setClientDvar("cg_bobweaponamplitude", "0.9");
 			self setClientDvar("bg_bobAmplitudeStanding", "0.012 0.005");
+			// bg_bobAmplitudeducked is for crouching, but cut unnecessary, gun lowering on crouch is fine
 		}
 		wait(0.05);
 	}
@@ -40,7 +41,7 @@ rot_main()
 		roll = roll/28;
 
 		self SetClientDvar("cg_gun_rot_r",roll[0]+roll[1]+roll[2]);
-
+		// cg_gun_move_r is for sprint but cut, unnecessary
 		wait(0.05);
 	}
 }
