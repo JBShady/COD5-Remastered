@@ -967,6 +967,8 @@ zombie_intro_screen( string1, string2, string3, string4, string5 )
         "dynEnt_spawnedLimit", level.dynEnt_spawnedLimit,
 		"aim_autobayonet_range", "100",
 		"cg_hudDamageIconTime", "2500", // fixed damage marks from disappearing too quick
+		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
+		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
 		"playerSpectating", "0"
 		 ); 	
 	}
@@ -996,6 +998,8 @@ players_playing()
         "dynEnt_spawnedLimit", level.dynEnt_spawnedLimit,
 		"aim_autobayonet_range", "100",
 		"cg_hudDamageIconTime", "2500", // fixed damage marks from disappearing too quick
+		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
+		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
 		"playerSpectating", "0"
 		); 
 
@@ -1102,6 +1106,8 @@ onPlayerConnect_clientDvars()
 		"player_strafeSpeedScale", "0.9", // buffed strafe
 		"player_sprintStrafeSpeedScale", "0.8", // buffed strafe
 		"playerSpectating", "0", // spectating hud
+		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
+		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
 		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
 
 	self SetClientDvars(
@@ -1170,6 +1176,8 @@ onPlayerSpawned()
         "aim_automelee_lerp", "50",
         "player_meleechargefriction", "2500",
 		"aim_autobayonet_range", "100",
+		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
+		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
 		"cg_hudDamageIconTime", "2500" );
      
      	self setClientDvar( "bg_fallDamageMinHeight", "150" );
