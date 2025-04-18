@@ -104,6 +104,14 @@ main()
 	thread homepad_loop_resume(); // for egg
 	thread power_audio_2d();
 	thread linkall_2d();
+
+	pa_sys = getstructarray( "pa_system", "targetname" ); // for egg
+	
+	array_thread( pa_sys, ::pa_countdown_egg, 1, "_one", 60 );
+	array_thread( pa_sys, ::pa_countdown_egg, 2, "_two", 30 );
+	array_thread( pa_sys, ::pa_countdown_egg, 3, "_three", 20 );
+	array_thread( pa_sys, ::pa_countdown_egg, 4, "_four", 15 );
+
 }
 add_song(song)
 {
@@ -454,7 +462,8 @@ pa_single_init()
 pa_countdown( pad )
 {
 	level endon( "scd" + pad );
-	
+	level endon( "game_over" );
+
 	while(1)
 	{		
 		level waittill( "pac" + pad );
@@ -481,6 +490,27 @@ pa_countdown( pad )
 		self thread pa_play_dialog( "pa_audio_link_fail" );
 	}
 	realwait(1);
+}
+
+pa_countdown_egg(players, players_name, players_timer)
+{
+	level endon( "scd_egg" );
+	level endon( "game_over" );
+
+	while(1)
+	{		
+		level waittill( "pac_egg" + players_name );
+		
+		//playsound( 0, "pa_buzz", self.origin );
+	
+		count = players_timer;
+ 		while ( count > 0 )
+		{
+			playsound( 0, "clock_tick_1sec", (0,0,0) );	
+			realwait( 1 );
+			count--;
+		}
+	}
 }
 
 pa_countdown_success( pad )
