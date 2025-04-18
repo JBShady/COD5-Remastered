@@ -56,10 +56,15 @@ start_timer( time, stop_notify )
 	self.stopwatch_elem_glass.alpha = 1;
 	wait( time );
 	self notify( "countdown_finished" );
-	wait( 1 );
+	//wait( 1 );
 	self.stopwatch_elem.alpha = 0;
 	self.stopwatch_elem_glass.alpha = 0;
-	
+
+	self.stopwatch_elem destroy();
+	self.stopwatch_elem_glass destroy();
+
+	self.stopwatch_elem.alpha = undefined;
+	self.stopwatch_elem_glass.alpha = undefined;
 }
 
 wait_for_stop_notify( stop_notify )
@@ -71,4 +76,10 @@ wait_for_stop_notify( stop_notify )
 	
 	self.stopwatch_elem.alpha = 0;
 	self.stopwatch_elem_glass.alpha = 0;
+
+	self.stopwatch_elem destroy();
+	self.stopwatch_elem_glass destroy();
+
+	self.stopwatch_elem.alpha = undefined;
+	self.stopwatch_elem_glass.alpha = undefined;
 }
