@@ -803,6 +803,9 @@
 #define CHOICE_DVARFLOATLIST_FOCUS_VIS( itemIndex, textArg, dvarArg, strListArg, actionArg, onFocusArg, leaveFocusArg, visArg ) \
 		CHOICE_DVARLIST_FOCUS_VIS( itemIndex, textArg, dvarArg, ITEM_TYPE_MULTI, dvarFloatList strListArg, actionArg, onFocusArg, leaveFocusArg, visArg )
 
+#define CHOICE_DVARFLOATLIST_FOCUS_VIS_EX( itemIndex, textArg, dvarArg, strListArg, actionArg, onFocusArg, leaveFocusArg, visArg, extraArgs ) \
+		CHOICE_DVARLIST_FOCUS_VIS_EX( itemIndex, textArg, dvarArg, ITEM_TYPE_MULTI, dvarFloatList strListArg, actionArg, onFocusArg, leaveFocusArg, visArg, extraArgs )
+
 #define CHOICE_DVARLIST_VIS( itemIndex, textArg, dvarArg, listTypeArg, listArg, actionArg, visArg ) \
 		CHOICE_DVARLIST_FOCUS_VIS( itemIndex, textArg, dvarArg, listTypeArg, listArg, actionArg, ;, ;, visArg )
 
@@ -822,6 +825,26 @@
 			style			WINDOW_STYLE_FILLED \
 			forecolor		CHOICE_TEXTCOLOR \
 			visible			visArg ; \
+			CHOICE_SCRIPTS_ALL( itemIndex, actionArg, onFocusArg, leaveFocusArg ) \
+		}
+
+#define CHOICE_DVARLIST_FOCUS_VIS_EX( itemIndex, textArg, dvarArg, listTypeArg, listArg, actionArg, onFocusArg, leaveFocusArg, visArg, extraArgs ) \
+		CHOICE_CAPTION_VIS( itemIndex, textArg, visArg ) \
+		itemDef \
+		{ \
+			type			listTypeArg \
+			dvar			dvarArg \
+			listArg \
+			rect			CHOICE_ORIGIN( itemIndex ) (CHOICE_SIZE_X+CHOICE_DVAR_WIDTH_OFFSET) CHOICE_SIZE_Y CHOICE_HORIZONTAL_ALIGN CHOICE_VERTICAL_ALIGN \
+			textalign		CHOICE_DVAR_TEXTALIGN \
+			textalignx		CHOICE_DVAR_OFFSET_X \
+			textfont		CHOICE_TEXTFONT \
+			textscale		CHOICE_TEXTSIZE \
+			textstyle 		ITEM_TEXTSTYLE_SHADOWED \
+			style			WINDOW_STYLE_FILLED \
+			forecolor		CHOICE_TEXTCOLOR \
+			visible			visArg \
+			extraArgs; \
 			CHOICE_SCRIPTS_ALL( itemIndex, actionArg, onFocusArg, leaveFocusArg ) \
 		}
 
