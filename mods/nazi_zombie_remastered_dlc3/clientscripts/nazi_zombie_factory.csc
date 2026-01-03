@@ -84,6 +84,8 @@ player_dvar_init()
 	{
 		players[i] thread dvar_update();
 		players[i] thread pause_check();
+		players[i] thread fov_spawn();
+
 		//players[i] thread ui_anim_timer();
 
 		//players[i] thread fov_fix(i);
@@ -124,11 +126,25 @@ ui_anim_timer()
     }
 }
 
+fov_spawn()
+{
+	timer = 3;
+	while(timer > 0 )
+	{
+		timer = timer - 0.05;
+
+		real_fov = GetDvarFloat("cg_fov_settings"); 
+		SetClientDvar("cg_fov", real_fov); 
+
+		wait(0.05);
+	}
+}
+
 dvar_update() // if we happen to change the dummy setting VARS on the main menu and load in-game, the actual dvar will not reflect the dummy, which in these cases we hard-code in the dvar to update
 {
 	self endon("disconnect");
 
-	wait(0.1);
+	wait(0.05);
 
 	if(GetDvarInt("cg_fov_settings") < 65 ) // failsafe
 	{
