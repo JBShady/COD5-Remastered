@@ -3,12 +3,9 @@
 
 player_init()
 {	
-<<<<<<< Updated upstream
-=======
 	self waittill("spawned_player");
 	self SetClientDvar("cg_gun_move_minspeed", 10000);
 	wait(1);
->>>>>>> Stashed changes
 
 	self thread walk_main();
 	self thread rot_main();
