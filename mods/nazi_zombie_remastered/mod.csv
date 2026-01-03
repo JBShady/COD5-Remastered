@@ -188,3 +188,4 @@ rawfile,buttons_experimental_alt_flipped.cfg
 rawfile,buttons_lefty_alt_flipped.cfg
 rawfile,buttons_nomad_flipped.cfg
 material,spec_xenon
+menufile,ui/quit.menu
