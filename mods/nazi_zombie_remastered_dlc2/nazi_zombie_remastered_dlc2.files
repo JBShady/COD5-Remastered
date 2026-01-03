@@ -121,10 +121,10 @@ maps\_gameskill.gsc
 maps\_hud_achievement.gsc
 maps\_hud_util.gsc
 maps\_laststand.gsc
-maps\_load.gsc
 maps\_loadout.gsc
 maps\_mgturret.gsc
 maps\_utility.gsc
+maps\_walking_anim.gsc
 maps\_zombie_poi.gsc
 maps\_zombiemode.gsc
 maps\_zombiemode_achievement.gsc
@@ -157,9 +157,8 @@ maps\nazi_zombie_sumpf_trap_pendulum.gsc
 maps\nazi_zombie_sumpf_trap_perk_electric.gsc
 maps\nazi_zombie_sumpf_zipline.gsc
 maps\nazi_zombie_sumpf_zone_management.gsc
-maps\_walking_anim.gsc
-sound\Stream\Music\Mission\zombie\mx_the_one.wav
 mod.csv
+sound\Stream\Music\Mission\zombie\mx_the_one.wav
 weapons\sp\bazooka_zombie
 weapons\sp\falling_hands
 weapons\sp\m1garand_gl_zombie

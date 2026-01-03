@@ -90,10 +90,10 @@ maps\_gameskill.gsc
 maps\_hud_achievement.gsc
 maps\_hud_util.gsc
 maps\_laststand.gsc
-maps\_load.gsc
 maps\_loadout.gsc
 maps\_mgturret.gsc
 maps\_utility.gsc
+maps\_walking_anim.gsc
 maps\_zombie_poi.gsc
 maps\_zombiemode.gsc
 maps\_zombiemode_achievement.gsc
@@ -125,9 +125,8 @@ maps\nazi_zombie_factory_fx.gsc
 maps\nazi_zombie_factory_new_eggs.gsc
 maps\nazi_zombie_factory_teleporter.gsc
 maps\nazi_zombie_sumpf_blockers.gsc
-maps\_walking_anim.gsc
-sound\Stream\Music\Mission\zombie\mx_beauty.wav
 mod.csv
+sound\Stream\Music\Mission\zombie\mx_beauty.wav
 weapons\sp\falling_hands
 weapons\sp\m1garand_gl_zombie
 weapons\sp\m1garand_gl_zombie_upgraded

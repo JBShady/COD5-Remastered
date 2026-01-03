@@ -79,6 +79,7 @@ maps\_load.gsc
 maps\_loadout.gsc
 maps\_mgturret.gsc
 maps\_utility.gsc
+maps\_walking_anim.gsc
 maps\_zombie_poi.gsc
 maps\_zombiemode.gsc
 maps\_zombiemode_achievement.gsc
@@ -101,9 +102,8 @@ maps\createart\nazi_zombie_asylum_art.gsc
 maps\createfx\nazi_zombie_asylum_fx.gsc
 maps\nazi_zombie_asylum.gsc
 maps\nazi_zombie_asylum_fx.gsc
-maps\_walking_anim.gsc
-sound\Stream\Music\Mission\zombie\mx_lullaby.wav
 mod.csv
+sound\Stream\Music\Mission\zombie\mx_lullaby.wav
 sound\voiceovers\zombie\dlc1\Player0\feedback_ammo_low_00.wav
 sound\voiceovers\zombie\dlc1\Player0\feedback_ammo_low_01.wav
 sound\voiceovers\zombie\dlc1\Player0\feedback_ammo_low_02.wav

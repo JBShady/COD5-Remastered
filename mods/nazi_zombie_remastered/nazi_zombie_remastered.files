@@ -67,9 +67,9 @@ maps\_gameskill.gsc
 maps\_hud_achievement.gsc
 maps\_interactive_objects.gsc
 maps\_laststand.gsc
-maps\_load.gsc
 maps\_loadout.gsc
 maps\_utility.gsc
+maps\_walking_anim.gsc
 maps\_zombiemode.gsc
 maps\_zombiemode_achievement.gsc
 maps\_zombiemode_blockers.gsc
@@ -89,7 +89,6 @@ maps\createart\nazi_zombie_prototype_art.gsc
 maps\createfx\nazi_zombie_prototype_fx.gsc
 maps\nazi_zombie_prototype.gsc
 maps\nazi_zombie_prototype_fx.gsc
-maps\_walking_anim.gsc
 mod.csv
 sound\customSFX\zombie\crawl\crawl_00.wav
 sound\customSFX\zombie\crawl\crawl_01.wav
