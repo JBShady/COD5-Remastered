@@ -78,7 +78,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Dead players spectating can chat with alive players now
 
 ### Zombies
-* All maps use various improvements to zombie and hellhound logic/pathing
+* All maps use various improvements to zombie and hellhound logic/pathing. Additional engine pathing improvements require T4M-Enhanced and are enabled by default if using
 * In addition to Round 1, Round 2 will also only be walkers to allow for more gradual pacing
 * Zombies have glowing eye effects in all DLCs, as originally seen only on Nacht Der Untoten
 * Zombies can now spawn with random combinations of helmets, hats, bandages, headbands, or other gear based on rare percent chances and the map's location, with the first two maps using more equipment and the last two having less (which is also due to aiding performance on the larger maps)
@@ -129,11 +129,12 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Weapon tutorial hint texts are slightly smaller so they are easier to read, used for Bouncing Betties and Satchel Charges
 
 ### Menu
+* Added front end menu video, as seen on the console version
 * Start game button added for quick solo play
 * Overhauled main menu to remove/reorganize all non-zombiemode related pages, buttons, and settings. While running this mod, it is purely a zombies experience
 * Co-op menus auto load the selected map and the co-op settings page now includes the relevant settings from Game Options that will effect all players and are decided by the host
 * Added a reminder when heading to co-op for all players to install T4M, a common mistake
-* Added Intel menu with an image/description of the map, achievements, and map stats/leaderboard
+* Added Intel menu with an image/description of the map, achievements, and map stats/leaderboard with rank
 * Added Character Bios menu, ported from console but with slight grammatical and layout fixes for the best PC experience. Easter egg bios have been added to the first two maps, hidden by default
 * Many new options seamlessly integrated into the existing menus with settings for FOV, the HUD, gametype/AI, fog, LOD, dialogue, and more with appropriate pop-up descriptions as needed. See table below
 * Added custom co-op loading screen hint messages related to the mod
@@ -141,10 +142,14 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Hid Multiplayer style progress summary report pop-up when player ends game or disconnects as this data is not relevant
 
 ### Gamepad
-* Controller Mode setting switches hints to use gamepad icons for hintstrings and the D-pad so that players can enjoy a more immersive controller experience. Uses Xbox 360 style icons by default, but optional patch is available to change to PlayStation 3 style icons. NOTE: If gamepad hints are not showing up, this is because you have your interact key bound to something other than F and the game gets confused, simply unbind your interact key to fix 
+* Gamepad setting switches hints to use gamepad icons for hintstrings and the D-pad so that players can enjoy a more immersive controller experience. Uses Xbox 360 style icons by default, but optional patch is available to change to PlayStation 3 style icons. NOTE: If gamepad hints are not showing up, this is because you have your interact key bound to something other than F and the game gets confused, simply unbind your interact key to fix 
+* Unique console font on ingame hints when gamepad is enabled, as seen on the console version
+* Ping graph on scoreboard when gamepad is enabled, as seen on console
+* Custom spectate menu, as seen on console (T4M-Enhanced recommended)
 * Loading screens no longer show the mouse cursor and "click to start" hints while Controller Mode is enabled
-* New custom scripted aim assist settings (lock on when aiming near enemy), togglable only while Controller Mode is enabled
-* Menu settings for sensitivity and flipping triggers, note that any buttons can be rebound by pressing them in the appropriate setting
+* New menu page including settings for controller layout, inversion, sensitivity, and flipping triggers. Note that any buttons can still be rebound by pressing them in the appropriate setting
+* Toggleable aim assist setting, only enabled while gamepad is detected (requires T4M-Enhanced)
+* Controller buttons work on menus and some menus automatically highlight the first option (requires T4M-Enhanced)
 
 ### Settings
 * New settings have been created, see below table
@@ -153,7 +158,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Max anisotropy texture filtering setting added to the menu and can now be set to 16. Now, the slider lets you properly set your min value from 0-16 instead of the values 5-16 not doing anything because the max being set to 4 would override it
 * All settings and stats are saved to the selected profile even if the game is closed, crashes, switches profiles, etc.
 * Leaderboard high round records do not save if player has set Gametype (24 zombie limit) or Enemy Intensity (no extra super sprinters) to "Classic," as this makes the mod substantially easier and are considered cheats. Note that rank and miscellaneous player statistics such as kills and playtime will still save when using these custom settings 
-* Note that some "fake" DVARs were created for bypassing cheat protected settings, labeled the same as the regular DVAR but with "_settings" to allow the player to edit them on the menu and have it carry over in-game
+* Note that some "fake" DVARs were created for bypassing cheat protected settings or for certain backdoor functionality, labeled the same as the regular DVAR but with "_settings" or "_ui" to allow the player to edit them on the menu and have it carry over in-game properly
 
 | New Settings | DVAR | Default | Other Values | Description |
 | :---: | :--- | :--- | :--- | :--- |
@@ -161,11 +166,11 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 | Fog | `r_fog_settings` | `1` Yes | `0` No | Enables or disables fog. |
 | Cinematic Mode | `r_filmUseTweaks_settings` | `0` No | `1` Yes | More saturated color grading. |
 | Gamma Correction | `r_gamma_x360` | `0` Default | `1` Classic | Replicates gamma curve of Xbox 360 version (requires T4M-Enhanced). |
-| Safe Area | `safeArea_ui` | `1` Default | `0.85` Minimum | Slider that adjusts the safeArea_horizontal and safeArea_vertical border sizes (requires T4M-Enhanced). |
+| Safe Area | `safeArea_ui` | `1` Default | `0.85` Minimum | Slider that adjusts the safeArea_horizontal and safeArea_vertical border sizes (works on menus, requires T4M-Enhanced). |
 | **TEXTURE SETTINGS** |  |  |  |  |
 | Max Anisotropy | `r_textFilterAnisoMax` | `4` Low | `16` Normal | Increases max possible texture filtering quality. |
-| LOD Range (Rigid) | `r_lodBiasRigid_settings` | `0` Default | `-200` Medium, `-500` High | Increases range of visible detail on rigid models. |
-| LOD Range (Skinned) | `r_lodBiasSkinned_settings` | `0` Default | `-200` Medium, `-500` High | Increases range of visible detail on skinned models. |
+| LOD Range (Rigid) | `r_lodBiasRigid_settings` | `0` Default | `-200` Low, `-500` High, `-1000` Insane  | Increases range of visible detail on rigid models (T4M-Enhanced recommended). |
+| LOD Range (Skinned) | `r_lodBiasSkinned_settings` | `0` Default | `-200` Low, `-500` High, `-1000` Insane | Increases range of visible detail on skinned models (T4M-Enhanced recommended). |
 | **SOUND** |  |  |  |  |
 | Character Dialogue | `character_dialog` | `0` Yes | `1` No | Enable or disables character dialogue. Locked in-game in co-op as dialogue is not clientside. |
 | **GAME OPTIONS** |  |  |  |  |
@@ -174,16 +179,24 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 | Enemy Grabbing | `grabby_zombies` | `0` Modified | `1` Classic | By default, "sticky" zombies are disabled with PushPlayer() set to false. Accessible on menu, requires match restart. |
 | Enemy Intensity | `super_sprinters` | `0` Modified | `1` Classic | By default, additional super sprinters are added to prototype and asylum. Accessible on menu, requires match restart. |
 | HUD | `cg_draw2D` `r_flame_allowed` | `1` Yes | `0` No | Enables or disables entire heads up display. |
+| HUD Scale | `r_hud_scale_fix` | `1` Normal | `0` Small | Enables or disables HUD scale fixes to weapon info and scoreboard. |
 | Display FPS | `cg_drawFPS` | `Off` No | `Simple` Yes | Enables or disables FPS counter. |
 | Limit FPS | `com_maxfps` | `85` Default | `0` Disabled | Adjusts the max FPS value. |
 | Field of View | `cg_fov` | `65` Default | `90` Maximum | Adjustable FOV with slider. |
 | View Scale | `cg_fovScale` | `1` Normal | `1.1` Medium or `1.2` High | Scales existing FOV higher or lower by multiplier, which also effects ADS FOV. |
-| Controller Mode | `cg_drawGamepadHUD` | `0` Disabled | `1` Enabled | DVAR switches HUD to use console style HUD and font. Menu button also executes controller bind commands. |
-| **CONTROLS** |  |  |  |  |
-| Controller Triggers | `gpad_flip_triggers` | `0` Default | `1` Flipped | Flips triggers to top row, useful for PlayStation 3 controller players. |
-| Controller Inversion | `input_invertpitch` | `0` Disabled | `1` Enabled | Enables or disables controller inversion. |
-| Controller Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to (Medium), (High), (Very High), (Insane) | Increases or decreases controller sensitivity using the same scale as console. |
+| Gamepad | `cg_drawGamepadHUD` | `0` Disabled | `1` Enabled | DVAR switches HUD to use console style HUD and font and auto binds gamepad controls. |
+| **COOPERATIVE** |  |  |  |  |
+| Player Name Indicator | `team_indicator` | `0-1` Full Name, Abbreviated | `1` None | Show or hide player name ingame. |
+| Player Rank Indicator | `team_hide_rank_indicator` | `0` Yes | `1` No | Show or hide player rank ingame. |
+| **GAMEPAD** |  |  |  |  |
+| Look Inversion | `input_invertpitch` | `0` Disabled | `1` Enabled | Enables or disables controller inversion. |
+| Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to (Medium), (High), (Very High), (Insane) | Increases or decreases controller sensitivity using the same scale as console. |
+| Aim Assist | Various | Various | n/a | Added button to enable and disable aim assist (requires T4M-Enhanced). |
+| Stick Layout | `gpad_buttonsConfig` | Various | n/a | Added button to switch between various gamepad joystick layouts. |
+| Button Layout | `gpad_sticksConfig` | Various | n/a | Added button to switch between various gamepad button layouts. |
+| Trigger Buttons | `gpad_flip_triggers` | `0` Default | `1` Flipped | Flips primary triggers to opposite row. |
 | Use/Reload | `+usereload` | `Unbound` Default | n/a | Added use/reload keybind to menu so controller players can now change all gamepad buttons. |
+| PS3 Gamepad | `gpad_ps3` | `0` Disabled | `1` Enabled | Enables or disables PS3 controller image on gamepad menu configurations. |
 | **CONSOLE COMMANDS** |  |  |  |  |
 | DVAR Initialization | `dvar_init` | `0` | `1` | Set to 0 in console to reset all new remastered settings back to default, requires mod relaunch. |
 | Zombiemode Developer | `zombiemode_dev` | `0` | `1` | Developer command to enable experimental features of the mod, requires map restart. |
@@ -239,6 +252,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Carpenter will not spawn when up to a maximum of 5 barriers are left destroyed (compared to the original 4) for better balancing. The first two maps had more than 4 barriers in the spawn rooms, and this also makes it more viable for players to block Carpenter spawns as part of their strategy
 * Carpenter powerup repairs do not cause a screenshake effect when near a barrier
 * Max Ammos now refills equipment on all maps (betties, molotovs, grenades, etc.)
+* Max Ammos reset flamethrower cooldown (requires T4M-Enhanced)
 * Fixed the last hellhound sometimes not dropping Max Ammos, especially on Shi No Numa
 * Increased volume of Insta-Kill active loop sound as it sometimes did not feel noticeable
 * Double points now effects Carpenters and Nukes giving +800 and +400 respectively

@@ -101,7 +101,7 @@
 			
 			HIDEALL_DESC
 			focusFirst;
-			setLocalVarBool ui_hideBack 1;
+			setLocalVarBool ui_hideBack 0;
 			setdvar invite_visible "0";
 		}
 		onEsc	

@@ -114,22 +114,43 @@
 		CHOICE_DVARSTRINGLIST_FOCUS_VIS( 27, "@MENU_BUTTON_LAYOUT", gpad_buttonsConfig, { "@MENU_DEFAULT"; "buttons_default_alt"; "@MENU_TACTICAL"; "buttons_experimental_alt"; "@MENU_LEFTY"; "buttons_lefty_alt" /*; "@PATCH_NOMAD"; "buttons_nomad"*/ }, SET_BUTTONS, 
 		SHOW_GAMEPAD_HINTS,
 		CLEAR_GAMEPAD_HINTS,
-			when( !dvarint(gpad_flip_triggers) ) )
+			when( !dvarint(gpad_flip_triggers)  && dvarInt("gpad_ps3") == 0 ) )
 		
 		CHOICE_DVARSTRINGLIST_FOCUS_VIS( 27, "@MENU_BUTTON_LAYOUT", gpad_buttonsConfig, { "@MENU_DEFAULT_ALT"; "buttons_default_alt"; "@MENU_TACTICAL_ALT"; "buttons_experimental_alt"; "@MENU_LEFTY_ALT"; "buttons_lefty_alt" /*; "@MENU_NOMAD_ALT"; "buttons_nomad"*/ }, SET_BUTTONS_FLIPPED, 
 		SHOW_GAMEPAD_HINTS,
 		CLEAR_GAMEPAD_HINTS,
-			when( dvarInt(gpad_flip_triggers) ) )
+			when( dvarInt(gpad_flip_triggers)  && dvarInt("gpad_ps3") == 0 ) )
+
+		CHOICE_DVARSTRINGLIST_FOCUS_VIS( 27, "@MENU_BUTTON_LAYOUT", gpad_buttonsConfig, { "@MENU_DEFAULT_ALT"; "buttons_default_alt"; "@MENU_TACTICAL_ALT"; "buttons_experimental_alt"; "@MENU_LEFTY_ALT"; "buttons_lefty_alt" /*; "@PATCH_NOMAD"; "buttons_nomad"*/ }, SET_BUTTONS, 
+		SHOW_GAMEPAD_HINTS,
+		CLEAR_GAMEPAD_HINTS,
+			when( !dvarint(gpad_flip_triggers)  && dvarInt("gpad_ps3") == 1 ) )
+		
+		CHOICE_DVARSTRINGLIST_FOCUS_VIS( 27, "@MENU_BUTTON_LAYOUT", gpad_buttonsConfig, { "@MENU_DEFAULT"; "buttons_default_alt"; "@MENU_TACTICAL"; "buttons_experimental_alt"; "@MENU_LEFTY"; "buttons_lefty_alt" /*; "@MENU_NOMAD_ALT"; "buttons_nomad"*/ }, SET_BUTTONS_FLIPPED, 
+		SHOW_GAMEPAD_HINTS,
+		CLEAR_GAMEPAD_HINTS,
+			when( dvarInt(gpad_flip_triggers)  && dvarInt("gpad_ps3") == 1 ) )
+
 
 		CHOICE_DVARFLOATLIST_FOCUS_VIS( 28, "@REMASTERED_CTRL_FLIP", gpad_flip_triggers, { "@MENU_DEFAULT" 0 "@REMASTERED_CTRL_FLIPPED" 1 }, exec "bind BUTTON_RSHLDR +attack"; exec "bind BUTTON_LSHLDR +speed_throw"; exec "bind BUTTON_RTRIG +frag"; exec "bind BUTTON_LTRIG +smoke"; exec "bind2 BUTTON_RSHLDR +gas"; exec "bind2 BUTTON_LSHLDR +reverse"; setdvar gpad_buttonsConfig buttons_default_alt; exec "exec buttons_default_alt_flipped.cfg", 
 		;,
 		;,
-		when( !dvarint(gpad_flip_triggers) ) ) // when 0
+		when( !dvarint(gpad_flip_triggers) && dvarInt("gpad_ps3") == 0 ) ) // when 0
 		
 		CHOICE_DVARFLOATLIST_FOCUS_VIS( 28, "@REMASTERED_CTRL_FLIP", gpad_flip_triggers, { "@MENU_DEFAULT" 0 "@REMASTERED_CTRL_FLIPPED" 1 }, exec "bind BUTTON_RSHLDR +frag"; exec "bind BUTTON_LSHLDR +smoke"; exec "bind BUTTON_RTRIG +attack"; exec "bind BUTTON_LTRIG +speed_throw"; exec "bind2 BUTTON_RTRIG +gas"; exec "bind2 BUTTON_LTRIG +reverse"; setdvar gpad_buttonsConfig buttons_default_alt; exec "exec buttons_default_alt.cfg", 
 		;,
 		;,
-		when( dvarint(gpad_flip_triggers) ) ) // when 1
+		when( dvarint(gpad_flip_triggers) && dvarInt("gpad_ps3") == 0 ) ) // when 1
+
+		CHOICE_DVARFLOATLIST_FOCUS_VIS( 28, "@REMASTERED_CTRL_FLIP", gpad_flip_triggers, { "@REMASTERED_CTRL_FLIPPED" 0 "@MENU_DEFAULT" 1 }, exec "bind BUTTON_RSHLDR +attack"; exec "bind BUTTON_LSHLDR +speed_throw"; exec "bind BUTTON_RTRIG +frag"; exec "bind BUTTON_LTRIG +smoke"; exec "bind2 BUTTON_RSHLDR +gas"; exec "bind2 BUTTON_LSHLDR +reverse"; setdvar gpad_buttonsConfig buttons_default_alt; exec "exec buttons_default_alt_flipped.cfg", 
+		;,
+		;,
+		when( !dvarint(gpad_flip_triggers) && dvarInt("gpad_ps3") == 1 ) ) // when 0
+		
+		CHOICE_DVARFLOATLIST_FOCUS_VIS( 28, "@REMASTERED_CTRL_FLIP", gpad_flip_triggers, { "@REMASTERED_CTRL_FLIPPED" 0 "@MENU_DEFAULT" 1 }, exec "bind BUTTON_RSHLDR +frag"; exec "bind BUTTON_LSHLDR +smoke"; exec "bind BUTTON_RTRIG +attack"; exec "bind BUTTON_LTRIG +speed_throw"; exec "bind2 BUTTON_RTRIG +gas"; exec "bind2 BUTTON_LTRIG +reverse"; setdvar gpad_buttonsConfig buttons_default_alt; exec "exec buttons_default_alt.cfg", 
+		;,
+		;,
+		when( dvarint(gpad_flip_triggers) && dvarInt("gpad_ps3") == 1 ) ) // when 1
 
 		//CHOICE_BIND( 22, "@MENU_VOICE_CHAT_BUTTON", "+talk", ; )
 		//CHOICE_BIND( 23, "@MENU_CHAT", "chatmodepublic", ; )
@@ -142,7 +163,7 @@
 			origin			0 0
 			background		"xenon_controller_top"
 			forecolor		1 1 1 1
-			visible 		when(localVarBool(gamepad_bg))
+			visible 		when(localVarBool(gamepad_bg) && dvarInt("gpad_ps3") == 0 )
 			decoration
 		}
 		itemDef
@@ -152,7 +173,29 @@
 			origin			0 0
 			background		"xenon_controller_lines_classic_mp"
 			forecolor		1 1 1 1
-			visible 		when(localVarBool(gamepad_lines))
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 0 )
+			decoration
+		}
+
+
+		itemDef
+		{
+			style			WINDOW_STYLE_SHADER
+			rect			335 -250 (512/2.25) (512/2.25) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			origin			0 0
+			background		"ps3_controller_top"
+			forecolor		1 1 1 1
+			visible 		when(localVarBool(gamepad_bg) && dvarInt("gpad_ps3") == 1 )
+			decoration
+		}
+		itemDef
+		{
+			style			WINDOW_STYLE_SHADER
+			rect			335 -250 (512/2.25) (512/2.25) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			origin			0 0
+			background		"ps3_controller_lines_classic_mp"
+			forecolor		1 1 1 1
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 1 )
 			decoration
 		}
 
@@ -168,7 +211,7 @@
 			origin			0 0
 			background		"xenon_stick_move"
 			forecolor		1 1 1 1
-			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_default" )
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_default" && dvarInt("gpad_ps3") == 0 )
 			decoration
 		}
 		itemDef
@@ -179,7 +222,7 @@
 			origin			0 0
 			background		"xenon_stick_turn"
 			forecolor		1 1 1 1
-			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_default" )
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_default" && dvarInt("gpad_ps3") == 0 )
 			decoration
 		}
 		itemDef
@@ -190,7 +233,7 @@
 			origin			0 0
 			background		"xenon_stick_turn"
 			forecolor		1 1 1 1
-			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" )
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" && dvarInt("gpad_ps3") == 0 )
 			decoration
 		}
 		itemDef
@@ -201,7 +244,7 @@
 			origin			0 0
 			background		"xenon_stick_move"
 			forecolor		1 1 1 1
-			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" )
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" && dvarInt("gpad_ps3") == 0 )
 			decoration
 		}
 		itemDef
@@ -212,7 +255,7 @@
 			origin			0 0
 			background		"xenon_stick_move_turn"
 			forecolor		1 1 1 1
-			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_legacy" )
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_legacy" && dvarInt("gpad_ps3") == 0 )
 			decoration
 		}
 		itemDef
@@ -223,7 +266,7 @@
 			origin			0 0
 			background		"xenon_stick_move_look"
 			forecolor		1 1 1 1
-			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_legacy" )
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_legacy" && dvarInt("gpad_ps3") == 0 )
 			decoration
 		}
 		itemDef
@@ -234,7 +277,7 @@
 			origin			0 0
 			background		"xenon_stick_move_look"
 			forecolor		1 1 1 1
-			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" )
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" && dvarInt("gpad_ps3") == 0 )
 			decoration
 		}
 		itemDef
@@ -245,7 +288,7 @@
 			origin			0 0
 			background		"xenon_stick_move_turn"
 			forecolor		1 1 1 1
-			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" )
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" && dvarInt("gpad_ps3") == 0 )
 			decoration
 		}
 		itemDef 
@@ -258,7 +301,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_default" || dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" ) )
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_default" || dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -272,7 +315,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_CENTER
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_default" || dvarstring("gpad_sticksConfig") == "thumbstick_legacy" ) )
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_default" || dvarstring("gpad_sticksConfig") == "thumbstick_legacy" ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -286,7 +329,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_default" || dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" ) )
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_default" || dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -300,7 +343,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_CENTER
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_default" || dvarstring("gpad_sticksConfig") == "thumbstick_legacy" ) )
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_default" || dvarstring("gpad_sticksConfig") == "thumbstick_legacy" ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -315,7 +358,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" || dvarstring("gpad_sticksConfig") == "thumbstick_legacy" ) )
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" || dvarstring("gpad_sticksConfig") == "thumbstick_legacy" ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -329,7 +372,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_CENTER
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" || dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" ) )
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" || dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -343,7 +386,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" || dvarstring("gpad_sticksConfig") == "thumbstick_legacy" ) )
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" || dvarstring("gpad_sticksConfig") == "thumbstick_legacy" ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -357,7 +400,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_CENTER
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" || dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" ) )
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" || dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -372,7 +415,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_RIGHT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 0 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -386,7 +429,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_RIGHT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 0 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -400,7 +443,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_RIGHT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 1 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -414,7 +457,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_RIGHT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 1 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -428,7 +471,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_RIGHT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -443,7 +486,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 0 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -457,7 +500,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 0 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -471,7 +514,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 1 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -485,7 +528,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 1 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -499,7 +542,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_CENTER
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt"  ) )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt"  ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -514,7 +557,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_RIGHT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 0 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -528,7 +571,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_RIGHT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 0 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -542,7 +585,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_RIGHT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 1 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -556,7 +599,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_RIGHT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 1 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -570,7 +613,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_RIGHT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -585,7 +628,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 0 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -599,7 +642,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 0 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -613,7 +656,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 1 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -627,7 +670,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 1 )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -641,7 +684,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_CENTER
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt"  ) )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt"  ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -656,7 +699,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_CENTER
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt"  ) )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt"  ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -671,7 +714,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) )
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -685,7 +728,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -699,7 +742,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) )
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -713,7 +756,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) )
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -727,7 +770,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) )
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -743,7 +786,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_CENTER
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) )
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -757,7 +800,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_CENTER
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines)  )
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 0 )
 			decoration
 			autowrapped
 		}
@@ -771,33 +814,643 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_CENTER
 			textscale		0.2
-			visible 		when(localVarBool(gamepad_lines) )
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 0 )
+			decoration
+			autowrapped
+		}
+
+		// PS3 BELOW
+
+
+		#undef JOYSTICK_OFFSET_X
+		#undef JOYSTICK_OFFSET_Y
+		#undef JOYSTICK_OFFSET_2_X
+		#undef JOYSTICK_OFFSET_2_Y
+		
+		#define JOYSTICK_OFFSET_X 58.8
+		#define JOYSTICK_OFFSET_Y 119
+		#define JOYSTICK_OFFSET_2_X 112.8
+		#define JOYSTICK_OFFSET_2_Y 119
+
+		// joysticks
+
+		itemDef
+		{
+			name			left_default
+			style			WINDOW_STYLE_SHADER
+			rect			(335 + JOYSTICK_OFFSET_X ) (-250 + JOYSTICK_OFFSET_Y) (128/2.25) (128/2.25) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			origin			0 0
+			background		"xenon_stick_move"
+			forecolor		1 1 1 1
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_default" && dvarInt("gpad_ps3") == 1 )
+			decoration
+		}
+		itemDef
+		{
+			name			right_default
+			style			WINDOW_STYLE_SHADER
+			rect			(335 + JOYSTICK_OFFSET_2_X) (-250 + JOYSTICK_OFFSET_2_Y) (128/2.25) (128/2.25) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			origin			0 0
+			background		"xenon_stick_turn"
+			forecolor		1 1 1 1
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_default" && dvarInt("gpad_ps3") == 1 )
+			decoration
+		}
+		itemDef
+		{
+			name			left_southpaw
+			style			WINDOW_STYLE_SHADER
+			rect			(335 + JOYSTICK_OFFSET_X ) (-250 + JOYSTICK_OFFSET_Y) (128/2.25) (128/2.25) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			origin			0 0
+			background		"xenon_stick_turn"
+			forecolor		1 1 1 1
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" && dvarInt("gpad_ps3") == 1 )
+			decoration
+		}
+		itemDef
+		{
+			name			right_southpaw
+			style			WINDOW_STYLE_SHADER
+			rect			(335 + JOYSTICK_OFFSET_2_X) (-250 + JOYSTICK_OFFSET_2_Y) (128/2.25) (128/2.25) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			origin			0 0
+			background		"xenon_stick_move"
+			forecolor		1 1 1 1
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" && dvarInt("gpad_ps3") == 1 )
+			decoration
+		}
+		itemDef
+		{
+			name			left_legacy
+			style			WINDOW_STYLE_SHADER
+			rect			(335 + JOYSTICK_OFFSET_X ) (-250 + JOYSTICK_OFFSET_Y) (128/2.25) (128/2.25) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			origin			0 0
+			background		"xenon_stick_move_turn"
+			forecolor		1 1 1 1
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_legacy" && dvarInt("gpad_ps3") == 1 )
+			decoration
+		}
+		itemDef
+		{
+			name			right_legacy
+			style			WINDOW_STYLE_SHADER
+			rect			(335 + JOYSTICK_OFFSET_2_X) (-250 + JOYSTICK_OFFSET_2_Y) (128/2.25) (128/2.25) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			origin			0 0
+			background		"xenon_stick_move_look"
+			forecolor		1 1 1 1
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_legacy" && dvarInt("gpad_ps3") == 1 )
+			decoration
+		}
+		itemDef
+		{
+			name			left_legacysouthpaw
+			style			WINDOW_STYLE_SHADER
+			rect			(335 + JOYSTICK_OFFSET_X ) (-250 + JOYSTICK_OFFSET_Y) (128/2.25) (128/2.25) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			origin			0 0
+			background		"xenon_stick_move_look"
+			forecolor		1 1 1 1
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" && dvarInt("gpad_ps3") == 1 )
+			decoration
+		}
+		itemDef
+		{
+			name			right_legacysouthpaw
+			style			WINDOW_STYLE_SHADER
+			rect			(335 + JOYSTICK_OFFSET_2_X) (-250 + JOYSTICK_OFFSET_2_Y) (128/2.25) (128/2.25) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			origin			0 0
+			background		"xenon_stick_move_turn"
+			forecolor		1 1 1 1
+			visible 		when(localVarBool(gamepad_arrows) && dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" && dvarInt("gpad_ps3") == 1 )
+			decoration
+		}
+		itemDef 
+		{
+			name			left_default_1
+			text			"@MENU_STRAFE_LEFT_RIGHT"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 68 ) (-250 + JOYSTICK_OFFSET_Y + 32 ) (200) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_default" || dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			left_default_2
+			text			"@MENU_MOVE_FORWARD_BACK"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 73 ) (-250 + JOYSTICK_OFFSET_Y - 15 ) (200) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_default" || dvarstring("gpad_sticksConfig") == "thumbstick_legacy" ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			right_default_1
+			text			"@MENU_ROTATE_LEFT_RIGHT"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 60 ) (-250 + JOYSTICK_OFFSET_2_Y + 32 ) (200) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_default" || dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			right_default_2
+			text			"@MENU_LOOK_UP_DOWN"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X - 72 ) (-250 + JOYSTICK_OFFSET_2_Y - 15 ) (200) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_default" || dvarstring("gpad_sticksConfig") == "thumbstick_legacy" ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+
+		itemDef 
+		{
+			name			left_southpaw_1
+			text			"@MENU_ROTATE_LEFT_RIGHT"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 68 ) (-250 + JOYSTICK_OFFSET_Y + 32 ) (200) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" || dvarstring("gpad_sticksConfig") == "thumbstick_legacy" ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			left_southpaw_2
+			text			"@MENU_LOOK_UP_DOWN"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 73 ) (-250 + JOYSTICK_OFFSET_Y - 15 ) (200) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" || dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			right_southpaw_1
+			text			"@MENU_STRAFE_LEFT_RIGHT"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 60 ) (-250 + JOYSTICK_OFFSET_2_Y + 32 ) (200) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" || dvarstring("gpad_sticksConfig") == "thumbstick_legacy" ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			right_southpaw_2
+			text			"@MENU_MOVE_FORWARD_BACK"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X - 72 ) (-250 + JOYSTICK_OFFSET_2_Y - 15 ) (200) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_arrows) && ( dvarstring("gpad_sticksConfig") == "thumbstick_southpaw" || dvarstring("gpad_sticksConfig") == "thumbstick_legacysouthpaw" ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+
+		 // buttons
+
+		itemDef 
+		{
+			name			default_l1
+			text			"@MENU_THROW_SPECIAL_GRENADE"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 125 ) (-250 + JOYSTICK_OFFSET_Y - 35 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			default_l2
+			text			"@MENU_AIM_DOWN_SIGHT"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 118 ) (-250 + JOYSTICK_OFFSET_Y - 47 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			default_l1_flipped
+			text			"@MENU_AIM_DOWN_SIGHT"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 125 ) (-250 + JOYSTICK_OFFSET_Y - 35 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			default_l2_flipped
+			text			"@MENU_THROW_SPECIAL_GRENADE"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 118 ) (-250 + JOYSTICK_OFFSET_Y - 47 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			default_l3
+			text			"@MENU_SPRINT_HOLD_BREATH"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 110 ) (-250 + JOYSTICK_OFFSET_Y + 33 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+
+		itemDef 
+		{
+			name			default_r1
+			text			"@MENU_THROW_FRAG_GRENADE"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 86 ) (-250 + JOYSTICK_OFFSET_Y - 35 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			default_r2
+			text			"@MENU_FIRE_WEAPON"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 81 ) (-250 + JOYSTICK_OFFSET_Y - 47 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			default_r1_flipped
+			text			"@MENU_FIRE_WEAPON"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 86 ) (-250 + JOYSTICK_OFFSET_Y - 35 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			default_r2_flipped
+			text			"@MENU_THROW_FRAG_GRENADE"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 81 ) (-250 + JOYSTICK_OFFSET_Y - 47 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			default_r3
+			text			"@MENU_MELEE_ATTACK"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X - 22 ) (-250 + JOYSTICK_OFFSET_Y + 70 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt"  ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+
+		itemDef 
+		{
+			name			lefty_l1
+			text			"@MENU_THROW_FRAG_GRENADE"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 125 ) (-250 + JOYSTICK_OFFSET_Y - 35 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			lefty_l2
+			text			"@MENU_FIRE_WEAPON"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 118 ) (-250 + JOYSTICK_OFFSET_Y - 47 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			lefty_l1_flipped
+			text			"@MENU_FIRE_WEAPON"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 125 ) (-250 + JOYSTICK_OFFSET_Y - 35 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			lefty_l2_flipped
+			text			"@MENU_THROW_FRAG_GRENADE"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 118 ) (-250 + JOYSTICK_OFFSET_Y - 47 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			lefty_l3
+			text			"@MENU_MELEE_ATTACK"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_X - 110 ) (-250 + JOYSTICK_OFFSET_Y + 33 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_RIGHT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+
+		itemDef 
+		{
+			name			lefty_r1
+			text			"@MENU_THROW_SPECIAL_GRENADE"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 86 ) (-250 + JOYSTICK_OFFSET_Y - 35 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			lefty_r2
+			text			"@MENU_AIM_DOWN_SIGHT"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 81 ) (-250 + JOYSTICK_OFFSET_Y - 47 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 0 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			lefty_r1_flipped
+			text			"@MENU_AIM_DOWN_SIGHT"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 86 ) (-250 + JOYSTICK_OFFSET_Y - 35 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			lefty_r2_flipped
+			text			"@MENU_THROW_SPECIAL_GRENADE"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 81 ) (-250 + JOYSTICK_OFFSET_Y - 47 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_flip_triggers") == 1 && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			lefty_r3
+			text			"@MENU_SPRINT_HOLD_BREATH"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X - 22 ) (-250 + JOYSTICK_OFFSET_Y + 70 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt"  ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+
+		itemDef 
+		{
+			name			tactical_r3
+			text			"@MENU_CROUCH_PRONE"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X - 22 ) (-250 + JOYSTICK_OFFSET_Y + 70 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt"  ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+
+		itemDef 
+		{
+			name			default_y
+			text			"@MENU_SWITCH_WEAPON"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 87 ) (-250 + JOYSTICK_OFFSET_Y + 22 - 28 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			default_b
+			text			"@MENU_CROUCH_PRONE"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 86 ) (-250 + JOYSTICK_OFFSET_Y + 36 - 27 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_default_alt" || dvarstring("gpad_buttonsConfig") == "buttons_lefty_alt" ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			tactical_b
+			text			"@MENU_MELEE_ATTACK"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 86 ) (-250 + JOYSTICK_OFFSET_Y + 36 - 27 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && ( dvarstring("gpad_buttonsConfig") == "buttons_experimental_alt" ) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			default_x
+			text			"@MENU_USE_RELOAD"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 91 ) (-250 + JOYSTICK_OFFSET_Y + 48 - 25 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
+		itemDef 
+		{
+			name			default_a
+			text			"@MENU_JUMP"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X + 93 ) (-250 + JOYSTICK_OFFSET_Y + 60 - 22 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 1 )
 			decoration
 			autowrapped
 		}
 
 
-		itemDef
+		itemDef 
 		{
-			style			WINDOW_STYLE_SHADER
-			rect			335 -250 (512/2.25) (512/2.25) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
-			origin			0 0
-			background		"ps3_controller_top"
-			forecolor		1 1 1 1
-			visible 0
+			name			default_pause
+			text			"@KEY_PAUSE"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X - 32 ) (-250 + JOYSTICK_OFFSET_Y - 50 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 1 )
 			decoration
+			autowrapped
 		}
-		itemDef
+		itemDef 
 		{
-			style			WINDOW_STYLE_SHADER
-			rect			335 -250 (512/2.25) (512/2.25) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
-			origin			0 0
-			background		"ps3_controller_lines_classic_mp"
-			forecolor		1 1 1 1
-			visible 0
+			name			default_scoreboard
+			text			"@REMASTERED_SCOREBOARD"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X - 66 ) (-250 + JOYSTICK_OFFSET_Y - 70 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 1 )
 			decoration
+			autowrapped
 		}
-
+		itemDef 
+		{
+			name			default_dpad
+			text			"@MENU_EQUIPMENT"
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			(335 + JOYSTICK_OFFSET_2_X - 139 ) (-250 + JOYSTICK_OFFSET_Y + 5 ) (100) (200) HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_BOTTOM
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_CENTER
+			textscale		0.2
+			visible 		when(localVarBool(gamepad_lines) && dvarInt("gpad_ps3") == 1 )
+			decoration
+			autowrapped
+		}
 
 		itemDef 
 		{

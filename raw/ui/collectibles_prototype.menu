@@ -95,7 +95,7 @@
 		style			WINDOW_STYLE_FILLED
 		soundloop 		"music_mainmenu"
 		border			0
-		onOpen			{ setdvar invite_visible "0"; setLocalVarBool ui_inOverlay 1; setLocalVarBool ui_hideBack 1; setdvar ui_selected_collectible "ZOMBIE_BARRIERS"; focusFirst; }
+		onOpen			{ setdvar invite_visible "0"; setLocalVarBool ui_inOverlay 1; setLocalVarBool ui_hideBack 0; setdvar ui_selected_collectible "ZOMBIE_BARRIERS"; focusFirst; }
 		onEsc			{ close self; }
 		onClose			{ setdvar invite_visible "1"; setLocalVarBool ui_inOverlay 0; setLocalVarBool ui_hideBack 0;  }
 
