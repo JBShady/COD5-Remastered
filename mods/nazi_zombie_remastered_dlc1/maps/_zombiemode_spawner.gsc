@@ -226,11 +226,11 @@ set_zombie_run_cycle()
 
 		if(level.round_number < 11 ) // For early game to prevent random super sprinters
 		{
-			var = randomintrange(1, 3);	
+			var = randomintrange(1, 10);	// needs to be 4 instead of 3 for verruckt
 		}
 		else if ( getDvarInt( "super_sprinters") == 1 )
 		{
-			var = randomintrange(1, 3);	
+			var = randomintrange(1, 10);	// needs to be 4 instead of 3 for verruckt
 			level.cheats_defined = true;
 		}
 		
