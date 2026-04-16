@@ -386,8 +386,7 @@ treasure_chest_think()
 	// give weapon here...
 	lid thread treasure_chest_lid_close( self.timedOut ); 
 	
-	wait 2; 
-
+	wait(1.75);
 	self enable_trigger(); 	
 	self setvisibletoall();
 
@@ -545,7 +544,7 @@ treasure_chest_lid_close( timedOut )
 	play_sound_at_pos( "close_chest", self.origin );
 }
 
-treasure_chest_ChooseRandomWeapon( player )
+treasure_chest_ChooseRandomWeapon( player, wep_order )
 {
 	keys = GetArrayKeys( level.zombie_weapons );
 
@@ -598,6 +597,54 @@ treasure_chest_ChooseRandomWeapon( player )
 		}
 	}
 
+	// filter out spam-weapons on last roll 
+	if(wep_order == 39 ) 
+	{
+		if( is_in_array(filtered, "kar98k") && is_in_array(filtered, "m1carbine") )
+		{
+			if( RandomInt(2) == 0 ){
+				//iprintln("Both kar/carbine are in, removing KAR");
+				filtered = array_remove( filtered, "kar98k" );
+			}
+			else{
+				//iprintln("Both kar/carbine are in, removing CARBINE");
+				filtered = array_remove( filtered, "m1carbine" );
+			}
+		}
+/*		if( is_in_array(filtered, "doublebarrel") && is_in_array(filtered, "doublebarrel_sawed_grip") )
+		{
+			if( RandomInt(2) == 0 ){
+				//iprintln("Both doubles are in, removing DOUBLE");
+				filtered = array_remove( filtered, "doublebarrel" );
+			}
+			else{
+				//iprintln("Both doubles are in, removing SAWED");
+				filtered = array_remove( filtered, "doublebarrel_sawed_grip" );
+			}
+		}*/
+/*		if( is_in_array(filtered, "m1garand") && is_in_array(filtered, "m1garand_gl") )
+		{
+			if( RandomInt(2) == 0 )
+			{
+				//iprintln("Both M1s are in, removing M1");
+				filtered = array_remove( filtered, "m1garand" );
+			}
+			else
+			{
+				//iprintln("Both M1s are in, removing M1 GL");
+				filtered = array_remove( filtered, "m1garand_gl" );
+			}
+		}*/
+	}
+
+/*	if(wep_order == 39 )
+	{
+		for( i = 0; i < filtered.size; i++ )
+		{
+			iprintlnbold(i + ": " + filtered[i]);
+		}	
+	}*/
+
 	return filtered[RandomInt( filtered.size )];
 }
 
@@ -644,7 +691,7 @@ treasure_chest_weapon_spawn( chest, player )
 			wait( 0.3 ); 
 		}
 
-		rand = treasure_chest_ChooseRandomWeapon( player );
+		rand = treasure_chest_ChooseRandomWeapon( player, i );
 		modelname = GetWeaponModel( rand );
 
 		if(rand == "mortar_round")

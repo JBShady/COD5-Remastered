@@ -234,13 +234,18 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * All maps have the same glow effect when the box is opened
 * All maps use the same hintstring functionality for when to show/hide the onscreen text
 * Hintstring text only says "trade" weapons when it will actually replace a weapon in your inventory
-* Reduced cooldown between box uses from 3 seconds to 2 seconds
+* Reduced cooldown between box uses from 3 seconds to 1.75 seconds to reduce annoyance when spamming box
 * Fixed the box playing the debris sound for other players after every use once the location has been changed
 * Fixed the box playing the lid close sound when floating away during a Teddy Bear even though the lid never closes
 * Fixed the box jingle stopping when too many other sounds play
 * Fixed Wonder Weapon stinger sound effect sometimes not playing
 * Der Riese & Shi No Numa boxes now share equal weighted odds for Wonder Weapons, which have also been slightly nerfed so the DG-2 is not overly common to the point of being annoying
-* Verrückt & Nacht Der Untoten boxes remain a full lottery, except for the Teddy Bear on Verrückt which is still slightly harsher than on later maps
+* Verrückt & Nacht Der Untoten boxes remain a full lottery for the Ray Gun
+* To reduce clutter, the game only picks one of the two starting room wall weapons to include in the mystery box pool, randomized each hit
+* Der Riese & Shi No Numa boxes now share equal teddy bear odds, fixing a glitch where Der Riese always gave odds that were only supposed to for the first box location
+* First teddy bear on Der Riese & Der Riese is now only forced on the 10th hit instead of the 9th hit
+* Slightly adjusted teddy bear odds after first box odds to account for more box weapons, now letting players on Der Riese and Shi No Numa get 5 guaranteed teddy-free hits per box instead of 4, similar to Verrückt, but still maxes teddy odds out after 12 hits same as was originally intended starting on Shi No Numa
+* Fixed bug where Verrückt was supposed to give 5 teddy-free hits but could still give teddy during these 5 hits with a 1% chance (however, I kept the 1% intentionally on just the first hit of any box location to keep it as a "feature", I think it was a fun, rare quirk)
 
 ### Powerups
 * Powerups last on the ground for the full 20 seconds before disappearing

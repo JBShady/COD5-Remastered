@@ -588,7 +588,7 @@ treasure_chest_think()
 		//Chris_P
 		//magic box dissapears and moves to a new spot after a predetermined number of uses
 
-		wait 2;
+		wait(1.75);
 		self enable_trigger();
 		self setvisibletoall();
 	}
@@ -983,7 +983,7 @@ treasure_chest_lid_close( timedOut )
 	}	
 }
 
-treasure_chest_ChooseRandomWeapon( player )
+treasure_chest_ChooseRandomWeapon( player, wep_order )
 {
 
 	keys = GetArrayKeys( level.zombie_weapons );
@@ -1160,6 +1160,30 @@ treasure_chest_ChooseRandomWeapon( player )
 		}
 	}
 
+	// filter out spam-weapons on last roll 
+	if(wep_order == 39 ) 
+	{
+		if( is_in_array(filtered, "zombie_type99_rifle") && is_in_array(filtered, "zombie_gewehr43") )
+		{
+			if( RandomInt(2) == 0 ){
+				//iprintln("Both ari/gew are in, removing ARI");
+				filtered = array_remove( filtered, "zombie_type99_rifle" );
+			}
+			else{
+				//iprintln("Both ari/gew are in, removing GEW");
+				filtered = array_remove( filtered, "zombie_gewehr43" );
+			}
+		}
+	}
+
+/*	if(wep_order == 39 )
+	{
+		for( i = 0; i < filtered.size; i++ )
+		{
+			iprintlnbold(i + ": " + filtered[i]);
+		}	
+	}*/
+
 	return filtered[RandomInt( filtered.size )];
 }
 
@@ -1200,7 +1224,7 @@ treasure_chest_weapon_spawn( chest, player )
 			wait( 0.3 ); 
 		}
 
-		rand = treasure_chest_ChooseRandomWeapon( player );
+		rand = treasure_chest_ChooseRandomWeapon( player, i );
 		
 		/#
 			if( maps\_zombiemode_tesla::tesla_gun_exists() )	
@@ -1229,7 +1253,7 @@ treasure_chest_weapon_spawn( chest, player )
 	if(level.script != "nazi_zombie_prototype" && getdvar("magic_chest_movable") == "1")
 	{
 
-		if(level.chest_accessed < 4)
+		if(level.chest_accessed < 5) // first 5 hits free
 		{		
 			// PI_CHANGE_BEGIN - JMA - RandomInt(100) can return a number between 0-99.  If it's zero and chance_of_joker is zero
 			//									we can possibly have a teddy bear one after another.
@@ -1243,15 +1267,15 @@ treasure_chest_weapon_spawn( chest, player )
 			// PI_CHANGE_BEGIN - JMA 
 			if( isDefined(level.script) && level.script == "nazi_zombie_sumpf" )
 			{
-				// make sure teddy bear appears on the 8th pull if it hasn't moved from the attic
-				if( (!isDefined(level.magic_box_first_move) || level.magic_box_first_move == false ) && level.chest_accessed >= 8)
+				// make sure teddy bear appears on the 10th pull if it hasn't moved from the attic
+				if( (!isDefined(level.magic_box_first_move) || level.magic_box_first_move == false ) && level.chest_accessed >= 9)
 				{
 					chance_of_joker = 100;
 				}
 				
-				// pulls 4 thru 8, there is a 15% chance of getting the teddy bear
+				// pulls 6 thru 9, there is a 15% chance of getting the teddy bear
 				// NOTE:  this happens in all cases
-				if( level.chest_accessed >= 4 && level.chest_accessed < 8 )
+				if( level.chest_accessed >= 5 && level.chest_accessed < 9 )
 				{
 					if( random < 15 )
 					{
@@ -1266,8 +1290,8 @@ treasure_chest_weapon_spawn( chest, player )
 				// after the first magic box move the teddy bear percentages changes
 				if( isDefined(level.magic_box_first_move) && level.magic_box_first_move == true )
 				{
-					// between pulls 8 thru 12, the teddy bear percent is 30%
-					if( level.chest_accessed >= 8 && level.chest_accessed < 13 )
+					// between pulls 10 thru 12, the teddy bear percent is 30%
+					if( level.chest_accessed >= 9 && level.chest_accessed < 13 )
 					{
 						if( random < 30 )
 						{
@@ -1279,7 +1303,7 @@ treasure_chest_weapon_spawn( chest, player )
 						}
 					}
 					
-					// after 12th pull, the teddy bear percent is 50%
+					// 13th pull onwards, the teddy bear percent is 50%
 					if( level.chest_accessed >= 13 )
 					{
 						if( random < 50 )
