@@ -138,6 +138,12 @@ watchSmokeDetonation( player )
 				}
 			}
 		}
+
+		if(level.solo_reviving_failsafe == 1 ) // if we die with QR cancel smokes since annoying
+		{
+			break;
+		}
+
 		durationOfSmoke -= 0.05;
         if ( durationOfSmoke <= 0 )
         break;

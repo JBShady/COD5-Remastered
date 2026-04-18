@@ -762,13 +762,18 @@ init_standard_zombie_anims()
 	level.scr_anim["zombie"]["walk2"] 	= %ai_zombie_walk_v2;
 	level.scr_anim["zombie"]["walk3"] 	= %ai_zombie_walk_v3;
 	level.scr_anim["zombie"]["walk4"] 	= %ai_zombie_walk_v4;
+	level.scr_anim["zombie"]["walk5"] 	= %ai_zombie_walk_v6;
+	level.scr_anim["zombie"]["walk6"] 	= %ai_zombie_walk_v7;
+	level.scr_anim["zombie"]["walk7"] 	= %ai_zombie_walk_v8;
+	level.scr_anim["zombie"]["walk8"] 	= %ai_zombie_walk_v9;
+	//new one ^^
 
 	level.scr_anim["zombie"]["run1"] 	= %ai_zombie_walk_fast_v1;
 	level.scr_anim["zombie"]["run2"] 	= %ai_zombie_walk_fast_v2;
 	level.scr_anim["zombie"]["run3"] 	= %ai_zombie_walk_fast_v3;
 	level.scr_anim["zombie"]["run4"] 	= %ai_zombie_run_v2;
 	level.scr_anim["zombie"]["run5"] 	= %ai_zombie_run_v4;
-	level.scr_anim["zombie"]["run6"] 	= %ai_zombie_run_v3;
+	level.scr_anim["zombie"]["run6"] 	= %ai_zombie_run_v3; // unused 
 	//level.scr_anim["zombie"]["run4"] 	= %ai_zombie_run_v1;
 	//level.scr_anim["zombie"]["run6"] 	= %ai_zombie_run_v4;
 
@@ -791,7 +796,7 @@ init_standard_zombie_anims()
 	level.scr_anim["zombie"]["crawl3"] 	= %ai_zombie_crawl_v2;
 	level.scr_anim["zombie"]["crawl4"] 	= %ai_zombie_crawl_v3;
 	level.scr_anim["zombie"]["crawl5"] 	= %ai_zombie_crawl_v4;
-	level.scr_anim["zombie"]["crawl6"] 	= %ai_zombie_crawl_v5;
+	level.scr_anim["zombie"]["crawl6"] 	= %ai_zombie_crawl_v5; // unused
 	level.scr_anim["zombie"]["crawl_hand_1"] = %ai_zombie_walk_on_hands_a;
 	level.scr_anim["zombie"]["crawl_hand_2"] = %ai_zombie_walk_on_hands_b;
 
@@ -829,11 +834,6 @@ init_standard_zombie_anims()
 	level._zombie_run_melee["zombie"][0]				=	%ai_zombie_run_attack_v1;
 	level._zombie_run_melee["zombie"][1]				=	%ai_zombie_run_attack_v2;
 	level._zombie_run_melee["zombie"][2]				=	%ai_zombie_run_attack_v3;
-	level.scr_anim["zombie"]["walk5"] 	= %ai_zombie_walk_v6;
-	level.scr_anim["zombie"]["walk6"] 	= %ai_zombie_walk_v7;
-	level.scr_anim["zombie"]["walk7"] 	= %ai_zombie_walk_v8;
-	level.scr_anim["zombie"]["walk8"] 	= %ai_zombie_walk_v9;
-	//new one ^^
 
 	if( isDefined( level.zombie_anim_override ) )
 	{
@@ -1018,7 +1018,8 @@ zombie_intro_screen( string1, string2, string3, string4, string5 )
         //"dynEnt_spawnedLimit", level.dynEnt_spawnedLimit,
 		"cg_hudDamageIconTime", "2500", // fixed damage marks from disappearing too quick
 		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
-		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+//		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+		"player_aimblend_back_mid", "0.1 0.3 0.5", // 3rd person look up/down
 		"playerSpectating", "0"
 		 ); 
 
@@ -1049,7 +1050,8 @@ players_playing()
         //"dynEnt_spawnedLimit", level.dynEnt_spawnedLimit,
 		"cg_hudDamageIconTime", "2500", // fixed damage marks from disappearing too quick
 		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
-		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+//		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+		"player_aimblend_back_mid", "0.1 0.3 0.5", // 3rd person look up/down
 		"playerSpectating", "0"
 		); 
 
@@ -1140,7 +1142,8 @@ onPlayerConnect_clientDvars()
 		"player_sprintStrafeSpeedScale", "0.8",  // buffed strafe
 		"playerSpectating", "0", // spectating hud
 		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
-		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+//		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+		"player_aimblend_back_mid", "0.1 0.3 0.5", // 3rd person look up/down
 		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
 
 /*	self SetClientDvars(
@@ -1209,7 +1212,8 @@ onPlayerSpawned()
         "aim_automelee_lerp", "50",
         "player_meleechargefriction", "2500",
 		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
-		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+//		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+		"player_aimblend_back_mid", "0.1 0.3 0.5", // 3rd person look up/down
 		"cg_hudDamageIconTime", "2500" );
    
    		self setClientDvar( "bg_fallDamageMinHeight", "150" );

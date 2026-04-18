@@ -222,15 +222,15 @@ set_zombie_run_cycle()
 		self.run_combatanim = level.scr_anim[self.animname]["run" + var];
 		break;
 	case "sprint":                 
-		var = randomintrange(1, 16); // For rest of the game
+		var = randomintrange(1, 19); // For rest of the game, 18 anims so range stops at 19
 
-		if(level.round_number < 11 ) // For early game to prevent random super sprinters
+		if(level.round_number < 15 ) // For early game to prevent random super sprinters
 		{
-			var = randomintrange(1, 10);	// needs to be 4 instead of 3 for verruckt
+			var = randomintrange(1, 10);	// needs to be 10 instead of 3 for verruckt
 		}
 		else if ( getDvarInt( "super_sprinters") == 1 )
 		{
-			var = randomintrange(1, 10);	// needs to be 4 instead of 3 for verruckt
+			var = randomintrange(1, 10);	// needs to be 10 instead of 3 for verruckt
 			level.cheats_defined = true;
 		}
 		
@@ -966,10 +966,15 @@ cap_zombie_head_gibs()
 
 zombie_head_gib( attacker )
 {
-	if ( is_german_build() )
+	if ( !is_mature() )
 	{
 		return;
 	}
+
+/*	if ( is_german_build() )
+	{
+		return;
+	}*/
 
 	if( IsDefined( self.head_gibbed ) && self.head_gibbed )
 	{
@@ -1112,10 +1117,15 @@ damage_over_time( dmg, delay, attacker )
 // SRS 9/2/2008: reordered checks, added ability to gib heads with airburst grenades
 head_should_gib( attacker, type, point )
 {
-	if ( is_german_build() )
+	if ( !is_mature() )
 	{
 		return false;
 	}
+
+/*	if ( is_german_build() )
+	{
+		return false;
+	}*/
 
 	if( self.head_gibbed )
 	{
@@ -1451,10 +1461,15 @@ zombie_gib_on_damage()
 
 zombie_should_gib( amount, attacker, type )
 {
-	if ( is_german_build() )
+	if ( !is_mature() )
 	{
 		return false;
 	}
+
+/*	if ( is_german_build() )
+	{
+		return false;
+	}*/
 
 	if( !IsDefined( type ) )
 	{

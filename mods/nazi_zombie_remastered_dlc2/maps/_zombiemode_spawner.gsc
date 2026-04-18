@@ -1248,10 +1248,15 @@ cap_zombie_head_gibs()
 
 zombie_head_gib( attacker )
 {
-	if ( is_german_build() )
+	if ( !is_mature() )
 	{
 		return;
 	}
+
+/*	if ( is_german_build() )
+	{
+		return;
+	}*/
 
 	if( IsDefined( self.head_gibbed ) && self.head_gibbed )
 	{
@@ -1393,10 +1398,15 @@ damage_over_time( dmg, delay, attacker )
 // SRS 9/2/2008: reordered checks, added ability to gib heads with airburst grenades
 head_should_gib( attacker, type, point )
 {
-	if ( is_german_build() )
+	if ( !is_mature() )
 	{
 		return false;
 	}
+
+/*	if ( is_german_build() )
+	{
+		return false;
+	}*/
 
 	if( self.head_gibbed )
 	{
@@ -1763,10 +1773,15 @@ zombie_gib_on_damage()
 
 zombie_should_gib( amount, attacker, type )
 {
-	if ( is_german_build() )
+	if ( !is_mature() )
 	{
 		return false;
 	}
+	
+/*	if ( is_german_build() )
+	{
+		return false;
+	}*/
 
 	if( !IsDefined( type ) )
 	{

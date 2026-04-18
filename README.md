@@ -53,9 +53,9 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Re-added subtle flame damage friendly fire that was cut on the later DLCs, watch your aim
 * Added weapon bobbing and crawl bobbing like future Call of Duty titles, weapons no longer just lowers while moving. Toggleable, see custom DVAR section
 * Added footstep sound effect when player lands on the ground after jumping which were originally cut, but are heard in all other Call of Duty titles
-* Fixed player third person model from stretching up to 90 degrees upwards or downwards when looking all the way up or down (which looks very odd), there is now has a set limit as introduced in Black Ops I
-* Added subtle screenshake when near grenade explosions, as seen in Multiplayer and later in Black Ops I campaign
-* Slightly increased footstep volume to make up for loud ambient sounds in zombiemode, especially on Der Riese
+* Fixed player third person model from stretching up to 90 degrees upwards or downwards when looking all the way up or down (which looks very odd), there is now a set limit as introduced in Black Ops I
+* Added subtle screenshake when near grenade explosions, as seen in Multiplayer and in Black Ops I singleplayer
+* Slightly increased footstep volume to account for loud ambient sounds in zombiemode, especially on Der Riese
 * Player falls into prone when dying like in Black Ops I
 * Player also drops their hands onto the ground when dying as the Game Over screen appears, animation ported from Black Ops II
 * Player no longer receives a free pistol when they have no weapons, instead the screen is just blank like future Call of Duty titles
@@ -94,7 +94,9 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Hellhounds are now actually invincible while they are spawning in before they are visible
 * Mid-round hellhounds count towards the total zombie count
 * Mid-round hellhounds have an additional failsafe if they glitch outside the map, automatically despawn after not hitting the player for a long time while also being near the end of the round
+* Fixed incomplete implentation of reduced graphic content setting so that now all gore and crawlers are disabled when using this setting, similar to Black Ops I
 * Fixed potential scripting leak when zombies rise out of ground
+* Removed checks for if playing German build of the game that disable extra gore in zombiemode
 
 ### HUD
 * Damage indicators only fully fade when player is actually at 100% health
@@ -326,6 +328,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Fixed voiceover categories that played with a delay being able to overlap, resulting in the character talking twice at the same time
 * Fixed Insta-Kill special melee voiceover still being able to play from non-melee kills
 * Fixed low ammo quote spam and thread leak
+* Fixed incomplete implentation of reduced graphic content setting so that all explicit dialogue on all maps is disabled when using this setting
 * Low ammo/no ammo quotes are scripted more efficiently on each player rather than on the level, allowing them to have separate timers
 * Low ammo/no ammo quotes no longer plays on attachment weapons (launcher)
 * Rewrote voiceover for earlier maps to use improved scripts from later DLCs that reduced the repetitiveness of how lines are selected
@@ -370,7 +373,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Unique to this map, zombies can use the original "sprint" crawler animation that was later cut
 * Unique to this map, while all future melee animations have been added, they have been rebalanced for this map specifically so zombies are still more likely to stop before hitting to reflect how these zombies are less advanced (and makes for better gameplay given the tight layout and lack of perks)
 * Unique to this map, taunt animations from later maps have been purposefully excluded to reflect how these zombies are less advanced 
-* Added a cut rare type of "super sprinter" that comes after round 10, toggleable under "Enemy Intensity" in Game Options. Note that disabling this is considered a cheat and high round records will not save
+* Added a cut unique "super sprinter" that can rarely spawn (1/15 odds) starting on round 15, toggleable under "Enemy Intensity" in Game Options. Note that disabling this is considered a cheat and high round records will not save
 * Reorganized the Nacht zombie vocals to have more consistency between ambient, attack, and sprint categories with less repetition
 * Added very quiet and rare behind vocals so that zombies are still likely to surprise the player. Player will also nervously breathe if a zombie is too close behind them
 * Replaced the existing grey uniform zombie variant texture with an SS camouflage texture, which fits better with the battlefield atmosphere of the map
@@ -396,7 +399,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Added new categories for powerups, perks, Teddy Bear (cut), and downed lines (cut)
 * Added missing taunt animations that were only into future maps
 * Added the Nacht original "sprint" crawler animation to bridge the transition between the first two maps because they feel similar, but it remains cut on Der Riese
-* Added a cut rare type of "super sprinter" that comes after round 10, toggleable under "Enemy Intensity" in Game Options. Note that disabling this is considered a cheat and high round records will not save
+* Added a cut extra "super sprinter" that can rarely spawn (1/15 odds) starting on round 15, toggleable under "Enemy Intensity" in Game Options. Note that disabling this is considered a cheat and high round records will not save
 * Added easter egg scripted dialogue for Player 4
 * Added easter egg PA system music that can play after using the traps too much
 

@@ -685,12 +685,16 @@ init_anims()
 	level.scr_anim["zombie"]["sprint8"] = %ai_zombie_sprint_v4;
 	level.scr_anim["zombie"]["sprint9"] = %ai_zombie_sprint_v4;
 
-	level.scr_anim["zombie"]["sprint10"] = %ai_zombie_sprint_w_object_4; // when this is added, we now have 4 super sprinter variants on the table, 1 of which is this extra-super (4/12)
-	level.scr_anim["zombie"]["sprint11"] = %ai_zombie_sprint_v4; // super sprint
-	level.scr_anim["zombie"]["sprint12"] = %ai_zombie_sprint_v1; 
-	level.scr_anim["zombie"]["sprint13"] = %ai_zombie_sprint_v2; 
-	level.scr_anim["zombie"]["sprint14"] = %ai_zombie_sprint_v1; 
-	level.scr_anim["zombie"]["sprint15"] = %ai_zombie_sprint_v2; 
+	level.scr_anim["zombie"]["sprint10"] = %ai_zombie_sprint_v1;  // 1/3 late game (normal sprinters) (6/18)
+	level.scr_anim["zombie"]["sprint11"] = %ai_zombie_sprint_v1;
+	level.scr_anim["zombie"]["sprint12"] = %ai_zombie_sprint_v1;
+	level.scr_anim["zombie"]["sprint13"] = %ai_zombie_sprint_v2;  // 1/3 late game (normal sprinters) (6/18)
+	level.scr_anim["zombie"]["sprint14"] = %ai_zombie_sprint_v2;
+	level.scr_anim["zombie"]["sprint15"] = %ai_zombie_sprint_v2;
+	level.scr_anim["zombie"]["sprint16"] = %ai_zombie_sprint_w_object_4; //  super sprinters as a whole are 1/3 late game, but rare extra super sprinters are also sprinkled in (1/18)
+	level.scr_anim["zombie"]["sprint17"] = %ai_zombie_sprint_v4; // normal super sprinters (5/18)
+	level.scr_anim["zombie"]["sprint18"] = %ai_zombie_sprint_v4;
+
 	// run cycles in prone
 	level.scr_anim["zombie"]["crawl1"] 	= %ai_zombie_crawl; 
 	level.scr_anim["zombie"]["crawl2"] 	= %ai_zombie_crawl_v1; 
@@ -725,11 +729,14 @@ init_anims()
 	level._zombie_melee["zombie"][2] 				= %ai_zombie_attack_v1; 
 	level._zombie_melee["zombie"][3] 				= %ai_zombie_attack_v2;	
 	level._zombie_melee["zombie"][4]				= %ai_zombie_attack_v1;
-	level._zombie_melee["zombie"][5]				= %ai_zombie_attack_v4; //New, from Verruckt/Riese
-	level._zombie_melee["zombie"][6]				= %ai_zombie_attack_v6;	 //New, from Verruckt/Riese
+	level._zombie_melee["zombie"][5] 				= %ai_zombie_attack_v2;	 // repeated to slightly slow down
+	level._zombie_melee["zombie"][6]				= %ai_zombie_attack_v4; //New, from Verruckt/Riese
+	level._zombie_melee["zombie"][7]				= %ai_zombie_attack_v6;	 //New, from Verruckt/Riese
 	level._zombie_run_melee["zombie"][0]				=	%ai_zombie_run_attack_v1; //New, from Verruckt/Riese
 	level._zombie_run_melee["zombie"][1]				=	%ai_zombie_run_attack_v2; //New, from Verruckt/Riese
 	level._zombie_run_melee["zombie"][2]				=	%ai_zombie_run_attack_v3; //New, from Verruckt/Riese
+	level._zombie_run_melee["zombie"][3] 				= %ai_zombie_attack_v1;  // repeated to slightly slow down
+	level._zombie_run_melee["zombie"][4] 				= %ai_zombie_attack_v2;	 // repeated to slightly slow down
 
 	if( isDefined( level.zombie_anim_override ) )
 	{
@@ -888,7 +895,8 @@ zombie_intro_screen( string1, string2, string3, string4, string5 )
         //"dynEnt_spawnedLimit", level.dynEnt_spawnedLimit,
 		"cg_hudDamageIconTime", "2500", // fixed damage marks from disappearing too quick
 		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
-		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+//		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+		"player_aimblend_back_mid", "0.1 0.3 0.5", // 3rd person look up/down
 		"playerSpectating", "0"
 		 ); 
 
@@ -919,7 +927,8 @@ players_playing()
         //"dynEnt_spawnedLimit", level.dynEnt_spawnedLimit,
 		"cg_hudDamageIconTime", "2500", // fixed damage marks from disappearing too quick
 		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
-		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+//		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+		"player_aimblend_back_mid", "0.1 0.3 0.5", // 3rd person look up/down
 		"playerSpectating", "0"
 		); 
 
@@ -1012,7 +1021,8 @@ onPlayerConnect_clientDvars()
 		"player_sprintStrafeSpeedScale", "0.8", // buffed strafe
 		"playerSpectating", "0", // spectating hud
 		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
-		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+//		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+		"player_aimblend_back_mid", "0.1 0.3 0.5", // 3rd person look up/down
 		"cg_hudDamageIconTime", "2500" ); // fixed damage marks from disappearing too quick
 
 /*	self SetClientDvars(
@@ -1076,7 +1086,8 @@ onPlayerSpawned()
         "aim_automelee_lerp", "50",
         "player_meleechargefriction", "2500",
 		"cg_firstPersonTracerchance", "0.5", // can see bullet tracers as you shoot in 1st person now
-		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+//		"player_aimblend_back_low", "0 0.3 0.5", // 3rd person look up/down
+		"player_aimblend_back_mid", "0.1 0.3 0.5", // 3rd person look up/down
 		"cg_hudDamageIconTime", "2500" );
 
 		self setClientDvar( "bg_fallDamageMinHeight", "150" );
