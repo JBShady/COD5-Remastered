@@ -372,9 +372,9 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Satchel Charge Crate and Sniper Cabinet now both have unique sounds when opened
 * Zombies can now use updated animations from future maps for traversing, crawling, attacking, hitting through barriers, walking, running, etc.
 * Unique to this map, zombies can use the original "sprint" crawler animation that was later cut
-* Unique to this map, while all future melee animations have been added, they have been rebalanced for this map specifically so zombies are still more likely to stop before hitting to reflect how these zombies are less advanced (and makes for better gameplay given the tight layout and lack of perks)
 * Unique to this map, taunt animations from later maps have been purposefully excluded to reflect how these zombies are less advanced 
-* Added a cut unique "super sprinter" that can rarely spawn (1/15 odds) starting on round 15, toggleable under "Enemy Intensity" in Game Options. Note that disabling this is considered a cheat and high round records will not save
+* Added a cut unique "super sprinter" that can rarely spawn (1-2 per horde odds) starting on round 15, toggleable under "Enemy Intensity" in Game Options. Note that disabling this is considered a cheat and high round records will not save
+* All future German-style melee animations have been added, but rebalanced for this map specifically to account for no Jugger-nog (approximately 25% of the time zombies do fast-hits instead of 50%)
 * Reorganized the Nacht zombie vocals to have more consistency between ambient, attack, and sprint categories with less repetition
 * Added very quiet and rare behind vocals so that zombies are still likely to surprise the player. Player will also nervously breathe if a zombie is too close behind them
 * Replaced the existing grey uniform zombie variant texture with an SS camouflage texture, which fits better with the battlefield atmosphere of the map
@@ -400,7 +400,8 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Added new categories for powerups, perks, Teddy Bear (cut), and downed lines (cut)
 * Added missing taunt animations that were only into future maps
 * Added the Nacht original "sprint" crawler animation to bridge the transition between the first two maps because they feel similar, but it remains cut on Der Riese
-* Added a cut extra "super sprinter" that can rarely spawn (1/15 odds) starting on round 15, toggleable under "Enemy Intensity" in Game Options. Note that disabling this is considered a cheat and high round records will not save
+* All future German-style melee animations have been added, but rebalanced for this map specifically to account for the close quarters map design and adjustments to the previously overpowered DLC1-2 Jugger-nog (approximately 40% of the time zombies do fast-hits instead of 50%)
+* Added a cut extra "super sprinter" that can rarely spawn (1-2 per horde odds) starting on round 15, toggleable under "Enemy Intensity" in Game Options. Note that disabling this is considered a cheat and high round records will not save
 * Added easter egg scripted dialogue for Player 4
 * Added easter egg PA system music that can play after using the traps too much
 
