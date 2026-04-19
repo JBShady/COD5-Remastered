@@ -284,7 +284,7 @@ get_next_powerup()
 
 	powerup = level.zombie_powerup_array[level.zombie_powerup_index];
 
-	while( (powerup == "carpenter" && get_num_window_destroyed() < 6) || getDvarInt( "classic_zombies") == 1 )
+	while( (powerup == "carpenter" && get_num_window_destroyed() < 19 ) || getDvarInt( "classic_zombies") == 1 ) // since no zones, all barriers but 2 (so 18) need to be broken out of 20 total
 	{	
 		
 		

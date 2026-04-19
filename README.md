@@ -256,7 +256,8 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Fixed bug where score threshold to earn a powerup was not scaling properly with number of players due calculations running before players have loaded in
 * Fixed bug where player could pickup powerups during game over screen
 * Carpenter available on all maps, combined into the togglable "Gametype" setting in Game Options
-* Carpenter will not spawn when up to a maximum of 5 barriers are left destroyed (compared to the original 4) for better balancing. The first two maps had more than 4 barriers in the spawn rooms, and this also makes it more viable for players to block Carpenter spawns as part of their strategy
+* Carpenter will not spawn if there are 5 or less destroyed barriers on Shi No Numa and Der Riese (compared to the original 4), i.e., if you repair all barriers except leave 5 (or less) open you can bypass carpenter 
+* Carpenter will not spawn if there are at least 2 closed barriers on Nacht Der Untoten and Verrückt, this is because zombies spawn across the entire map and should feel more rare 
 * Carpenter powerup repairs do not cause a screenshake effect when near a barrier
 * Max Ammos now refills equipment on all maps (betties, molotovs, grenades, etc.)
 * Max Ammos reset flamethrower cooldown (requires T4M-Enhanced)
