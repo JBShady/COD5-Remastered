@@ -83,6 +83,10 @@ images\i_jbanana_richtofen_diary_n.iwi
 images\i_richtofen_diary_pencil_c.iwi
 images\i_richtofen_diary_pencil_n.iwi
 images\jap_katana_c.iwi
+images\joystick_ls_down_xenon.iwi
+images\joystick_ls_up_xenon.iwi
+images\joystick_rs_down_xenon.iwi
+images\joystick_rs_up_xenon.iwi
 images\katana.iwi
 images\leaderboard.iwi
 images\line_bio.iwi
@@ -158,7 +162,6 @@ maps\nazi_zombie_sumpf_trap_perk_electric.gsc
 maps\nazi_zombie_sumpf_zipline.gsc
 maps\nazi_zombie_sumpf_zone_management.gsc
 mod.csv
-sound\Stream\Music\Mission\zombie\mx_the_one.wav
 weapons\sp\bazooka_zombie
 weapons\sp\falling_hands
 weapons\sp\m1garand_gl_zombie

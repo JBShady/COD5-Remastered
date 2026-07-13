@@ -48,6 +48,10 @@ images\grenadeicon.iwi
 images\hint_usable.iwi
 images\hud_m2_flamethrower.iwi
 images\hud_us_grenade.iwi
+images\joystick_ls_down_xenon.iwi
+images\joystick_ls_up_xenon.iwi
+images\joystick_rs_down_xenon.iwi
+images\joystick_rs_up_xenon.iwi
 images\leaderboard.iwi
 images\line_bio.iwi
 images\makin_door_wood2_c.iwi
@@ -65,6 +69,7 @@ maps\_destructible_opel_blitz.gsc
 maps\_detonategrenades.gsc
 maps\_gameskill.gsc
 maps\_hud_achievement.gsc
+maps\_hud_util.gsc
 maps\_interactive_objects.gsc
 maps\_laststand.gsc
 maps\_loadout.gsc
@@ -183,6 +188,7 @@ sound\voiceovers\zombie\dlc0\Player0\feedback_kill_explo_05.wav
 sound\voiceovers\zombie\dlc0\Player0\feedback_kill_flame_00.wav
 sound\voiceovers\zombie\dlc0\Player0\feedback_kill_flame_01.wav
 sound\voiceovers\zombie\dlc0\Player0\feedback_kill_flame_02.wav
+sound\voiceovers\zombie\dlc0\Player0\feedback_kill_flame_03.wav
 sound\voiceovers\zombie\dlc0\Player0\feedback_kill_headd_00.wav
 sound\voiceovers\zombie\dlc0\Player0\feedback_kill_headd_01.wav
 sound\voiceovers\zombie\dlc0\Player0\feedback_kill_headd_02.wav
@@ -220,6 +226,7 @@ sound\voiceovers\zombie\dlc0\Player0\oh_shit_01.wav
 sound\voiceovers\zombie\dlc0\Player0\oh_shit_02.wav
 sound\voiceovers\zombie\dlc0\Player0\oh_shit_03.wav
 sound\voiceovers\zombie\dlc0\Player0\oh_shit_04.wav
+sound\voiceovers\zombie\dlc0\Player0\oh_shit_special_00.wav
 sound\voiceovers\zombie\dlc0\Player0\powerup_ammo_00.wav
 sound\voiceovers\zombie\dlc0\Player0\powerup_ammo_01.wav
 sound\voiceovers\zombie\dlc0\Player0\powerup_ammo_02.wav

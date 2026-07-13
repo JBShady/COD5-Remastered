@@ -50,6 +50,10 @@ images\hud_bar_overheat.iwi
 images\hud_fg42_overheat.iwi
 images\hud_m2_flamethrower.iwi
 images\hud_us_grenade.iwi
+images\joystick_ls_down_xenon.iwi
+images\joystick_ls_up_xenon.iwi
+images\joystick_rs_down_xenon.iwi
+images\joystick_rs_up_xenon.iwi
 images\leaderboard.iwi
 images\line_bio.iwi
 images\makin_door_wood2_c.iwi
@@ -103,7 +107,6 @@ maps\createfx\nazi_zombie_asylum_fx.gsc
 maps\nazi_zombie_asylum.gsc
 maps\nazi_zombie_asylum_fx.gsc
 mod.csv
-sound\Stream\Music\Mission\zombie\mx_lullaby.wav
 sound\voiceovers\zombie\dlc1\Player0\feedback_ammo_low_00.wav
 sound\voiceovers\zombie\dlc1\Player0\feedback_ammo_low_01.wav
 sound\voiceovers\zombie\dlc1\Player0\feedback_ammo_low_02.wav
