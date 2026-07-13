@@ -443,7 +443,7 @@ waitAndDetonate( delay )
 	self endon("death");
 	wait delay;
 
-	earthquake(.3 ,3,self.origin,1000);
+	earthquake(.3 ,3,self.origin,850);
 
 	zombs = getaispeciesarray("axis");
 	for(i=0;i<zombs.size;i++)
@@ -513,7 +513,7 @@ satchelDamage()
 		self.owner.satchelarray = array_remove(self.owner.satchelarray, self);
 	}
 
-	earthquake(.3 ,3,self.origin,1000);
+	earthquake(.3 ,3,self.origin,850);
 
 	zombs = getaispeciesarray("axis");
 	damaged_zombies = 0;
