@@ -216,7 +216,7 @@ set_zombie_run_cycle()
 		self.run_combatanim = level.scr_anim[self.animname]["run" + var];
 		break;
 	case "sprint":                 
-		var = randomintrange(1, 20); // For rest of the game, 19 anims so range stops at 20
+		var = randomintrange(1, 19); // For rest of the game, 18 anims so range stops at 19
 
 		if(level.round_number < 15 ) // For early game to prevent random super sprinters
 		{
@@ -1932,7 +1932,7 @@ zombie_damage( mod, hit_location, hit_origin, player, amount )
 	self thread maps\_zombiemode_powerups::check_for_instakill( player );
 }
 
-zombie_damage_ads( mod, hit_location, hit_origin, player )
+zombie_damage_ads( mod, hit_location, hit_origin, player, amount )
 {
 	player.use_weapon_type = mod;
 	if( !IsDefined( player ) )
