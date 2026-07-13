@@ -1665,13 +1665,23 @@ turret_ignore_me_timer( time )
  */ 
 array_randomize( array )
 {
-    for( i = 0; i < array.size; i ++ )
+/*    for( i = 0; i < array.size; i ++ )
     {
         j = RandomInt( array.size ); 
         temp = array[ i ];
         array[ i ] = array[ j ];
         array[ j ] = temp;
     }
+    return array; 
+}*/
+	for (i = array.size - 1; i > 0; i--)
+	{
+	    j = RandomInt(i + 1);
+
+	    temp = array[i];
+	    array[i] = array[j];
+	    array[j] = temp;
+	}
     return array; 
 }
  /* 
