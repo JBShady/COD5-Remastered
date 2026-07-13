@@ -36,6 +36,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Player rank now changes based on the above zombie stats within the mod, allowing players to not just be stuck at Private level 1 as mods do not carry over Multiplayer rank. There is no indication of progression or ranking up, similar to the ranking system in Black Ops II zombies. Note this is only a feature for bragging rights with friends to indicate how experienced you are within a map, and it still uses the vanilla prestige logos and rank numbering system so nothing looks out of place
 * Unused entities are cleared after use, both for one time items like radios or songs and for temporary scripting tasks
 * Fixed instances where functions should have been threaded instead of being called, which originally resulted in unnecessary delays or bugs
+* Fixed slight bias in array_randomize utility function to use a proper Fisher–Yates shuffle
 * Game is hardcoded to Campaign "normal" difficulty as the level of difficulty unintentionally changed health regen and other variables in zombies
 * Cheats disabled by default, use devmap to load in with cheats. Note that no leaderboard stats or ranks will save while playing with devmap so that you can still test features of the mod or develop without skewing legitimate stats you may have worked hard to earn
 
@@ -73,36 +74,37 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Fixed bug where players could mount weapons on top of other players near balcony ledges
 * Fixed large amounts of damage or unknown damages types causing map restarts, including Peter's hanging body. Note Peter's body will still kill you
 * Fixed all 3+ weapon glitches
+* Fixed bug where players could respawn as the game over screen appeared
 * Points capped at 1 billion to prevent overflow into negative points
 * Added setting to hide or show rank logo next to player name while in game, as rank is a non-essential aspect of zombies progression
 * Dead players spectating can chat with alive players now
 
 ### Zombies
-* All maps use various improvements to zombie and hellhound logic/pathing. Additional engine pathing improvements require T4M-Enhanced and are enabled by default if using
-* In addition to Round 1, Round 2 will also only be walkers to allow for more gradual pacing
+* All maps use various improvements to zombie and hellhound logic/pathing. Additional pathing improvements made to the engine based on Black Ops I require T4M-Enhanced and is enabled by default if using
 * Zombies have glowing eye effects in all DLCs, as originally seen only on Nacht Der Untoten
-* Zombies can now spawn with random combinations of helmets, hats, bandages, headbands, or other gear based on rare percent chances and the map's location, with the first two maps using more equipment and the last two having less (which is also due to aiding performance on the larger maps)
+* Zombies can now spawn with random combinations of helmets, hats, bandages, headbands, or other gear based on rare percent chances and the map's setting, with the first two maps using more equipment and the last two having less (which is also due to aiding performance on the larger maps)
 * Helmets can be shot off a zombie's head and will fling based on the direction of the damage and will play a special sound
 * Gibs and helmets shot off of zombies disappear quicker depending on the amount of players to hopefully reduce visual glitches when there are too many vertices on the screen
 * Added missing gore fx when gibbing zombie torsos
 * All German zombies utilize the same set of moving, crawling, and melee animations, as some animations were only added in later DLCs. Note that the first two maps still utilize the old style swiping board animations. Some adjustments have also been made on a per-map basis regarding crawlers, taunting, and meleeing, see map sections below 
 * Zombies now use consistent wallhop animation tiers in all maps (was cut on Der Riese) where zombies climb through barriers faster depending on their movement speed
-* Added cut walk_v9 animation to all German zombie variants that was later used in Black Ops I. Further cut Japaense zombie animations have been added to Shi No Numa, see map section below
+* In addition to Round 1, Round 2 will also only be walkers to allow for more gradual pacing.
+* Added cut walk_v9 animation to all German zombie variants that was later used in Black Ops I. Further cut Japanese zombie animations have been added to Shi No Numa, see map section below
 * Zombies must be on the same floor/actually directly behind players to still play their "behind" vocals
 * Zombies can now gib from special scripted explosive damage including Bouncing Betties, Satchels, and Mortars
 * Zombie neckshots no longer count as headshots on the stats page so that scoreboard headshot value will reconcile with the menu stats
 * Hellhounds are now actually invincible while they are spawning in before they are visible
 * Mid-round hellhounds count towards the total zombie count
-* Mid-round hellhounds have an additional failsafe if they glitch outside the map, automatically despawn after not hitting the player for a long time while also being near the end of the round
+* Mid-round hellhounds have an additional failsafe if they glitch outside the map, automatically despawning after not hitting the player for a long time while also being near the end of the round
 * Fixed incomplete implentation of reduced graphic content setting so that now all gore and crawlers are disabled when using this setting, similar to Black Ops I
 * Fixed potential scripting leak when zombies rise out of ground
-* Removed checks for if playing German build of the game that disable extra gore in zombiemode
+* Removed checks for if playing German build of the game that disables extra gore in zombiemode
 
 ### HUD
-* Damage indicators only fully fade when player is actually at 100% health
+* Damage indicators only fully disappear when player is actually at 100% health
 * HUD elements no longer touch the very edge of the screen including the ammo counter, round counter, perk shaders, and mission intro text
-* Powerup shader alignment has been tweaked so they are not so close to the edge of the screen, creating better spacing with the equipment inventory HUD elements
-* Tweaked HUD text elements so none overlap after making the above changes (Max Ammo text, revive related text, hintstrings)
+* Added larger gap under powerup shaders, creating better spacing with the equipment inventory HUD elements
+* Tweaked HUD text elements so none overlap (Max Ammo text, revive related text, hintstrings)
 * Shifted bottom right points scoreboard slightly up and to the left, more visually appealing similar to how it appeared on the console version and Black Ops I
 * Bottom right points color in solo is now dependent on your character (as seen in co-op). Togglable, see custom DVAR section
 * Hintstrings now show yellow highlights for keybinds, similar to Multiplayer and all other Call of Duty titles
@@ -144,12 +146,13 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Hid Multiplayer style progress summary report pop-up when player ends game or disconnects as this data is not relevant
 
 ### Gamepad
-* Gamepad setting switches hints to use gamepad icons for hintstrings and the D-pad so that players can enjoy a more immersive controller experience. Uses Xbox 360 style icons by default, but optional patch is available to change to PlayStation 3 style icons. NOTE: If gamepad hints are not showing up, this is because you have your interact key bound to something other than F and the game gets confused, simply unbind your interact key to fix 
+* Gamepad setting switches all ingame HUD elements to use proper gamepad button prompts including hintstrings, spectate menu, sniper hold breath, grenade pick ups, and D-pad icons for a more immersive experience when using a controller. Uses Xbox 360 style icons by default, but optional patch is available to change to PlayStation 3 style icons. NOTE: If gamepad hints are not showing up, this is because you have your interact key bound to something other than F and the game gets confused, simply unbind your interact key to fix 
 * Unique console font on ingame hints when gamepad is enabled, as seen on the console version
 * Ping graph on scoreboard when gamepad is enabled, as seen on console
-* Custom spectate menu, as seen on console (T4M-Enhanced recommended)
+* Custom gamepad spectate menu will hide the PC spectate menu (requires T4M-Enhanced)
 * Loading screens no longer show the mouse cursor and "click to start" hints while Controller Mode is enabled
-* New menu page including settings for controller layout, inversion, sensitivity, and flipping triggers. Note that any buttons can still be rebound by pressing them in the appropriate setting
+* New menu page including settings for controller layout, inversion, vibration, sensitivity, and flipping triggers. Note that any buttons can still be rebound by pressing them in the appropriate setting; however, button prompts on the HUD are only designed to be used with official gamepad layouts in the gamepad menu
+* Toggleable controller vibration setting (requires T4M-Enhanced)
 * Toggleable aim assist setting, only enabled while gamepad is detected (requires T4M-Enhanced)
 * Controller buttons work on menus and some menus automatically highlight the first option (requires T4M-Enhanced)
 
@@ -168,7 +171,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 | Fog | `r_fog_settings` | `1` Yes | `0` No | Enables or disables fog. |
 | Cinematic Mode | `r_filmUseTweaks_settings` | `0` No | `1` Yes | More saturated color grading. |
 | Gamma Correction | `r_gamma_x360` | `0` Default | `1` Classic | Replicates gamma curve of Xbox 360 version (requires T4M-Enhanced). |
-| Safe Area | `safeArea_ui` | `1` Default | `0.85` Minimum | Slider that adjusts the safeArea_horizontal and safeArea_vertical border sizes (works on menus, requires T4M-Enhanced). |
+| Safe Area | `safeArea_ui` | `1` Default | `0.85` Minimum | Used for slider that adjusts the safeArea_horizontal and safeArea_vertical border sizes to apply correctly ingame and on UI (requires T4M-Enhanced). |
 | **TEXTURE SETTINGS** |  |  |  |  |
 | Max Anisotropy | `r_textFilterAnisoMax` | `4` Low | `16` Normal | Increases max possible texture filtering quality. |
 | LOD Range (Rigid) | `r_lodBiasRigid_settings` | `0` Default | `-200` Low, `-500` High, `-1000` Insane  | Increases range of visible detail on rigid models (T4M-Enhanced recommended). |
@@ -180,7 +183,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 | Difficulty | `classic_perks` | `0` Modified | `1` Classic | By default, solo Quick Revive, Double Tap buff, and 45 second bleedout are enabled. Accessible on menu, requires match restart. |
 | Enemy Grabbing | `grabby_zombies` | `0` Modified | `1` Classic | By default, "sticky" zombies are disabled with PushPlayer() set to false. Accessible on menu, requires match restart. |
 | Enemy Intensity | `super_sprinters` | `0` Modified | `1` Classic | By default, additional super sprinters are added to prototype and asylum. Accessible on menu, requires match restart. |
-| HUD | `cg_draw2D` `r_flame_allowed` | `1` Yes | `0` No | Enables or disables entire heads up display. |
+| HUD | `cg_draw2D` `r_flame_allowed` | `1` Yes | `0` No | Enables or disables all 2D HUD elements. |
 | HUD Scale | `r_hud_scale_fix` | `1` Normal | `0` Small | Enables or disables HUD scale fixes to weapon info and scoreboard. |
 | Display FPS | `cg_drawFPS` | `Off` No | `Simple` Yes | Enables or disables FPS counter. |
 | Limit FPS | `com_maxfps` | `85` Default | `0` Disabled | Adjusts the max FPS value. |
@@ -193,10 +196,11 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 | **GAMEPAD** |  |  |  |  |
 | Look Inversion | `input_invertpitch` | `0` Disabled | `1` Enabled | Enables or disables controller inversion. |
 | Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to (Medium), (High), (Very High), (Insane) | Increases or decreases controller sensitivity using the same scale as console. |
-| Aim Assist | Various | Various | n/a | Added button to enable and disable aim assist (requires T4M-Enhanced). |
-| Stick Layout | `gpad_buttonsConfig` | Various | n/a | Added button to switch between various gamepad joystick layouts. |
-| Button Layout | `gpad_sticksConfig` | Various | n/a | Added button to switch between various gamepad button layouts. |
-| Trigger Buttons | `gpad_flip_triggers` | `0` Default | `1` Flipped | Flips primary triggers to opposite row. |
+| Aim Assist | Various | Various | n/a | Added menu button to enable and disable all aim assist settings (requires T4M-Enhanced). |
+| Vibration | `gpad_rumble` | `0` Disabled | `1` Enabled | Enables or disables controller vibration (requires T4M-Enhanced). |
+| Stick Layout | `gpad_buttonsConfig` | Various | n/a | Used for menu button to switch between various gamepad joystick layouts. |
+| Button Layout | `gpad_sticksConfig` | Various | n/a | Used for menu button to switch between various gamepad button layouts. |
+| Trigger Buttons | `gpad_flip_triggers` | `0` Default | `1` Flipped | Internal setting for reflecting flipped triggers on menus and HUD. |
 | Use/Reload | `+usereload` | `Unbound` Default | n/a | Added use/reload keybind to menu so controller players can now change all gamepad buttons. |
 | PS3 Gamepad | `gpad_ps3` | `0` Disabled | `1` Enabled | Enables or disables PS3 controller image on gamepad menu configurations. |
 | **CONSOLE COMMANDS** |  |  |  |  |
@@ -240,9 +244,13 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Fixed the box playing the debris sound for other players after every use once the location has been changed
 * Fixed the box playing the lid close sound when floating away during a Teddy Bear even though the lid never closes
 * Fixed the box jingle stopping when too many other sounds play
-* Fixed Wonder Weapon stinger sound effect sometimes not playing
-* Der Riese & Shi No Numa boxes now share equal weighted odds for Wonder Weapons, which have also been slightly nerfed so the DG-2 is not overly common to the point of being annoying
-* Verrückt & Nacht Der Untoten boxes remain a full lottery for the Ray Gun
+* Fixed wonder weapon stinger sound effect sometimes not playing
+* Der Riese & Shi No Numa boxes now share equal weighted odds for wonder weapons
+* Additionally, rebalanced/slightly nerfed wonder weapon increased odds to be less repetitive (like the original game, if you are unlucky more wonder weapons will be added to the back, now as following: either 1/2/3 Ray Guns can appear and 1/3/5 Wunderwaffes can apear)
+* As part of the rebalancing above, fixed bug where Der Riese Wonder Weapon weighting percentages were based on total weapons instead of weapons in the box
+* Fixed bug where increased wonder weapon odds for the Wunderwaffe would not go into effect if you purchased a wall weapon to get rid of the weapon
+* Shi No Numa box does not show increased odds during cycling, which was introduced on Der Riese (in other words, if you have increased wonder weapon odds the initial cycles before you get your weapon are still fully random to give the illusion that the box is random even if there are more wonder weapons in the pool)
+* Verrückt & Nacht Der Untoten boxes still remain a full lottery for wonder weapons
 * To reduce clutter, the game only picks one of the two starting room wall weapons to include in the mystery box pool, randomized each hit
 * Der Riese & Shi No Numa boxes now share equal teddy bear odds, fixing a glitch where Der Riese always gave odds that were only supposed to for the first box location
 * First teddy bear on Der Riese & Der Riese is now only forced on the 10th hit instead of the 9th hit
@@ -256,8 +264,8 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Fixed bug where score threshold to earn a powerup was not scaling properly with number of players due calculations running before players have loaded in
 * Fixed bug where player could pickup powerups during game over screen
 * Carpenter available on all maps, combined into the togglable "Gametype" setting in Game Options
-* Carpenter will not spawn if there are 5 or less destroyed barriers on Shi No Numa and Der Riese (compared to the original 4), i.e., if you repair all barriers except leave 5 (or less) open you can bypass carpenter 
-* Carpenter will not spawn if there are at least 2 closed barriers on Nacht Der Untoten and Verrückt, this is because zombies spawn across the entire map and should feel more rare 
+* Carpenter will not spawn if there are 5 or less destroyed barriers on Shi No Numa and Der Riese (compared to the original 4), i.e., if you repair all barriers except keep 5 (or less) open you can bypass carpenters on these maps
+* Carpenter will not spawn if there are at least 3 closed barriers on Nacht Der Untoten and Verrückt, this is because zombies spawn across the entire map and these powerups should feel more rare , i.e., if you let all barriers open except keep 3 (or more) closed you can bypass carpenters on these maps 
 * Carpenter powerup repairs do not cause a screenshake effect when near a barrier
 * Max Ammos now refills equipment on all maps (betties, molotovs, grenades, etc.)
 * Max Ammos reset flamethrower cooldown (requires T4M-Enhanced)
@@ -310,8 +318,9 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Player does not talk while in last stand (such as about kills or powerups)
 * Downing and reviving point loss/reward is the same across all maps, as it was originally not in the the first map
 * The co-op bleedout time has been increased from 30 seconds to 45 seconds like future Call of Duty titles, togglable under the "Difficulty" setting in Game Options
-* Can no longer switch weapons while reviving\
+* Can no longer switch weapons while reviving
 * Fixed sound glitch when pressing fire with the Syrette
+* All maps use the slightly buffed revive radius from Der Riese 
 
 ### Sounds
 * All maps use the most refined (DLC3) iteration of soundalias settings where applicable for consistency in audio mastering and mixing
