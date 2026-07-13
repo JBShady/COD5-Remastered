@@ -31,6 +31,12 @@ watchMolotovFire(player)
 		sticky_pos = array_add(sticky_pos, self.origin);
 	}
 
+	d = self depthinwater();
+	if(d > 0)
+	{
+		return;
+	}
+
 	fireEffectArea = spawn("trigger_radius", self.origin, 0, 80, 15); 
 	durationOfFire = 8;  // fire only exists for a set amount of time
 
