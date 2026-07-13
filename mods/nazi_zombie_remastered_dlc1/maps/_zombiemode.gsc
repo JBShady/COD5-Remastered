@@ -729,9 +729,8 @@ init_anims()
 	level._zombie_melee["zombie"][2] 				= %ai_zombie_attack_v1; 
 	level._zombie_melee["zombie"][3] 				= %ai_zombie_attack_v2;	
 	level._zombie_melee["zombie"][4]				= %ai_zombie_attack_v1;
-	level._zombie_melee["zombie"][5] 				= %ai_zombie_attack_v2;	 // repeated to slightly slow down
-	level._zombie_melee["zombie"][6]				= %ai_zombie_attack_v4; //New, from Verruckt/Riese
-	level._zombie_melee["zombie"][7]				= %ai_zombie_attack_v6;	 //New, from Verruckt/Riese
+	level._zombie_melee["zombie"][5]				= %ai_zombie_attack_v4; //New, from Verruckt/Riese
+	level._zombie_melee["zombie"][6]				= %ai_zombie_attack_v6;	 //New, from Verruckt/Riese
 	level._zombie_run_melee["zombie"][0]				=	%ai_zombie_run_attack_v1; //New, from Verruckt/Riese
 	level._zombie_run_melee["zombie"][1]				=	%ai_zombie_run_attack_v2; //New, from Verruckt/Riese
 	level._zombie_run_melee["zombie"][2]				=	%ai_zombie_run_attack_v3; //New, from Verruckt/Riese
@@ -1334,7 +1333,20 @@ reset_spec_hud()
 spectators_respawn()
 {
 	level endon( "between_round_over" );
+	level endon( "end_game" );
 
+	wait(0.05); // delay incase of end game
+
+	if( !IsDefined( level.zombie_vars["spectators_respawn"] ) || !level.zombie_vars["spectators_respawn"] )
+	{
+		return;
+	}
+
+	if((isDefined(level.intermission) && level.intermission == true) || (isDefined(level.falling_down) && level.falling_down == true) )
+	{
+		return;
+	}
+	
 	if( !IsDefined( level.zombie_vars["spectators_respawn"] ) || !level.zombie_vars["spectators_respawn"] )
 	{
 		return;

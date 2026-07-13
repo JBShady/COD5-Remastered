@@ -1460,8 +1460,16 @@ reset_spec_hud()
 spectators_respawn()
 {
 	level endon( "between_round_over" );
+	level endon( "end_game" );
+
+	wait(0.05); // delay incase of end game
 
 	if( !IsDefined( level.zombie_vars["spectators_respawn"] ) || !level.zombie_vars["spectators_respawn"] )
+	{
+		return;
+	}
+
+	if((isDefined(level.intermission) && level.intermission == true) || (isDefined(level.falling_down) && level.falling_down == true) )
 	{
 		return;
 	}
