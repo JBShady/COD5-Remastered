@@ -628,7 +628,7 @@ revive_do_revive( playerBeingRevived, reviverGun )
 	playerBeingRevived startrevive( self );
 
 	if( !isdefined(self.reviveProgressBar) )
-		self.reviveProgressBar = self createPrimaryProgressBar();
+		self.reviveProgressBar = self createPrimaryProgressBar(true);
 
 	if( !isdefined(self.reviveTextHud) )
 		self.reviveTextHud = newclientHudElem( self );	
