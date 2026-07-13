@@ -2,8 +2,8 @@
 #include "ui_mp/common_macro.inc"
 
 #define OPTIONS_STYLE			1
-#define CHOICE_SEP_1			25
-#define CHOICE_SEP_2			27
+#define CHOICE_SEP_1			24
+#define CHOICE_SEP_2			26
 
 #include "ui_mp/menustyle.inc"
 #include "ui/choices_setup_common.menu"
@@ -84,19 +84,19 @@
 		CHOICE_BIND( 24, "@MENU_ACTIONSLOT1", "+actionslot 1", ; )
 	#endif
 
-		CHOICE_BIND( 25, "@REMASTERED_ITEM_OTHER", "+actionslot 2", ; )
+		//CHOICE_BIND( 25, "@REMASTERED_ITEM_OTHER", "+actionslot 2", ; )
 
 
 		CHOICE_SEPARATOR( CHOICE_SEP_1 )
 
-		CHOICE_BIND( 26, "@MENU_VOICE_CHAT_BUTTON", "+talk", ; )
-		CHOICE_BIND( 27, "@MENU_CHAT", "chatmodepublic", ; )
+		CHOICE_BIND( 25, "@MENU_VOICE_CHAT_BUTTON", "+talk", ; )
+		CHOICE_BIND( 26, "@MENU_CHAT", "chatmodepublic", ; )
 		
 		CHOICE_SEPARATOR( CHOICE_SEP_2 )
 
-		CHOICE_BIND_VIS_FOCUS( 28, "@MENU_SCREENSHOT", "screenshotjpeg", ;, 1, 1, setLocalVarBool hint_screenshot 1, CLEAR_HINTS )
-		CHOICE_BIND( 29, "@REMASTERED_SCOREBOARD", "+scores", ; )
-		CHOICE_BIND( 30, "@MENU_ACCEPT_INVITE", "acceptInvitation", ; )
+		CHOICE_BIND_VIS_FOCUS( 27, "@MENU_SCREENSHOT", "screenshotjpeg", ;, 1, 1, setLocalVarBool hint_screenshot 1, CLEAR_HINTS )
+		CHOICE_BIND( 28, "@REMASTERED_SCOREBOARD", "+scores", ; )
+		CHOICE_BIND( 29, "@MENU_ACCEPT_INVITE", "acceptInvitation", ; )
 
 
 	//	CHOICE_BIND_VIS( 27, "@MENU_QUICK_SAVE", "savegame_lastcommit", ;, when( !dvarbool( ui_multiplayer ) ),!dvarbool( ui_multiplayer ) )

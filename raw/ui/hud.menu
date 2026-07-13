@@ -1610,34 +1610,69 @@ menuDef
 			textscale		TEXTSIZE_SMALL
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			ownerdraw		CG_HOLD_BREATH_HINT
-//			visible			when( dvarInt( "cg_drawGamepadHUD" ) != 1 )
-			visible 1
-			decoration
-		}
-/*		itemDef 
-		{
-			name			"chRect_console"
-			rect			0 0 0 0
-			textfont		UI_FONT_NORMAL
-			textscale		TEXTSIZE_SMALL
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
-			textalign		ITEM_ALIGN_CENTER
-			text		"Click and hold LS(up) to steady"
-			visible			when( dvarInt("ui_gamepad_stick") != 1 && dvarInt( "cg_drawGamepadHUD" ) == 1 && scoped() )
+			visible			when( dvarInt( "cg_drawGamepadHUD" ) != 1 || dvarInt("version_t4me") <= 48 ) // even if in gamepad mode, if we're on old version just use default
 			decoration
 		}
 		itemDef 
 		{
 			name			"chRect_console"
-			rect			0 0 0 0
+			rect			-1 0 0 0
 			textfont		UI_FONT_NORMAL
 			textscale		TEXTSIZE_SMALL
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textalign		ITEM_ALIGN_CENTER
-			text		"Click and hold LS(down) to steady"
-			visible			when( dvarInt("ui_gamepad_stick") == 1 && dvarInt( "cg_drawGamepadHUD" ) == 1 && scoped() )
+			exp 			text ( locString( "@PLATFORM_HOLDBREATH_CONSOLE" ) );
+			visible			when( (dvarInt("ui_gamepad_stick") == 1 || dvarInt("ui_gamepad_stick") == 2) && dvarInt("version_t4me") > 48 && dvarInt( "cg_drawGamepadHUD" ) == 1 && scoped() /*&& !dvarBool("cl_holdBreath")*/ )
 			decoration
-		}*/
+		}
+		#define JOYSTICK_OFFSET_X 0
+		#define JOYSTICK_OFFSET_Y -21.5
+		#define JOYSTICK_SHADER_FACTOR 2.25
+		itemDef 
+		{
+			name			"chRect_console_stick_down"
+			rect			(JOYSTICK_OFFSET_X) (JOYSTICK_OFFSET_Y) (64/JOYSTICK_SHADER_FACTOR) (64/JOYSTICK_SHADER_FACTOR)
+			origin			0 0
+			forecolor		1 1 1 1
+			style			WINDOW_STYLE_SHADER
+			background		"joystick_ls_down_xenon"
+			visible			when( dvarInt("ui_gamepad_stick") == 1 && dvarString("gpad_buttonsConfig") != "buttons_lefty_alt" && dvarInt("version_t4me") > 48 && dvarInt( "cg_drawGamepadHUD" ) == 1 && scoped() /*&& !dvarBool("cl_holdBreath")*/ )
+			decoration
+		}
+		itemDef 
+		{
+			name			"chRect_console_stick_up"
+			rect			(JOYSTICK_OFFSET_X) (JOYSTICK_OFFSET_Y) (64/JOYSTICK_SHADER_FACTOR) (64/JOYSTICK_SHADER_FACTOR)
+			origin			0 0
+			forecolor		1 1 1 1
+			style			WINDOW_STYLE_SHADER
+			background		"joystick_ls_up_xenon"
+			visible			when( dvarInt("ui_gamepad_stick") == 2 && dvarString("gpad_buttonsConfig") != "buttons_lefty_alt" && dvarInt("version_t4me") > 48 && dvarInt( "cg_drawGamepadHUD" ) == 1 && scoped() /*&& !dvarBool("cl_holdBreath")*/ )
+			decoration
+		}
+		
+		itemDef 
+		{
+			name			"chRect_console_stick_down_lefty"
+			rect			(JOYSTICK_OFFSET_X) (JOYSTICK_OFFSET_Y) (64/JOYSTICK_SHADER_FACTOR) (64/JOYSTICK_SHADER_FACTOR)
+			origin			0 0
+			forecolor		1 1 1 1
+			style			WINDOW_STYLE_SHADER
+			background		"joystick_rs_down_xenon"
+			visible			when( dvarInt("ui_gamepad_stick") == 1 && dvarString("gpad_buttonsConfig") == "buttons_lefty_alt" && dvarInt("version_t4me") > 48 && dvarInt( "cg_drawGamepadHUD" ) == 1 && scoped() /*&& !dvarBool("cl_holdBreath")*/ )
+			decoration
+		}
+		itemDef 
+		{
+			name			"chRect_console_stick_up_lefty"
+			rect			(JOYSTICK_OFFSET_X) (JOYSTICK_OFFSET_Y) (64/JOYSTICK_SHADER_FACTOR) (64/JOYSTICK_SHADER_FACTOR)
+			origin			0 0
+			forecolor		1 1 1 1
+			style			WINDOW_STYLE_SHADER
+			background		"joystick_rs_up_xenon"
+			visible			when( dvarInt("ui_gamepad_stick") == 2 && dvarString("gpad_buttonsConfig") == "buttons_lefty_alt" && dvarInt("version_t4me") > 48 && dvarInt( "cg_drawGamepadHUD" ) == 1 && scoped() /*&& !dvarBool("cl_holdBreath")*/ )
+			decoration
+		}
 	}
 	
 	// Saving Icon

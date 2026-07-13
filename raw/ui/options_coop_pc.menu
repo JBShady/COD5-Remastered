@@ -93,7 +93,7 @@
 
 		CHOICE_DVARFLOATLIST( 22, "@MENU_LOOK_INVERSION", input_invertpitch, { "@MENU_DISABLED" 0 "@MENU_ENABLED" 1 }, ; )
 		// MENU_CONTROLLER_VIBRATION would go here 23 NEEDS TO BE ADDED TO DEFAULT CONTROLS
-		CHOICE_DDVARALTTEXT_VIS( 23, "@MENU_CONTROLLER_VIBRATION", "Not Supported", 1 )
+		CHOICE_DVARFLOATLIST( 23, "@MENU_CONTROLLER_VIBRATION", gpad_rumble, { "@MENU_DISABLED" 0 "@MENU_ENABLED" 1 }, ; )
 
 		CHOICE_DVARFLOATLIST_FOCUS_VIS( 24, "@MENU_AIM_ASSIST", gpad_autoaim_enabled, { "@MENU_DISABLED" 0 "@MENU_ENABLED" 1 }, exec "setfromdvar aim_lockon_enabled gpad_autoaim_enabled"; exec "setfromdvar aim_slowdown_enabled gpad_autoaim_enabled", setLocalVarBool hint_aimassist 1, setLocalVarBool hint_aimassist 0, 1 )
 		//CHOICE_DDVARALTTEXT_VIS( 27, "@MENU_AIM_ASSIST", "@MENU_NO", when( dvarInt( version_t4me) == 0 ) )
@@ -1479,7 +1479,7 @@
 			textfont		UI_FONT_NORMAL
 			textalign		ITEM_ALIGN_LEFT
 			textscale		0.27
-			visible 		when( localVarBool( hint_aimassist ) && dvarInt( version_t4me) == 0  ) // if we have an old t4m version 
+			visible 		when( localVarBool( hint_aimassist ) && dvarInt( version_t4me) <= 48  ) // if we have an old t4m version 
 			mouseEnter		{ play "mouse_over"; }
 			decoration
 			autowrapped

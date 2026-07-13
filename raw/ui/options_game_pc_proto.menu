@@ -112,12 +112,13 @@
 		CHOICE_SEPARATOR( CHOICE_SEP_1 )
 		CHOICE_DVARYESNO_VIS( 27, "@REMASTERED_CROSSHAIR", cg_drawCrosshair, ;, when( !dvarBool(ui_multiplayer) ); )
 
-		CHOICE_DVARFLOATLIST_FOCUS_VIS( 28, "@REMASTERED_HUD", cg_draw2D_ui, { "@MENU_YES" 1 "@MENU_NO" 0 }, exec "setfromdvar r_flame_allowed cg_draw2D_ui"; setdvar "cg_draw2D" 1, ; , ; , when (dvarint(cg_draw2D_ui)) ) 
-		CHOICE_DVARFLOATLIST_FOCUS_VIS( 28, "@REMASTERED_HUD", cg_draw2D_ui, { "@MENU_YES" 1 "@MENU_NO" 0 }, exec "setfromdvar r_flame_allowed cg_draw2D_ui"/*; setdvar "cg_draw2D" 1*/, ; , ; , when (!dvarint(cg_draw2D_ui)) ) 
+		//CHOICE_DVARFLOATLIST_FOCUS_VIS( 28, "@REMASTERED_HUD", cg_draw2D_ui, { "@MENU_YES" 1 "@MENU_NO" 0 }, exec "setfromdvar r_flame_allowed cg_draw2D_ui"; setdvar "cg_draw2D" 1, ; , ; , when (dvarint(cg_draw2D_ui)) ) 
+		//CHOICE_DVARFLOATLIST_FOCUS_VIS( 28, "@REMASTERED_HUD", cg_draw2D_ui, { "@MENU_YES" 1 "@MENU_NO" 0 }, exec "setfromdvar r_flame_allowed cg_draw2D_ui"/*; setdvar "cg_draw2D" 1*/, ; , ; , when (!dvarint(cg_draw2D_ui)) ) 
+		CHOICE_DVARFLOATLIST( 28, "@REMASTERED_HUD", cg_draw2D, { "@MENU_YES" 1 "@MENU_NO" 0 }, exec "setfromdvar r_flame_allowed cg_draw2D" ) 
 
 		CHOICE_DVARFLOATLIST_FOCUS_VIS( 29, "@REMASTERED_HUD_SCALE", r_hud_scale_fix, { "@MENU_NORMAL" 1 "@MENU_SMALL" 0 }, setdvar "cg_scoreboard_h" 25.5; setdvar "cg_scoreboard_w" 110; setdvar "cg_scoreboard_textscale" 1.2, ; , ; , when (!dvarint(r_hud_scale_fix) && dvarInt(version_t4me) > 48 ) ) 
 		CHOICE_DVARFLOATLIST_FOCUS_VIS( 29, "@REMASTERED_HUD_SCALE", r_hud_scale_fix, { "@MENU_NORMAL" 1 "@MENU_SMALL" 0 }, setdvar "cg_scoreboard_h" 21; setdvar "cg_scoreboard_w" 100; setdvar "cg_scoreboard_textscale" 1, ; , ; , when (dvarint(r_hud_scale_fix) && dvarInt(version_t4me) > 48 ) ) 
-		CHOICE_DDVARALTTEXT_VIS( 29, "@REMASTERED_HUD_SCALE", "@MENU_SMALL", when( dvarInt( version_t4me) == 0 ) )
+		CHOICE_DDVARALTTEXT_VIS( 29, "@REMASTERED_HUD_SCALE", "@MENU_SMALL", when( dvarInt( version_t4me) <= 48 ) )
 		
 
 		//CHOICE_DVARSTRINGLIST( 28, "@REMASTERED_FPS_HUD", cg_drawFPS, { "@MENU_YES"; "Simple"; "@MENU_NO"; "Off" }, ; )

@@ -140,10 +140,7 @@
 		allowedBinding	"pause"
 		onOpen
 		{
-			exec "setfromdvar cg_draw2D cg_draw2D_ui"; // reset
 			exec "setfromdvar safeArea_vertical safeArea_ui"; // reset
-			setdvar cl_paused_ui 1; // first, tell the csc that we are paused so that we know to fire off our hud reshow and safe area failsafe
-
 
 			showMenu "pausedbkgnd"
 			//showMenu "objectiveinfo"
@@ -215,7 +212,6 @@
 
 	#define SETUP_ACTION_MENU_OPTIONS \
 				execnow "set safeArea_vertical 1.0"; \
-				execnow "set cg_draw2D 0"; \
 				execnow "set ui_allow_graphic_change 0"; \
 				close self; \
 				open "options_new_pc"; 
@@ -267,48 +263,48 @@
 		CHOICE_BUTTON_P( 2, "@MENU_OPTIONS_UPPER_CASE", ;, SETUP_ACTION_MENU_OPTIONS, dvarstring( "credits_active" ) != "1" )			
 			
 		// Restart Level for SP
-		CHOICE_BUTTON_P( 3, "@MENU_RESTART_LEVEL_CAP", "restartlevel", setdvar "cg_draw2D" 0; open "popup_restart_warning"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && dvarBool( sv_running ) && !dvarbool( arcademode ) && !dvarbool( splitscreen ) && NOT_CUSTOM_MATCH && !dvarbool( onlinegame ) )
+		CHOICE_BUTTON_P( 3, "@MENU_RESTART_LEVEL_CAP", "restartlevel", /*setdvar "cg_draw2D" 0; */open "popup_restart_warning"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && dvarBool( sv_running ) && !dvarbool( arcademode ) && !dvarbool( splitscreen ) && NOT_CUSTOM_MATCH && !dvarbool( onlinegame ) )
 		// Restart Level for Splitscreen Host alone
-		CHOICE_BUTTON_P( 3, "@MENU_RESTART_LEVEL_CAP", "restartlevel", setdvar "cg_draw2D" 0; open "popup_restart_warning"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && SPLITSCREEN_HOST && NOT_CUSTOM_MATCH )
+		CHOICE_BUTTON_P( 3, "@MENU_RESTART_LEVEL_CAP", "restartlevel", /*setdvar "cg_draw2D" 0;*/ open "popup_restart_warning"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && SPLITSCREEN_HOST && NOT_CUSTOM_MATCH )
 		// Restart Level for any COOP game
-		CHOICE_BUTTON_P( 3, "@MENU_RESTART_LEVEL_CAP", "restartlevel", setdvar "cg_draw2D" 0; open "popup_restart_warning"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && dvarBool( sv_running ) && CUSTOM_MATCH && !dvarbool( splitscreen ) )
+		CHOICE_BUTTON_P( 3, "@MENU_RESTART_LEVEL_CAP", "restartlevel", /*setdvar "cg_draw2D" 0;*/ open "popup_restart_warning"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && dvarBool( sv_running ) && CUSTOM_MATCH && !dvarbool( splitscreen ) )
 #ifdef CONSOLE
 		// Locked Button for Restart Level
 		CHOICE_BUTTON_LOCKED( 3, "@MENU_RESTART_LEVEL_CAP", "restartlevel_locked", dvarString( "credits_active" ) != "1" && ( !dvarBool( sv_running ) && CUSTOM_MATCH ) || XBOX_LIVE_PUBLIC || NOT_SPLITSCREEN_HOST )
 #else
 		CHOICE_BUTTON_LOCKED( 3, "@MENU_RESTART_LEVEL_CAP", "restartlevel_locked", dvarString( "credits_active" ) != "1" && !dvarBool( sv_running ) )
-		CHOICE_BUTTON_P( 3, "@MENU_RESTART_LEVEL_CAP", "restartlevel", setdvar "cg_draw2D" 0; open "popup_restart_warning"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && dvarBool( sv_running ) && dvarbool( onlinegame ) )
+		CHOICE_BUTTON_P( 3, "@MENU_RESTART_LEVEL_CAP", "restartlevel", /*setdvar "cg_draw2D" 0;*/ open "popup_restart_warning"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && dvarBool( sv_running ) && dvarbool( onlinegame ) )
 #endif
 		// Client Quitting Option : COOP
 		//"online_leave_quit"
-		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "online_leave_quit", setdvar "cg_draw2D" 0; open "popup_leavegame_coop"; setdvar "safeArea_vertical" 1.0, dvarbool( onlinegame ) && !dvarbool( systemlinkparty ) && !dvarbool( sv_running ) && (!InPrivateParty() || PrivatePartyHost() || !PrivatePartyHostInLobby()) )
+		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "online_leave_quit", /*setdvar "cg_draw2D" 0;*/ open "popup_leavegame_coop"; setdvar "safeArea_vertical" 1.0, dvarbool( onlinegame ) && !dvarbool( systemlinkparty ) && !dvarbool( sv_running ) && (!InPrivateParty() || PrivatePartyHost() || !PrivatePartyHostInLobby()) )
 		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "online_leave_quit", open "popup_leavegameandparty_coop"; setdvar "safeArea_vertical" 1.0, dvarbool( onlinegame ) && !dvarbool( systemlinkparty ) && !dvarbool( sv_running ) && (InPrivateParty() && !PrivatePartyHost() && PrivatePartyHostInLobby()) )
 #ifdef CONSOLE
 		//"systemlinkparty_leave_quit"
-		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "systemlinkparty_leave_quit", setdvar "cg_draw2D" 0; open "popup_coop_client_quit"; setdvar "safeArea_vertical" 1.0, !dvarBool( onlinegame ) && dvarbool( systemlinkparty ) && !dvarbool( sv_running ) && !dvarbool( zombiemode ) )
+		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "systemlinkparty_leave_quit", /*setdvar "cg_draw2D" 0;*/ open "popup_coop_client_quit"; setdvar "safeArea_vertical" 1.0, !dvarBool( onlinegame ) && dvarbool( systemlinkparty ) && !dvarbool( sv_running ) && !dvarbool( zombiemode ) )
 #else
 		//"systemlinkparty_leave_quit"
-		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "systemlinkparty_leave_quit", setdvar "cg_draw2D" 0; open "popup_coop_client_quit"; setdvar "safeArea_vertical" 1.0, dvarBool( onlinegame ) && dvarbool( systemlinkparty ) && !dvarbool( sv_running ) )
+		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "systemlinkparty_leave_quit", /*setdvar "cg_draw2D" 0;*/ open "popup_coop_client_quit"; setdvar "safeArea_vertical" 1.0, dvarBool( onlinegame ) && dvarbool( systemlinkparty ) && !dvarbool( sv_running ) )
 #endif
 
 		// Host Quitting Option : COOP
 		// "quit_coop"
-		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "quit_coop", setdvar "cg_draw2D" 0; open "popup_coop_host_quit"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && dvarbool( sv_running ) &&  ( dvarBool( splitscreen ) || dvarBool( systemlinkparty ) || XBOX_LIVE_PRIVATE ) )
-		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "quit_coop", setdvar "cg_draw2D" 0; open "popup_coop_host_quit_clone"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && dvarbool( sv_running ) &&  XBOX_LIVE_PUBLIC && !dvarbool( splitscreen ) && !dvarbool( systemlinkparty ) )
+		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "quit_coop", /*setdvar "cg_draw2D" 0;*/ open "popup_coop_host_quit"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && dvarbool( sv_running ) &&  ( dvarBool( splitscreen ) || dvarBool( systemlinkparty ) || XBOX_LIVE_PRIVATE ) )
+		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "quit_coop", /*setdvar "cg_draw2D" 0;*/ open "popup_coop_host_quit_clone"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && dvarbool( sv_running ) &&  XBOX_LIVE_PUBLIC && !dvarbool( splitscreen ) && !dvarbool( systemlinkparty ) )
 
 		// SOLO Quitting Options
 		// "quit"
 		// quit for movie maps
-		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "quit", setdvar "cg_draw2D" 0; open "popup_general_quit"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && !dvarBool( arcademode ) && dvarbool( sv_running ) && SOLO && MOVIE_MAPS )
+		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "quit", /*setdvar "cg_draw2D" 0;*/ open "popup_general_quit"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && !dvarBool( arcademode ) && dvarbool( sv_running ) && SOLO && MOVIE_MAPS )
 		// quit for no profile signed in
-		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "quit", setdvar "cg_draw2D" 0; open "popup_noprofile_quit"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && !dvarBool( arcademode ) && dvarbool( sv_running ) && SOLO && NOT_MOVIE_MAPS )
+		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "quit", /*setdvar "cg_draw2D" 0;*/ open "popup_noprofile_quit"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && !dvarBool( arcademode ) && dvarbool( sv_running ) && SOLO && NOT_MOVIE_MAPS )
 		// "saveandquit" ( displayed when we dont have an available save device )
-		CHOICE_BUTTON_P( 4, "@PLATFORM_SAVE_AND_QUIT_CAP", "saveandquit", setdvar "cg_draw2D" 0; open "popup_savegame_warning";, dvarstring( "credits_active" ) != "1" && !dvarBool( arcademode ) && !dvarBool( zombiemode ) && dvarbool( sv_running ) && SOLO )
+		CHOICE_BUTTON_P( 4, "@PLATFORM_SAVE_AND_QUIT_CAP", "saveandquit", /*setdvar "cg_draw2D" 0;*/ open "popup_savegame_warning";, dvarstring( "credits_active" ) != "1" && !dvarBool( arcademode ) && !dvarBool( zombiemode ) && dvarbool( sv_running ) && SOLO )
 		// "Quit for Zombie mode"
-		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "zombie_quit", setdvar "cg_draw2D" 0; open "popup_nosave_quit"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && dvarBool( zombiemode ) && dvarbool( sv_running ) && SOLO )
+		CHOICE_BUTTON_P( 4, "@PLATFORM_QUIT_CAP", "zombie_quit", /*setdvar "cg_draw2D" 0;*/ open "popup_nosave_quit"; setdvar "safeArea_vertical" 1.0, dvarstring( "credits_active" ) != "1" && dvarBool( zombiemode ) && dvarbool( sv_running ) && SOLO )
 
 		// "restartCheckpoint"
-		CHOICE_BUTTON_P( 5, "@MENU_RESTART_CHECKPOINT", "restartCheckpoint", setdvar "cg_draw2D" 0; open "popup_checkpoint_restart_warning";, dvarBool( ui_shipping_cheats ) && dvarbool( sv_running ) )
+		CHOICE_BUTTON_P( 5, "@MENU_RESTART_CHECKPOINT", "restartCheckpoint", /*setdvar "cg_draw2D" 0;*/ open "popup_checkpoint_restart_warning";, dvarBool( ui_shipping_cheats ) && dvarbool( sv_running ) )
 
 /*
 // "difficulty"
@@ -539,7 +535,7 @@
 		*/
 	}
 	
-	#define HAS_INGAME_MAP ( dvarString( mapname ) != "nazi_zombie_prototype" && dvarString( mapname ) != "nazi_zombie_asylum" && dvarString( mapname ) != "nazi_zombie_sumpf" )
+	#define HAS_INGAME_MAP ( dvarString( mapname ) != "nazi_zombie_farm" && dvarString( mapname ) != "nazi_zombie_prototype" && dvarString( mapname ) != "nazi_zombie_asylum" && dvarString( mapname ) != "nazi_zombie_sumpf" )
 		
 	// overhead map - old map code opens
 	menuDef

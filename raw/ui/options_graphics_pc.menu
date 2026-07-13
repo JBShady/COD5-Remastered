@@ -453,13 +453,14 @@ setLocalVarBool hint_gamma 0;
 
 		CHOICE_SEPARATOR(CHOICE_SEP_1)
 
+		// restrict insane setting if on old versions as flashing model issue can happen
 		//when on menu, we are just changing the dummy var because our client script will set the actual 2 dvars
-		CHOICE_DVARFLOATLIST_VIS( 25, "@REMASTERED_LOD_RIGID", r_lodBiasRigid_settings, { "@MENU_LOW" 0 "@MENU_NORMAL" -200 "@MENU_HIGH" -500 }, ; , when( !dvarint(cl_ingame) && dvarInt( version_t4me) == 0 ) ) // Increases LOD bias for detailed models
-		CHOICE_DVARFLOATLIST_VIS( 26, "@REMASTERED_LOD_SKINNED", r_lodBiasSkinned_settings, { "@MENU_LOW" 0 "@MENU_NORMAL" -200 "@MENU_HIGH" -500 }, ; , when( !dvarint(cl_ingame) && dvarInt( version_t4me) == 0 ) ) // Increases LOD bias for detailed models
+		CHOICE_DVARFLOATLIST_VIS( 25, "@REMASTERED_LOD_RIGID", r_lodBiasRigid_settings, { "@MENU_LOW" 0 "@MENU_NORMAL" -200 "@MENU_HIGH" -500 }, ; , when( !dvarint(cl_ingame) && dvarInt( version_t4me) <= 48 ) ) // Increases LOD bias for detailed models
+		CHOICE_DVARFLOATLIST_VIS( 26, "@REMASTERED_LOD_SKINNED", r_lodBiasSkinned_settings, { "@MENU_LOW" 0 "@MENU_NORMAL" -200 "@MENU_HIGH" -500 }, ; , when( !dvarint(cl_ingame) && dvarInt( version_t4me) <= 48 ) ) // Increases LOD bias for detailed models
 
 		//however, when we are in game we will edit the actual settings
-		CHOICE_DVARFLOATLIST_VIS( 25, "@REMASTERED_LOD_RIGID", r_lodBiasRigid, { "@MENU_LOW" 0 "@MENU_NORMAL" -200 "@MENU_HIGH" -500 }, exec "setfromdvar r_lodBiasRigid_settings r_lodBiasRigid" , when( dvarint(cl_ingame) && dvarInt( version_t4me) == 0 ) ) 
-		CHOICE_DVARFLOATLIST_VIS( 26, "@REMASTERED_LOD_SKINNED", r_lodBiasSkinned, { "@MENU_LOW" 0 "@MENU_NORMAL" -200 "@MENU_HIGH" -500 }, exec "setfromdvar r_lodBiasSkinned_settings r_lodBiasSkinned" , when( dvarint(cl_ingame) && dvarInt( version_t4me) == 0 ) ) 
+		CHOICE_DVARFLOATLIST_VIS( 25, "@REMASTERED_LOD_RIGID", r_lodBiasRigid, { "@MENU_LOW" 0 "@MENU_NORMAL" -200 "@MENU_HIGH" -500 }, exec "setfromdvar r_lodBiasRigid_settings r_lodBiasRigid" , when( dvarint(cl_ingame) && dvarInt( version_t4me) <= 48 ) ) 
+		CHOICE_DVARFLOATLIST_VIS( 26, "@REMASTERED_LOD_SKINNED", r_lodBiasSkinned, { "@MENU_LOW" 0 "@MENU_NORMAL" -200 "@MENU_HIGH" -500 }, exec "setfromdvar r_lodBiasSkinned_settings r_lodBiasSkinned" , when( dvarint(cl_ingame) && dvarInt( version_t4me) <= 48 ) ) 
 		
 
 		//when on menu, we are just changing the dummy var because our client script will set the actual 2 dvars

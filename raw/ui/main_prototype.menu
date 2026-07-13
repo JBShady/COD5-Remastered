@@ -128,7 +128,6 @@
 			execondvarintvalue cg_drawGamepadHUD 1 "set cl_bypassMouseInput 1"; 
 
 			setdvar safeArea_vertical 1.0;
-			exec "setfromdvar cg_draw2D cg_draw2D_ui"; // reset
 
 			execondvarintvalue dvar_init 0 "exec init_remastered"; 
 			execondvarintvalue cg_drawGamepadHUD 1 "set cg_scoreboardFont 3"; 
@@ -436,11 +435,12 @@
 #else // #ifdef CONSOLE
 			//setdvar safeArea_horizontal 1.0;
 			setdvar safeArea_vertical 1.0;
-			exec "setfromdvar cg_draw2D cg_draw2D_ui"; // reset
 
 			execnow "ui_cinematic front_end_sp 3"
 			setdvar ui_showOnlineOfflineButton "1";
-			
+
+			exec "setfromdvar cg_fov cg_fov_settings"; // if we leave game with a modified spec (end game or spectating, we need to reset)
+
 			execondvarintvalue dvar_init 0 "exec init_remastered"; 
 			execondvarintvalue cg_drawGamepadHUD 1 "set cg_scoreboardFont 3"; 
 			execondvarintvalue cg_drawGamepadHUD 0 "set cg_scoreboardFont 0"; 

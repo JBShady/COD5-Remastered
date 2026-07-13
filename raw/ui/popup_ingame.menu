@@ -1,0 +1,182 @@
+#include "ui/menudef.h"
+
+#define CHOICE_SIZE_X			150
+#define CHOICE_SIZE_Y			22
+
+#define CHOICE_X_START			0
+#define CHOICE_Y_START			34
+
+#define CHOICE_SEP_OFFSET_Y		-2
+
+#define CHOICE_SEP_1			3
+
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+#define ORIGIN_POPUPTITLE		320 160
+#define ORIGIN_POPUPTITLE2		320 220
+
+#define ORIGIN_YES				234 260
+#define ORIGIN_NO				310 260
+
+#define ORIGIN_POPUPCHOICE1		180 200
+#define ORIGIN_POPUPCHOICE2		180 220
+
+{
+
+	#include "ui_mp/popupstyle.inc"
+	#include "ui/choices_setup_popmenu.menu"
+
+#ifdef XENON
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			230
+#endif // #ifdef XENON
+#ifdef PS3
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			200
+#endif //#ifdef PS3
+#ifdef PC
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			265
+#endif //#ifdef PC
+
+	menuDef
+	{
+		blurWorld		4.8
+
+		CENTER_POPUP_SETUP_ONOPEN( popup_savegame_warning, 2, close self; open "pausedmenu";, setfocus resume_game, 1 )
+
+#ifdef XENON
+		#define ACTION_SAVEGAME_RESUME \
+				play "mouse_click"; \
+				close self; \
+				close "pausedmenu"; \
+				uiScript saveRevert;
+#else
+		#define ACTION_SAVEGAME_RESUME \
+				play "mouse_click"; \
+				close self; \
+				close "pausedmenu"; \
+				uiScript saveRevert; 
+#endif // #ifdef XENON
+
+		#define ACTION_SAVE_AND_QUIT_DEVICE_AVAILABLE \
+				play "mouse_click"; \
+				close self; \
+				setSaveExecOnSuccess "disconnect" \
+				open "savegameinfo"; \
+				setdvar ui_skipMainLockout "1"; \
+
+		#define ACTION_SAVE_AND_QUIT_DEVICE_NOT_AVAILABLE \
+				play "mouse_click"; \
+				close self; \
+				close "pausedmenu"; \
+				open "popup_savegame_error"; \
+				setdvar ui_skipMainLockout "1";
+				
+		CHOICE_POPMENU_TITLE( "@MENU_CONTINUE_SAVING")
+
+#ifdef XENON
+		CHOICE_POPMENU_SUBTITLE( "@MENU_SAVEQUIT_TEXT_WITH_DEVICE_CHANGE" )
+#else
+		CHOICE_POPMENU_SUBTITLE( "@MENU_SAVEQUIT_TEXT_WITHOUT_DEVICE_CHANGE" )
+#endif // #ifdef XENON
+		
+		CHOICE_BUTTON_FOCUS_VIS_EX( 1, "@MENU_RESUMEGAME_CAP", ACTION_SAVEGAME_RESUME, play "mouse_over";, ;, 1, name resume_game )
+		CHOICE_BUTTON_FOCUS_VIS_ADV( 2, "@MENU_SAVE_AND_QUIT", ACTION_SAVE_AND_QUIT_DEVICE_AVAILABLE, play "mouse_over";, ;, when( dvarbool( sv_saveDeviceAvailable ) ), dvarbool( sv_saveDeviceAvailable ) )
+		CHOICE_BUTTON_FOCUS_VIS_ADV( 2, "@MENU_SAVE_AND_QUIT", ACTION_SAVE_AND_QUIT_DEVICE_NOT_AVAILABLE, play "mouse_over";, ;, when( !dvarbool( sv_saveDeviceAvailable ) ), !dvarbool( sv_saveDeviceAvailable ) )
+	}	
+
+#ifdef PC
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			235
+#else
+	#undef CHOICE_Y_START
+	#define CHOICE_Y_START			200
+#endif //#ifdef PC
+
+	menuDef
+	{
+
+		blurWorld		4.8
+
+#ifndef PC
+		#define RESTART_WARNING_ONOPEN \
+			setfocus resume_game; \
+			exec "fullscreenview";
+#else // #ifndef PC
+		#define RESTART_WARNING_ONOPEN \
+			setfocus resume_game; 
+#endif	// #ifndef PC
+
+		CENTER_POPUP_SETUP_ONOPEN( popup_restart_warning, 2, close self; open "pausedmenu";, RESTART_WARNING_ONOPEN, 1 )
+
+#ifndef PC
+		#define ACTION_RESTART_LEVEL_RESUME \
+			play "mouse_click"; \
+			exec "splitscreenview"; \
+			close self; \
+			close "pausedmenu";
+#else
+		#define ACTION_RESTART_LEVEL_RESUME \
+			play "mouse_click"; \
+			close self; \
+			close "pausedmenu";
+#endif // #ifndef PC
+
+#ifndef PC
+		#define ACTION_RESTART_LEVEL \
+				play "mouse_click"; \
+				close self; \
+				exec "stopControllerRumble"; \
+				exec "fast_restart";
+#else
+		#define ACTION_RESTART_LEVEL \
+				play "mouse_click"; \
+				close self; \
+				exec "stopControllerRumble"; \
+				exec "fast_restart";
+#endif// #ifndef PC
+				
+		CHOICE_POPMENU_TITLE( "@MENU_CONTINUE_RESTART")
+
+		CHOICE_POPMENU_SUBTITLE( "@MENU_RESTART_LEVEL_TEXT" )
+		
+		CHOICE_BUTTON_FOCUS_VIS_EX( 1, "@MENU_RESUMEGAME_CAP", ACTION_RESTART_LEVEL_RESUME, play "mouse_over";, ;, 1, name resume_game )
+		CHOICE_BUTTON_FOCUS( 2, "@MENU_RESTART_LEVEL_CAP", ACTION_RESTART_LEVEL, play "mouse_over";, ; )
+	}	
+
+	menuDef
+	{
+		blurWorld		4.8
+
+		CENTER_POPUP_SETUP_ONOPEN( popup_checkpoint_restart_warning, 2, close self; open "pausedmenu";, setfocus resume_game, 1 )
+
+		#define ACTION_CHECKPOINT_RESTART_RESUME \
+			play "mouse_click"; \
+			close self; \
+			close "pausedmenu";
+
+#ifndef PC
+		#define ACTION_CHECKPOINT_RESTART \
+			play "mouse_click"; \
+			close self; \
+			exec "stopControllerRumble"; \
+			exec "checkpoint_restart"
+#else
+		#define ACTION_CHECKPOINT_RESTART \
+			play "mouse_click"; \
+			close self; \
+			exec "stopControllerRumble"; \
+			exec "checkpoint_restart"
+#endif // #ifndef PC
+				
+		CHOICE_POPMENU_TITLE( "@MENU_CONTINUE_RESTART_CHECKPOINT")
+
+		CHOICE_POPMENU_SUBTITLE( "@MENU_CHECKPOINT_RESTART_TEXT" )
+		
+		CHOICE_BUTTON_FOCUS_VIS_EX( 1, "@MENU_RESUMEGAME_CAP", ACTION_CHECKPOINT_RESTART_RESUME, play "mouse_over";, ;, 1, name resume_game )
+		CHOICE_BUTTON_FOCUS( 2, "@MENU_CONTINUE_RESTART_CHECKPOINT", ACTION_CHECKPOINT_RESTART, play "mouse_over";, ; )
+	}	
+
+}
