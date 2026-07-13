@@ -78,7 +78,7 @@ player_dvar_init()
 	for(i = 0; i < players.size; i++)
 	{
 		players[i] thread dvar_update();
-		players[i] thread pause_check();
+		//players[i] thread pause_check();
 		players[i] thread fov_spawn();
 	}
 }
