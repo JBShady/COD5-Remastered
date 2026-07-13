@@ -120,15 +120,17 @@ dvar_update() // if we happen to change the dummy setting VARS on the main menu 
 	
 	wait(0.05);
 
-	if(GetDvarInt("cg_fov_settings") < 65 ) // failsafe
+	fov_force_time = 60;
+
+	// initial sync
+	if(GetDvarInt("cg_fov_settings") < 65)
 	{
 		SetClientDvar("cg_fov", 65); 
 		SetClientDvar("cg_fov_settings", 65); 
 	}
 	else
 	{
-		real_fov = GetDvarFloat("cg_fov_settings"); 
-		SetClientDvar("cg_fov", real_fov); 
+		SetClientDvar("cg_fov", GetDvarFloat("cg_fov_settings"));
 	}
 
 	//if dvars do not exist, reset to default value just incase
@@ -151,6 +153,12 @@ dvar_update() // if we happen to change the dummy setting VARS on the main menu 
 */
 	for(;;)
 	{
+		// im tired boss
+		if(fov_force_time > 0)
+		{
+			SetClientDvar("cg_fov", GetDvarFloat("cg_fov_settings"));
+			fov_force_time -= 0.05;
+		}
 		aim_assist = GetDvarInt("gpad_autoaim_enabled");
 		SetClientDvar("aim_lockon_enabled", aim_assist);
 		SetClientDvar("aim_slowdown_enabled", aim_assist);
