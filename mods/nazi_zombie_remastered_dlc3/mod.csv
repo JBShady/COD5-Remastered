@@ -217,6 +217,7 @@ xmodel,zombie_sumpf_zipcage_switch
 fx,env/electrical/fx_elec_sparking
 fx,env/electrical/fx_elec_sparking_oneshot
 fx,env/smoke/fx_pipe_steam_sm_onesht
+fx,weapon/muzzleflashes/fx_mg_ug_light
 fx,maps/zombie/fx_zombie_light_glow_orange
 fx,weapon/grenade/fx_smoke_grenade_11sec_mp
 material,hud_fuse
@@ -244,6 +245,7 @@ menufile,ui/briefing.menu
 rawfile,bik/bink_front_end_screen_home.bik
 localize,key
 localize,menu
+localize,cgame
 rawfile,buttons_nomad_new.cfg
 rawfile,buttons_default_alt_flipped.cfg
 rawfile,buttons_experimental_alt_flipped.cfg
@@ -251,3 +253,7 @@ rawfile,buttons_lefty_alt_flipped.cfg
 rawfile,buttons_nomad_flipped.cfg
 material,spec_xenon
 menufile,ui/quit.menu
+material,joystick_ls_down_xenon
+material,joystick_ls_up_xenon
+material,joystick_rs_down_xenon
+material,joystick_rs_up_xenon
