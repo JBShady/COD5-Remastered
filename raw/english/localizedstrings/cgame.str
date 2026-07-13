@@ -10,14 +10,11 @@
 //  as being untranslated.)
 //
 VERSION             "1"
-CONFIG              "E:\cod5\cod\cod5\bin\StringEd.cfg"
+CONFIG              "C:\cod5\cod\cod5\bin\StringEd.cfg"
 FILENOTES           ""
 
-REFERENCE           USE
-LANG_ENGLISH        "|^7½"
-
-REFERENCE           HINT_GP
-LANG_ENGLISH		"|^7¾"
+REFERENCE           SPECTATOR
+LANG_ENGLISH        ""
 
 
 ENDMARKER

@@ -25,6 +25,21 @@ LANG_ENGLISH        "- Press^3 &&1 ^7to follow next player"
 REFERENCE           THROWBACKGRENADE
 LANG_ENGLISH        "^3&&1 ^7throw back"
 
+REFERENCE           THROWBACKGRENADE_CONSOLE_DEFAULT
+LANG_ENGLISH        "£ ^7throw back"
+
+REFERENCE           THROWBACKGRENADE_CONSOLE_LEFTY
+LANG_ENGLISH        "¢ ^7throw back"
+
+REFERENCE           THROWBACKGRENADE_CONSOLE_DEFAULT_FLIPPED
+LANG_ENGLISH        "¥ ^7throw back"
+
+REFERENCE           THROWBACKGRENADE_CONSOLE_LEFTY_FLIPPED
+LANG_ENGLISH        "¤ ^7throw back"
+
+REFERENCE           HOLDBREATH_CONSOLE
+LANG_ENGLISH        "Click and hold ^3        ^7to steady"
+
 REFERENCE           RELOAD
 LANG_ENGLISH        "½ Reload"
 

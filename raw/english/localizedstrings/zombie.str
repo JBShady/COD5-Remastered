@@ -37,30 +37,6 @@ LANG_ENGLISH        "Round"
 REFERENCE           UNDEFINED
 LANG_ENGLISH        "UNDEFINED!! PLEASE SET THE SCRIPT_HINT ON THE ENT PROPERLY!"
 
-REFERENCE           BUTTON_BUY_BACK_BARRIER_10
-LANG_ENGLISH        "Press & hold ^3&&1^7 to buy back Barrier [Cost: 10]"
-
-REFERENCE           BUTTON_BUY_BACK_BARRIER_20
-LANG_ENGLISH        "Press & hold ^3&&1^7 to buy back Barrier [Cost: 20]"
-
-REFERENCE           BUTTON_BUY_BACK_BARRIER_50
-LANG_ENGLISH        "Press & hold ^3&&1^7 to buy back Barrier [Cost: 50]"
-
-REFERENCE           BUTTON_BUY_BACK_BARRIER_100
-LANG_ENGLISH        "Press & hold ^3&&1^7 to buy back Barrier [Cost: 100]"
-
-REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_100
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 100]"
-
-REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_200
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 200]"
-
-REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_250
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 250]"
-
-REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_500
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 500]"
-
 REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_750
 LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 750]"
 
@@ -72,24 +48,6 @@ LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 1250]"
 
 REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_1500
 LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 1500]"
-
-REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_1750
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 1750]"
-
-REFERENCE           BUTTON_BUY_CLEAR_DEBRIS_2000
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Clear Debris [Cost: 2000]"
-
-REFERENCE           BUTTON_BUY_OPEN_DOOR_100
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 100]"
-
-REFERENCE           BUTTON_BUY_OPEN_DOOR_200
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 200]"
-
-REFERENCE           BUTTON_BUY_OPEN_DOOR_250
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 250]"
-
-REFERENCE           BUTTON_BUY_OPEN_DOOR_500
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 500]"
 
 REFERENCE           BUTTON_BUY_OPEN_DOOR_750
 LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 750]"
@@ -103,27 +61,6 @@ LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 1250]"
 REFERENCE           BUTTON_BUY_OPEN_DOOR_1500
 LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 1500]"
 
-REFERENCE           BUTTON_BUY_OPEN_DOOR_1750
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 1750]"
-
-REFERENCE           BUTTON_BUY_OPEN_DOOR_2500
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 2500]"
-
-REFERENCE           BUTTON_BUY_OPEN_DOOR_2000
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Door [Cost: 2000]"
-
-REFERENCE           BUTTON_BUY_OPEN_AREA_100
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 100]"
-
-REFERENCE           BUTTON_BUY_OPEN_AREA_200
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 200]"
-
-REFERENCE           BUTTON_BUY_OPEN_AREA_250
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 250]"
-
-REFERENCE           BUTTON_BUY_OPEN_AREA_500
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 500]"
-
 REFERENCE           BUTTON_BUY_OPEN_AREA_750
 LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 750]"
 
@@ -135,12 +72,6 @@ LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 1250]"
 
 REFERENCE           BUTTON_BUY_OPEN_AREA_1500
 LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 1500]"
-
-REFERENCE           BUTTON_BUY_OPEN_AREA_1750
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 1750]"
-
-REFERENCE           BUTTON_BUY_OPEN_AREA_2000
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Area [Cost: 2000]"
 
 REFERENCE           CABINET_OPEN_500
 LANG_ENGLISH        "Press & hold ^3&&1^7 to Open Cabinet [Cost: 500]"
@@ -290,7 +221,7 @@ REFERENCE           WEAPON_BAR_1800
 LANG_ENGLISH        "Press & hold ^3&&1^7 to buy BAR [Cost: 1800]"
 
 REFERENCE           WEAPON_DP28_2250
-LANG_ENGLISH        "Press & hold ^3&&1^7 to buy DP-28 [Cost: 2250]"
+LANG_ENGLISH        "Press & hold ^3&&1^7 to buy DP-28 [Cost: 2000]"
 
 REFERENCE           WEAPON_FG42_1500
 LANG_ENGLISH        "Press & hold ^3&&1^7 to buy FG42 [Cost: 1500]"
@@ -379,23 +310,8 @@ LANG_ENGLISH        "Double Points: "
 REFERENCE           POWERUP_MAX_AMMO
 LANG_ENGLISH        "Max Ammo!"
 
-REFERENCE           BUTTON_REWARD_BARRIER_10
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Rebuild Barrier [Reward: 10]"
-
-REFERENCE           BUTTON_REWARD_BARRIER_20
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Rebuild Barrier [Reward: 20]"
-
-REFERENCE           BUTTON_REWARD_BARRIER_30
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Rebuild Barrier [Reward: 30]"
-
-REFERENCE           BUTTON_REWARD_BARRIER_40
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Rebuild Barrier [Reward: 40]"
-
 REFERENCE           GAME_OVER
 LANG_ENGLISH        "GAME OVER"
-
-REFERENCE           BUTTON_REWARD_BARRIER_50
-LANG_ENGLISH        "Press & hold ^3&&1^7 to Rebuild Barrier [Reward: 50]"
 
 REFERENCE           SURVIVED_ROUNDS
 LANG_ENGLISH        "You Survived &&1 Rounds"
