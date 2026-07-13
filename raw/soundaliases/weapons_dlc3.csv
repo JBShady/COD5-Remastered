@@ -473,7 +473,7 @@ gr_type100_tap_plr,,SFX/Weapon/SMG/type100/foley/type100_tap.wav,,0.75,0.8,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 # Machine Guns,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 #Browning .30 Cal,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_30cal_fire_plr,,SFX/Weapon/mg/30cal/Fire/wpn_30cal_mn.wav,,0.7,0.74,,,2,oldest,,,full_vol,,curve3,,,,,0.9,1.1,,2d,,,,0.75,hol2 hol1 hol3 see2 see3 mak audio_test_tuey firing_range all_mp oki3 oki2 pel1b,,,weap_30cal_fire_plr_act,,,wpn_all,0.5,0.5,,,,,,,,,,90,90,0.25,1,,yes
+weap_30cal_fire_plr,,SFX/Weapon/mg/30cal/Fire/wpn_30Cal_st_f.wav,,0.7,0.74,,,2,oldest,,,full_vol,,curve3,,,,,0.9,1.1,,2d,,,,0.75,hol2 hol1 hol3 see2 see3 mak audio_test_tuey firing_range all_mp oki3 oki2 pel1b,,,weap_30cal_fire_plr_act,,,wpn_all,0.5,0.5,,,,,,,,,,90,90,0.25,1,,yes
 weap_30cal_fire_plr_act,,SFX/Weapon/mg/30cal/Fire/wpn_30Cal_st_act.wav,,0.65,0.75,,,3,oldest,,,full_vol,,curve3,,,,,0.9,1.1,,2d,,,,0.75,hol2 hol1 hol3 see2 see3 mak audio_test_tuey firing_range all_mp oki3 oki2 pel1b,,,weap_30cal_move_l,,75,wpn_fnt,0.5,0.5,,,,,,,,,,90,90,0.25,1,,yes
 weap_30cal_fire,,SFX/Weapon/mg/30cal/Fire/wpn_30cal_mn.wav,,0.9,1,250,2000,,,2,oldest,smg_3rd,,curve4,,2000,,,0.9,1.05,,3d,,,,0.7,hol2 hol1 hol3 see2 see3 mak audio_test_tuey firing_range all_mp oki3 oki2 pel1b,,,weap_30cal_fire_act,,,,,,,,,,,,,,,60,90,0.35,1,,yes
 weap_30cal_fire_act,,SFX/Weapon/mg/30cal/Fire/wpn_30Cal_mn_act.wav,,0.9,1,100,600,,,2,oldest,smg_3rd,,curve4,,1000,,,0.9,1.05,,3d,,,,0.7,hol2 hol1 hol3 see2 see3 mak audio_test_tuey firing_range all_mp oki3 oki2 pel1b,,,weap_30cal_fire_dist,,,,,,,,,,,,,,,60,90,0.35,1,,yes
@@ -1472,12 +1472,6 @@ weap_molotov_flick_close,,SFX/Weapon/Special/Molotov/molotov_light_00.wav,,0.9,1
 weap_molotov_throw,,SFX/Weapon/Special/Molotov/molotov_throw_00.wav,,0.9,1,35,3000,,,,,explosion,,,,,,,0.85,1,,3d,,,,,see1 ber1 ber2 ber3 ber3b all_sp sniper nazi_zombie_asylum ,,,foley_throw,,,,,,,,,,,,,,,90,90,0.25,1,,
 weap_molotov_impact,,SFX/Weapon/Special/Molotov/molotov_explode_00.wav,,0.9,1,35,3000,,,,,explosion,,,,,,,0.85,1,,3d,,,,,see1 ber1 ber2 ber3 ber3b all_sp sniper nazi_zombie_asylum,,,,,,,,,,,,,,,,,,90,90,0.25,1,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-weap_molotov_flick_open,,SFX/Weapon/Special/Molotov/molotov_light_00.wav,,0.9,1,35,3000,,,,,explosion,,,,,,,0.85,1,,3d,,,,,audio_test_tuey,,,,,,,,,,,,,,,,,,90,90,0.25,1,,
-weap_molotov_light,,SFX/Weapon/Special/Molotov/molotov_light_00.wav,,0.9,1,35,3000,,,,,explosion,,,,,,,0.85,1,,3d,,,,,audio_test_tuey,,,,,,,,,,,,,,,,,,90,90,0.25,1,,
-weap_molotov_flick_close,,SFX/Weapon/Special/Molotov/molotov_light_00.wav,,0.9,1,35,3000,,,,,explosion,,,,,,,0.85,1,,3d,,,,,audio_test_tuey,,,,,,,,,,,,,,,,,,90,90,0.25,1,,
-#weap_molotov_fuseburn,,SFX/Weapon/Special/Molotov/molotov_armed_00.wav,,0.9,1,35,3000,,,,,explosion,,,,,,,0.85,1,,3d,,,,,audio_test_tuey,,,,,,,,,,,,,,,,,,90,90,0.25,1,,
-weap_molotov_throw,,SFX/Weapon/Special/Molotov/molotov_throw_00.wav,,0.9,1,35,3000,,,,,explosion,,,,,,,0.85,1,,3d,,,,,audio_test_tuey,,,foley_throw,,,,,,,,,,,,,,,90,90,0.25,1,,
-weap_molotov_impact,,SFX/Weapon/Special/Molotov/molotov_explode_00.wav,,0.9,1,35,3000,,,,,explosion,,,,,,,0.85,1,,3d,,,,,audio_test_tuey,,,,,,,,,,,,,,,,,,90,90,0.25,1,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 # Dry Fire,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
