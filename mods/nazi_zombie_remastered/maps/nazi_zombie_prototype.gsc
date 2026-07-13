@@ -628,8 +628,19 @@ player_zombie_awareness()
 	self endon("end_game_quiet");
 
 	wait(6);
+
 	players = getplayers();
 	index = maps\_zombiemode_weapons::get_player_index(self);
+
+	if(index == 0)
+	{
+		special_once = true;
+	}
+	else
+	{
+		special_once = undefined;
+	}
+
 	while(1)
 	{
 		wait(1);		
@@ -700,7 +711,36 @@ player_zombie_awareness()
 				close_zombs ++;
 			}
 		}
-		if(close_zombs > 5 && players.size > 1)
+
+		weap = self getCurrentWeapon(); 
+
+		
+
+
+		if(/*index == 0 &&*/ close_zombs > 5 && isSubStr(weap, "panzer") && isDefined(special_once) && special_once == true ) // add extra condition for only 1 player alive
+		{
+			players = getplayers();
+			alive_players = 0;
+			for(i=0;i<players.size;i++)
+			{
+				if( IsAlive( players[i] ) && !players[i] maps\_laststand::player_is_in_laststand() ) // if alive and not in last stand only
+				{
+					alive_players++;
+				}
+			}
+
+			if(alive_players == 1)
+			{
+				//iprintlnbold("Only one player is alive and is holding panzer, checking for putting the bastards back");
+				if(randomintrange(0,2) < 1)
+				{
+					plr = "plr_" + index + "_";
+					self thread create_and_play_dialog( plr, "vox_oh_shit_special", .25 );	
+					special_once = undefined;
+				}	
+			}
+		}
+		else if(close_zombs > 5 && players.size > 1)
 		{
 			if(randomintrange(0,20) < 4)
 			{
