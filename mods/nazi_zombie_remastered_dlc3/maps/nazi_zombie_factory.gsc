@@ -627,7 +627,8 @@ factory_tesla_weighting_func()
 		// player has dropped the tesla for another weapon, so we set all future polls to 20% nerfed to 10
 		if( isDefined(level.player_drops_tesla_gun) && level.player_drops_tesla_gun == true )
 		{						
-			num_to_add += int(.1 * level.zombie_include_weapons.size);		
+			//num_to_add += int(.1 * level.zombie_include_weapons.size);
+			num_to_add += 4; // 5 total
 		}
 		
 		// player has not seen tesla gun in late rounds
@@ -636,13 +637,15 @@ factory_tesla_weighting_func()
 			// after round 15 the Tesla gun percentage increases to 20% nerfed to 10
 			if( level.round_number > 15 )
 			{
-				num_to_add += int(.1 * level.zombie_include_weapons.size);
+				//num_to_add += int(.1 * level.zombie_include_weapons.size);
+				num_to_add += 4; // 5 total
 			}		
 			// after round 10 the Tesla gun percentage increases to 15% nerfed to 5
 			else if( level.round_number > 10 )
 			{
 				// calculate the number of times we have to add it to the array to get the desired percent
-				num_to_add += int(.05 * level.zombie_include_weapons.size);
+//				num_to_add += int(.05 * level.zombie_include_weapons.size);
+				num_to_add += 2; // 3 total
 			}						
 		}
 	}
@@ -661,12 +664,14 @@ factory_ray_gun_weighting_func()
 			// after 12 pulls the ray gun percentage increases to 15% nerfed to 10
 			if( level.pulls_since_last_ray_gun > 11 )
 			{
-				num_to_add += int(level.zombie_include_weapons.size*0.1);
+				//num_to_add += int(level.zombie_include_weapons.size*0.1);
+				num_to_add += 2; // 3 total
 			}			
 			// after 8 pulls the Ray Gun percentage increases to 10% nerfed to 5
 			else if( level.pulls_since_last_ray_gun > 7 )
 			{
-				num_to_add += int(.05 * level.zombie_include_weapons.size);
+				//num_to_add += int(.05 * level.zombie_include_weapons.size);
+				num_to_add += 1; // 2 total
 			}		
 		}
 		return num_to_add;	
