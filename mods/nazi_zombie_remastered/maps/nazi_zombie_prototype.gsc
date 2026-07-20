@@ -15,6 +15,10 @@ main()
 
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_PROTO_LEVEL_PLACE");
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_PROTO_LEVEL_TIME");
+
+	precachestring(&"REMASTERED_ZOMBIE_SATCHEL_HOWTO");
+	precachestring(&"REMASTERED_ZOMBIE_SATCHEL_HOWTO2");
+
 	precachemodel("char_usa_raider_gear_flametank");
 	precachemodel("satchel_crate");
 	precachemodel("satchel_crate_lid");

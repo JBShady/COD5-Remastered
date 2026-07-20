@@ -88,7 +88,7 @@ main()
 	PrecacheItem( "zombie_item_beaker" ); // new
 	PrecacheItem( "zombie_svt40_upgraded" ); // fix 3 round burst
 
-	precachestring(&"ZOMBIE_BETTY_ALREADY_PURCHASED");
+	//precachestring(&"ZOMBIE_BETTY_ALREADY_PURCHASED");
 	precachestring(&"REMASTERED_ZOMBIE_BETTY_HOWTO");
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_FACTORY_LEVEL_PLACE");
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_FACTORY_LEVEL_TIME");

@@ -53,8 +53,10 @@ main()
 	level.sack_has_been_found = 0; // for flogger step
 	level.meteor_ready = 0; // for our 20 zaps
 	
-	//precachestring(&"ZOMBIE_BETTY_ALREADY_PURCHASED");
 	precachestring(&"REMASTERED_ZOMBIE_BETTY_HOWTO");
+	//precachestring(&"ZOMBIE_BETTY_ALREADY_PURCHASED");
+
+	precachestring(&"REMASTERED_ZOMBIE_BAYONET_BUY_1500");
 //	precachestring(&"ZOMBIE_AMMO_BOX");
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_SUMPF_LEVEL_PLACE");
 	precachestring(&"REMASTERED_ZOMBIE_INTRO_SUMPF_LEVEL_TIME");

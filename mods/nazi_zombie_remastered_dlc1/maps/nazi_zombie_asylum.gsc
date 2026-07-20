@@ -39,7 +39,7 @@ main()
 	
 	precachestring(level.valve_hint_north);
 	precachestring(level.valve_hint_south);	
-	precachestring(&"ZOMBIE_BETTY_ALREADY_PURCHASED");
+	//precachestring(&"ZOMBIE_BETTY_ALREADY_PURCHASED");
 	precachestring(&"REMASTERED_ZOMBIE_BETTY_HOWTO");
 	precachestring(&"ZOMBIE_FLAMES_UNAVAILABLE");
 	precachestring(&"ZOMBIE_USE_AUTO_TURRET");
