@@ -605,5 +605,8 @@ LANG_ENGLISH		"Aim assist is only active when gamepad input is detected."
 REFERENCE           AIM_ASS_DESC_T4M
 LANG_ENGLISH		"Aim assist is only active when gamepad input is detected.\nNote: You must upgrade to T4Me r49+ for ADS aim assist."
 
+REFERENCE           CHAT_SIZE
+LANG_ENGLISH		"Team Chat"
+
 
 ENDMARKER

@@ -1,7 +1,7 @@
 #include "ui/menudef.h"
 #include "ui_mp/common_macro.inc"
 #define 	OPTIONS_STYLE			1
-#define 	CHOICE_SEP_1			24
+#define 	CHOICE_SEP_1			25
 #include "ui_mp/menustyle.inc"
 #include "ui/choices_setup_common.menu"
 
@@ -71,19 +71,21 @@
 		CHOICE_DVARFLOATLIST_VIS( 22, "@MENU_TEAM_INDICATOR", team_indicator, { "@MENU_FULL_TEAM_INDICATOR" 0 "@MENU_ABBREVIATED_TEAM_INDICATOR" 1 "@MENU_NONE" 2 }, ;, 1 )
 		CHOICE_DVARFLOATLIST_VIS( 23, "@REMASTERED_TEAM_RANK_INDICATOR", team_hide_rank_indicator, { "@MENU_NO" 1 "@MENU_YES" 0 }, setdvar "cg_overheadRankSize" 0; setdvar "cg_overheadIconSize" 0, when(dvarint("team_hide_rank_indicator") == 0 ) ) 
 		CHOICE_DVARFLOATLIST_VIS( 23, "@REMASTERED_TEAM_RANK_INDICATOR", team_hide_rank_indicator, { "@MENU_NO" 1 "@MENU_YES" 0 }, setdvar "cg_overheadRankSize" 0.7; setdvar "cg_overheadIconSize" 0.9, when(dvarint("team_hide_rank_indicator") == 1 ) ) 
+		CHOICE_DVARFLOATLIST_VIS( 24, "@REMASTERED_CHAT_SIZE", cg_chatHeight, { "@MENU_DISABLED" 0 "@MENU_ENABLED" 5 }, ;, 1 )
 
 		//CHOICE_DVARYESNO_VIS( 24, "@MENU_ALLOW_DOWNLOAD", cl_allowdownload, ;,when( dvarint( ui_multiplayer ) ) )
 		//CHOICE_DVARFLOATLIST_VIS( 25, "@PLATFORM_TANK_CONTROLS", vehControlMode, { "@MENU_NEW" 1 "@MENU_CLASSIC" 0 }, ;, when( dvarint( ui_multiplayer ) ) )
-		CHOICE_DDVAR_VIS( 24, "@MENU_CLAN_TAG", clanName, when( !dvarint( ui_multiplayer ) && dvarBool( cl_ingame ) ) ) 
-		CHOICE_DVAREDIT_VIS( 24, "@MENU_CLAN_TAG", clanName, 4, 4, ;, when( dvarint( ui_multiplayer ) && dvarBool( cl_ingame ) ) ) 
+		CHOICE_DDVAR_VIS( 25, "@MENU_CLAN_TAG", clanName, when( !dvarint( ui_multiplayer ) && dvarBool( cl_ingame ) ) ) 
+		CHOICE_DVAREDIT_VIS( 25, "@MENU_CLAN_TAG", clanName, 4, 4, ;, when( dvarint( ui_multiplayer ) && dvarBool( cl_ingame ) ) ) 
 // 		CHOICE_DVAREDIT_VIS( 27, "@MENU_PLAYER_NAME", ui_name, 20, 20, ;, when( !dvarbool( dw_loggedin ) ) )
 // 		CHOICE_DDVAR_VIS( 27, "@MENU_PLAYER_NAME", com_playerprofile, when( dvarbool( dw_loggedin ) ) )
-		CHOICE_DVAREDIT_VIS( 24, "@MENU_CLAN_TAG", clanName, 4, 4, ;, when ( !dvarBool( cl_ingame ) ) )
+		CHOICE_DVAREDIT_VIS( 25, "@MENU_CLAN_TAG", clanName, 4, 4, ;, when ( !dvarBool( cl_ingame ) ) )
 //		CHOICE_DVAREDIT_VIS( 27, "@MENU_PLAYER_NAME", ui_name, 20, 20, ;, MENU_TRUE )
+
 		//PC_INGAME
 		CHOICE_SEPARATOR_VIS( CHOICE_SEP_1, when ( !dvarBool( cl_ingame) ) )
 
-		CHOICE_DVAREDIT_VIS( 25, "@REMASTERED_CLEARANCE", bio_access, 10, 10, ;, when ( !dvarBool( cl_ingame ) ) )
+		CHOICE_DVAREDIT_VIS( 26, "@REMASTERED_CLEARANCE", bio_access, 10, 10, ;, when ( !dvarBool( cl_ingame ) ) )
 
 		//CHOICE_DVAREDIT_VIS( 26, "@MENU_PLAYER_NAME", ui_name, 20, 20, ;, when( dvarstring( com_playerprofile ) == "$$$" ) )
 		//CHOICE_BUTTON_VIS( 27, "@MENU_ENTER_KEY_CODE", open cdkey_warning;, when( !dvarBool( sv_running ) ); )
