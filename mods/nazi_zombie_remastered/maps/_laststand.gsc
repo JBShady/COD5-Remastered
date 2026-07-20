@@ -398,6 +398,8 @@ laststand_bleedout( delay )
 	}
 	
 	setClientSysState("lsm", "3", self);	// Notify client last stand ended.
+
+	self notify("bleedout");
 	
 	if (isdefined(level.is_zombie_level ) && level.is_zombie_level)
 	{
