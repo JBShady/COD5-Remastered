@@ -191,6 +191,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 | View Scale | `cg_fovScale` | `1` Normal | `1.1` Medium or `1.2` High | Scales existing FOV higher or lower by multiplier, which also effects ADS FOV. |
 | Gamepad | `cg_drawGamepadHUD` | `0` Disabled | `1` Enabled | DVAR switches HUD to use console style HUD and font and auto binds gamepad controls. |
 | **COOPERATIVE** |  |  |  |  |
+| Field Name Scale | `cg_overheadNamesSize` | `0.8` Default | `0.8` Maximum | Adjustable player name size with slider. |
 | Player Name Indicator | `team_indicator` | `0-1` Full Name, Abbreviated | `1` None | Show or hide player name ingame. |
 | Player Rank Indicator | `team_hide_rank_indicator` | `0` Yes | `1` No | Show or hide player rank ingame. |
 | Team Chat | `cg_chatHeight` | `0` Disabled | `5` Enabled | Show or hide text for team chat. |

@@ -608,5 +608,8 @@ LANG_ENGLISH		"Aim assist is only active when gamepad input is detected.\nNote: 
 REFERENCE           CHAT_SIZE
 LANG_ENGLISH		"Team Chat"
 
+REFERENCE           TEAM_RANK_SIZE
+LANG_ENGLISH		"Player Name Size"
+
 
 ENDMARKER
