@@ -321,7 +321,7 @@ init_weapons()
 	add_zombie_weapon( "m2_flamethrower_zombie_upgraded", 		&"ZOMBIE_WEAPON_M2_FLAMETHROWER_3000", 		3000,	"vox_flame",	7);	
 
 	// Special                                          	
-	add_zombie_weapon( "mine_bouncing_betty",					&"ZOMBIE_WEAPON_SATCHEL_2000",				2000,	"" );
+	add_zombie_weapon( "mine_bouncing_betty",					&"REMASTERED_ZOMBIE_BETTY_PURCHASE",				2000,	"" );
 	add_zombie_weapon( "mortar_round", 							&"ZOMBIE_WEAPON_MORTARROUND_2000", 			2000,	"" );
 	add_zombie_weapon( "satchel_charge", 						&"ZOMBIE_WEAPON_SATCHEL_2000", 				2000,	"vox_monkey",	8 );
 	add_zombie_weapon( "zombie_cymbal_monkey",					&"ZOMBIE_WEAPON_SATCHEL_2000", 				2000,	"vox_monkey",	8 );
@@ -2828,7 +2828,8 @@ add_weapon_to_sound_array(vo,num)
 
 flamethrower_swap()
 {
-	self endon( "death" ); // if we die we end, because we perma lose the flamethrower
+	self endon( "death" );
+	self endon( "bleedout" ); // if we die we end, because we perma lose the flamethrower
 	self endon( "disconnect" ); 
 	
 	while( 1 ) // once we get flamer, we need to do a loop so that we can easily remove it if we lose the weapon or remove/then re-add it if we are downed/revived

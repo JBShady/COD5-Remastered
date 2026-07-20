@@ -139,7 +139,7 @@ init_weapons()
                                                         	
 	// Special                                          	
 	add_zombie_weapon( "mortar_round", 						&"ZOMBIE_WEAPON_MORTARROUND_2000", 								2000,	"",				0);
-	add_zombie_weapon( "satchel_charge", 					&"ZOMBIE_WEAPON_SATCHEL_2000", 									2000,	"",				0);
+	add_zombie_weapon( "satchel_charge", 					&"REMASTERED_ZOMBIE_SATCHEL_PURCHASE", 									2000,	"",				0);
 	add_zombie_weapon( "ray_gun", 							&"ZOMBIE_WEAPON_RAYGUN_10000", 									10000,	"vox_raygun",	3); // 66% chance for all characters except Sarge because he has 3 unique lines, so 100% for him
 	// ONLY 1 OF THE BELOW SHOULD BE ALLOWED
 	add_limited_weapon( "m2_flamethrower_zombie", 1 );
@@ -1097,6 +1097,8 @@ show_satchel_hint(satchel)
 {
 	self endon("death");
 	self endon("disconnect");
+	self endon("bleedout");
+
 	level endon("intermission");
 
 	self setup_client_hintelem();
@@ -1131,11 +1133,12 @@ show_satchel_hint(satchel)
 
 }
 
-hud_satchel_deathwatch()
+hud_satchel_deathwatch() // incase player dies clear the hud
 {
 	self endon("satchel_hud_destroyed");
-	self waittill("death");
 	
+	self waittill("bleedout");
+
 	if(isDefined(self.hintelem))
 	{
 		self.hintelem delete();
@@ -1152,7 +1155,9 @@ setup_client_hintelem()
 	{
 		self.hintelem = newclienthudelem(self);
 	}
-	self.hintelem init_hint_hudelem(320, 220, "center", "bottom", 1.3, 1.0);
+	self.hintelem init_hint_hudelem(320, 220, "center", "bottom", 1.5, 1.0);
+
+	self thread hud_satchel_deathwatch();
 }
 
 //satchel hint stuff
@@ -1165,7 +1170,7 @@ init_hint_hudelem(x, y, alignX, alignY, fontscale, alpha)
 	self.fontScale = fontScale;
 	self.alpha = alpha;
 	self.sort = 20;
-	//self.font = "objective";
+	self.font = "big";
 }
 
 give_satchel_after_rounds()
@@ -1685,7 +1690,8 @@ add_weapon_to_sound_array(vo,num)
 
 flamethrower_swap()
 {
-	self endon( "death" ); // if we die we end, because we perma lose the flamethrower
+	self endon( "death" );
+	self endon( "bleedout" ); // if we die we end, because we perma lose the flamethrower
 	self endon( "disconnect" ); 
 	
 	while( 1 ) // once we get flamer, we need to do a loop so that we can easily remove it if we lose the weapon or remove/then re-add it if we are downed/revived
@@ -1744,6 +1750,7 @@ islookingatorigin( origin )
 mortar_checker()
 {
 	self endon("death");
+	self endon ("bleedout");
 	self endon("disconnect");
 
 	self.current_gun = self getCurrentWeapon();
