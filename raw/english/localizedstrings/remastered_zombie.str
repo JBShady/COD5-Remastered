@@ -67,17 +67,44 @@ LANG_ENGLISH        "Press & hold ^3&&1^7 to Search Crate [Cost: 2000 - one time
 REFERENCE           SATCHEL_PURCHASE
 LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Satchel Charges [Cost: 2000 - one time only]"
 
-REFERENCE           SATCHEL_HOWTO
-LANG_ENGLISH        "Press ^3[{+actionslot 4}]^7 to equip a Satchel Charge"
-
-REFERENCE           SATCHEL_HOWTO2
-LANG_ENGLISH        "Press ^3[{+toggleads_throw}]^7 to throw a Satchel Charge and press ^3[{+attack}]^7 to detonate"
-
 REFERENCE           BETTY_PURCHASE
 LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Bouncing Betties [Cost: 1000 - one time only]"
 
 REFERENCE           BETTY_HOWTO
 LANG_ENGLISH        "Press ^3[{+actionslot 4}]^7 then ^3[{+attack}]^7 to place a Bouncing Betty"
+
+REFERENCE           BETTY_HOWTO_CONSOLE
+LANG_ENGLISH        "Press ± then £ to place a Bouncing Betty"
+
+REFERENCE           BETTY_HOWTO_CONSOLE_LEFTY
+LANG_ENGLISH        "Press ± then ¶ to place a Bouncing Betty"
+
+REFERENCE           BETTY_HOWTO_CONSOLE_FLIPPED
+LANG_ENGLISH        "Press ± then ¥ to place a Bouncing Betty"
+
+REFERENCE           BETTY_HOWTO_CONSOLE_LEFTY_FLIPPED
+LANG_ENGLISH        "Press ± then ¾ to place a Bouncing Betty"
+
+REFERENCE           SATCHEL_HOWTO
+LANG_ENGLISH        "Press ^3[{+actionslot 4}]^7 to equip a Satchel Charge"
+
+REFERENCE           SATCHEL_HOWTO_CONSOLE
+LANG_ENGLISH        "Press ± to equip a Satchel Charge"
+
+REFERENCE           SATCHEL_HOWTO2
+LANG_ENGLISH        "Press ^3[{+toggleads_throw}]^7 to throw a Satchel Charge and ^3[{+attack}]^7 to detonate"
+
+REFERENCE           SATCHEL_HOWTO2_CONSOLE
+LANG_ENGLISH        "Press ¶ to throw a Satchel Charge and £ to detonate"
+
+REFERENCE           SATCHEL_HOWTO2_CONSOLE_LEFTY
+LANG_ENGLISH        "Press £ to throw a Satchel Charge and ¶ to detonate"
+
+REFERENCE           SATCHEL_HOWTO2_CONSOLE_FLIPPED
+LANG_ENGLISH        "Press ¾ to throw a Satchel Charge and ¥ to detonate"
+
+REFERENCE           SATCHEL_HOWTO2_CONSOLE_LEFTY_FLIPPED
+LANG_ENGLISH        "Press ¥ to throw a Satchel Charge and ¾ to detonate"
 
 REFERENCE           BAYONET_BUY_1500
 LANG_ENGLISH        "Press & hold ^3&&1^7 to buy Type 30 Bayonet [Cost: 1500 - valid weapons only]"
