@@ -146,8 +146,8 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 * Hid Multiplayer style progress summary report pop-up when player ends game or disconnects as this data is not relevant
 
 ### Gamepad
-* Gamepad setting switches all ingame HUD elements to use proper gamepad button prompts including hintstrings, spectate menu, sniper hold breath, grenade pick ups, and D-pad icons for a more immersive experience when using a controller. Uses Xbox 360 style icons by default, but optional patch is available to change to PlayStation 3 style icons. NOTE: If gamepad hints are not showing up, this is because you have your interact key bound to something other than F and the game gets confused, simply unbind your interact key to fix 
-* Unique console font on ingame hints when gamepad is enabled, as seen on the console version
+* Gamepad setting switches all ingame HUD elements to use proper gamepad button prompts including hintstrings, spectate menu, sniper hold breath, grenade pick ups, equipment how-tos, and D-pad icons for a more immersive experience when using a controller. Uses Xbox 360 style icons by default, but optional patch is available to change to PlayStation 3 (DualShock) style icons. NOTE: If gamepad hints for (X) / square are not showing up, this is because you have your interact key bound to something other than F and the mod gets confused, simply unbind your interact key to fix while playing in gamepad mode
+* Unique console font on certain ingame hints when gamepad is enabled, as seen on the console version
 * Ping graph on scoreboard when gamepad is enabled, as seen on console
 * Custom gamepad spectate menu will hide the PC spectate menu (requires T4M-Enhanced)
 * Loading screens no longer show the mouse cursor and "click to start" hints while Controller Mode is enabled
@@ -193,6 +193,7 @@ nazi_zombie_remastered_dlc3 (Der Riese)
 | **COOPERATIVE** |  |  |  |  |
 | Player Name Indicator | `team_indicator` | `0-1` Full Name, Abbreviated | `1` None | Show or hide player name ingame. |
 | Player Rank Indicator | `team_hide_rank_indicator` | `0` Yes | `1` No | Show or hide player rank ingame. |
+| Team Chat | `cg_chatHeight` | `0` Disabled | `5` Enabled | Show or hide text for team chat. |
 | **GAMEPAD** |  |  |  |  |
 | Look Inversion | `input_invertpitch` | `0` Disabled | `1` Enabled | Enables or disables controller inversion. |
 | Sensitivity | `input_viewSensitivity` | `0.6` 1 (Low) | Scales up to (Medium), (High), (Very High), (Insane) | Increases or decreases controller sensitivity using the same scale as console. |
