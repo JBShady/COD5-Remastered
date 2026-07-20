@@ -322,7 +322,7 @@ init_hint_hudelem(x, y, alignX, alignY, fontscale, alpha)
 	self.fontScale = fontScale;
 	self.alpha = alpha;
 	self.sort = 20;
-	//self.font = "objective";
+	self.font = "big";
 }
 
 setup_client_hintelem()
@@ -334,7 +334,7 @@ setup_client_hintelem()
 	{
 		self.hintelem = newclienthudelem(self);
 	}
-	self.hintelem init_hint_hudelem(320, 220, "center", "bottom", 1.3, 1.0);
+	self.hintelem init_hint_hudelem(320, 220, "center", "bottom", 1.5, 1.0);
 }
 
 
